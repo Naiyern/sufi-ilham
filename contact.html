@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Sufi Ilham</title>
+<meta name="description" content="Contact author Sufi Ilham (MD Naiyer Alam) — phone +91 62017 57330, WhatsApp, and enquiries for interviews, bulk orders and translation rights.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%2308080a'/><text y='72' x='50' text-anchor='middle' font-size='62' font-family='Georgia,serif' fill='%23d4af54'>S</text></svg>">
+<style>
+/* ============ SUFI ILHAM — SHARED CINEMATIC CORE ============ */
+:root{
+  --ink:#14131a;
+  --ink-2:#1c1a22;
+  --ink-3:#26232c;
+  --ink-4:#322e38;
+  --line:rgba(212,175,84,.30);
+  --line-soft:rgba(255,255,255,.13);
+  --paper:#faf7f0;
+  --paper-2:#ece5d8;
+  --muted:#b8b1a4;
+  --muted-2:#948c81;
+  --gold:#e0bb63;
+  --gold-lt:#f6e3a8;
+  --gold-dp:#bb953c;
+  --rust:#b4552d;
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,'Times New Roman',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --maxw:1200px;
+  --ease:cubic-bezier(.16,.84,.34,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--ink);color:var(--paper);font-family:var(--sans);
+  line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block;height:auto}
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 26px}
+::selection{background:var(--gold);color:var(--ink)}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:#2a2a31;border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dp)}
+
+/* film grain */
+body::after{
+  content:'';position:fixed;inset:-50%;pointer-events:none;z-index:9997;opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 700ms steps(2) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}25%{transform:translate(-2%,1%)}
+  50%{transform:translate(1%,-2%)}75%{transform:translate(-1%,-1%)}100%{transform:translate(0,0)}
+}
+/* vignette */
+.vig{position:fixed;inset:0;pointer-events:none;z-index:9996;
+  box-shadow:inset 0 0 260px 70px rgba(0,0,0,.52);}
+
+/* scroll progress */
+.prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:10000;
+  background:linear-gradient(90deg,var(--gold-dp),var(--gold-lt));box-shadow:0 0 14px rgba(212,175,84,.8)}
+
+/* cursor */
+.cur,.cur-r{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;
+  transform:translate3d(-200px,-200px,0);mix-blend-mode:screen;opacity:0;transition:opacity .3s}
+.cur.on,.cur-r.on{opacity:1}
+.cur{width:7px;height:7px;background:var(--gold-lt)}
+.cur-r{width:34px;height:34px;border:1px solid rgba(212,175,84,.5);transition:width .3s,height .3s,border-color .3s,background .3s}
+.cur-r.big{width:64px;height:64px;background:rgba(212,175,84,.10);border-color:rgba(212,175,84,.8)}
+@media (hover:none),(max-width:900px){.cur,.cur-r{display:none!important}}
+
+/* preloader */
+#pre{position:fixed;inset:0;z-index:10001;background:var(--ink);display:grid;place-items:center;
+  transition:opacity .8s var(--ease),visibility .8s}
+#pre.done{opacity:0;visibility:hidden}
+.pre-in{text-align:center;padding:20px}
+.pre-name{font-family:var(--serif);font-size:clamp(1.8rem,5.4vw,3rem);letter-spacing:.3em;color:var(--paper);
+  display:flex;gap:.04em;justify-content:center;flex-wrap:wrap}
+.pre-name span{opacity:0;transform:translateY(24px);animation:letterUp .7s var(--ease) forwards}
+@keyframes letterUp{to{opacity:1;transform:none}}
+.pre-sub{font-size:.6rem;letter-spacing:.5em;text-transform:uppercase;color:var(--gold);margin-top:20px;
+  opacity:0;animation:fadeIn .8s .7s forwards}
+@keyframes fadeIn{to{opacity:1}}
+.pre-bar{width:min(240px,58vw);height:1px;background:rgba(255,255,255,.13);margin:36px auto 0;overflow:hidden}
+.pre-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-dp),var(--gold-lt));
+  animation:load 1.5s .5s var(--ease) forwards}
+@keyframes load{to{width:100%}}
+
+/* nav */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 0;
+  transition:background .5s var(--ease),backdrop-filter .5s,border-color .5s,padding .4s;
+  border-bottom:1px solid transparent}
+header.nav.solid{background:rgba(8,8,10,.82);backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);border-bottom-color:var(--line);padding:9px 0}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:13px}
+.brand .mark{width:40px;height:40px;flex:0 0 40px;border-radius:50%;border:1px solid var(--gold);
+  color:var(--gold);display:grid;place-items:center;font-family:var(--serif);font-size:20px;
+  background:radial-gradient(circle at 30% 25%,rgba(212,175,84,.25),transparent 70%);
+  transition:transform .6s var(--ease),box-shadow .5s}
+.brand:hover .mark{transform:rotate(360deg);box-shadow:0 0 24px rgba(212,175,84,.5)}
+.brand b{font-family:var(--serif);font-weight:600;font-size:1.08rem;letter-spacing:.07em;display:block}
+.brand i{font-style:normal;display:block;font-size:.56rem;letter-spacing:.36em;color:var(--muted-2);
+  text-transform:uppercase;margin-top:1px}
+nav ul{display:flex;gap:28px;list-style:none;align-items:center}
+nav ul a{font-size:.74rem;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);
+  transition:color .3s;position:relative;padding:5px 0}
+nav ul a::after{content:'';position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .4s var(--ease)}
+nav ul a:hover{color:var(--paper)}
+nav ul a:hover::after{width:100%}
+.btn-nav{border:1px solid var(--gold);color:var(--gold)!important;padding:10px 20px;border-radius:2px;
+  font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;transition:.4s var(--ease);white-space:nowrap}
+.btn-nav::after{display:none!important}
+.btn-nav:hover{background:var(--gold);color:var(--ink)!important;box-shadow:0 0 26px rgba(212,175,84,.45)}
+.burger{display:none;background:none;border:0;cursor:pointer;padding:9px;flex-direction:column;gap:5px;z-index:1002}
+.burger i{display:block;width:25px;height:1.5px;background:var(--paper);transition:.35s var(--ease)}
+.burger.open i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open i:nth-child(2){opacity:0}
+.burger.open i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* buttons */
+.btn{-webkit-appearance:none;appearance:none;background:transparent;display:inline-flex;align-items:center;justify-content:center;gap:11px;padding:15px 32px;border-radius:2px;
+  font-size:.73rem;letter-spacing:.19em;text-transform:uppercase;font-weight:600;cursor:pointer;
+  border:1px solid transparent;transition:.45s var(--ease);position:relative;overflow:hidden}
+.btn-gold{background:var(--gold);color:var(--ink);box-shadow:0 14px 38px -16px rgba(212,175,84,.8)}
+.btn-gold:hover{background:var(--gold-lt);transform:translateY(-3px);box-shadow:0 22px 50px -16px rgba(212,175,84,.95)}
+.btn-ghost{border-color:rgba(246,242,233,.26);color:var(--paper);background:transparent}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,175,84,.07);transform:translateY(-3px)}
+.btn .arw{transition:transform .4s var(--ease)}
+.btn:hover .arw{transform:translateX(6px)}
+.btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .7s var(--ease)}
+.btn:hover::before{left:100%}
+
+/* section furniture */
+section{padding:120px 0;position:relative}
+.sec-head{margin-bottom:64px;max-width:46em}
+.sec-tag{font-size:.63rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:20px;display:flex;align-items:center;gap:13px}
+.sec-tag::before{content:'';width:36px;height:1px;background:var(--gold);opacity:.75}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;letter-spacing:-.012em}
+h2{font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1.09}
+h2 em{font-style:italic;color:var(--gold)}
+.sec-sub{color:var(--muted);margin-top:20px;font-size:1.02rem;max-width:41em}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* footer */
+footer{background:var(--ink-2);border-top:1px solid var(--line);padding:76px 0 30px;position:relative}
+.f-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.1fr;gap:44px;margin-bottom:54px}
+.f-brand p{color:var(--muted);font-size:.92rem;margin-top:18px;max-width:25em}
+footer h5{font-size:.63rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+footer ul a{color:var(--muted);font-size:.91rem;transition:color .3s,padding-left .3s}
+footer ul a:hover{color:var(--paper);padding-left:5px}
+.f-contact a{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.91rem;transition:color .3s}
+.f-contact a:hover{color:var(--gold)}
+.f-bot{border-top:1px solid var(--line-soft);padding-top:26px;display:flex;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;font-size:.75rem;color:var(--muted-2)}
+.f-bot a:hover{color:var(--gold)}
+
+/* to top */
+.totop{position:fixed;right:22px;bottom:22px;z-index:900;width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(14,14,17,.9);backdrop-filter:blur(10px);color:var(--gold);
+  display:grid;place-items:center;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:.45s var(--ease)}
+.totop.show{opacity:1;visibility:visible;transform:none}
+.totop:hover{background:var(--gold);color:var(--ink);box-shadow:0 0 26px rgba(212,175,84,.55)}
+
+/* legal pages */
+.legal-hero{padding:170px 0 60px;position:relative;overflow:hidden;
+  background:radial-gradient(900px 460px at 50% -10%,rgba(212,175,84,.14),transparent 65%),var(--ink)}
+.legal-hero h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.06;margin-bottom:14px}
+.legal-hero h1 em{font-style:italic;color:var(--gold)}
+.legal-hero .upd{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2);margin-top:22px}
+.legal-body{padding:34px 0 110px}
+.legal-grid{display:grid;grid-template-columns:250px 1fr;gap:60px;align-items:start}
+.toc{position:sticky;top:100px;border-left:1px solid var(--line-soft);padding-left:22px}
+.toc h6{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.toc ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.toc a{font-size:.85rem;color:var(--muted);transition:color .3s,padding-left .3s}
+.toc a:hover{color:var(--gold);padding-left:4px}
+.legal-content h2{font-size:clamp(1.35rem,2.5vw,1.8rem);margin:46px 0 16px;scroll-margin-top:110px}
+.legal-content h2:first-child{margin-top:0}
+.legal-content p{color:var(--paper-2);margin-bottom:16px;font-size:1rem;line-height:1.8;max-width:44em}
+.legal-content ul{margin:0 0 18px 20px;color:var(--paper-2);display:flex;flex-direction:column;gap:9px;max-width:44em}
+.legal-content li{line-height:1.7}
+.legal-content strong{color:var(--paper)}
+.callout{border:1px solid var(--line);border-left:3px solid var(--gold);background:rgba(212,175,84,.055);
+  padding:22px 26px;border-radius:3px;margin:26px 0}
+.callout p{margin:0;color:var(--paper)}
+
+@media (max-width:980px){
+  .f-grid{grid-template-columns:1fr 1fr;gap:36px}
+  .legal-grid{grid-template-columns:1fr;gap:34px}
+  .toc{position:static;border-left:0;border-top:1px solid var(--line-soft);padding:22px 0 0}
+  .toc ul{flex-direction:row;flex-wrap:wrap;gap:14px}
+}
+@media (max-width:760px){
+  nav ul{position:fixed;top:0;right:0;height:100vh;width:min(80vw,330px);background:rgba(8,8,10,.98);
+    backdrop-filter:blur(20px);flex-direction:column;justify-content:center;gap:30px;
+    transform:translateX(100%);transition:transform .5s var(--ease);border-left:1px solid var(--line)}
+  nav ul.open{transform:none}
+  nav ul a{font-size:.92rem}
+  .burger{display:flex}
+  section{padding:84px 0}
+  .f-grid{grid-template-columns:1fr;gap:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .reveal{opacity:1;transform:none}
+  body::after{animation:none}
+}
+
+/* ====== SOUND · LANGUAGE · GATE · AMAZON TRANSITION ====== */
+body{font-family:var(--body-font,var(--sans))}
+body.lang-fade #main-flow,body.lang-fade section,body.lang-fade footer{
+  opacity:.25;transition:opacity .25s ease}
+
+/* RTL */
+body.rtl .sec-tag::before,body.rtl .eyebrow::before{order:2}
+body.rtl .sec-tag,body.rtl .eyebrow{flex-direction:row-reverse;justify-content:flex-end}
+body.rtl .pull,body.rtl .m-quote{border-left:0;border-right:2px solid var(--gold);
+  padding-left:0;padding-right:22px}
+body.rtl .toc{border-left:0;border-right:1px solid var(--line-soft);padding-left:0;padding-right:22px}
+body.rtl .legal-content ul,body.rtl .m-desc ul{margin-left:0;margin-right:20px}
+body.rtl .about-body p.first::first-letter{float:right;padding:6px 0 0 13px}
+body.rtl .tl-dot{left:auto;right:0}
+body.rtl .c-card:not(.static):hover{transform:translateX(-5px)}
+body.rtl footer ul a:hover{padding-left:0;padding-right:5px}
+body.rtl .btn .arw{transform:scaleX(-1)}
+body.rtl .btn:hover .arw{transform:scaleX(-1) translateX(6px)}
+body.rtl .stat{border-right:0;border-left:1px solid var(--line-soft)}
+body.rtl .stat:last-child{border-left:0}
+
+/* Urdu/Hindi type tuning */
+body.lang-ur{line-height:2.05}
+body.lang-ur h1,body.lang-ur h2,body.lang-ur h3,body.lang-ur h4,
+body.lang-ur .lede,body.lang-ur blockquote,body.lang-ur .pull{line-height:1.95;letter-spacing:0}
+body.lang-ur .sec-tag,body.lang-ur .eyebrow,body.lang-ur .kicker,body.lang-ur nav ul a,
+body.lang-ur .stat span,body.lang-ur .alias,body.lang-ur .btn{letter-spacing:.04em}
+body.lang-ur h1.title{font-size:clamp(2.6rem,6.2vw,5rem)}
+body.lang-hi{line-height:1.85}
+body.lang-hi h1.title{font-size:clamp(2.8rem,6.6vw,5.4rem)}
+body.lang-hi .sec-tag,body.lang-hi .eyebrow,body.lang-hi nav ul a{letter-spacing:.14em}
+
+/* ---- control cluster ---- */
+.ctrls{display:flex;align-items:center;gap:10px}
+@keyframes eqb{0%,100%{height:22%}50%{height:100%}}
+.lang-wrap{position:relative}
+.lang-btn{display:inline-flex;align-items:center;gap:8px;background:none;cursor:pointer;
+  border:1px solid var(--line-soft);color:var(--muted);border-radius:2px;padding:9px 13px;
+  font-family:inherit;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  transition:.35s var(--ease);white-space:nowrap}
+.lang-btn:hover{border-color:var(--gold);color:var(--gold)}
+.lang-btn .glb{font-size:.9rem;line-height:1}
+.lang-cur{text-transform:none;letter-spacing:.04em;font-size:.72rem}
+.lang-menu{position:absolute;top:calc(100% + 9px);right:0;min-width:186px;z-index:1200;
+  background:rgba(14,14,17,.98);backdrop-filter:blur(16px);border:1px solid var(--line);
+  border-radius:3px;padding:7px;opacity:0;visibility:hidden;transform:translateY(-8px);
+  transition:.35s var(--ease);box-shadow:0 24px 54px -20px rgba(0,0,0,.95)}
+.lang-menu.open{opacity:1;visibility:visible;transform:none}
+.lang-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+  background:none;border:0;cursor:pointer;color:var(--muted);font-family:inherit;
+  padding:11px 13px;border-radius:2px;text-align:left;transition:.28s;font-size:.92rem}
+.lang-opt:hover{background:rgba(212,175,84,.1);color:var(--paper)}
+.lang-opt.on{color:var(--gold);background:rgba(212,175,84,.07)}
+.lang-opt small{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+.lang-opt .tick{opacity:0}
+.lang-opt.on .tick{opacity:1}
+
+/* ---- cinematic amazon interstitial ---- */
+.go-ov{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;
+  background:rgba(18,16,24,.90);-webkit-backdrop-filter:blur(16px) saturate(120%);backdrop-filter:blur(16px) saturate(120%);
+  opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s var(--ease)}
+.go-ov.open{opacity:1;visibility:visible}
+.go-in{text-align:center;max-width:440px;transform:scale(.94);transition:transform .55s var(--ease)}
+.go-ov.open .go-in{transform:none}
+.go-book{width:150px;margin:0 auto 26px;position:relative;perspective:900px;min-height:10px}
+.go-book img{width:100%;border-radius:2px;box-shadow:0 30px 60px -22px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.1);
+  animation:goSpin 1.5s var(--ease) both}
+@keyframes goSpin{0%{opacity:0;transform:rotateY(-32deg) translateY(20px) scale(.9)}
+  60%{opacity:1}100%{opacity:1;transform:rotateY(0) translateY(0) scale(1)}}
+.go-title{font-family:var(--serif);font-size:1.5rem;color:var(--paper);margin-bottom:9px;line-height:1.25}
+.go-sub{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.go-bar{width:210px;height:2px;background:rgba(255,255,255,.12);margin:0 auto 22px;overflow:hidden;border-radius:2px}
+.go-ov.open .go-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-dp),var(--gold-lt));
+  animation:goLoad 1.5s var(--ease) forwards;box-shadow:0 0 14px rgba(212,175,84,.8)}
+@keyframes goLoad{to{width:100%}}
+.go-cancel{background:none;border:1px solid var(--line-soft);color:var(--muted-2);cursor:pointer;
+  font-family:inherit;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  padding:9px 20px;border-radius:2px;transition:.35s}
+.go-cancel:hover{border-color:var(--paper);color:var(--paper)}
+
+/* mobile placement */
+@media (max-width:760px){
+  .ctrls{gap:7px}
+.lang-btn{padding:9px 11px}
+.lang-menu{right:auto;left:50%;transform:translate(-50%,-8px)}
+.lang-menu.open{transform:translate(-50%,0)}
+nav ul .ctrls{flex-direction:column;width:100%;gap:14px}
+nav ul .lang-menu{position:static;transform:none;opacity:1;visibility:visible;
+    display:none;box-shadow:none;background:rgba(255,255,255,.03);margin-top:8px;width:100%}
+nav ul .lang-menu.open{display:block;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .eq.playing i,.go-book img,.go-ov.open .go-bar i{animation:none}
+}
+
+</style>
+<style>
+.c-wrap{padding:20px 0 110px}
+.c-grid2{display:grid;grid-template-columns:.85fr 1.15fr;gap:52px;align-items:start}
+.c-info{display:flex;flex-direction:column;gap:14px}
+.c-card{display:flex;align-items:center;gap:16px;border:1px solid var(--line-soft);border-radius:3px;
+  padding:18px 20px;transition:.4s var(--ease);background:rgba(255,255,255,.02)}
+.c-card:not(.static):hover{border-color:var(--gold);background:rgba(212,175,84,.07);transform:translateX(5px)}
+.c-ic{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:1px solid var(--line);color:var(--gold);
+  display:grid;place-items:center;font-size:1.15rem}
+.c-card b{display:block;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-2);margin-bottom:3px}
+.c-card span{display:block;color:var(--paper);font-size:1rem}
+.c-form{display:flex;flex-direction:column;gap:16px;border:1px solid var(--line-soft);border-radius:3px;
+  padding:32px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.008))}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.c-form label{display:flex;flex-direction:column;gap:8px;font-size:.62rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted-2);font-weight:600}
+.c-form input,.c-form select,.c-form textarea{background:rgba(0,0,0,.35);border:1px solid var(--line-soft);
+  border-radius:2px;padding:13px 15px;color:var(--paper);font-family:inherit;font-size:.95rem;
+  letter-spacing:normal;text-transform:none;font-weight:400;transition:.3s;width:100%}
+.c-form input:focus,.c-form select:focus,.c-form textarea:focus{outline:none;border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(212,175,84,.14)}
+.c-form textarea{resize:vertical;min-height:120px}
+.c-form option{background:var(--ink-3)}
+.c-form .btn{align-self:flex-start}
+.fnote{font-size:.78rem;color:var(--muted-2);letter-spacing:normal;text-transform:none;font-weight:400}
+.fnote.ok{color:var(--gold)} .fnote.err{color:#e07a5f}
+.faq{margin-top:80px}
+.faq-item{border-bottom:1px solid var(--line-soft);padding:24px 0}
+.faq-item h4{font-size:1.12rem;margin-bottom:9px;color:var(--paper)}
+.faq-item p{color:var(--muted);font-size:.96rem;max-width:46em}
+@media(max-width:1000px){.c-grid2{grid-template-columns:1fr;gap:40px}}
+@media(max-width:760px){.f-row{grid-template-columns:1fr}.c-form{padding:24px 20px}}
+
+}
+
+/* ---------- author gallery (added in polish pass) ---------- */
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.gal figure{margin:0;position:relative;border-radius:4px;overflow:hidden;
+  border:1px solid var(--line-soft);background:var(--ink-2);
+  box-shadow:0 26px 54px -30px rgba(0,0,0,.85)}
+.gal img{display:block;width:100%;height:auto;transition:transform .8s var(--ease),filter .6s var(--ease)}
+.gal figure:hover img{transform:scale(1.045)}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:34px 13px 12px;
+  font-family:var(--sans);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--paper);text-shadow:0 1px 6px rgba(0,0,0,.9);
+  background:linear-gradient(180deg,transparent,rgba(10,9,14,.82) 62%);}
+.gal .g-young img{filter:contrast(1.01) brightness(1.03) sepia(.12)}
+.gal figure::after{content:'';position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);border-radius:4px}
+@media(max-width:560px){
+  .gal{gap:11px}
+  .gal figcaption{font-size:.54rem;letter-spacing:.14em;padding:16px 10px 9px}
+}
+
+/* ---------- readability + mobile polish (added in polish pass) ---------- */
+html{-webkit-text-size-adjust:100%}
+body{letter-spacing:.002em}
+
+/* lift body copy off the background */
+p{color:#ded7c9}
+.sec-sub,.hero-lede{color:#c9c2b4}
+
+/* smoother, less jarring reveals */
+.reveal{transition:opacity .95s var(--ease),transform .95s var(--ease)}
+
+/* gentler vignette so phone screens don't crush the corners */
+.vig{box-shadow:inset 0 0 260px 70px rgba(0,0,0,.52)}
+
+/* cards read as real surfaces now */
+.card:hover{transform:translateY(-6px);border-color:var(--line);
+  box-shadow:0 34px 70px -34px rgba(0,0,0,.9)}
+
+/* --- phone --- */
+@media(max-width:760px){
+  .vig{box-shadow:inset 0 0 160px 44px rgba(0,0,0,.42)}
+  body{line-height:1.72}
+  p{font-size:1.02rem}
+  /* comfortable tap targets everywhere */
+  .btn,.lnk,.lang-opt,.filter,.toc a,footer a{min-height:44px;
+    display:inline-flex;align-items:center}
+  .card{padding:22px}
+  h1{letter-spacing:-.01em}
+  /* stop long book titles from overflowing */
+  h1,h2,h3,.go-title{overflow-wrap:break-word;hyphens:auto}
+}
+@media(max-width:420px){
+  .gal{grid-template-columns:1fr 1fr}
+}
+
+/* respect reduced-motion */
+@media(prefers-reduced-motion:reduce){
+  .gal figure:hover img{transform:none}
+  .reveal{transition:opacity .3s linear}
+}
+
+/* ---------- soundtrack toggle ---------- */
+.snd-btn{-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;
+  border:1px solid var(--line-soft);border-radius:2px;padding:0 11px;height:36px;
+  display:inline-flex;align-items:center;justify-content:center;gap:2px;
+  transition:border-color .35s var(--ease),background .35s var(--ease)}
+.snd-btn:hover{border-color:var(--line);background:rgba(224,187,99,.07)}
+.snd-btn .eq{display:flex;align-items:flex-end;gap:2px;height:14px}
+.snd-btn .eq i{display:block;width:2px;height:4px;background:var(--muted);
+  border-radius:1px;transition:background .35s}
+.snd-btn.on .eq i{background:var(--gold)}
+.snd-btn.on .eq i:nth-child(1){animation:eqb .9s -.10s ease-in-out infinite alternate}
+.snd-btn.on .eq i:nth-child(2){animation:eqb .9s -.45s ease-in-out infinite alternate}
+.snd-btn.on .eq i:nth-child(3){animation:eqb .9s -.72s ease-in-out infinite alternate}
+.snd-btn.on .eq i:nth-child(4){animation:eqb .9s -.28s ease-in-out infinite alternate}
+@keyframes eqb{from{height:3px}to{height:14px}}
+/* muted state: a slash through the bars */
+.snd-btn:not(.on){position:relative}
+.snd-btn:not(.on)::after{content:'';position:absolute;left:19%;right:19%;top:50%;
+  height:1px;background:var(--muted-2);transform:rotate(-22deg)}
+@media(max-width:760px){
+  .snd-btn{height:44px;min-width:44px}
+}
+@media(prefers-reduced-motion:reduce){
+  .snd-btn.on .eq i{animation:none;height:9px}
+}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div><div class="vig"></div>
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="index.html" class="brand"><span class="mark">S</span><span><b>SUFI ILHAM</b><i>Author</i></span></a>
+    <nav><ul id="menu">
+      <li><a href="index.html#books" data-i18n="nav.books">Books</a></li>
+      <li><a href="index.html#about" data-i18n="nav.about">About</a></li>
+      <li><a href="contact.html" style="color:var(--gold)" data-i18n="nav.contact">Contact</a></li>
+      <li><a href="privacy.html" data-i18n="nav.privacy">Privacy</a></li>
+      <li><a class="btn-nav" href="https://www.amazon.com/author/sufibookauthor" target="_blank" rel="noopener" data-i18n="nav.store">Amazon Store</a></li>
+      <li class="ctrls">
+        <button class="snd-btn" id="sndBtn" type="button" aria-label="Toggle music" title="Music">
+          <span class="eq"><i></i><i></i><i></i><i></i></span>
+        </button>
+        <span class="lang-wrap">
+          <button class="lang-btn" id="langBtn" type="button" aria-label="Change language">
+            <span class="glb">&#9673;</span><span class="lang-cur">English</span>
+          </button>
+          <div class="lang-menu" id="langMenu">
+            <button class="lang-opt on" data-lang="en" type="button"><span>English</span><span class="tick">&#10003;</span></button>
+            <button class="lang-opt" data-lang="hi" type="button"><span>&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; <small>Hindi</small></span><span class="tick">&#10003;</span></button>
+            <button class="lang-opt" data-lang="ur" type="button"><span>&#1575;&#1585;&#1583;&#1608; <small>Urdu</small></span><span class="tick">&#10003;</span></button>
+            <button class="lang-opt" data-lang="hinglish" type="button"><span>Hinglish <small>Roman</small></span><span class="tick">&#10003;</span></button>
+          </div>
+        </span>
+      </li>
+    </ul></nav>
+    <button class="burger" id="burger" aria-label="Open menu"><i></i><i></i><i></i></button>
+  </div>
+</header>
+<section class="legal-hero">
+  <div class="wrap">
+    <div class="sec-tag">Get In Touch</div>
+    <h1>Say <em>hello</em></h1>
+    <p class="sec-sub">For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly. Every genuine message is read.</p>
+    <div class="upd">Last updated · 12 August 2026</div>
+  </div>
+</section>
+<div class="legal-body c-wrap"><div class="wrap">
+<div class="c-grid2">
+  <div class="c-info reveal">
+    <a class="c-card" href="tel:+916201757330"><div class="c-ic">☏</div>
+      <div><b>Phone</b><span>+91 62017 57330</span></div></a>
+    <a class="c-card" href="https://wa.me/916201757330" target="_blank" rel="noopener"><div class="c-ic">✆</div>
+      <div><b>WhatsApp</b><span>Message directly</span></div></a>
+    <a class="c-card" href="https://instagram.com/Sufiilham07" target="_blank" rel="noopener me"><div class="c-ic">&#9673;</div>
+      <div><b>Instagram &mdash; Author</b><span>@Sufiilham07</span></div></a>
+    <a class="c-card" href="https://instagram.com/naiyer_fx" target="_blank" rel="noopener me"><div class="c-ic">&#9673;</div>
+      <div><b>Instagram &mdash; Personal</b><span>@naiyer_fx</span></div></a>
+    <a class="c-card" href="https://www.amazon.com/author/sufibookauthor" target="_blank" rel="noopener">
+      <div class="c-ic">✦</div><div><b>Amazon.com</b><span>Author Store</span></div></a>
+    <a class="c-card" href="https://www.amazon.in/stores/Sufi-ilham/author/B0DK9YXXMV/allbooks" target="_blank" rel="noopener">
+      <div class="c-ic">✦</div><div><b>Amazon.in</b><span>Author Store</span></div></a>
+    <div class="c-card static"><div class="c-ic">◈</div>
+      <div><b>Based in</b><span>Bihar, India · Available worldwide</span></div></div>
+    <div class="c-card static"><div class="c-ic">◷</div>
+      <div><b>Response Time</b><span>Usually within 2–3 days</span></div></div>
+  </div>
+  <form class="c-form reveal" id="cform" data-delay="120" novalidate>
+    <div class="f-row">
+      <label>Your Name<input type="text" name="name" placeholder="Enter your name" required></label>
+      <label>Email<input type="email" name="email" placeholder="you@example.com" required></label>
+    </div>
+    <label>Subject<select name="subject">
+      <option>Reader Message</option><option>Interview Request</option><option>Collaboration</option>
+      <option>Bulk / Bookstore Order</option><option>Translation Rights</option>
+      <option>Speaking Invitation</option><option>Other</option></select></label>
+    <label>Message<textarea name="message" rows="6" placeholder="Write your message…" required></textarea></label>
+    <button class="btn btn-gold" type="submit">Send via WhatsApp <span class="arw">→</span></button>
+    <p class="fnote" id="fnote">This form opens WhatsApp to +91 62017 57330 with your message pre-filled.
+      Nothing is stored on this website — see the <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p>
+  </form>
+</div>
+
+<div class="faq reveal">
+  <div class="sec-tag">Common Questions</div>
+  <h2 style="margin-bottom:26px">Before you <em>write</em></h2>
+  <div class="faq-item"><h4>Where can I buy the books?</h4>
+    <p>All eight titles are on Amazon — <a href="https://www.amazon.com/author/sufibookauthor" target="_blank" rel="noopener" style="color:var(--gold)">Amazon.com</a>
+       for international readers and <a href="https://www.amazon.in/stores/Sufi-ilham/author/B0DK9YXXMV/allbooks" target="_blank" rel="noopener" style="color:var(--gold)">Amazon.in</a> for India.
+       Four titles are free to read with Kindle Unlimited.</p></div>
+  <div class="faq-item"><h4>Do you accept interview or podcast requests?</h4>
+    <p>Yes. Choose "Interview Request" in the form above or message the number directly, and include your outlet, format and preferred dates.</p></div>
+  <div class="faq-item"><h4>Can I order in bulk for a school, library or bookstore?</h4>
+    <p>Absolutely. Get in touch with the quantity and destination and arrangements can be made through Amazon or directly.</p></div>
+  <div class="faq-item"><h4>Are translation rights available?</h4>
+    <p>Enquiries about translation and foreign-language editions are welcome. Select "Translation Rights" and include the language and territory.</p></div>
+  <div class="faq-item"><h4>Will you read my manuscript?</h4>
+    <p>Unsolicited manuscripts cannot be reviewed or returned, but thoughtful questions about writing and the ideas in the books are always welcome.</p></div>
+</div>
+</div></div>
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <a href="index.html" class="brand"><span class="mark">S</span><span><b>SUFI ILHAM</b><i>Author</i></span></a>
+        <p data-i18n="foot.about">Books on belief, time, attention and the freedom that waits on the other side of conditioning. Available worldwide on Amazon in Kindle and paperback.</p>
+      </div>
+      <div><h5 data-i18n="foot.books">Books</h5><ul>
+        <li><a href="index.html#featured">The Human Operating Manual</a></li>
+        <li><a href="index.html#books">Laozi: The Man Who Disappeared into the Dao</a></li>
+        <li><a href="index.html#books">The Wall Was a Gesture</a></li>
+        <li><a href="index.html#books">The Map Is Finished</a></li>
+        <li><a href="index.html#books">NeuroFocus Protocol</a></li>
+        <li><a href="index.html#books">Fractured Time</a></li>
+        <li><a href="index.html#books">Belief Unveiled</a></li>
+        <li><a href="index.html#books">The Infinite Classroom</a></li>
+      </ul></div>
+      <div><h5 data-i18n="foot.explore">Explore</h5><ul>
+        <li><a href="index.html#about" data-i18n="foot.aboutl">About the Author</a></li>
+        <li><a href="index.html#themes">Themes</a></li>
+        <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+        <li><a href="privacy.html" data-i18n="foot.privacy">Privacy Policy</a></li>
+        <li><a href="terms.html" data-i18n="foot.terms">Terms of Use</a></li>
+        <li><a href="https://www.amazon.com/author/sufibookauthor" target="_blank" rel="noopener">Amazon.com Store</a></li>
+        <li><a href="https://www.amazon.in/stores/Sufi-ilham/author/B0DK9YXXMV/allbooks" target="_blank" rel="noopener">Amazon.in Store</a></li>
+      </ul></div>
+      <div><h5 data-i18n="foot.contact">Contact</h5><ul class="f-contact">
+        <li><a href="tel:+916201757330">☏ &nbsp;+91 62017 57330</a></li>
+        <li><a href="https://wa.me/916201757330" target="_blank" rel="noopener">✆ &nbsp;WhatsApp</a></li>
+        <li><a href="https://instagram.com/Sufiilham07" target="_blank" rel="noopener me">◎ &nbsp;@Sufiilham07</a></li>
+        <li><a href="https://instagram.com/naiyer_fx" target="_blank" rel="noopener me">◎ &nbsp;@naiyer_fx</a></li>
+        <li><a href="contact.html">✉ &nbsp;<span data-i18n="foot.msg">Send a message</span></a></li>
+        <li><span style="color:var(--muted-2);font-size:.91rem">◈ &nbsp;Bihar, India</span></li>
+      </ul></div>
+    </div>
+    <div class="f-bot">
+      <span>© <span id="yr">2026</span> Sufi Ilham (MD Naiyer Alam). <span data-i18n="foot.rights">All rights reserved.</span></span>
+      <span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
+<button class="totop" id="totop" aria-label="Back to top">↑</button>
+<div class="go-ov" id="goOv" aria-hidden="true">
+  <div class="go-in">
+    <div class="go-book"></div>
+    <div class="go-title">Opening Amazon</div>
+    <div class="go-sub">Taking you to the secure Amazon store...</div>
+    <div class="go-bar"><i></i></div>
+    <button class="go-cancel" type="button">Cancel</button>
+  </div>
+</div>
+<script>
+/* ============ SUFI ILHAM — CINEMATIC ENGINE ============ */
+(function(){
+  'use strict';
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- preloader ---- */
+  function initPre(){
+    var pre = document.getElementById('pre');
+    if(!pre) return;
+    var el = pre.querySelector('.pre-name');
+    if(el){
+      var txt = el.getAttribute('data-text') || el.textContent;
+      el.textContent = '';
+      txt.split('').forEach(function(ch,i){
+        var s = document.createElement('span');
+        s.textContent = ch === ' ' ? '\u00A0' : ch;
+        s.style.animationDelay = (i*0.055)+'s';
+        el.appendChild(s);
+      });
+    }
+    function hide(){ pre.classList.add('done'); document.body.style.overflow=''; }
+    document.body.style.overflow='hidden';
+    window.addEventListener('load', function(){ setTimeout(hide, RM?200:1750); });
+    setTimeout(hide, 4200); // safety
+  }
+
+  /* ---- scroll progress + nav + to-top ---- */
+  function initScroll(){
+    var nav=document.getElementById('nav'), prog=document.getElementById('prog'), top=document.getElementById('totop');
+    function on(){
+      var y=window.scrollY, h=document.documentElement.scrollHeight-window.innerHeight;
+      if(nav) nav.classList.toggle('solid', y>40);
+      if(prog) prog.style.width = (h>0 ? (y/h*100) : 0)+'%';
+      if(top) top.classList.toggle('show', y>600);
+    }
+    on(); window.addEventListener('scroll', on, {passive:true});
+    if(top) top.addEventListener('click', function(){ window.scrollTo({top:0,behavior:RM?'auto':'smooth'}); });
+  }
+
+  /* ---- mobile menu ---- */
+  function initMenu(){
+    var b=document.getElementById('burger'), m=document.getElementById('menu');
+    if(!b||!m) return;
+    b.addEventListener('click', function(){ m.classList.toggle('open'); b.classList.toggle('open'); });
+    m.addEventListener('click', function(e){
+      if(e.target.tagName==='A'){ m.classList.remove('open'); b.classList.remove('open'); }
+    });
+  }
+
+  /* ---- reveal ---- */
+  function initReveal(){
+    var els=document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window) || RM){
+      els.forEach(function(e){e.classList.add('in');}); return;
+    }
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(x){
+        if(x.isIntersecting){
+          var d = parseFloat(x.target.getAttribute('data-delay')||0);
+          setTimeout(function(){ x.target.classList.add('in'); }, d);
+          io.unobserve(x.target);
+        }
+      });
+    },{threshold:.1, rootMargin:'0px 0px -70px 0px'});
+    els.forEach(function(e){io.observe(e);});
+  }
+
+  /* ---- custom cursor ---- */
+  function initCursor(){
+    if(RM || window.matchMedia('(hover:none)').matches || window.innerWidth<900) return;
+    var d=document.createElement('div'); d.className='cur';
+    var r=document.createElement('div'); r.className='cur-r';
+    document.body.appendChild(d); document.body.appendChild(r);
+    var mx=-200,my=-200,rx=-200,ry=-200,seen=false;
+    document.addEventListener('mousemove',function(e){
+      mx=e.clientX; my=e.clientY;
+      if(!seen){ seen=true; rx=mx; ry=my; d.classList.add('on'); r.classList.add('on'); }
+      d.style.transform='translate3d('+(mx-3.5)+'px,'+(my-3.5)+'px,0)';
+    });
+    (function loop(){
+      rx+=(mx-rx)*.16; ry+=(my-ry)*.16;
+      r.style.transform='translate3d('+(rx-17)+'px,'+(ry-17)+'px,0)';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a,button,.card,.tilt').forEach(function(el){
+      el.addEventListener('mouseenter',function(){r.classList.add('big');});
+      el.addEventListener('mouseleave',function(){r.classList.remove('big');});
+    });
+  }
+
+  /* ---- particles ---- */
+  function initParticles(){
+    var c=document.getElementById('dust'); if(!c||RM) return;
+    var ctx=c.getContext('2d'), ps=[], w,h,raf;
+    function size(){
+      var p=c.parentElement;
+      w=c.width=p.offsetWidth; h=c.height=p.offsetHeight;
+    }
+    size();
+    var n=Math.min(64, Math.round(w/22));
+    for(var i=0;i<n;i++) ps.push({
+      x:Math.random()*w, y:Math.random()*h,
+      r:Math.random()*1.5+.35, s:Math.random()*.28+.06,
+      o:Math.random()*.5+.12, dx:(Math.random()-.5)*.16
+    });
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(var i=0;i<ps.length;i++){
+        var p=ps[i]; p.y-=p.s; p.x+=p.dx;
+        if(p.y<-6){p.y=h+6;p.x=Math.random()*w;}
+        if(p.x<-6)p.x=w+6; if(p.x>w+6)p.x=-6;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.2832);
+        ctx.fillStyle='rgba(212,175,84,'+p.o+')'; ctx.fill();
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    draw();
+    window.addEventListener('resize',function(){cancelAnimationFrame(raf);size();draw();});
+  }
+
+  /* ---- 3D tilt ---- */
+  function initTilt(){
+    if(RM || window.matchMedia('(hover:none)').matches) return;
+    document.querySelectorAll('.tilt').forEach(function(el){
+      var inner = el.querySelector('.tilt-in') || el;
+      el.addEventListener('mousemove',function(e){
+        var b=el.getBoundingClientRect();
+        var px=(e.clientX-b.left)/b.width-.5, py=(e.clientY-b.top)/b.height-.5;
+        var mx = parseFloat(el.getAttribute('data-max')||12);
+        inner.style.transform='perspective(1100px) rotateY('+(px*mx)+'deg) rotateX('+(-py*mx)+'deg) translateZ(14px)';
+      });
+      el.addEventListener('mouseleave',function(){
+        inner.style.transform='perspective(1100px) rotateY(0) rotateX(0) translateZ(0)';
+      });
+    });
+  }
+
+  /* ---- counters ---- */
+  function initCount(){
+    var els=document.querySelectorAll('[data-count]');
+    if(!els.length) return;
+    if(!('IntersectionObserver' in window)||RM){
+      els.forEach(function(e){e.textContent=e.getAttribute('data-count');}); return;
+    }
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(x){
+        if(!x.isIntersecting) return;
+        var el=x.target, raw=el.getAttribute('data-count');
+        var target=parseFloat(raw.replace(/[^0-9.]/g,''));
+        var suf=raw.replace(/[0-9.,]/g,'');
+        var t0=null, dur=1500;
+        function step(ts){
+          if(!t0)t0=ts;
+          var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
+          var v=Math.floor(e*target);
+          el.textContent=v.toLocaleString('en-US')+suf;
+          if(p<1) requestAnimationFrame(step); else el.textContent=target.toLocaleString('en-US')+suf;
+        }
+        requestAnimationFrame(step);
+        io.unobserve(el);
+      });
+    },{threshold:.5});
+    els.forEach(function(e){io.observe(e);});
+  }
+
+  /* ---- parallax ---- */
+  function initPara(){
+    var els=document.querySelectorAll('[data-para]');
+    if(!els.length||RM) return;
+    var tick=false;
+    function upd(){
+      var vh=window.innerHeight;
+      els.forEach(function(el){
+        var b=el.getBoundingClientRect();
+        if(b.bottom<-200||b.top>vh+200) return;
+        var sp=parseFloat(el.getAttribute('data-para'));
+        var off=((b.top+b.height/2)-vh/2)*sp*-0.1;
+        el.style.transform='translate3d(0,'+off.toFixed(2)+'px,0)';
+      });
+      tick=false;
+    }
+    window.addEventListener('scroll',function(){
+      if(!tick){requestAnimationFrame(upd);tick=true;}
+    },{passive:true});
+    upd();
+  }
+
+  /* ---- modal ---- */
+  function initModal(){
+    var mod=document.getElementById('modal'); if(!mod) return;
+    var body=document.getElementById('modal-body'), last=null;
+    function open(card){
+      var d=JSON.parse(card.getAttribute('data-book'));
+      body.innerHTML =
+        '<div class="m-grid">'+
+          '<div class="m-cover"><img src="'+d.img+'" alt="'+d.title+' cover"></div>'+
+          '<div class="m-body">'+
+            '<div class="m-kick">'+d.kicker+'</div>'+
+            '<h3>'+d.title+'</h3>'+
+            (d.sub?'<div class="m-sub">'+d.sub+'</div>':'')+
+            (d.quote?'<p class="m-quote">'+d.quote+'</p>':'')+
+            '<div class="m-desc">'+d.desc+'</div>'+
+            '<ul class="m-spec">'+d.spec.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul>'+
+            '<div class="m-links">'+
+              '<a class="btn btn-gold" href="'+d.us+'" target="_blank" rel="noopener">Amazon.com <span class="arw">→</span></a>'+
+              '<a class="btn btn-ghost" href="'+d.in+'" target="_blank" rel="noopener">Amazon.in</a>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
+      mod.classList.add('open');
+      document.body.style.overflow='hidden';
+      mod.setAttribute('aria-hidden','false');
+      var cl = mod.querySelector('.m-close'); if(cl) cl.focus();
+    }
+    function close(){
+      mod.classList.remove('open'); document.body.style.overflow='';
+      mod.setAttribute('aria-hidden','true');
+      if(last) last.focus();
+    }
+    document.querySelectorAll('[data-book]').forEach(function(card){
+      card.querySelectorAll('.js-open').forEach(function(btn){
+        btn.addEventListener('click',function(e){ e.preventDefault(); last=btn; open(card); });
+      });
+    });
+    mod.addEventListener('click',function(e){
+      if(e.target===mod || e.target.closest('.m-close')) close();
+    });
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Escape' && mod.classList.contains('open')) close();
+    });
+  }
+
+  /* ---- filters ---- */
+  function initFilter(){
+    var btns=document.querySelectorAll('[data-filter]'); if(!btns.length) return;
+    btns.forEach(function(b){
+      b.addEventListener('click',function(){
+        var f=b.getAttribute('data-filter');
+        btns.forEach(function(x){x.classList.toggle('on',x===b);});
+        document.querySelectorAll('[data-tags]').forEach(function(card){
+          var show = f==='all' || card.getAttribute('data-tags').indexOf(f)>-1;
+          card.style.display = show?'':'none';
+          if(show){ card.classList.remove('in'); void card.offsetWidth; card.classList.add('in'); }
+        });
+      });
+    });
+  }
+
+  /* ---- contact form (no backend: opens mail/WhatsApp) ---- */
+  function initForm(){
+    var f=document.getElementById('cform'); if(!f) return;
+    var note=document.getElementById('fnote');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var n=f.name.value.trim(), em=f.email.value.trim(), s=f.subject.value, m=f.message.value.trim();
+      if(!n||!em||!m){ note.textContent='Please fill in your name, email and message.'; note.className='fnote err'; return; }
+      var txt='Name: '+n+'%0AEmail: '+em+'%0ASubject: '+s+'%0A%0A'+encodeURIComponent(m);
+      note.innerHTML='Opening WhatsApp… If nothing happens, message <b>+91 62017 57330</b> directly.';
+      note.className='fnote ok';
+      window.open('https://wa.me/916201757330?text='+txt,'_blank');
+    });
+  }
+
+  /* ---- boot ---- */
+  function boot(){
+    initPre(); initScroll(); initMenu(); initReveal(); initCursor();
+    initParticles(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initForm();
+    var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+
+</script>
+<script>
+/* ============ LANGUAGE SYSTEM : EN / HI / UR / HINGLISH ============ */
+window.I18N = {
+en:{
+ _name:'English', _dir:'ltr', _font:"var(--sans)",
+ 'nav.new':'New Release','nav.books':'Books','nav.themes':'Themes','nav.about':'About',
+ 'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
+ 'hero.eyebrow':'Eight Books · Philosophy &amp; Self-Discovery',
+ 'hero.alias':'Also known as MD Naiyer Alam',
+ 'hero.lede':'An author and deep thinker exploring belief systems and self-discovery — writing that challenges societal norms and asks you to <strong>question every assumption you inherited.</strong>',
+ 'hero.lede2':'From the architecture of belief to the illusion of time, from ADHD and attention to the quiet freedom of simply seeing — eight books, one pursuit: the truth, however uncomfortable.',
+ 'hero.cta1':'Read the New Release','hero.cta2':'Browse All Books','hero.scroll':'Scroll',
+ 'stat.titles':'Published Titles','stat.pages':'Pages in Print',
+ 'stat.ku':'Free on Kindle Unlimited','stat.markets':'Amazon Marketplaces',
+ 'feat.tag':'The New Release','feat.head':'Your toaster came with a manual. <em>You didn\'t.</em>',
+ 'feat.sub':'A Systems-Based Guide to Designing a Better Mind, Better Habits, and a Better Life',
+ 'feat.quote':'"You are not broken. You are running old settings — and settings can be changed."',
+ 'feat.p1':'You are the most complex machine on the planet, and you were shipped with zero documentation. So you\'ve done what everyone does with an undocumented machine: pushed the same three buttons harder. More motivation. More discipline. More guilt.',
+ 'feat.p2':'Written in the calm, precise voice of a premium hardware manual — with <strong>111 original diagrams, 34 write-in worksheets and 10 complete system modules</strong> — it treats your life as what it actually is: a living system of energy, emotion, attention and habit.',
+ 'feat.m1':'Daily Operation','feat.m2':'Building &amp; Repair','feat.m3':'The Long Game',
+ 'feat.it':'No 4 a.m. alarms. No hype. No pretending Tuesday won\'t happen.<br>Stop gripping outcomes — start adjusting settings.',
+ 'feat.buy1':'Buy on Amazon.com','feat.buy2':'Buy on Amazon.in',
+ 'books.tag':'The Library','books.head':'All <em>Books</em>',
+ 'books.sub':'Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon. Click any book to read more.',
+ 'f.all':'All Books','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback',
+ 'card.more':'Read More','card.buy':'Amazon',
+ 'themes.tag':'Recurring Threads','themes.head':'What the work keeps <em>returning to</em>',
+ 'th1':'Belief','th1d':'The hidden architecture beneath your relationships, career and happiness — and the fact that architecture can be rebuilt.',
+ 'th2':'Time','th2d':'Why the obsession with past and future silently steals a life, and what remains when the clock loses its authority.',
+ 'th3':'Attention','th3d':'A thread one breath long. The whole art is the returning — in meditation, in focus, in ordinary Tuesday afternoons.',
+ 'th4':'Seeing','th4d':'Not doctrine, not self-help. Something older: philosophy with a heartbeat, offered without asking you to believe anything.',
+ 'quote.text':'The map is not the country. Walk until you know the difference.','quote.cite':'— The Map Is Finished',
+ 'about.tag':'About the Author','about.head':'A fearless pursuit <em>of truth</em>',
+ 'about.p1':'Sufi Ilham, also known as MD Naiyer Alam, is an author, deep thinker, and seeker of truth who explores belief, consciousness, identity, and self-discovery.',
+ 'about.p2':'&ldquo;Sufi Ilham&rdquo; is a name I gave myself. To me, it represents <strong>the meaning I live</strong> &mdash; a reminder that life is not merely something to exist through, but something to understand, question, and experience authentically.',
+ 'about.p3':'My writing challenges inherited beliefs and societal conditioning, inviting readers to question assumptions rather than accept them blindly. I explore the raw and often uncomfortable realities of existence, philosophy, human nature, and the search for truth.',
+ 'about.p4':'I believe authenticity begins when we dare to look beyond what we have been taught and discover what is genuinely our own.',
+ 'about.p5':'Through my words, I seek to inspire transformation &mdash; to break free from conditioning, confront reality without fear, and live with greater clarity, courage, and awareness.',
+ 'about.creed':'Sufi Ilham is not just a name. It is a way of being.',
+ 'foot.follow':'Follow',
+ 'jour.tag':'The Path So Far','jour.head':'A writing <em>journey</em>',
+ 'j1':'The debut. A journey into the hidden architecture of the mind — and how to rewrite it.',
+ 'j2':'The most talked-about title. What if time isn\'t real, but a beautiful lie?',
+ 'j3':'Learning from birth to beyond — for those brave enough to keep attending.',
+ 'j4t':'Four New Works','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture and The Map Is Finished.',
+ 'con.tag':'Get In Touch','con.head':'Say <em>hello</em>',
+ 'con.sub':'For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.',
+ 'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Message directly','con.store':'Amazon Author Store',
+ 'con.stored':'Follow for new releases','con.based':'Based in','con.basedd':'Bihar, India · Available worldwide',
+ 'con.name':'Your Name','con.email':'Email','con.subject':'Subject','con.msg':'Message',
+ 'con.ph_name':'Enter your name','con.ph_msg':'Write your message…',
+ 'con.send':'Send via WhatsApp',
+ 'con.note':'Your message opens in WhatsApp to +91 62017 57330 — nothing is stored on this website.',
+ 's1':'Reader Message','s2':'Interview Request','s3':'Collaboration','s4':'Bulk / Bookstore Order','s5':'Translation Rights','s6':'Other',
+ 'cta.tag':'Start Reading','cta.head':'Begin where the <em>question</em> is loudest',
+ 'cta.sub':'Four titles are free to read on Kindle Unlimited. Follow the author on Amazon to get new release updates the moment a book goes live.',
+ 'cta.b1':'Amazon.com Store','cta.b2':'Amazon.in Store',
+ 'foot.about':'Books on belief, time, attention and the freedom that waits on the other side of conditioning. Available worldwide on Amazon in Kindle and paperback.',
+ 'foot.books':'Books','foot.explore':'Explore','foot.contact':'Contact','foot.rights':'All rights reserved.',
+ 'foot.privacy':'Privacy Policy','foot.terms':'Terms of Use','foot.aboutl':'About the Author','foot.msg':'Send a message',
+ 'go.title':'Opening Amazon','go.sub':'Taking you to the secure Amazon store…','go.cancel':'Cancel',
+ 'snd.on':'Sound on','snd.off':'Sound off','lang.label':'Language'
+},
+
+hi:{
+ _name:'हिन्दी', _dir:'ltr', _font:"'Nirmala UI','Noto Sans Devanagari',var(--sans)",
+ 'nav.new':'नई पुस्तक','nav.books':'पुस्तकें','nav.themes':'विषय','nav.about':'परिचय',
+ 'nav.contact':'संपर्क','nav.privacy':'गोपनीयता','nav.store':'अमेज़न स्टोर',
+ 'hero.eyebrow':'आठ पुस्तकें · दर्शन एवं आत्म-खोज',
+ 'hero.alias':'एमडी नैयर आलम के नाम से भी जाने जाते हैं',
+ 'hero.lede':'एक लेखक और गहन विचारक, जो विश्वास-प्रणालियों और आत्म-खोज की पड़ताल करते हैं — ऐसा लेखन जो सामाजिक मान्यताओं को चुनौती देता है और आपसे कहता है कि <strong>विरासत में मिली हर धारणा पर प्रश्न कीजिए।</strong>',
+ 'hero.lede2':'विश्वास की संरचना से लेकर समय के भ्रम तक, एडीएचडी और एकाग्रता से लेकर केवल देख पाने की शांत स्वतंत्रता तक — आठ पुस्तकें, एक ही खोज: सत्य, चाहे वह कितना ही असहज क्यों न हो।',
+ 'hero.cta1':'नई पुस्तक पढ़ें','hero.cta2':'सभी पुस्तकें देखें','hero.scroll':'नीचे जाएँ',
+ 'stat.titles':'प्रकाशित पुस्तकें','stat.pages':'कुल पृष्ठ',
+ 'stat.ku':'किंडल अनलिमिटेड पर निःशुल्क','stat.markets':'अमेज़न मार्केटप्लेस',
+ 'feat.tag':'नई पुस्तक','feat.head':'आपके टोस्टर के साथ मैनुअल आया था। <em>आपके साथ नहीं।</em>',
+ 'feat.sub':'बेहतर मन, बेहतर आदतें और बेहतर जीवन रचने की एक सिस्टम-आधारित मार्गदर्शिका',
+ 'feat.quote':'"आप टूटे हुए नहीं हैं। आप पुरानी सेटिंग्स पर चल रहे हैं — और सेटिंग्स बदली जा सकती हैं।"',
+ 'feat.p1':'आप इस ग्रह की सबसे जटिल मशीन हैं, और आपको बिना किसी दस्तावेज़ के भेज दिया गया। इसलिए आपने वही किया जो हर कोई करता है: वही तीन बटन और ज़ोर से दबाए। अधिक प्रेरणा। अधिक अनुशासन। अधिक अपराधबोध।',
+ 'feat.p2':'एक उत्कृष्ट हार्डवेयर मैनुअल की शांत, सटीक भाषा में लिखी गई — <strong>111 मौलिक चित्र, 34 अभ्यास-पृष्ठ और 10 पूर्ण सिस्टम मॉड्यूल</strong> के साथ — यह आपके जीवन को वैसा ही मानती है जैसा वह वास्तव में है: ऊर्जा, भाव, ध्यान और आदत की एक जीवंत प्रणाली।',
+ 'feat.m1':'दैनिक संचालन','feat.m2':'निर्माण एवं मरम्मत','feat.m3':'दीर्घ यात्रा',
+ 'feat.it':'सुबह 4 बजे का अलार्म नहीं। कोई शोर नहीं।<br>परिणामों को जकड़ना छोड़िए — सेटिंग्स बदलना शुरू कीजिए।',
+ 'feat.buy1':'Amazon.com से खरीदें','feat.buy2':'Amazon.in से खरीदें',
+ 'books.tag':'पुस्तकालय','books.head':'सभी <em>पुस्तकें</em>',
+ 'books.sub':'सूफ़ी इल्हाम की हर कृति — किंडल और पेपरबैक में, विश्वभर में अमेज़न पर। अधिक जानने के लिए किसी भी पुस्तक पर क्लिक करें।',
+ 'f.all':'सभी पुस्तकें','f.phil':'दर्शन','f.self':'स्व-सहायता','f.ku':'किंडल अनलिमिटेड','f.pb':'पेपरबैक',
+ 'card.more':'और पढ़ें','card.buy':'अमेज़न',
+ 'themes.tag':'आवर्ती सूत्र','themes.head':'यह लेखन बार-बार <em>जिस ओर लौटता है</em>',
+ 'th1':'विश्वास','th1d':'आपके संबंधों, करियर और प्रसन्नता के नीचे छिपी संरचना — और यह सत्य कि उस संरचना को पुनः रचा जा सकता है।',
+ 'th2':'समय','th2d':'अतीत और भविष्य का जुनून चुपचाप जीवन क्यों चुरा लेता है, और जब घड़ी अपना अधिकार खो देती है तब क्या शेष रहता है।',
+ 'th3':'ध्यान','th3d':'एक साँस भर लंबा धागा। पूरी कला लौट आने में है — ध्यान में, एकाग्रता में, साधारण दोपहरों में।',
+ 'th4':'देखना','th4d':'न सिद्धांत, न स्व-सहायता। कुछ अधिक प्राचीन: धड़कते हृदय वाला दर्शन, जो आपसे कुछ भी मानने को नहीं कहता।',
+ 'quote.text':'नक्शा देश नहीं होता। तब तक चलिए जब तक अंतर समझ न आ जाए।','quote.cite':'— द मैप इज़ फ़िनिश्ड',
+ 'about.tag':'लेखक परिचय','about.head':'सत्य की <em>निर्भीक खोज</em>',
+ 'about.p1':'सूफ़ी इल्हाम, जिन्हें एमडी नैयर आलम के नाम से भी जाना जाता है, एक लेखक, गहन विचारक और सत्य के अन्वेषक हैं जो आस्था, चेतना, पहचान और आत्म-खोज की पड़ताल करते हैं।',
+ 'about.p2':'&ldquo;सूफ़ी इल्हाम&rdquo; वह नाम है जो मैंने स्वयं को दिया। मेरे लिए यह <strong>उस अर्थ का प्रतीक है जिसे मैं जीता हूँ</strong> &mdash; एक स्मरण कि जीवन केवल काट देने की वस्तु नहीं, बल्कि समझने, प्रश्न करने और प्रामाणिक रूप से अनुभव करने की चीज़ है।',
+ 'about.p3':'मेरा लेखन विरासत में मिली मान्यताओं और सामाजिक संस्कारों को चुनौती देता है, और पाठकों को आमंत्रित करता है कि वे धारणाओं को आँख मूँदकर स्वीकार करने के बजाय उन पर प्रश्न करें। मैं अस्तित्व, दर्शन, मानव स्वभाव और सत्य की खोज की कच्ची और अक्सर असहज सच्चाइयों में उतरता हूँ।',
+ 'about.p4':'मेरा विश्वास है कि प्रामाणिकता तभी आरंभ होती है जब हम उससे परे देखने का साहस करें जो हमें सिखाया गया है, और वह खोजें जो सचमुच हमारा अपना है।',
+ 'about.p5':'अपने शब्दों के माध्यम से मैं परिवर्तन की प्रेरणा देना चाहता हूँ &mdash; संस्कारों के बंधन तोड़ना, वास्तविकता का निर्भय सामना करना, और अधिक स्पष्टता, साहस और जागरूकता के साथ जीना।',
+ 'about.creed':'सूफ़ी इल्हाम केवल एक नाम नहीं है। यह होने का एक तरीका है।',
+ 'foot.follow':'फ़ॉलो करें',
+ 'jour.tag':'अब तक की यात्रा','jour.head':'एक लेखकीय <em>यात्रा</em>',
+ 'j1':'पहली कृति। मन की छिपी संरचना में एक यात्रा — और उसे पुनः लिखने की विधि।',
+ 'j2':'सर्वाधिक चर्चित पुस्तक। यदि समय वास्तविक न हो, बल्कि एक सुंदर झूठ हो तो?',
+ 'j3':'जन्म से परे तक सीखना — उनके लिए जो सीखते रहने का साहस रखते हैं।',
+ 'j4t':'चार नई कृतियाँ','j4':'न्यूरोफ़ोकस प्रोटोकॉल, द ह्यूमन ऑपरेटिंग मैनुअल, द वॉल वाज़ अ जेस्चर और द मैप इज़ फ़िनिश्ड।',
+ 'con.tag':'संपर्क करें','con.head':'नमस्ते <em>कहिए</em>',
+ 'con.sub':'पाठकों के संदेश, साक्षात्कार, सहयोग, थोक ऑर्डर या अनुवाद अधिकारों के लिए — सीधे संपर्क करें।',
+ 'con.phone':'फ़ोन','con.wa':'व्हाट्सएप','con.wad':'सीधे संदेश भेजें','con.store':'अमेज़न लेखक स्टोर',
+ 'con.stored':'नई पुस्तकों के लिए फ़ॉलो करें','con.based':'स्थान','con.basedd':'बिहार, भारत · विश्वभर में उपलब्ध',
+ 'con.name':'आपका नाम','con.email':'ईमेल','con.subject':'विषय','con.msg':'संदेश',
+ 'con.ph_name':'अपना नाम लिखें','con.ph_msg':'अपना संदेश लिखें…',
+ 'con.send':'व्हाट्सएप से भेजें',
+ 'con.note':'आपका संदेश व्हाट्सएप पर +91 62017 57330 पर खुलेगा — इस वेबसाइट पर कुछ भी संग्रहीत नहीं होता।',
+ 's1':'पाठक संदेश','s2':'साक्षात्कार अनुरोध','s3':'सहयोग','s4':'थोक / बुकस्टोर ऑर्डर','s5':'अनुवाद अधिकार','s6':'अन्य',
+ 'cta.tag':'पढ़ना आरंभ करें','cta.head':'वहीं से शुरू कीजिए जहाँ <em>प्रश्न</em> सबसे प्रबल है',
+ 'cta.sub':'चार पुस्तकें किंडल अनलिमिटेड पर निःशुल्क पढ़ी जा सकती हैं। नई पुस्तकों की सूचना के लिए अमेज़न पर लेखक को फ़ॉलो करें।',
+ 'cta.b1':'Amazon.com स्टोर','cta.b2':'Amazon.in स्टोर',
+ 'foot.about':'विश्वास, समय, ध्यान और संस्कारों के पार प्रतीक्षा करती स्वतंत्रता पर पुस्तकें। विश्वभर में अमेज़न पर किंडल और पेपरबैक में उपलब्ध।',
+ 'foot.books':'पुस्तकें','foot.explore':'अन्वेषण','foot.contact':'संपर्क','foot.rights':'सर्वाधिकार सुरक्षित।',
+ 'foot.privacy':'गोपनीयता नीति','foot.terms':'उपयोग की शर्तें','foot.aboutl':'लेखक परिचय','foot.msg':'संदेश भेजें',
+ 'go.title':'अमेज़न खुल रहा है','go.sub':'आपको सुरक्षित अमेज़न स्टोर पर ले जाया जा रहा है…','go.cancel':'रद्द करें',
+ 'snd.on':'ध्वनि चालू','snd.off':'ध्वनि बंद','lang.label':'भाषा'
+},
+
+ur:{
+ _name:'اردو', _dir:'rtl', _font:"'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Noto Naskh Arabic',var(--sans)",
+ 'nav.new':'نئی کتاب','nav.books':'کتابیں','nav.themes':'موضوعات','nav.about':'تعارف',
+ 'nav.contact':'رابطہ','nav.privacy':'رازداری','nav.store':'ایمازون اسٹور',
+ 'hero.eyebrow':'آٹھ کتابیں · فلسفہ اور خود شناسی',
+ 'hero.alias':'ایم ڈی نیر عالم کے نام سے بھی معروف',
+ 'hero.lede':'ایک مصنف اور گہرے مفکر، جو عقائد کے نظام اور خود شناسی کی کھوج کرتے ہیں — ایسی تحریر جو سماجی روایات کو چیلنج کرتی ہے اور آپ سے کہتی ہے کہ <strong>ہر ورثے میں ملے گمان پر سوال اٹھائیے۔</strong>',
+ 'hero.lede2':'عقیدے کی ساخت سے وقت کے فریب تک، اے ڈی ایچ ڈی اور توجہ سے محض دیکھ لینے کی پرسکون آزادی تک — آٹھ کتابیں، ایک ہی جستجو: سچ، خواہ کتنا ہی بے چین کرنے والا ہو۔',
+ 'hero.cta1':'نئی کتاب پڑھیے','hero.cta2':'تمام کتابیں دیکھیے','hero.scroll':'نیچے',
+ 'stat.titles':'شائع شدہ کتابیں','stat.pages':'کل صفحات',
+ 'stat.ku':'کنڈل انلمیٹڈ پر مفت','stat.markets':'ایمازون مارکیٹ',
+ 'feat.tag':'نئی کتاب','feat.head':'آپ کے ٹوسٹر کے ساتھ ہدایت نامہ آیا تھا۔ <em>آپ کے ساتھ نہیں۔</em>',
+ 'feat.sub':'بہتر ذہن، بہتر عادات اور بہتر زندگی تشکیل دینے کی ایک نظام پر مبنی رہنمائی',
+ 'feat.quote':'"آپ ٹوٹے ہوئے نہیں ہیں۔ آپ پرانی ترتیبات پر چل رہے ہیں — اور ترتیبات بدلی جا سکتی ہیں۔"',
+ 'feat.p1':'آپ اس کرۂ ارض کی پیچیدہ ترین مشین ہیں، اور آپ کو بغیر کسی دستاویز کے بھیج دیا گیا۔ سو آپ نے وہی کیا جو ہر کوئی کرتا ہے: وہی تین بٹن اور زور سے دبائے۔ زیادہ ترغیب۔ زیادہ نظم۔ زیادہ احساسِ جرم۔',
+ 'feat.p2':'ایک اعلیٰ ہارڈویئر ہدایت نامے کی پرسکون، دقیق زبان میں لکھی گئی — <strong>111 اصل خاکے، 34 مشقی صفحات اور 10 مکمل ماڈیول</strong> کے ساتھ — یہ آپ کی زندگی کو وہی سمجھتی ہے جو وہ حقیقتاً ہے: توانائی، جذبے، توجہ اور عادت کا ایک زندہ نظام۔',
+ 'feat.m1':'روزمرہ عمل','feat.m2':'تعمیر و مرمت','feat.m3':'طویل سفر',
+ 'feat.it':'صبح چار بجے کا الارم نہیں۔ کوئی شور نہیں۔<br>نتائج کو جکڑنا چھوڑیے — ترتیبات بدلنا شروع کیجیے۔',
+ 'feat.buy1':'Amazon.com سے خریدیں','feat.buy2':'Amazon.in سے خریدیں',
+ 'books.tag':'کتب خانہ','books.head':'تمام <em>کتابیں</em>',
+ 'books.sub':'صوفی الہام کی ہر تصنیف — کنڈل اور پیپربیک میں، دنیا بھر میں ایمازون پر۔ مزید جاننے کے لیے کسی بھی کتاب پر کلک کیجیے۔',
+ 'f.all':'تمام کتابیں','f.phil':'فلسفہ','f.self':'خود مدد','f.ku':'کنڈل انلمیٹڈ','f.pb':'پیپربیک',
+ 'card.more':'مزید پڑھیے','card.buy':'ایمازون',
+ 'themes.tag':'بار بار آنے والے موضوعات','themes.head':'یہ تحریر بار بار <em>جس طرف لوٹتی ہے</em>',
+ 'th1':'عقیدہ','th1d':'آپ کے رشتوں، پیشے اور خوشی کے نیچے چھپی ساخت — اور یہ حقیقت کہ اس ساخت کو نئے سرے سے تعمیر کیا جا سکتا ہے۔',
+ 'th2':'وقت','th2d':'ماضی اور مستقبل کا جنون خاموشی سے زندگی کیوں چرا لیتا ہے، اور جب گھڑی اپنا اختیار کھو دیتی ہے تو کیا باقی رہتا ہے۔',
+ 'th3':'توجہ','th3d':'ایک سانس بھر لمبا دھاگا۔ سارا فن لوٹ آنے میں ہے — مراقبے میں، ارتکاز میں، عام دوپہروں میں۔',
+ 'th4':'دیکھنا','th4d':'نہ عقیدہ، نہ خود مدد۔ کچھ زیادہ قدیم: دھڑکتے دل والا فلسفہ، جو آپ سے کچھ ماننے کو نہیں کہتا۔',
+ 'quote.text':'نقشہ ملک نہیں ہوتا۔ تب تک چلیے جب تک فرق معلوم نہ ہو جائے۔','quote.cite':'— دی میپ اِز فِنِشڈ',
+ 'about.tag':'مصنف کا تعارف','about.head':'سچ کی <em>بے خوف جستجو</em>',
+ 'about.p1':'صوفی الہام، جنہیں ایم ڈی نیر عالم کے نام سے بھی جانا جاتا ہے، ایک مصنف، گہرے مفکر اور سچ کے متلاشی ہیں جو عقیدے، شعور، شناخت اور خود شناسی کی کھوج کرتے ہیں۔',
+ 'about.p2':'&ldquo;صوفی الہام&rdquo; وہ نام ہے جو میں نے خود کو دیا۔ میرے نزدیک یہ <strong>اُس معنی کی علامت ہے جسے میں جیتا ہوں</strong> &mdash; ایک یاد دہانی کہ زندگی محض گزارنے کی چیز نہیں، بلکہ سمجھنے، سوال کرنے اور اصل روپ میں محسوس کرنے کی چیز ہے۔',
+ 'about.p3':'میری تحریر ورثے میں ملے عقائد اور سماجی تربیت کو چیلنج کرتی ہے، اور قارئین کو دعوت دیتی ہے کہ وہ مفروضوں کو آنکھ بند کر کے قبول کرنے کے بجائے اُن پر سوال کریں۔ میں وجود، فلسفے، انسانی فطرت اور سچ کی تلاش کی کھری اور اکثر بے چین کرنے والی حقیقتوں میں اترتا ہوں۔',
+ 'about.p4':'میرا یقین ہے کہ اصلیت وہیں سے شروع ہوتی ہے جب ہم اُس سے آگے دیکھنے کی جرأت کریں جو ہمیں سکھایا گیا ہے، اور وہ دریافت کریں جو حقیقتاً ہمارا اپنا ہے۔',
+ 'about.p5':'اپنے الفاظ کے ذریعے میں تبدیلی کی تحریک دینا چاہتا ہوں &mdash; مشروط سوچ سے آزادی، حقیقت کا بے خوف سامنا، اور زیادہ وضاحت، حوصلے اور آگاہی کے ساتھ جینا۔',
+ 'about.creed':'صوفی الہام محض ایک نام نہیں۔ یہ ہونے کا ایک انداز ہے۔',
+ 'foot.follow':'فالو کریں',
+ 'jour.tag':'اب تک کا سفر','jour.head':'ایک تحریری <em>سفر</em>',
+ 'j1':'پہلی تصنیف۔ ذہن کی پوشیدہ ساخت میں ایک سفر — اور اسے نئے سرے سے لکھنے کا طریقہ۔',
+ 'j2':'سب سے زیادہ زیرِ بحث کتاب۔ اگر وقت حقیقی نہ ہو، بلکہ ایک خوبصورت جھوٹ ہو تو؟',
+ 'j3':'پیدائش سے آگے تک سیکھنا — ان کے لیے جو سیکھتے رہنے کی جرأت رکھتے ہیں۔',
+ 'j4t':'چار نئی تصانیف','j4':'نیوروفوکس پروٹوکول، دی ہیومن آپریٹنگ مینوئل، دی وال واز اے جیسچر اور دی میپ اِز فِنِشڈ۔',
+ 'con.tag':'رابطہ کیجیے','con.head':'سلام <em>کہیے</em>',
+ 'con.sub':'قارئین کے پیغامات، انٹرویو، اشتراک، تھوک آرڈر یا ترجمے کے حقوق کے لیے — براہِ راست رابطہ کیجیے۔',
+ 'con.phone':'فون','con.wa':'واٹس ایپ','con.wad':'براہِ راست پیغام','con.store':'ایمازون مصنف اسٹور',
+ 'con.stored':'نئی کتابوں کے لیے فالو کیجیے','con.based':'مقام','con.basedd':'بہار، بھارت · دنیا بھر میں دستیاب',
+ 'con.name':'آپ کا نام','con.email':'ای میل','con.subject':'موضوع','con.msg':'پیغام',
+ 'con.ph_name':'اپنا نام لکھیے','con.ph_msg':'اپنا پیغام لکھیے…',
+ 'con.send':'واٹس ایپ سے بھیجیں',
+ 'con.note':'آپ کا پیغام واٹس ایپ پر ‎+91 62017 57330‎ پر کھلے گا — اس ویب سائٹ پر کچھ محفوظ نہیں ہوتا۔',
+ 's1':'قاری کا پیغام','s2':'انٹرویو کی درخواست','s3':'اشتراک','s4':'تھوک / بک اسٹور آرڈر','s5':'ترجمے کے حقوق','s6':'دیگر',
+ 'cta.tag':'پڑھنا شروع کیجیے','cta.head':'وہیں سے شروع کیجیے جہاں <em>سوال</em> سب سے بلند ہے',
+ 'cta.sub':'چار کتابیں کنڈل انلمیٹڈ پر مفت پڑھی جا سکتی ہیں۔ نئی کتابوں کی اطلاع کے لیے ایمازون پر مصنف کو فالو کیجیے۔',
+ 'cta.b1':'Amazon.com اسٹور','cta.b2':'Amazon.in اسٹور',
+ 'foot.about':'عقیدے، وقت، توجہ اور مشروط سوچ کے پار منتظر آزادی پر کتابیں۔ دنیا بھر میں ایمازون پر کنڈل اور پیپربیک میں دستیاب۔',
+ 'foot.books':'کتابیں','foot.explore':'دریافت','foot.contact':'رابطہ','foot.rights':'جملہ حقوق محفوظ ہیں۔',
+ 'foot.privacy':'رازداری کی پالیسی','foot.terms':'استعمال کی شرائط','foot.aboutl':'مصنف کا تعارف','foot.msg':'پیغام بھیجیں',
+ 'go.title':'ایمازون کھل رہا ہے','go.sub':'آپ کو محفوظ ایمازون اسٹور پر لے جایا جا رہا ہے…','go.cancel':'منسوخ',
+ 'snd.on':'آواز چالو','snd.off':'آواز بند','lang.label':'زبان'
+},
+
+hinglish:{
+ _name:'Hinglish', _dir:'ltr', _font:"var(--sans)",
+ 'nav.new':'Nayi Kitab','nav.books':'Kitabein','nav.themes':'Themes','nav.about':'Parichay',
+ 'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
+ 'hero.eyebrow':'Aath Kitabein · Philosophy aur Self-Discovery',
+ 'hero.alias':'MD Naiyer Alam ke naam se bhi jaane jaate hain',
+ 'hero.lede':'Ek author aur gehre thinker, jo belief systems aur self-discovery ko explore karte hain — aisi writing jo society ke banaye rules ko challenge karti hai aur aapse kehti hai ki <strong>jo bhi maan liya hai, us par sawaal kijiye.</strong>',
+ 'hero.lede2':'Belief ki architecture se lekar time ke illusion tak, ADHD aur attention se lekar sirf dekh paane ki shaant azadi tak — aath kitabein, ek hi talash: sach, chahe kitna hi uncomfortable ho.',
+ 'hero.cta1':'Nayi Kitab Padhiye','hero.cta2':'Saari Kitabein Dekhiye','hero.scroll':'Scroll',
+ 'stat.titles':'Published Kitabein','stat.pages':'Total Pages',
+ 'stat.ku':'Kindle Unlimited par Free','stat.markets':'Amazon Marketplaces',
+ 'feat.tag':'Nayi Kitab','feat.head':'Aapke toaster ke saath manual aaya tha. <em>Aapke saath nahi.</em>',
+ 'feat.sub':'Behtar Mind, Behtar Habits aur Behtar Life design karne ki ek Systems-Based Guide',
+ 'feat.quote':'"Aap broken nahi hain. Aap purani settings par chal rahe hain — aur settings badli ja sakti hain."',
+ 'feat.p1':'Aap is planet ki sabse complex machine hain, aur aapko zero documentation ke saath bhej diya gaya. Toh aapne wahi kiya jo sab karte hain: wahi teen buttons aur zor se dabaye. Zyada motivation. Zyada discipline. Zyada guilt.',
+ 'feat.p2':'Ek premium hardware manual ki shaant, precise zubaan mein likhi gayi — <strong>111 original diagrams, 34 write-in worksheets aur 10 complete system modules</strong> ke saath — ye aapki life ko wahi maanti hai jo wo asal mein hai: energy, emotion, attention aur habit ka ek living system.',
+ 'feat.m1':'Daily Operation','feat.m2':'Building &amp; Repair','feat.m3':'The Long Game',
+ 'feat.it':'Subah 4 baje ka alarm nahi. Koi hype nahi.<br>Outcomes ko pakadna chhodiye — settings adjust karna shuru kijiye.',
+ 'feat.buy1':'Amazon.com se khareedein','feat.buy2':'Amazon.in se khareedein',
+ 'books.tag':'The Library','books.head':'Saari <em>Kitabein</em>',
+ 'books.sub':'Sufi Ilham ki har kitab — Kindle aur paperback mein, duniya bhar mein Amazon par. Zyada jaanne ke liye kisi bhi kitab par click kijiye.',
+ 'f.all':'Saari Kitabein','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback',
+ 'card.more':'Aur Padhiye','card.buy':'Amazon',
+ 'themes.tag':'Baar Baar Aane Wale Themes','themes.head':'Ye writing baar baar <em>jahan lautti hai</em>',
+ 'th1':'Belief','th1d':'Aapke rishton, career aur khushi ke neeche chhupi architecture — aur ye sach ki us architecture ko dobara banaya ja sakta hai.',
+ 'th2':'Time','th2d':'Past aur future ka obsession chupchaap zindagi kyun chura leta hai, aur jab ghadi apna adhikar kho deti hai tab kya bachta hai.',
+ 'th3':'Attention','th3d':'Ek saans bhar lamba dhaaga. Poori kala laut aane mein hai — meditation mein, focus mein, aam dopaharon mein.',
+ 'th4':'Seeing','th4d':'Na doctrine, na self-help. Kuch zyada purana: dhadakte dil wala philosophy, jo aapse kuch maanne ko nahi kehta.',
+ 'quote.text':'Naksha desh nahi hota. Tab tak chaliye jab tak farq samajh na aa jaye.','quote.cite':'— The Map Is Finished',
+ 'about.tag':'Author ke Baare Mein','about.head':'Sach ki <em>nidar talash</em>',
+ 'about.p1':'Sufi Ilham, jinhe MD Naiyer Alam ke naam se bhi jaana jaata hai, ek author, deep thinker aur sach ke seeker hain jo belief, consciousness, identity aur self-discovery ko explore karte hain.',
+ 'about.p2':'&ldquo;Sufi Ilham&rdquo; woh naam hai jo maine khud ko diya. Mere liye yeh <strong>us maayne ka pratik hai jise main jeeta hoon</strong> &mdash; ek reminder ki zindagi sirf kaat dene ki cheez nahi, balki samajhne, sawaal karne aur authentically experience karne ki cheez hai.',
+ 'about.p3':'Meri writing inherited beliefs aur societal conditioning ko challenge karti hai, aur readers ko invite karti hai ki woh assumptions ko blindly accept karne ke bajaye unpar sawaal karein. Main existence, philosophy, human nature aur sach ki talash ki raw aur aksar uncomfortable realities mein utarta hoon.',
+ 'about.p4':'Mera maanna hai ki authenticity tabhi shuru hoti hai jab hum us se aage dekhne ki himmat karein jo humein sikhaya gaya hai, aur woh discover karein jo sach mein hamara apna hai.',
+ 'about.p5':'Apne shabdon ke through main transformation inspire karna chahta hoon &mdash; conditioning se azaad hona, reality ka bina dar ke saamna karna, aur zyada clarity, courage aur awareness ke saath jeena.',
+ 'about.creed':'Sufi Ilham sirf ek naam nahi hai. Yeh hone ka ek tareeka hai.',
+ 'foot.follow':'Follow karein',
+ 'jour.tag':'Ab Tak Ka Safar','jour.head':'Ek writing <em>journey</em>',
+ 'j1':'Pehli kitab. Mind ki chhupi architecture mein ek safar — aur use dobara likhne ka tarika.',
+ 'j2':'Sabse zyada charchit kitab. Agar time real na ho, balki ek khoobsurat jhooth ho toh?',
+ 'j3':'Janm se aage tak seekhna — un logon ke liye jo seekhte rehne ki himmat rakhte hain.',
+ 'j4t':'Chaar Nayi Kitabein','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture aur The Map Is Finished.',
+ 'con.tag':'Sampark Kijiye','con.head':'Kahiye <em>hello</em>',
+ 'con.sub':'Reader messages, interviews, collaboration, bulk order ya translation rights ke liye — seedha sampark kijiye.',
+ 'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Seedha message bhejiye','con.store':'Amazon Author Store',
+ 'con.stored':'Nayi kitabon ke liye follow kijiye','con.based':'Location','con.basedd':'Bihar, India · Duniya bhar mein available',
+ 'con.name':'Aapka Naam','con.email':'Email','con.subject':'Subject','con.msg':'Message',
+ 'con.ph_name':'Apna naam likhiye','con.ph_msg':'Apna message likhiye…',
+ 'con.send':'WhatsApp se bhejein',
+ 'con.note':'Aapka message WhatsApp par +91 62017 57330 par khulega — is website par kuch bhi store nahi hota.',
+ 's1':'Reader Message','s2':'Interview Request','s3':'Collaboration','s4':'Bulk / Bookstore Order','s5':'Translation Rights','s6':'Other',
+ 'cta.tag':'Padhna Shuru Kijiye','cta.head':'Wahin se shuru kijiye jahan <em>sawaal</em> sabse tez hai',
+ 'cta.sub':'Chaar kitabein Kindle Unlimited par free padhi ja sakti hain. Nayi kitabon ki update ke liye Amazon par author ko follow kijiye.',
+ 'cta.b1':'Amazon.com Store','cta.b2':'Amazon.in Store',
+ 'foot.about':'Belief, time, attention aur conditioning ke paar intezaar karti azadi par kitabein. Duniya bhar mein Amazon par Kindle aur paperback mein available.',
+ 'foot.books':'Kitabein','foot.explore':'Explore','foot.contact':'Contact','foot.rights':'Sarvadhikar surakshit.',
+ 'foot.privacy':'Privacy Policy','foot.terms':'Terms of Use','foot.aboutl':'Author ke Baare Mein','foot.msg':'Message bhejiye',
+ 'go.title':'Amazon khul raha hai','go.sub':'Aapko secure Amazon store par le jaya ja raha hai…','go.cancel':'Cancel',
+ 'snd.on':'Sound on','snd.off':'Sound off','lang.label':'Bhasha'
+}
+};
+
+</script>
+<script>
+/* ====== SOUNDTRACK · LANGUAGE · CINEMATIC AMAZON TRANSITION ====== */
+(function(){
+ 'use strict';
+ var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ var LS = {get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
+           set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+ /* ---------------- LANGUAGE ---------------- */
+ var I18N = window.I18N || {};
+ var lang = LS.get('si_lang') || 'en';
+ if(!I18N[lang]) lang = 'en';
+
+ function t(key){ var d=I18N[lang]||{}; return (key in d)?d[key]:((I18N.en&&I18N.en[key])||''); }
+
+ function applyLang(code, animate){
+   if(!I18N[code]) return;
+   lang = code; LS.set('si_lang', code);
+   var d = I18N[code];
+   var html = document.documentElement;
+   html.setAttribute('lang', code==='hinglish'?'hi-Latn':code);
+   html.setAttribute('dir', d._dir||'ltr');
+   document.body.style.setProperty('--body-font', d._font||'var(--sans)');
+   document.body.classList.toggle('rtl', (d._dir==='rtl'));
+   document.body.classList.toggle('lang-ur', code==='ur');
+   document.body.classList.toggle('lang-hi', code==='hi');
+
+   var els = document.querySelectorAll('[data-i18n]');
+   function swap(){
+     els.forEach(function(el){
+       var k = el.getAttribute('data-i18n'), v = t(k);
+       if(v==='') return;
+       var attr = el.getAttribute('data-i18n-attr');
+       if(attr){ el.setAttribute(attr, v.replace(/<[^>]+>/g,'')); }
+       else { el.innerHTML = v; }
+     });
+     // update <option> text
+     document.querySelectorAll('[data-i18n-opt]').forEach(function(o){
+       var v=t(o.getAttribute('data-i18n-opt')); if(v) o.textContent=v;
+     });
+     // language button label
+     document.querySelectorAll('.lang-cur').forEach(function(e){ e.textContent = d._name; });
+     document.querySelectorAll('.lang-opt').forEach(function(b){
+       b.classList.toggle('on', b.getAttribute('data-lang')===code);
+     });
+   }
+   if(animate && !RM){
+     document.body.classList.add('lang-fade');
+     setTimeout(function(){ swap(); document.body.classList.remove('lang-fade'); }, 260);
+   } else swap();
+ }
+
+ function initLang(){
+   var btn=document.getElementById('langBtn'), menu=document.getElementById('langMenu');
+   if(btn&&menu){
+     btn.addEventListener('click',function(e){ e.stopPropagation(); menu.classList.toggle('open'); });
+     document.addEventListener('click',function(){ menu.classList.remove('open'); });
+     menu.addEventListener('click',function(e){ e.stopPropagation(); });
+     menu.querySelectorAll('.lang-opt').forEach(function(b){
+       b.addEventListener('click',function(){
+         applyLang(b.getAttribute('data-lang'), true);
+         menu.classList.remove('open');
+       });
+     });
+   }
+   applyLang(lang,false);
+ }
+
+ /* -------- CINEMATIC AMAZON TRANSITION -------- */
+ function initGo(){
+   var ov=document.getElementById('goOv'); if(!ov) return;
+   var titleEl=ov.querySelector('.go-title'), subEl=ov.querySelector('.go-sub'),
+       bookEl=ov.querySelector('.go-book'), cancel=ov.querySelector('.go-cancel');
+   var timer=null, target=null, popup=null;
+
+   function show(url, cover, name, win){
+     target=url; popup=win||null;
+     titleEl.textContent = name || t('go.title');
+     subEl.textContent = t('go.sub');
+     bookEl.innerHTML = cover ? '<img src="'+cover+'" alt="">' : '';
+     cancel.textContent = t('go.cancel');
+     ov.classList.add('open');
+     var dur = RM?200:1500;
+     timer=setTimeout(function(){
+       if(popup && !popup.closed){
+         // tab was opened during the user gesture; just point it at Amazon
+         try{ popup.opener=null; }catch(err){}
+         try{ popup.location.replace(target); popup.focus(); }
+         catch(err){ location.href=target; }
+       } else {
+         // popup was blocked -> navigate this tab instead (never leaves user stuck)
+         location.href=target;
+       }
+       popup=null; hide();
+     },dur);
+   }
+   function hide(){
+     clearTimeout(timer); ov.classList.remove('open'); document.body.style.overflow='';
+     if(popup && !popup.closed){ try{popup.close();}catch(err){} }
+     popup=null;
+   }
+   cancel.addEventListener('click',function(e){e.stopPropagation();hide();});
+   ov.addEventListener('click',function(e){ if(e.target===ov) hide(); });
+   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) hide(); });
+
+   // intercept every amazon link
+   document.addEventListener('click',function(e){
+     var a=e.target.closest('a[href*="amazon."]');
+     if(!a) return;
+     if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0) return;
+     e.preventDefault();
+     // open the tab NOW, inside the user gesture, so it is never popup-blocked
+     var win=null;
+     try{ win=window.open('','_blank'); }catch(err){ win=null; }
+     if(win){ try{ win.opener=null;
+       win.document.write('<!doctype html><meta charset=utf-8><title>Opening Amazon…</title>'+
+         '<body style="margin:0;background:#08080a;color:#d4af54;font:14px/1.6 system-ui;'+
+         'display:grid;place-items:center;height:100vh">Opening Amazon…</body>'); }catch(err){} }
+     var card=a.closest('[data-book]'), cover='', nm=a.getAttribute('data-go-name')||'';
+     if(card){
+       try{ var d=JSON.parse(card.getAttribute('data-book')); cover=d.img; nm=nm||d.title; }catch(err){}
+     }
+     var mim=document.querySelector('#modal.open .m-cover img');
+     if(!cover&&mim){ cover=mim.src; nm=nm||(document.querySelector('#modal h3')||{}).textContent; }
+     show(a.href, cover, nm, win);
+   },true);
+   window.__goShow=show;
+ }
+
+ function boot(){ initLang(); initGo(); }
+ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
+ else boot();
+})();
+
+</script>
+
+<audio id="bgm" loop preload="auto" playsinline src="sama.mp3"></audio>
+
+<script>
+/* ---------- "Sama'" ambient soundtrack ----------------------------------
+   Plays by itself. No gate, no prompt. Falls back to starting on the first
+   interaction when the browser blocks autoplay, and always fades in. */
+(function(){
+  var a = document.getElementById('bgm');
+  if(!a) return;
+
+  var KEY = 'si_music';                       // 'off' means the user muted it
+  var VOL = 0.30;                             // gentle by design
+  var btn = document.getElementById('sndBtn');
+  var fadeT = null, wanted = (localStorage.getItem(KEY) !== 'off');
+  var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  a.volume = 0;
+  a.loop = true;
+
+  function paint(){
+    if(btn) btn.classList.toggle('on', wanted && !a.paused);
+  }
+  function fade(to, ms, done){
+    clearInterval(fadeT);
+    var from = a.volume, t0 = Date.now();
+    fadeT = setInterval(function(){
+      var p = Math.min(1, (Date.now()-t0)/ms);
+      a.volume = Math.max(0, Math.min(1, from + (to-from)*p));
+      if(p >= 1){ clearInterval(fadeT); if(done) done(); }
+    }, 40);
+  }
+  function start(){
+    if(!wanted) return;
+    var pr = a.play();
+    if(pr && pr.then){
+      pr.then(function(){ fade(VOL, RM ? 600 : 4000); paint(); })
+        .catch(function(){ arm(); });        // blocked -> wait for a gesture
+    } else {
+      fade(VOL, 4000); paint();
+    }
+  }
+  function stop(){
+    fade(0, 700, function(){ try{ a.pause(); }catch(e){} paint(); });
+  }
+
+  var armed = false;
+  function arm(){
+    if(armed) return;
+    armed = true;
+    var evs = ['pointerdown','touchstart','keydown','scroll','mousemove'];
+    var kick = function(){
+      evs.forEach(function(e){ document.removeEventListener(e, kick, true); });
+      armed = false;
+      start();
+    };
+    evs.forEach(function(e){ document.addEventListener(e, kick, {once:true, capture:true, passive:true}); });
+  }
+
+  if(btn){
+    btn.addEventListener('click', function(){
+      wanted = !wanted;
+      localStorage.setItem(KEY, wanted ? 'on' : 'off');
+      if(wanted) start(); else stop();
+      paint();
+    });
+  }
+
+  // pause politely when the tab is hidden, resume when it comes back
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){
+      if(!a.paused) fade(0, 400, function(){ a.pause(); });
+    } else if(wanted){
+      a.play().then(function(){ fade(VOL, 1400); paint(); }).catch(function(){});
+    }
+  });
+
+  a.addEventListener('play', paint);
+  a.addEventListener('pause', paint);
+
+  if(wanted) start(); else paint();
+})();
+</script>
+
+</body>
+</html>
