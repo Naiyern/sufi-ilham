@@ -1,7 +1,7 @@
 # Sufi Ilham — Official Author Website
 
 An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam),
-author of 13 titles on Amazon — eight works of philosophy and self-discovery plus the
+author of 15 titles on Amazon — ten works of philosophy, spirituality and self-discovery plus the
 five-book **Maple Falls Romance** series. Every line of design, copy, code and music here
 was made for this site — no templates, no stock, no copied marketing text.
 
@@ -9,7 +9,7 @@ was made for this site — no templates, no stock, no copied marketing text.
 
 | File | Description |
 |---|---|
-| `index.html` | Homepage — hero, 8-book library with live filters, the Maple Falls Romance series section, about, themes, contact strip |
+| `index.html` | Homepage — hero, 10-book library with live filters, the Maple Falls Romance series section, about, themes, contact strip |
 | `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
 | `privacy.html` | Privacy Policy — 13 sections with sticky table of contents |
 | `terms.html` | Terms of Use — 13 sections, governing law: Bihar, India |
@@ -18,7 +18,8 @@ was made for this site — no templates, no stock, no copied marketing text.
 
 All images (3 author photos + 8 book covers) are **embedded directly in the HTML** as
 base64, so every page is self-contained. The only separate file is `sama.mp3` — plus the
-five Maple Falls covers, which are hotlinked from Amazon's image CDN (see below).
+five Maple Falls covers and the two newer love books (Moh Tera Prem, PREM), which are
+hotlinked from Amazon's image CDN (see below).
 
 ## How to publish it
 
@@ -41,10 +42,10 @@ Keep all files together in the same folder so `sama.mp3` and the page links reso
   to right-to-left. Your choice follows you across every page.
 - **Cinematic Amazon routing** — clicking any store link opens an interstitial showing the
   book cover and a progress bar, then delivers the reader to the correct Amazon store in a
-  new tab. All 26 links (13 books × amazon.com and amazon.in) are wired the same way.
+  new tab. All 30 links (15 books × amazon.com and amazon.in) are wired the same way.
 - **Series shelf** — the Maple Falls Romance section has its own maple-warm palette, a
   reading-order strip and five numbered cards, and the homepage counters now read
-  13 titles · 2,336 pages · 9 free on Kindle Unlimited.
+  15 titles · 2,832 pages · 11 free on Kindle Unlimited.
 - **Motion design** — custom cursor, drifting dust canvas, scroll progress bar, staggered
   reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
 
@@ -91,29 +92,32 @@ with a reading-order strip, per-book "Read More" modals and the usual Amazon int
 
 Amazon series page: <https://www.amazon.com/dp/B0H7Q6GQPV>
 
-**One note on the covers.** Unlike the eight older titles, the five Maple Falls covers are
-*not* embedded as base64 — they are loaded straight from Amazon's image CDN
+**One note on the covers.** Unlike the eight older titles, the five Maple Falls covers and
+the two newer love books (Moh Tera Prem, PREM) are *not* embedded as base64 — they are
+loaded straight from Amazon's image CDN
 (`https://m.media-amazon.com/images/I/<id>._SL500_.jpg`), which is always the live cover
-Amazon is showing. If a cover ever fails to load, `mfCover()` in `index.html` swaps in a
-maple-toned placeholder so the layout never breaks. To make the page fully self-contained
-again, download the five JPEGs and paste them in as `data:image/jpeg;base64,…` in both the
+Amazon is showing. If a cover ever fails to load, `mfCover()` / `phCover()` in `index.html`
+swap in a styled placeholder so the layout never breaks. To make the page fully self-contained
+again, download the seven JPEGs and paste them in as `data:image/jpeg;base64,…` in both the
 `<img src>` and the card's `data-book` JSON.
 
 ## The books
 
 1. The Human Operating Manual — 383 pp · most popular
-2. Laozi: The Man Who Disappeared into the Dao — 318 pp · newest
-3. The Wall Was a Gesture — 334 pp
-4. The Map Is Finished — 320 pp
-5. NeuroFocus Protocol — 362 pp
-6. Fractured Time — 56 pp · most talked about
-7. Belief Unveiled — 66 pp
-8. The Infinite Classroom — 76 pp
-9. The Bookshop at the End of Maple Street — 123 pp · Maple Falls #1
-10. A Recipe for Maple Falls — 76 pp · Maple Falls #2
-11. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
-12. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
-13. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
+2. Moh Tera Prem: Where Attachment Ends and Love Begins — 211 pp · new
+3. PREM: The Ancient Path of Selfless, Unconditional Love — 285 pp · new
+4. Laozi: The Man Who Disappeared into the Dao — 318 pp
+5. The Wall Was a Gesture — 334 pp
+6. The Map Is Finished — 320 pp
+7. NeuroFocus Protocol — 362 pp
+8. Fractured Time — 56 pp · most talked about
+9. Belief Unveiled — 66 pp
+10. The Infinite Classroom — 76 pp
+11. The Bookshop at the End of Maple Street — 123 pp · Maple Falls #1
+12. A Recipe for Maple Falls — 76 pp · Maple Falls #2
+13. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
+14. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
+15. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
 
 ## Contact
 
