@@ -1,14 +1,15 @@
 # Sufi Ilham — Official Author Website
 
 An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam),
-author of 7 titles on Amazon. Every line of design, copy, code and music here was made
-for this site — no templates, no stock, no copied marketing text.
+author of 13 titles on Amazon — eight works of philosophy and self-discovery plus the
+five-book **Maple Falls Romance** series. Every line of design, copy, code and music here
+was made for this site — no templates, no stock, no copied marketing text.
 
 ## What's in this folder
 
 | File | Description |
 |---|---|
-| `index.html` | Homepage — hero, 7-book library with live filters, about, themes, contact strip |
+| `index.html` | Homepage — hero, 8-book library with live filters, the Maple Falls Romance series section, about, themes, contact strip |
 | `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
 | `privacy.html` | Privacy Policy — 13 sections with sticky table of contents |
 | `terms.html` | Terms of Use — 13 sections, governing law: Bihar, India |
@@ -16,7 +17,8 @@ for this site — no templates, no stock, no copied marketing text.
 | `robots.txt` / `sitemap.xml` | Search engine files |
 
 All images (3 author photos + 8 book covers) are **embedded directly in the HTML** as
-base64, so every page is self-contained. The only separate file is `sama.mp3`.
+base64, so every page is self-contained. The only separate file is `sama.mp3` — plus the
+five Maple Falls covers, which are hotlinked from Amazon's image CDN (see below).
 
 ## How to publish it
 
@@ -39,7 +41,10 @@ Keep all files together in the same folder so `sama.mp3` and the page links reso
   to right-to-left. Your choice follows you across every page.
 - **Cinematic Amazon routing** — clicking any store link opens an interstitial showing the
   book cover and a progress bar, then delivers the reader to the correct Amazon store in a
-  new tab. All 16 links (8 books × amazon.com and amazon.in) are verified working.
+  new tab. All 26 links (13 books × amazon.com and amazon.in) are wired the same way.
+- **Series shelf** — the Maple Falls Romance section has its own maple-warm palette, a
+  reading-order strip and five numbered cards, and the homepage counters now read
+  13 titles · 2,336 pages · 9 free on Kindle Unlimited.
 - **Motion design** — custom cursor, drifting dust canvas, scroll progress bar, staggered
   reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
 
@@ -70,6 +75,30 @@ and that choice is remembered across pages and visits.
 - Removed the "Veni, Vidi, Vici" motto from all wording.
 - Mobile: larger body text, 44px minimum tap targets, softer vignette, no overflow at 390px.
 
+## The Maple Falls Romance series
+
+Five small-town romances set in Maple Falls, Vermont. All five are $2.99 on Kindle and
+free on Kindle Unlimited. They live in their own section on the homepage (`#maple`),
+with a reading-order strip, per-book "Read More" modals and the usual Amazon interstitial.
+
+| # | Title | ASIN | Pages | Published |
+|---|---|---|---|---|
+| 1 | The Bookshop at the End of Maple Street | B0HDSLBTX7 | 123 | 17 Aug 2026 |
+| 2 | A Recipe for Maple Falls | B0HFKCQXS4 | 76 | 17 Aug 2026 |
+| 3 | The Christmas Letters of Maple Falls | B0HFMFQW2C | 78 | 18 Aug 2026 |
+| 4 | A Second Chance in Maple Falls | B0HFP1KFF1 | 68 | 18 Aug 2026 |
+| 5 | A Wedding at the End of Maple Street | B0HFNWTV82 | 76 | 18 Aug 2026 |
+
+Amazon series page: <https://www.amazon.com/dp/B0H7Q6GQPV>
+
+**One note on the covers.** Unlike the eight older titles, the five Maple Falls covers are
+*not* embedded as base64 — they are loaded straight from Amazon's image CDN
+(`https://m.media-amazon.com/images/I/<id>._SL500_.jpg`), which is always the live cover
+Amazon is showing. If a cover ever fails to load, `mfCover()` in `index.html` swaps in a
+maple-toned placeholder so the layout never breaks. To make the page fully self-contained
+again, download the five JPEGs and paste them in as `data:image/jpeg;base64,…` in both the
+`<img src>` and the card's `data-book` JSON.
+
 ## The books
 
 1. The Human Operating Manual — 383 pp · most popular
@@ -80,6 +109,11 @@ and that choice is remembered across pages and visits.
 6. Fractured Time — 56 pp · most talked about
 7. Belief Unveiled — 66 pp
 8. The Infinite Classroom — 76 pp
+9. The Bookshop at the End of Maple Street — 123 pp · Maple Falls #1
+10. A Recipe for Maple Falls — 76 pp · Maple Falls #2
+11. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
+12. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
+13. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
 
 ## Contact
 
