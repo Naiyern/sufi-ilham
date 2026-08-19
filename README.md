@@ -11,15 +11,21 @@ was made for this site — no templates, no stock, no copied marketing text.
 |---|---|
 | `index.html` | Homepage — hero, 10-book library with live filters, the Maple Falls Romance series section, about, themes, contact strip |
 | `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
-| `privacy.html` | Privacy Policy — 13 sections with sticky table of contents |
-| `terms.html` | Terms of Use — 13 sections, governing law: Bihar, India |
+| `privacy.html` | Privacy Policy — 16 sections with sticky table of contents |
+| `terms.html` | Terms of Use — 15 sections, governing law: Bihar, India |
+| `404.html` | Styled not-found page (GitHub Pages serves it automatically) |
+| `assets/site.css` | **Shared stylesheet for every page** — downloaded once, then cached |
+| `assets/site.js` | **Shared script** — engine, four-language system, Amazon interstitial, soundtrack |
+| `assets/icon*.png`, `favicon.ico` | Favicon, Apple touch icon and PWA icons |
+| `site.webmanifest` | Web app manifest (installable, correct name and theme colour) |
+| `images/` | 3 author photos + 8 book covers |
 | `sama.mp3` | Original Sufi ambient soundtrack, 5:52 (3.4 MB) |
 | `robots.txt` / `sitemap.xml` | Search engine files |
+| `.nojekyll` | Tells GitHub Pages to publish the files as-is |
 
-All images (3 author photos + 8 book covers) are **embedded directly in the HTML** as
-base64, so every page is self-contained. The only separate file is `sama.mp3` — plus the
-five Maple Falls covers and the two newer love books (Moh Tera Prem, PREM), which are
-hotlinked from Amazon's image CDN (see below).
+The CSS and JavaScript used to be pasted inline into all four pages. They now live in
+`assets/`, so the browser fetches them once and every page after the first is close to
+instant. Page-specific rules (the contact form, for instance) stay inline in that page.
 
 ## How to publish it
 
@@ -30,7 +36,8 @@ folder onto the page. It goes live in about 20 seconds.
 
 **Vercel:** https://vercel.com/new → import or drag the folder.
 
-**GitHub Pages:** push these files to a repo, then Settings → Pages → deploy from branch.
+**GitHub Pages (this repo):** already live at <https://naiyern.github.io/sufi-ilham/> —
+pushing to `main` rebuilds it automatically.
 
 **Any web host / cPanel:** upload the contents of this folder to `public_html`.
 
@@ -69,11 +76,27 @@ and that choice is remembered across pages and visits.
 
 ## Recent polish
 
+- **Shared assets.** The stylesheet and script were lifted out of all four pages into
+  `assets/site.css` and `assets/site.js`. `index.html` went from 198 KB to 63 KB and the three
+  sub-pages from ~93 KB to ~14 KB each; after the first page the browser reuses the cache.
+- **The soundtrack no longer pre-downloads.** `sama.mp3` was set to `preload="auto"`, so every
+  visit pulled 3.4 MB before the page was usable. It is now `preload="none"` and fetched only
+  when the music actually starts.
+- **Privacy Policy rewritten to match reality** — it previously claimed there were no analytics
+  and no newsletter, while the site runs cookie-free Plausible analytics and a Buttondown
+  subscribe box. It now documents both, plus the two local-storage preference keys, a
+  sub-processor table, retention periods and DPDP/GDPR/CCPA rights.
+- **Terms of Use** gained a newsletter clause and a privacy clause, lists all fifteen titles
+  (it stopped at eight), and reserves rights against AI training and bulk scraping.
+- Real favicon, Apple touch icon, PWA manifest and a styled `404.html`.
+- `preconnect` hints for the analytics and Amazon image origins; the hero portrait is
+  preloaded as the LCP image, and sub-pages finally have Open Graph / Twitter cards.
+- Fixed a `prefers-reduced-motion` block that was nested inside a phone-only media query so it
+  never applied on desktop, and a stray `}` that truncated the contact page's CSS.
 - Palette lifted out of near-black to a warm charcoal so the site stays legible on
   phone screens and in daylight; body text, borders and gold accents all brightened.
 - Added a two-photo gallery under the author portrait: the flute portrait ("The flute ·
   today") and the childhood photograph ("Where it began"), warm-toned to match.
-- Removed the "Veni, Vidi, Vici" motto from all wording.
 - Mobile: larger body text, 44px minimum tap targets, softer vignette, no overflow at 390px.
 
 ## The Maple Falls Romance series
@@ -92,14 +115,12 @@ with a reading-order strip, per-book "Read More" modals and the usual Amazon int
 
 Amazon series page: <https://www.amazon.com/dp/B0H7Q6GQPV>
 
-**One note on the covers.** Unlike the eight older titles, the five Maple Falls covers and
-the two newer love books (Moh Tera Prem, PREM) are *not* embedded as base64 — they are
-loaded straight from Amazon's image CDN
-(`https://m.media-amazon.com/images/I/<id>._SL500_.jpg`), which is always the live cover
-Amazon is showing. If a cover ever fails to load, `mfCover()` / `phCover()` in `index.html`
-swap in a styled placeholder so the layout never breaks. To make the page fully self-contained
-again, download the seven JPEGs and paste them in as `data:image/jpeg;base64,…` in both the
-`<img src>` and the card's `data-book` JSON.
+**One note on the covers.** The eight older covers and the three author photos are real files
+in `images/`. The five Maple Falls covers and the two newer love books (Moh Tera Prem, PREM)
+are loaded straight from Amazon's image CDN
+(`https://m.media-amazon.com/images/I/<id>._SL500_.jpg`), which is always the live cover Amazon
+is showing. If a cover ever fails to load, `mfCover()` / `phCover()` in `index.html` swap in a
+styled placeholder so the layout never breaks.
 
 ## The books
 
@@ -123,7 +144,3 @@ again, download the seven JPEGs and paste them in as `data:image/jpeg;base64,…
 
 Phone / WhatsApp: **+91 62017 57330** · Bihar, India · Available worldwide
 Instagram: **@Sufiilham07** (author) · **@naiyer_fx** (personal)
-
----
-
-*Veni · Vidi · Vici*

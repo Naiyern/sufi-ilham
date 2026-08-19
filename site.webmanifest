@@ -1,0 +1,17 @@
+{
+  "name": "Sufi Ilham — Author",
+  "short_name": "Sufi Ilham",
+  "description": "Official website of Sufi Ilham (MD Naiyer Alam), author of 15 books on philosophy, self-discovery and romance.",
+  "start_url": "/sufi-ilham/",
+  "scope": "/sufi-ilham/",
+  "display": "standalone",
+  "background_color": "#08080a",
+  "theme_color": "#08080a",
+  "lang": "en",
+  "categories": ["books", "education", "lifestyle"],
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
