@@ -123,6 +123,62 @@
     window.addEventListener('resize',function(){cancelAnimationFrame(raf);size();draw();});
   }
 
+  /* ---- maple falls snowfall ---- */
+  function initSnow(){
+    var sec=document.getElementById('maple'), c=document.getElementById('mfsnow');
+    if(!sec||!c||RM) return;
+    var ctx=c.getContext('2d');
+    var ps=[], w=0,h=0,raf=null;
+    var DPR=Math.min(2, window.devicePixelRatio||1);
+    function size(){
+      w=sec.offsetWidth; h=sec.offsetHeight;
+      c.width=w*DPR; c.height=h*DPR;
+      c.style.width=w+'px'; c.style.height=h+'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    function make(){
+      var d=Math.random();                 /* depth: 0 = far, 1 = near */
+      return {
+        x:Math.random()*w, y:Math.random()*h,
+        r:d*2.2+.7,                        /* near flakes are bigger    */
+        s:d*.6+.22,                        /* ...and fall faster        */
+        o:d*.42+.1,                        /* ...and shine brighter     */
+        sw:d*10+2,                         /* sway amplitude            */
+        ph:Math.random()*6.2832,           /* sway phase                */
+        sp:Math.random()*.009+.004         /* sway speed                */
+      };
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(var i=0;i<ps.length;i++){
+        var p=ps[i];
+        p.y+=p.s; p.ph+=p.sp;
+        if(p.y>h+6){ p.y=-6; p.x=Math.random()*w; }
+        ctx.beginPath();
+        ctx.arc(p.x+Math.sin(p.ph)*p.sw, p.y, p.r, 0, 6.2832);
+        ctx.fillStyle='rgba(236,242,252,'+p.o+')';
+        ctx.fill();
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    function start(){ if(!raf) draw(); }
+    function stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+    size();
+    var n=Math.min(120, Math.round(w/11));
+    for(var i=0;i<n;i++) ps.push(make());
+    /* draw only while the section is on screen */
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(en){
+        en.forEach(function(x){ x.isIntersecting ? start() : stop(); });
+      },{rootMargin:'90px'});
+      io.observe(sec);
+    } else start();
+    window.addEventListener('resize',function(){
+      size();
+      for(var i=0;i<ps.length;i++){ ps[i].x=Math.random()*w; if(ps[i].y>h) ps[i].y=Math.random()*h; }
+    });
+  }
+
   /* ---- 3D tilt ---- */
   function initTilt(){
     if(RM || window.matchMedia('(hover:none)').matches) return;
@@ -275,7 +331,7 @@
   /* ---- boot ---- */
   function boot(){
     initPre(); initScroll(); initMenu(); initReveal(); initCursor();
-    initParticles(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initForm();
+    initParticles(); initSnow(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initForm();
     var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
