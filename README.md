@@ -51,9 +51,11 @@ Keep all files together in the same folder so `sama.mp3` and the page links reso
   book cover and a progress bar, then delivers the reader to the correct Amazon store in a
   new tab. All 30 links (15 books × amazon.com and amazon.in) are wired the same way.
 - **Series shelf** — the Maple Falls Romance section has its own maple-warm palette, a
-  reading-order strip and five numbered cards, and the homepage counters now read
+  reading-order strip, five numbered cards and a gentle layered snowfall over the section,
+  and the homepage counters now read
   15 titles · 2,832 pages · 11 free on Kindle Unlimited.
-- **Motion design** — custom cursor, drifting dust canvas, scroll progress bar, staggered
+- **Motion design** — custom cursor, drifting dust canvas, Maple Falls snowfall (paused
+  off-screen), scroll progress bar, staggered
   reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
 
 ## The soundtrack

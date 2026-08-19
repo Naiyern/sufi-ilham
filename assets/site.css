@@ -721,6 +721,10 @@ p{color:#ded7c9}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 100 100'%3E%3Cpath fill='%23e0bb63' d='M50 8l7 16 12-7-4 14 15-3-9 12 15 5-15 6 9 12-15-3 4 14-12-7-7 16-7-16-12 7 4-14-15 3 9-12-15-6 15-5-9-12 15 3-4-14 12 7z'/%3E%3C/svg%3E");
   background-size:150px 150px;
 }
+/* snowfall layer — flakes drift above the leaves, below the content */
+.mf-snow{
+  position:absolute;inset:0;pointer-events:none;display:block;
+}
 .maple .wrap{position:relative;z-index:1}
 .mf-tag{color:#e39a6b}
 .mf-tag::before{background:#e39a6b}
