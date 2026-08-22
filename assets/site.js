@@ -253,7 +253,21 @@
     function open(card){
       var d=JSON.parse(card.getAttribute('data-book'));
       var linksHtml = '';
-      if(d.coming_soon){
+      if(d.free_whatsapp){
+        linksHtml =
+          '<div class="m-links">'+
+            (d.whatsapp_url ? '<a class="btn btn-gold" href="'+d.whatsapp_url+'" target="_blank" rel="noopener">Get Free Copy on WhatsApp <span class="arw">→</span></a>' : '')+
+            (d.english_url ? '<a class="btn btn-ghost" href="'+d.english_url+'" target="_blank" rel="noopener">English Edition on Amazon <span class="arw">→</span></a>' : '')+
+          '</div>'+
+          '<div class="m-stores"><span class="m-stores-t">WhatsApp Delivery:</span><span style="color:var(--paper-2);font-size:.82rem;">Message opens to <b>+91 62017 57330</b> for instant automated delivery.</span></div>'+
+          (d.english_url ? (
+            '<div class="m-stores">'+
+              '<span class="m-stores-t">English Edition:</span>'+
+              '<a href="'+d.english_url+'" target="_blank" rel="noopener">Amazon.in</a>'+
+              (d.us ? '<a href="'+d.us+'" target="_blank" rel="noopener">Amazon.com</a>' : '')+
+            '</div>'
+          ) : '');
+      } else if(d.coming_soon){
         linksHtml =
           '<div class="m-links">'+
             (d.notify_url ? '<a class="btn btn-gold" href="'+d.notify_url+'" target="_blank" rel="noopener">Notify Me on WhatsApp <span class="arw">→</span></a>' : '')+
