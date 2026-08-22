@@ -338,6 +338,22 @@
     });
   }
 
+  /* ---- featured spotlight tabs ---- */
+  function initFeatTabs(){
+    var tabs = document.querySelectorAll('.feat-tab');
+    if(!tabs.length) return;
+    tabs.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var target = btn.getAttribute('data-feat');
+        tabs.forEach(function(t){ t.classList.toggle('on', t === btn); });
+        document.querySelectorAll('.feat-pane').forEach(function(p){
+          var isTarget = (p.id === 'pane-' + target);
+          p.classList.toggle('on', isTarget);
+        });
+      });
+    });
+  }
+
   /* ---- contact form (no backend: opens mail/WhatsApp) ---- */
   function initForm(){
     var f=document.getElementById('cform'); if(!f) return;
@@ -356,7 +372,7 @@
   /* ---- boot ---- */
   function boot(){
     initPre(); initScroll(); initMenu(); initReveal(); initCursor();
-    initParticles(); initSnow(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initForm();
+    initParticles(); initSnow(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initFeatTabs(); initForm();
     var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
@@ -386,7 +402,7 @@ en:{
  'feat.buy1':'Buy on Amazon.com','feat.buy2':'Buy on Amazon.in',
  'books.tag':'The Library','books.head':'All <em>Books</em>',
  'books.sub':'Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon and upcoming special editions. Click any book to read more.',
- 'f.all':'All Books','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.maple':'Maple Falls Romance',
+ 'f.all':'All Books','f.fic':'Fiction &amp; Novels','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.urdu':'Urdu Edition','f.maple':'Maple Falls Romance',
  'card.more':'Read More','card.buy':'Amazon',
  'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance',
  'mf.tag':'The Maple Falls Romance Series',
@@ -455,7 +471,7 @@ hi:{
  'feat.buy1':'Amazon.com से खरीदें','feat.buy2':'Amazon.in से खरीदें',
  'books.tag':'पुस्तकालय','books.head':'सभी <em>पुस्तकें</em>',
  'books.sub':'सूफ़ी इल्हाम की हर कृति — किंडल और पेपरबैक में, विश्वभर में अमेज़न पर तथा आगामी विशेष संस्करण। अधिक जानने के लिए किसी भी पुस्तक पर क्लिक करें।',
- 'f.all':'सभी पुस्तकें','f.phil':'दर्शन','f.self':'स्व-सहायता','f.ku':'किंडल अनलिमिटेड','f.pb':'पेपरबैक','f.maple':'मेपल फ़ॉल्स रोमांस',
+ 'f.all':'सभी पुस्तकें','f.fic':'साहित्य एवं उपन्यास','f.phil':'दर्शन','f.self':'स्व-सहायता','f.ku':'किंडल अनलिमिटेड','f.pb':'पेपरबैक','f.urdu':'उर्दू संस्करण','f.maple':'मेपल फ़ॉल्स रोमांस',
  'card.more':'और पढ़ें','card.buy':'अमेज़न',
  'nav.maple':'मेपल फ़ॉल्स','foot.maple':'मेपल फ़ॉल्स रोमांस',
  'mf.tag':'मेपल फ़ॉल्स रोमांस सीरीज़',
@@ -524,7 +540,7 @@ ur:{
  'feat.buy1':'Amazon.com سے خریدیں','feat.buy2':'Amazon.in سے خریدیں',
  'books.tag':'کتب خانہ','books.head':'تمام <em>کتابیں</em>',
  'books.sub':'صوفی الہام کی ہر تصنیف — کنڈل اور پیپربیک میں، دنیا بھر میں ایمازون پر اور خصوصی ایڈیشنز۔ مزید جاننے کے لیے کسی بھی کتاب پر کلک کیجیے۔',
- 'f.all':'تمام کتابیں','f.phil':'فلسفہ','f.self':'خود مدد','f.ku':'کنڈل انلمیٹڈ','f.pb':'پیپربیک','f.maple':'میپل فالز رومانس',
+ 'f.all':'تمام کتابیں','f.fic':'ادب اور ناول','f.phil':'فلسفہ','f.self':'خود مدد','f.ku':'کنڈل انلمیٹڈ','f.pb':'پیپربیک','f.urdu':'اردو ایڈیشن','f.maple':'میپل فالز رومانس',
  'card.more':'مزید پڑھیے','card.buy':'ایمازون',
  'nav.maple':'میپل فالز','foot.maple':'میپل فالز رومانس',
  'mf.tag':'میپل فالز رومانس سیریز',
@@ -593,7 +609,7 @@ hinglish:{
  'feat.buy1':'Amazon.com se khareedein','feat.buy2':'Amazon.in se khareedein',
  'books.tag':'The Library','books.head':'Saari <em>Kitabein</em>',
  'books.sub':'Sufi Ilham ki har kitab — Kindle aur paperback mein, duniya bhar mein Amazon par aur upcoming special editions. Zyada jaanne ke liye kisi bhi kitab par click kijiye.',
- 'f.all':'Saari Kitabein','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.maple':'Maple Falls Romance',
+ 'f.all':'Saari Kitabein','f.fic':'Fiction aur Novels','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.urdu':'Urdu Edition','f.maple':'Maple Falls Romance',
  'card.more':'Aur Padhiye','card.buy':'Amazon',
  'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance',
  'mf.tag':'Maple Falls Romance Series',
