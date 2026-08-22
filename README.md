@@ -1,7 +1,7 @@
 # Sufi Ilham — Official Author Website
 
 An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam),
-author of 15 titles on Amazon — ten works of philosophy, spirituality and self-discovery plus the
+author of 16 titles — ten works of philosophy, spirituality and self-discovery, the literary novel *The River's Portion (حصۂ دریا)*, plus the
 five-book **Maple Falls Romance** series. Every line of design, copy, code and music here
 was made for this site — no templates, no stock, no copied marketing text.
 
@@ -9,7 +9,7 @@ was made for this site — no templates, no stock, no copied marketing text.
 
 | File | Description |
 |---|---|
-| `index.html` | Homepage — hero, 10-book library with live filters, the Maple Falls Romance series section, about, themes, contact strip |
+| `index.html` | Homepage — hero, 11-book library with live filters, the Maple Falls Romance series section, about, themes, contact strip |
 | `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
 | `privacy.html` | Privacy Policy — 16 sections with sticky table of contents |
 | `terms.html` | Terms of Use — 15 sections, governing law: Bihar, India |
@@ -53,7 +53,7 @@ Keep all files together in the same folder so `sama.mp3` and the page links reso
 - **Series shelf** — the Maple Falls Romance section has its own maple-warm palette, a
   reading-order strip, five numbered cards and a gentle layered snowfall over the section,
   and the homepage counters now read
-  15 titles · 2,832 pages · 11 free on Kindle Unlimited.
+  16 titles · 3,075 pages · 11 free on Kindle Unlimited.
 - **Motion design** — custom cursor, drifting dust canvas, Maple Falls snowfall (paused
   off-screen), scroll progress bar, staggered
   reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
@@ -129,18 +129,19 @@ styled placeholder so the layout never breaks.
 1. The Human Operating Manual — 383 pp · most popular
 2. Moh Tera Prem: Where Attachment Ends and Love Begins — 211 pp · new
 3. PREM: The Ancient Path of Selfless, Unconditional Love — 285 pp · new
-4. Laozi: The Man Who Disappeared into the Dao — 318 pp
-5. The Wall Was a Gesture — 334 pp
-6. The Map Is Finished — 320 pp
-7. NeuroFocus Protocol — 362 pp
-8. Fractured Time — 56 pp · most talked about
-9. Belief Unveiled — 66 pp
-10. The Infinite Classroom — 76 pp
-11. The Bookshop at the End of Maple Street — 123 pp · Maple Falls #1
-12. A Recipe for Maple Falls — 76 pp · Maple Falls #2
-13. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
-14. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
-15. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
+4. The River's Portion (حصۂ دریا) — 243 pp · Urdu Edition · Coming Soon
+5. Laozi: The Man Who Disappeared into the Dao — 318 pp
+6. The Wall Was a Gesture — 334 pp
+7. The Map Is Finished — 320 pp
+8. NeuroFocus Protocol — 362 pp
+9. Fractured Time — 56 pp · most talked about
+10. Belief Unveiled — 66 pp
+11. The Infinite Classroom — 76 pp
+12. The Bookshop at the End of Maple Street — 123 pp · Maple Falls #1
+13. A Recipe for Maple Falls — 76 pp · Maple Falls #2
+14. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
+15. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
+16. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
 
 ## Contact
 

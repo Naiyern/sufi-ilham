@@ -356,6 +356,9 @@ h1.title em{font-style:italic;color:var(--gold);
 .meta li{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);
   border:1px solid var(--line-soft);padding:5px 10px;border-radius:2px}
 .meta li.ku{border-color:rgba(212,175,84,.4);color:var(--gold)}
+.meta li.cs{border-color:rgba(212,175,84,.55);color:var(--gold);background:rgba(212,175,84,.08)}
+.meta li.lang-tag{border-color:rgba(246,242,233,.22);color:var(--gold-lt)}
+.urdu-font{font-family:'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Noto Naskh Arabic',serif;font-size:1.15em;letter-spacing:0;font-weight:normal;color:var(--gold-lt)}
 .card-links{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto}
 .lnk{flex:1;min-width:104px;text-align:center;font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;
   padding:11px 10px;border-radius:2px;border:1px solid rgba(246,242,233,.19);color:var(--paper);
