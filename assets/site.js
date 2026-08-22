@@ -252,6 +252,54 @@
     var body=document.getElementById('modal-body'), last=null;
     function open(card){
       var d=JSON.parse(card.getAttribute('data-book'));
+      var linksHtml = '';
+      if(d.free_whatsapp){
+        linksHtml =
+          '<div class="m-links">'+
+            (d.whatsapp_url ? '<a class="btn btn-gold" href="'+d.whatsapp_url+'" target="_blank" rel="noopener">Get Free Copy on WhatsApp <span class="arw">→</span></a>' : '')+
+            (d.english_url ? '<a class="btn btn-ghost" href="'+d.english_url+'" target="_blank" rel="noopener">English Edition on Amazon <span class="arw">→</span></a>' : '')+
+          '</div>'+
+          '<div class="m-stores"><span class="m-stores-t">WhatsApp Delivery:</span><span style="color:var(--paper-2);font-size:.82rem;">Message opens to <b>+91 62017 57330</b> for instant automated delivery.</span></div>'+
+          (d.english_url ? (
+            '<div class="m-stores">'+
+              '<span class="m-stores-t">English Edition:</span>'+
+              '<a href="'+d.english_url+'" target="_blank" rel="noopener">Amazon.in</a>'+
+              (d.us ? '<a href="'+d.us+'" target="_blank" rel="noopener">Amazon.com</a>' : '')+
+            '</div>'
+          ) : '');
+      } else if(d.coming_soon){
+        linksHtml =
+          '<div class="m-links">'+
+            (d.notify_url ? '<a class="btn btn-gold" href="'+d.notify_url+'" target="_blank" rel="noopener">Notify Me on WhatsApp <span class="arw">→</span></a>' : '')+
+            (d.english_url ? '<a class="btn btn-ghost" href="'+d.english_url+'" target="_blank" rel="noopener">English Edition on Amazon <span class="arw">→</span></a>' : '')+
+          '</div>'+
+          (d.english_url ? (
+            '<div class="m-stores">'+
+              '<span class="m-stores-t">English Edition:</span>'+
+              '<a href="'+d.english_url+'" target="_blank" rel="noopener">Amazon.in</a>'+
+              (d.us ? '<a href="'+d.us+'" target="_blank" rel="noopener">Amazon.com</a>' : '')+
+            '</div>'
+          ) : '');
+      } else if(d.custom_links && d.custom_links.length){
+        linksHtml = '<div class="m-links">' + d.custom_links.map(function(l){
+          return '<a class="btn '+(l.pri?'btn-gold':'btn-ghost')+'" href="'+l.url+'" target="_blank" rel="noopener">'+l.text+' <span class="arw">→</span></a>';
+        }).join('') + '</div>';
+      } else {
+        linksHtml =
+          '<div class="m-links">'+
+            (d.us ? '<a class="btn btn-gold" href="'+d.us+'" target="_blank" rel="noopener">Amazon.com <span class="arw">→</span></a>' : '')+
+            (d.in ? '<a class="btn btn-ghost" href="'+d.in+'" target="_blank" rel="noopener">Amazon.in</a>' : '')+
+          '</div>'+
+          ((d.uk || d.ca || d.au) ? (
+            '<div class="m-stores">'+
+              '<span class="m-stores-t">More stores:</span>'+
+              (d.uk ? '<a href="'+d.uk+'" target="_blank" rel="noopener">Amazon.co.uk</a>' : '')+
+              (d.ca ? '<a href="'+d.ca+'" target="_blank" rel="noopener">Amazon.ca</a>' : '')+
+              (d.au ? '<a href="'+d.au+'" target="_blank" rel="noopener">Amazon.com.au</a>' : '')+
+            '</div>'
+          ) : '');
+      }
+
       body.innerHTML =
         '<div class="m-grid">'+
           '<div class="m-cover"><img src="'+d.img+'" alt="'+d.title+' cover"></div>'+
@@ -261,17 +309,8 @@
             (d.sub?'<div class="m-sub">'+d.sub+'</div>':'')+
             (d.quote?'<p class="m-quote">'+d.quote+'</p>':'')+
             '<div class="m-desc">'+d.desc+'</div>'+
-            '<ul class="m-spec">'+d.spec.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul>'+
-            '<div class="m-links">'+
-              '<a class="btn btn-gold" href="'+d.us+'" target="_blank" rel="noopener">Amazon.com <span class="arw">→</span></a>'+
-              '<a class="btn btn-ghost" href="'+d.in+'" target="_blank" rel="noopener">Amazon.in</a>'+
-            '</div>'+
-            '<div class="m-stores">'+
-              '<span class="m-stores-t">More stores:</span>'+
-              '<a href="'+d.uk+'" target="_blank" rel="noopener">Amazon.co.uk</a>'+
-              '<a href="'+d.ca+'" target="_blank" rel="noopener">Amazon.ca</a>'+
-              '<a href="'+d.au+'" target="_blank" rel="noopener">Amazon.com.au</a>'+
-            '</div>'+
+            '<ul class="m-spec">'+(d.spec||[]).map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul>'+
+            linksHtml+
           '</div>'+
         '</div>';
       mod.classList.add('open');
@@ -313,6 +352,22 @@
     });
   }
 
+  /* ---- featured spotlight tabs ---- */
+  function initFeatTabs(){
+    var tabs = document.querySelectorAll('.feat-tab');
+    if(!tabs.length) return;
+    tabs.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var target = btn.getAttribute('data-feat');
+        tabs.forEach(function(t){ t.classList.toggle('on', t === btn); });
+        document.querySelectorAll('.feat-pane').forEach(function(p){
+          var isTarget = (p.id === 'pane-' + target);
+          p.classList.toggle('on', isTarget);
+        });
+      });
+    });
+  }
+
   /* ---- contact form (no backend: opens mail/WhatsApp) ---- */
   function initForm(){
     var f=document.getElementById('cform'); if(!f) return;
@@ -331,7 +386,7 @@
   /* ---- boot ---- */
   function boot(){
     initPre(); initScroll(); initMenu(); initReveal(); initCursor();
-    initParticles(); initSnow(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initForm();
+    initParticles(); initSnow(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initFeatTabs(); initForm();
     var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
@@ -344,10 +399,10 @@ en:{
  _name:'English', _dir:'ltr', _font:"var(--sans)",
  'nav.new':'New Release','nav.books':'Books','nav.themes':'Themes','nav.about':'About',
  'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
- 'hero.eyebrow':'Fifteen Books · Philosophy, Self-Discovery &amp; Romance',
+ 'hero.eyebrow':'Sixteen Books · Philosophy, Self-Discovery, Fiction &amp; Romance',
  'hero.alias':'Also known as MD Naiyer Alam',
  'hero.lede':'An author and deep thinker exploring belief systems and self-discovery — writing that challenges societal norms and asks you to <strong>question every assumption you inherited.</strong>',
- 'hero.lede2':'From the architecture of belief to the illusion of time, from ADHD and attention to the quiet freedom of simply seeing — and now five small-town love stories in Maple Falls, Vermont. Fifteen books, one pursuit: the truth, however uncomfortable.',
+ 'hero.lede2':'From the architecture of belief to the illusion of time, from ADHD and attention to the quiet freedom of simply seeing — five small-town love stories in Maple Falls, Vermont, and the literary novel The River\'s Portion. Sixteen books, one pursuit: the truth, however uncomfortable.',
  'hero.cta1':'Read the New Release','hero.cta2':'Browse All Books','hero.scroll':'Scroll',
  'stat.titles':'Published Titles','stat.pages':'Pages in Print',
  'stat.ku':'Free on Kindle Unlimited','stat.markets':'Amazon Marketplaces',
@@ -360,8 +415,8 @@ en:{
  'feat.it':'No 4 a.m. alarms. No hype. No pretending Tuesday won\'t happen.<br>Stop gripping outcomes — start adjusting settings.',
  'feat.buy1':'Buy on Amazon.com','feat.buy2':'Buy on Amazon.in',
  'books.tag':'The Library','books.head':'All <em>Books</em>',
- 'books.sub':'Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon. Click any book to read more.',
- 'f.all':'All Books','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.maple':'Maple Falls Romance',
+ 'books.sub':'Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon and upcoming special editions. Click any book to read more.',
+ 'f.all':'All Books','f.fic':'Fiction &amp; Novels','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.urdu':'Urdu Edition','f.maple':'Maple Falls Romance',
  'card.more':'Read More','card.buy':'Amazon',
  'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance',
  'mf.tag':'The Maple Falls Romance Series',
@@ -388,7 +443,7 @@ en:{
  'j1':'The debut. A journey into the hidden architecture of the mind — and how to rewrite it.',
  'j2':'The most talked-about title. What if time isn\'t real, but a beautiful lie?',
  'j3':'Learning from birth to beyond — for those brave enough to keep attending.',
- 'j4t':'Six New Works','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem and PREM.',
+ 'j4t':'Seven New Works','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem, PREM, and The River\'s Portion.',
  'con.tag':'Get In Touch','con.head':'Say <em>hello</em>',
  'con.sub':'For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.',
  'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Message directly','con.store':'Amazon Author Store',
@@ -413,10 +468,10 @@ hi:{
  _name:'हिन्दी', _dir:'ltr', _font:"'Nirmala UI','Noto Sans Devanagari',var(--sans)",
  'nav.new':'नई पुस्तक','nav.books':'पुस्तकें','nav.themes':'विषय','nav.about':'परिचय',
  'nav.contact':'संपर्क','nav.privacy':'गोपनीयता','nav.store':'अमेज़न स्टोर',
- 'hero.eyebrow':'पंद्रह पुस्तकें · दर्शन, आत्म-खोज एवं रोमांस',
+ 'hero.eyebrow':'सोलह पुस्तकें · दर्शन, आत्म-खोज, साहित्य एवं रोमांस',
  'hero.alias':'एमडी नैयर आलम के नाम से भी जाने जाते हैं',
  'hero.lede':'एक लेखक और गहन विचारक, जो विश्वास-प्रणालियों और आत्म-खोज की पड़ताल करते हैं — ऐसा लेखन जो सामाजिक मान्यताओं को चुनौती देता है और आपसे कहता है कि <strong>विरासत में मिली हर धारणा पर प्रश्न कीजिए।</strong>',
- 'hero.lede2':'विश्वास की संरचना से लेकर समय के भ्रम तक, एडीएचडी और एकाग्रता से लेकर केवल देख पाने की शांत स्वतंत्रता तक — और अब वरमॉन्ट के मेपल फ़ॉल्स की पाँच प्रेम कहानियाँ। पंद्रह पुस्तकें, एक ही खोज: सत्य, चाहे वह कितना ही असहज क्यों न हो।',
+ 'hero.lede2':'विश्वास की संरचना से लेकर समय के भ्रम तक, एडीएचडी और एकाग्रता से लेकर केवल देख पाने की शांत स्वतंत्रता तक — मेपल फ़ॉल्स की पाँच प्रेम कहानियाँ तथा द रिवर्स पोर्शन (दरिया का हिस्सा)। सोलह पुस्तकें, एक ही खोज: सत्य, चाहे वह कितना ही असहज क्यों न हो।',
  'hero.cta1':'नई पुस्तक पढ़ें','hero.cta2':'सभी पुस्तकें देखें','hero.scroll':'नीचे जाएँ',
  'stat.titles':'प्रकाशित पुस्तकें','stat.pages':'कुल पृष्ठ',
  'stat.ku':'किंडल अनलिमिटेड पर निःशुल्क','stat.markets':'अमेज़न मार्केटप्लेस',
@@ -429,8 +484,8 @@ hi:{
  'feat.it':'सुबह 4 बजे का अलार्म नहीं। कोई शोर नहीं।<br>परिणामों को जकड़ना छोड़िए — सेटिंग्स बदलना शुरू कीजिए।',
  'feat.buy1':'Amazon.com से खरीदें','feat.buy2':'Amazon.in से खरीदें',
  'books.tag':'पुस्तकालय','books.head':'सभी <em>पुस्तकें</em>',
- 'books.sub':'सूफ़ी इल्हाम की हर कृति — किंडल और पेपरबैक में, विश्वभर में अमेज़न पर। अधिक जानने के लिए किसी भी पुस्तक पर क्लिक करें।',
- 'f.all':'सभी पुस्तकें','f.phil':'दर्शन','f.self':'स्व-सहायता','f.ku':'किंडल अनलिमिटेड','f.pb':'पेपरबैक','f.maple':'मेपल फ़ॉल्स रोमांस',
+ 'books.sub':'सूफ़ी इल्हाम की हर कृति — किंडल और पेपरबैक में, विश्वभर में अमेज़न पर तथा आगामी विशेष संस्करण। अधिक जानने के लिए किसी भी पुस्तक पर क्लिक करें।',
+ 'f.all':'सभी पुस्तकें','f.fic':'साहित्य एवं उपन्यास','f.phil':'दर्शन','f.self':'स्व-सहायता','f.ku':'किंडल अनलिमिटेड','f.pb':'पेपरबैक','f.urdu':'उर्दू संस्करण','f.maple':'मेपल फ़ॉल्स रोमांस',
  'card.more':'और पढ़ें','card.buy':'अमेज़न',
  'nav.maple':'मेपल फ़ॉल्स','foot.maple':'मेपल फ़ॉल्स रोमांस',
  'mf.tag':'मेपल फ़ॉल्स रोमांस सीरीज़',
@@ -457,7 +512,7 @@ hi:{
  'j1':'पहली कृति। मन की छिपी संरचना में एक यात्रा — और उसे पुनः लिखने की विधि।',
  'j2':'सर्वाधिक चर्चित पुस्तक। यदि समय वास्तविक न हो, बल्कि एक सुंदर झूठ हो तो?',
  'j3':'जन्म से परे तक सीखना — उनके लिए जो सीखते रहने का साहस रखते हैं।',
- 'j4t':'छह नई कृतियाँ','j4':'न्यूरोफ़ोकस प्रोटोकॉल, द ह्यूमन ऑपरेटिंग मैनुअल, द वॉल वाज़ अ जेस्चर, द मैप इज़ फ़िनिश्ड, मोह तेरा प्रेम और प्रेम।',
+ 'j4t':'सात नई कृतियाँ','j4':'न्यूरोफ़ोकस प्रोटोकॉल, द ह्यूमन ऑपरेटिंग मैनुअल, द वॉल वाज़ अ जेस्चर, द मैप इज़ फ़िनिश्ड, मोह तेरा प्रेम, प्रेम, और द रिवर्स पोर्शन (दरिया का हिस्सा)।',
  'con.tag':'संपर्क करें','con.head':'नमस्ते <em>कहिए</em>',
  'con.sub':'पाठकों के संदेश, साक्षात्कार, सहयोग, थोक ऑर्डर या अनुवाद अधिकारों के लिए — सीधे संपर्क करें।',
  'con.phone':'फ़ोन','con.wa':'व्हाट्सएप','con.wad':'सीधे संदेश भेजें','con.store':'अमेज़न लेखक स्टोर',
@@ -482,10 +537,10 @@ ur:{
  _name:'اردو', _dir:'rtl', _font:"'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Noto Naskh Arabic',var(--sans)",
  'nav.new':'نئی کتاب','nav.books':'کتابیں','nav.themes':'موضوعات','nav.about':'تعارف',
  'nav.contact':'رابطہ','nav.privacy':'رازداری','nav.store':'ایمازون اسٹور',
- 'hero.eyebrow':'پندرہ کتابیں · فلسفہ، خود شناسی اور رومانس',
+ 'hero.eyebrow':'سولہ کتابیں · فلسفہ، خود شناسی، ادب اور رومانس',
  'hero.alias':'ایم ڈی نیر عالم کے نام سے بھی معروف',
  'hero.lede':'ایک مصنف اور گہرے مفکر، جو عقائد کے نظام اور خود شناسی کی کھوج کرتے ہیں — ایسی تحریر جو سماجی روایات کو چیلنج کرتی ہے اور آپ سے کہتی ہے کہ <strong>ہر ورثے میں ملے گمان پر سوال اٹھائیے۔</strong>',
- 'hero.lede2':'عقیدے کی ساخت سے وقت کے فریب تک، اے ڈی ایچ ڈی اور توجہ سے محض دیکھ لینے کی پرسکون آزادی تک — اور اب ورمونٹ کے میپل فالز کی پانچ محبت بھری کہانیاں۔ پندرہ کتابیں، ایک ہی جستجو: سچ، خواہ کتنا ہی بے چین کرنے والا ہو۔',
+ 'hero.lede2':'عقیدے کی ساخت سے وقت کے فریب تک، اے ڈی ایچ ڈی اور توجہ سے محض دیکھ لینے کی پرسکون آزادی تک — میپل فالز کی پانچ محبت بھری کہانیاں اور شاہکار ناول حصۂ دریا (The River\'s Portion)۔ سولہ کتابیں، ایک ہی جستجو: سچ، خواہ کتنا ہی بے چین کرنے والا ہو۔',
  'hero.cta1':'نئی کتاب پڑھیے','hero.cta2':'تمام کتابیں دیکھیے','hero.scroll':'نیچے',
  'stat.titles':'شائع شدہ کتابیں','stat.pages':'کل صفحات',
  'stat.ku':'کنڈل انلمیٹڈ پر مفت','stat.markets':'ایمازون مارکیٹ',
@@ -498,8 +553,8 @@ ur:{
  'feat.it':'صبح چار بجے کا الارم نہیں۔ کوئی شور نہیں۔<br>نتائج کو جکڑنا چھوڑیے — ترتیبات بدلنا شروع کیجیے۔',
  'feat.buy1':'Amazon.com سے خریدیں','feat.buy2':'Amazon.in سے خریدیں',
  'books.tag':'کتب خانہ','books.head':'تمام <em>کتابیں</em>',
- 'books.sub':'صوفی الہام کی ہر تصنیف — کنڈل اور پیپربیک میں، دنیا بھر میں ایمازون پر۔ مزید جاننے کے لیے کسی بھی کتاب پر کلک کیجیے۔',
- 'f.all':'تمام کتابیں','f.phil':'فلسفہ','f.self':'خود مدد','f.ku':'کنڈل انلمیٹڈ','f.pb':'پیپربیک','f.maple':'میپل فالز رومانس',
+ 'books.sub':'صوفی الہام کی ہر تصنیف — کنڈل اور پیپربیک میں، دنیا بھر میں ایمازون پر اور خصوصی ایڈیشنز۔ مزید جاننے کے لیے کسی بھی کتاب پر کلک کیجیے۔',
+ 'f.all':'تمام کتابیں','f.fic':'ادب اور ناول','f.phil':'فلسفہ','f.self':'خود مدد','f.ku':'کنڈل انلمیٹڈ','f.pb':'پیپربیک','f.urdu':'اردو ایڈیشن','f.maple':'میپل فالز رومانس',
  'card.more':'مزید پڑھیے','card.buy':'ایمازون',
  'nav.maple':'میپل فالز','foot.maple':'میپل فالز رومانس',
  'mf.tag':'میپل فالز رومانس سیریز',
@@ -526,7 +581,7 @@ ur:{
  'j1':'پہلی تصنیف۔ ذہن کی پوشیدہ ساخت میں ایک سفر — اور اسے نئے سرے سے لکھنے کا طریقہ۔',
  'j2':'سب سے زیادہ زیرِ بحث کتاب۔ اگر وقت حقیقی نہ ہو، بلکہ ایک خوبصورت جھوٹ ہو تو؟',
  'j3':'پیدائش سے آگے تک سیکھنا — ان کے لیے جو سیکھتے رہنے کی جرأت رکھتے ہیں۔',
- 'j4t':'چھ نئی تصانیف','j4':'نیوروفوکس پروٹوکول، دی ہیومن آپریٹنگ مینوئل، دی وال واز اے جیسچر، دی میپ اِز فِنِشڈ، موہ تیرا پریم اور پریم۔',
+ 'j4t':'سات نئی تصانیف','j4':'نیوروفوکس پروٹوکول، دی ہیومن آپریٹنگ مینوئل، دی وال واز اے جیسچر، دی میپ اِز فِنِشڈ، موہ تیرا پریم، پریم، اور حصۂ دریا (دی ریورز پورشن)۔',
  'con.tag':'رابطہ کیجیے','con.head':'سلام <em>کہیے</em>',
  'con.sub':'قارئین کے پیغامات، انٹرویو، اشتراک، تھوک آرڈر یا ترجمے کے حقوق کے لیے — براہِ راست رابطہ کیجیے۔',
  'con.phone':'فون','con.wa':'واٹس ایپ','con.wad':'براہِ راست پیغام','con.store':'ایمازون مصنف اسٹور',
@@ -551,10 +606,10 @@ hinglish:{
  _name:'Hinglish', _dir:'ltr', _font:"var(--sans)",
  'nav.new':'Nayi Kitab','nav.books':'Kitabein','nav.themes':'Themes','nav.about':'Parichay',
  'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
- 'hero.eyebrow':'Pandrah Kitabein · Philosophy, Self-Discovery aur Romance',
+ 'hero.eyebrow':'Solah Kitabein · Philosophy, Self-Discovery, Fiction aur Romance',
  'hero.alias':'MD Naiyer Alam ke naam se bhi jaane jaate hain',
  'hero.lede':'Ek author aur gehre thinker, jo belief systems aur self-discovery ko explore karte hain — aisi writing jo society ke banaye rules ko challenge karti hai aur aapse kehti hai ki <strong>jo bhi maan liya hai, us par sawaal kijiye.</strong>',
- 'hero.lede2':'Belief ki architecture se lekar time ke illusion tak, ADHD aur attention se lekar sirf dekh paane ki shaant azadi tak — aur ab Vermont ke Maple Falls ki paanch love stories. Pandrah kitabein, ek hi talash: sach, chahe kitna hi uncomfortable ho.',
+ 'hero.lede2':'Belief ki architecture se lekar time ke illusion tak, ADHD aur attention se lekar sirf dekh paane ki shaant azadi tak — Vermont ke Maple Falls ki paanch love stories aur The River\'s Portion (Darya Ka Hissa). Solah kitabein, ek hi talash: sach, chahe kitna hi uncomfortable ho.',
  'hero.cta1':'Nayi Kitab Padhiye','hero.cta2':'Saari Kitabein Dekhiye','hero.scroll':'Scroll',
  'stat.titles':'Published Kitabein','stat.pages':'Total Pages',
  'stat.ku':'Kindle Unlimited par Free','stat.markets':'Amazon Marketplaces',
@@ -567,8 +622,8 @@ hinglish:{
  'feat.it':'Subah 4 baje ka alarm nahi. Koi hype nahi.<br>Outcomes ko pakadna chhodiye — settings adjust karna shuru kijiye.',
  'feat.buy1':'Amazon.com se khareedein','feat.buy2':'Amazon.in se khareedein',
  'books.tag':'The Library','books.head':'Saari <em>Kitabein</em>',
- 'books.sub':'Sufi Ilham ki har kitab — Kindle aur paperback mein, duniya bhar mein Amazon par. Zyada jaanne ke liye kisi bhi kitab par click kijiye.',
- 'f.all':'Saari Kitabein','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.maple':'Maple Falls Romance',
+ 'books.sub':'Sufi Ilham ki har kitab — Kindle aur paperback mein, duniya bhar mein Amazon par aur upcoming special editions. Zyada jaanne ke liye kisi bhi kitab par click kijiye.',
+ 'f.all':'Saari Kitabein','f.fic':'Fiction aur Novels','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.urdu':'Urdu Edition','f.maple':'Maple Falls Romance',
  'card.more':'Aur Padhiye','card.buy':'Amazon',
  'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance',
  'mf.tag':'Maple Falls Romance Series',
@@ -595,7 +650,7 @@ hinglish:{
  'j1':'Pehli kitab. Mind ki chhupi architecture mein ek safar — aur use dobara likhne ka tarika.',
  'j2':'Sabse zyada charchit kitab. Agar time real na ho, balki ek khoobsurat jhooth ho toh?',
  'j3':'Janm se aage tak seekhna — un logon ke liye jo seekhte rehne ki himmat rakhte hain.',
- 'j4t':'Chhe Nayi Kitabein','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem aur PREM.',
+ 'j4t':'Saat Nayi Kitabein','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem, PREM, aur The River\'s Portion.',
  'con.tag':'Sampark Kijiye','con.head':'Kahiye <em>hello</em>',
  'con.sub':'Reader messages, interviews, collaboration, bulk order ya translation rights ke liye — seedha sampark kijiye.',
  'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Seedha message bhejiye','con.store':'Amazon Author Store',
