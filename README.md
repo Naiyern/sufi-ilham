@@ -1,15 +1,17 @@
 # Sufi Ilham — Official Author Website
 
 An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam),
-author of 15 titles on Amazon — ten works of philosophy, spirituality and self-discovery plus the
-five-book **Maple Falls Romance** series. Every line of design, copy, code and music here
-was made for this site — no templates, no stock, no copied marketing text.
+author of 19 titles on Amazon — ten works of philosophy, spirituality and self-discovery, the
+five-book **Maple Falls Romance** series, the three-book dark gothic romantasy trilogy
+**The Tithe Crown**, and the standalone literary novel **The River's Portion**. Every line of
+design, copy, code and music here was made for this site — no templates, no stock, no copied
+marketing text.
 
 ## What's in this folder
 
 | File | Description |
 |---|---|
-| `index.html` | Homepage — hero, 10-book library with live filters, the Maple Falls Romance series section, about, themes, contact strip |
+| `index.html` | Homepage — hero, 10-book library with live filters, the Maple Falls Romance series section, The Tithe Crown trilogy section, about, themes, contact strip |
 | `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
 | `privacy.html` | Privacy Policy — 16 sections with sticky table of contents |
 | `terms.html` | Terms of Use — 15 sections, governing law: Bihar, India |
@@ -49,11 +51,12 @@ Keep all files together in the same folder so `sama.mp3` and the page links reso
   to right-to-left. Your choice follows you across every page.
 - **Cinematic Amazon routing** — clicking any store link opens an interstitial showing the
   book cover and a progress bar, then delivers the reader to the correct Amazon store in a
-  new tab. All 30 links (15 books × amazon.com and amazon.in) are wired the same way.
-- **Series shelf** — the Maple Falls Romance section has its own maple-warm palette, a
-  reading-order strip, five numbered cards and a gentle layered snowfall over the section,
-  and the homepage counters now read
-  15 titles · 2,832 pages · 11 free on Kindle Unlimited.
+  new tab. All 38 links (19 books × amazon.com and amazon.in) are wired the same way.
+- **Series shelves** — the Maple Falls Romance section has its own maple-warm palette, a
+  reading-order strip, five numbered cards and a gentle layered snowfall over the section.
+  The Tithe Crown section mirrors it with a dark gothic palette, its own reading-order strip
+  and three numbered cards. The homepage counters now read
+  19 titles · 3,804 pages · 15 free on Kindle Unlimited.
 - **Motion design** — custom cursor, drifting dust canvas, Maple Falls snowfall (paused
   off-screen), scroll progress bar, staggered
   reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
@@ -88,7 +91,7 @@ and that choice is remembered across pages and visits.
   and no newsletter, while the site runs cookie-free Plausible analytics and a Buttondown
   subscribe box. It now documents both, plus the two local-storage preference keys, a
   sub-processor table, retention periods and DPDP/GDPR/CCPA rights.
-- **Terms of Use** gained a newsletter clause and a privacy clause, lists all fifteen titles
+- **Terms of Use** gained a newsletter clause and a privacy clause, lists all nineteen titles
   (it stopped at eight), and reserves rights against AI training and bulk scraping.
 - Real favicon, Apple touch icon, PWA manifest and a styled `404.html`.
 - `preconnect` hints for the analytics and Amazon image origins; the hero portrait is
@@ -117,18 +120,44 @@ with a reading-order strip, per-book "Read More" modals and the usual Amazon int
 
 Amazon series page: <https://www.amazon.com/dp/B0H7Q6GQPV>
 
+## The Tithe Crown
+
+A complete dark gothic romantasy trilogy. The Crown cuts magic from any soul that will not
+declare it — and sends its own collectors after every shadow that hides. All three are $4.85–
+$4.87 on Kindle and free on Kindle Unlimited. They live in their own section on the homepage
+(`#tithe`), with a reading-order strip, per-book "Read More" modals and the usual Amazon
+interstitial.
+
+| # | Title | ASIN | Pages | Published |
+|---|---|---|---|---|
+| 1 | The Shadow Tithe: A Dark Gothic Romantasy | B0HGBM3WX2 | 222 | 24 Aug 2026 |
+| 2 | The Sea Tithe: A Dark Gothic Romantasy | B0HGF5G8QM | 247 | 25 Aug 2026 |
+| 3 | The Crown Always Owns: A Dark Gothic Romantasy | B0HGG8N7VD | 260 | 25 Aug 2026 |
+
+Amazon series page: <https://www.amazon.com/dp/B0HGBX47WJ>
+
+## The River's Portion
+
+A standalone literary novel of tawbah, debt, and the rights of the living, set in the fictional
+town of Nahrabad. Free on Kindle Unlimited; also available in paperback.
+
+| Title | Kindle ASIN | Paperback ASIN | Pages | Published |
+|---|---|---|---|---|
+| The River's Portion | B0HG5S4DG2 | B0HG787946 | 243 | 22 Aug 2026 (Kindle) / 23 Aug 2026 (paperback) |
+
 **One note on the covers.** The eight older covers and the three author photos are real files
-in `images/`. The five Maple Falls covers and the two newer love books (Moh Tera Prem, PREM)
-are loaded straight from Amazon's image CDN
-(`https://m.media-amazon.com/images/I/<id>._SL500_.jpg`), which is always the live cover Amazon
-is showing. If a cover ever fails to load, `mfCover()` / `phCover()` in `index.html` swap in a
-styled placeholder so the layout never breaks.
+in `images/`. The five Maple Falls covers, the three Tithe Crown covers, The River's Portion
+cover, and the two newer love books (Moh Tera Prem, PREM) are loaded straight from Amazon's
+image CDN (`https://m.media-amazon.com/images/I/<id>._SL500_.jpg` or similar Amazon thumbnail
+URLs), which is always the live cover Amazon is showing. If a cover ever fails to load,
+`mfCover()` / `phCover()` in `index.html` swap in a styled placeholder so the layout never
+breaks.
 
 ## The books
 
 1. The Human Operating Manual — 383 pp · most popular
-2. Moh Tera Prem: Where Attachment Ends and Love Begins — 211 pp · new
-3. PREM: The Ancient Path of Selfless, Unconditional Love — 285 pp · new
+2. Moh Tera Prem: Where Attachment Ends and Love Begins — 211 pp
+3. PREM: The Ancient Path of Selfless, Unconditional Love — 285 pp
 4. Laozi: The Man Who Disappeared into the Dao — 318 pp
 5. The Wall Was a Gesture — 334 pp
 6. The Map Is Finished — 320 pp
@@ -141,6 +170,10 @@ styled placeholder so the layout never breaks.
 13. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
 14. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
 15. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
+16. The Shadow Tithe: A Dark Gothic Romantasy — 222 pp · Tithe Crown #1 · new
+17. The Sea Tithe: A Dark Gothic Romantasy — 247 pp · Tithe Crown #2 · new
+18. The Crown Always Owns: A Dark Gothic Romantasy — 260 pp · Tithe Crown #3 · new
+19. The River's Portion — 243 pp · standalone literary fiction · new
 
 ## Contact
 

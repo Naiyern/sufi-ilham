@@ -776,9 +776,77 @@ body.rtl .mf-num{text-align:left}
 .mf-jump{display:inline-flex;align-items:center;color:#e39a6b;border-color:rgba(180,85,45,.45);
   background:rgba(180,85,45,.10)}
 .mf-jump:hover{color:#ffd0ac;border-color:#e39a6b;background:rgba(180,85,45,.2)}
-/* the nav gained a seventh item — tighten it just above the burger breakpoint */
+
+/* ============ THE TITHE CROWN — DARK GOTHIC ROMANTASY TRILOGY ============ */
+.tithe{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(1100px 540px at 90% -14%,rgba(140,20,45,.26),transparent 60%),
+    radial-gradient(900px 480px at 4% 8%,rgba(90,20,60,.18),transparent 62%),
+    linear-gradient(180deg,#150b12,#120a10 55%,var(--ink));
+  border-top:1px solid rgba(178,58,85,.28);
+  border-bottom:1px solid rgba(178,58,85,.28);
+}
+.tc-leaves{
+  position:absolute;inset:0;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 100 100'%3E%3Cpath fill='%23c23b57' d='M50 6c3 10 2 16-2 22 8-4 14-3 20 2-6 6-7 12-2 20 7-6 13-6 20-1-3 9-8 13-16 14 6 6 8 12 5 20-9-1-14-5-17-12-3 7-8 11-17 12-3-8-1-14 5-20-8-1-13-5-16-14 7-5 13-5 20 1 5-8 4-14-2-20 6-5 12-6 20-2-4-6-5-12-2-22-5 4-10 5-16 3 3-6 3-11 0-17-3 6-3 11 0 17z'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+}
+.tc-embers{position:absolute;inset:0;pointer-events:none;display:block}
+.tithe .wrap{position:relative;z-index:1}
+.tc-tag{color:#e0748f}
+.tc-tag::before{background:#e0748f}
+.tc-head{max-width:58em}
+.tc-head h2 em{color:#f0a0b3;font-style:italic}
+.tc-lede{color:var(--paper-2);font-family:var(--serif);font-size:1.08rem;line-height:1.75;margin-top:6px}
+.tc-lede strong{color:var(--gold-lt);font-weight:400}
+.tc-lede2{color:var(--muted);font-size:.95rem;margin-top:14px;max-width:46em}
+
+.tc-order{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:38px;
+  padding:16px 20px;border:1px solid rgba(178,58,85,.3);border-radius:3px;
+  background:linear-gradient(90deg,rgba(178,58,85,.14),rgba(255,255,255,.02))}
+.tc-order-t{font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:#e0748f;white-space:nowrap}
+.tc-steps{list-style:none;display:flex;flex-wrap:wrap;gap:8px 10px;margin:0;padding:0}
+.tc-steps li{display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--muted);
+  border:1px solid var(--line-soft);border-radius:2px;padding:6px 11px;background:rgba(255,255,255,.02)}
+.tc-step-n{font-family:var(--serif);color:var(--gold);font-size:.8rem}
+.tc-step-t{letter-spacing:.02em}
+
+.tc-grid{grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.tc-card{position:relative;padding:24px 20px;border-color:rgba(178,58,85,.24)}
+.tc-card .card-cover{max-width:170px}
+.tc-card .card-cover img{box-shadow:0 20px 40px -18px rgba(0,0,0,.9)}
+.tc-card h3{font-size:1.12rem}
+.tc-card .kicker{color:#e0748f;font-size:.56rem}
+.tc-card p{font-size:.88rem}
+.tc-hook{font-family:var(--serif);font-style:italic;color:var(--paper-2);flex:0 0 auto;
+  font-size:.94rem;margin-bottom:10px;line-height:1.5}
+.tc-card .meta li{font-size:.56rem;padding:5px 8px}
+.tc-card .lnk{min-width:86px;font-size:.6rem;padding:9px 8px}
+.tc-num{display:block;text-align:right;font-family:var(--serif);font-size:1.3rem;
+  color:rgba(224,187,99,.34);line-height:1;margin-bottom:2px;pointer-events:none;transition:color .4s}
+.tc-card:hover .tc-num{color:rgba(224,116,143,.82)}
+.tc-card::before{background:linear-gradient(90deg,transparent,#e0748f,transparent)}
+.tc-card:hover{border-color:rgba(178,58,85,.5)}
+
+.tc-cta{margin-top:52px;text-align:center;border-top:1px solid rgba(178,58,85,.24);padding-top:40px}
+.tc-cta p{font-family:var(--serif);font-size:1.18rem;color:var(--paper);margin-bottom:22px}
+.tc-cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+@media (max-width:860px){ .tc-grid{grid-template-columns:repeat(2,1fr)} .tc-card .card-cover{max-width:170px} }
+@media (max-width:560px){
+  .tc-grid{grid-template-columns:1fr;gap:22px}
+  .tc-order{gap:12px}
+  .tc-cta-btns .btn{flex:1;min-width:190px}
+}
+body.rtl .tc-num{text-align:left}
+.tc-jump{display:inline-flex;align-items:center;color:#e0748f;border-color:rgba(178,58,85,.45);
+  background:rgba(178,58,85,.10)}
+.tc-jump:hover{color:#ffc2d2;border-color:#e0748f;background:rgba(178,58,85,.2)}
+
+/* the nav gained more items — tighten it just above the burger breakpoint */
 @media (max-width:1180px) and (min-width:981px){
-  nav ul{gap:17px}
-  nav ul a{font-size:.68rem;letter-spacing:.11em}
-  .btn-nav{padding:9px 13px}
+  nav ul{gap:14px}
+  nav ul a{font-size:.64rem;letter-spacing:.09em}
+  .btn-nav{padding:8px 11px}
 }
