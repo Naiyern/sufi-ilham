@@ -179,6 +179,63 @@
     });
   }
 
+  /* ---- tithe crown embers ---- */
+  function initEmbers(){
+    var sec=document.getElementById('tithe'), c=document.getElementById('tcembers');
+    if(!sec||!c||RM) return;
+    var ctx=c.getContext('2d');
+    var ps=[], w=0,h=0,raf=null;
+    var DPR=Math.min(2, window.devicePixelRatio||1);
+    function size(){
+      w=sec.offsetWidth; h=sec.offsetHeight;
+      c.width=w*DPR; c.height=h*DPR;
+      c.style.width=w+'px'; c.style.height=h+'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    function make(){
+      var d=Math.random();
+      return {
+        x:Math.random()*w, y:h+Math.random()*40,
+        r:d*1.9+.5,
+        s:d*.5+.18,
+        o:d*.5+.12,
+        sw:d*14+3,
+        ph:Math.random()*6.2832,
+        sp:Math.random()*.013+.005,
+        life:Math.random()
+      };
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(var i=0;i<ps.length;i++){
+        var p=ps[i];
+        p.y-=p.s; p.ph+=p.sp; p.life+=.002;
+        if(p.y<-10 || p.life>1){ p.y=h+10; p.x=Math.random()*w; p.life=0; }
+        var fade = p.life<.15 ? p.life/.15 : (p.life>.8 ? (1-p.life)/.2 : 1);
+        ctx.beginPath();
+        ctx.arc(p.x+Math.sin(p.ph)*p.sw, p.y, p.r, 0, 6.2832);
+        ctx.fillStyle='rgba(230,120,90,'+(p.o*fade)+')';
+        ctx.fill();
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    function start(){ if(!raf) draw(); }
+    function stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+    size();
+    var n=Math.min(70, Math.round(w/16));
+    for(var i=0;i<n;i++) ps.push(make());
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(en){
+        en.forEach(function(x){ x.isIntersecting ? start() : stop(); });
+      },{rootMargin:'90px'});
+      io.observe(sec);
+    } else start();
+    window.addEventListener('resize',function(){
+      size();
+      for(var i=0;i<ps.length;i++){ ps[i].x=Math.random()*w; }
+    });
+  }
+
   /* ---- 3D tilt ---- */
   function initTilt(){
     if(RM || window.matchMedia('(hover:none)').matches) return;
@@ -331,7 +388,7 @@
   /* ---- boot ---- */
   function boot(){
     initPre(); initScroll(); initMenu(); initReveal(); initCursor();
-    initParticles(); initSnow(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initForm();
+    initParticles(); initSnow(); initEmbers(); initTilt(); initCount(); initPara(); initModal(); initFilter(); initForm();
     var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
@@ -344,10 +401,10 @@ en:{
  _name:'English', _dir:'ltr', _font:"var(--sans)",
  'nav.new':'New Release','nav.books':'Books','nav.themes':'Themes','nav.about':'About',
  'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
- 'hero.eyebrow':'Fifteen Books · Philosophy, Self-Discovery &amp; Romance',
+ 'hero.eyebrow':'Nineteen Books · Philosophy, Self-Discovery, Romance &amp; Dark Romantasy',
  'hero.alias':'Also known as MD Naiyer Alam',
  'hero.lede':'An author and deep thinker exploring belief systems and self-discovery — writing that challenges societal norms and asks you to <strong>question every assumption you inherited.</strong>',
- 'hero.lede2':'From the architecture of belief to the illusion of time, from ADHD and attention to the quiet freedom of simply seeing — and now five small-town love stories in Maple Falls, Vermont. Fifteen books, one pursuit: the truth, however uncomfortable.',
+ 'hero.lede2':'From the architecture of belief to the illusion of time, from ADHD and attention to the quiet freedom of simply seeing — five small-town love stories in Maple Falls, Vermont, and now a dark gothic romantasy trilogy, The Tithe Crown. Nineteen books, one pursuit: the truth, however uncomfortable.',
  'hero.cta1':'Read the New Release','hero.cta2':'Browse All Books','hero.scroll':'Scroll',
  'stat.titles':'Published Titles','stat.pages':'Pages in Print',
  'stat.ku':'Free on Kindle Unlimited','stat.markets':'Amazon Marketplaces',
@@ -361,15 +418,21 @@ en:{
  'feat.buy1':'Buy on Amazon.com','feat.buy2':'Buy on Amazon.in',
  'books.tag':'The Library','books.head':'All <em>Books</em>',
  'books.sub':'Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon. Click any book to read more.',
- 'f.all':'All Books','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.maple':'Maple Falls Romance',
+ 'f.all':'All Books','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.fiction':'Literary Fiction','f.maple':'Maple Falls Romance','f.tithe':'The Tithe Crown',
  'card.more':'Read More','card.buy':'Amazon',
- 'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance',
+ 'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance','nav.tithe':'Tithe Crown','foot.tithe':'The Tithe Crown',
  'mf.tag':'The Maple Falls Romance Series',
  'mf.head':'Five love stories. <em>One town that never lets go.</em>',
  'mf.lede':'Some towns change your life. This one will steal your heart. Welcome to <strong>Maple Falls, Vermont</strong> &mdash; a small town at the end of a maple-lined street, where the bookshop keeps its lights on, the bakery keeps its ovens warm, and every love story gets the happily-ever-after it deserves.',
  'mf.lede2':'Grumpy sunshine. Enemies to lovers. Second chances. Snowdrifts. Fireworks. One town where everyone gets their ending &mdash; and all five books are free to read on Kindle Unlimited.',
  'mf.order':'Reading order','mf.note':'Start with Book 1, or jump in anywhere &mdash; Maple Falls will save you a seat.',
  'mf.cta1':'Start with Book 1','mf.cta2':'See the whole series on Amazon',
+ 'tc.tag':'The Tithe Crown Trilogy',
+ 'tc.head':'Three books. <em>One Crown that never lets go.</em>',
+ 'tc.lede':'A completed adult gothic dark romantasy trilogy. The Crown cuts magic out of a soul that will not declare it &mdash; and sends its collectors to hunt down every shadow that hides. <strong>Neris Pell</strong> forges what the Crown wants erased. <strong>Calden Rue</strong> is the collector bound to her by a gold seal neither of them chose.',
+ 'tc.lede2':'Enemies to lovers. Forced proximity. A morally grey collector who falls first. Obsessive devotion. Touch-her-and-die stakes. A slow burn that turns open-door only after it costs them something &mdash; and all three books are free to read on Kindle Unlimited.',
+ 'tc.order':'Reading order','tc.note':'Start with Book 1 &mdash; the Crown always finishes what it starts.',
+ 'tc.cta1':'Start with Book 1','tc.cta2':'See the whole series on Amazon',
  'themes.tag':'Recurring Threads','themes.head':'What the work keeps <em>returning to</em>',
  'th1':'Belief','th1d':'The hidden architecture beneath your relationships, career and happiness — and the fact that architecture can be rebuilt.',
  'th2':'Time','th2d':'Why the obsession with past and future silently steals a life, and what remains when the clock loses its authority.',
@@ -388,7 +451,7 @@ en:{
  'j1':'The debut. A journey into the hidden architecture of the mind — and how to rewrite it.',
  'j2':'The most talked-about title. What if time isn\'t real, but a beautiful lie?',
  'j3':'Learning from birth to beyond — for those brave enough to keep attending.',
- 'j4t':'Six New Works','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem and PREM.',
+ 'j4t':'Nine New Works','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem, PREM, The River&#39;s Portion and the dark gothic romantasy trilogy The Tithe Crown.',
  'con.tag':'Get In Touch','con.head':'Say <em>hello</em>',
  'con.sub':'For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.',
  'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Message directly','con.store':'Amazon Author Store',
@@ -399,7 +462,7 @@ en:{
  'con.note':'Your message opens in WhatsApp to +91 62017 57330 — nothing is stored on this website.',
  's1':'Reader Message','s2':'Interview Request','s3':'Collaboration','s4':'Bulk / Bookstore Order','s5':'Translation Rights','s6':'Other',
  'cta.tag':'Start Reading','cta.head':'Begin where the <em>question</em> is loudest',
- 'cta.sub':'Eleven titles — including all five Maple Falls romances — are free to read on Kindle Unlimited. Follow the author on Amazon to get new release updates the moment a book goes live.',
+ 'cta.sub':'Fifteen titles — including all five Maple Falls romances and all three Tithe Crown novels — are free to read on Kindle Unlimited. Follow the author on Amazon to get new release updates the moment a book goes live.',
  'cta.b1':'Amazon.com Store','cta.b2':'Amazon.in Store',
 'news.title':'Get notified of new books','news.sub':'One short email when a new book goes live. No spam, unsubscribe anytime.','news.ph':'you@example.com','news.btn':'Subscribe','news.note':'Free forever. Unsubscribe in one click.',
  'foot.about':'Books on belief, time, attention and the freedom that waits on the other side of conditioning. Available worldwide on Amazon in Kindle and paperback.',
@@ -413,10 +476,10 @@ hi:{
  _name:'हिन्दी', _dir:'ltr', _font:"'Nirmala UI','Noto Sans Devanagari',var(--sans)",
  'nav.new':'नई पुस्तक','nav.books':'पुस्तकें','nav.themes':'विषय','nav.about':'परिचय',
  'nav.contact':'संपर्क','nav.privacy':'गोपनीयता','nav.store':'अमेज़न स्टोर',
- 'hero.eyebrow':'पंद्रह पुस्तकें · दर्शन, आत्म-खोज एवं रोमांस',
+ 'hero.eyebrow':'उन्नीस पुस्तकें · दर्शन, आत्म-खोज, रोमांस एवं डार्क रोमांटसी',
  'hero.alias':'एमडी नैयर आलम के नाम से भी जाने जाते हैं',
  'hero.lede':'एक लेखक और गहन विचारक, जो विश्वास-प्रणालियों और आत्म-खोज की पड़ताल करते हैं — ऐसा लेखन जो सामाजिक मान्यताओं को चुनौती देता है और आपसे कहता है कि <strong>विरासत में मिली हर धारणा पर प्रश्न कीजिए।</strong>',
- 'hero.lede2':'विश्वास की संरचना से लेकर समय के भ्रम तक, एडीएचडी और एकाग्रता से लेकर केवल देख पाने की शांत स्वतंत्रता तक — और अब वरमॉन्ट के मेपल फ़ॉल्स की पाँच प्रेम कहानियाँ। पंद्रह पुस्तकें, एक ही खोज: सत्य, चाहे वह कितना ही असहज क्यों न हो।',
+ 'hero.lede2':'विश्वास की संरचना से लेकर समय के भ्रम तक, एडीएचडी और एकाग्रता से लेकर केवल देख पाने की शांत स्वतंत्रता तक — वरमॉन्ट के मेपल फ़ॉल्स की पाँच प्रेम कहानियाँ, और अब एक डार्क गॉथिक रोमांटसी त्रयी, द टाइद क्राउन। उन्नीस पुस्तकें, एक ही खोज: सत्य, चाहे वह कितना ही असहज क्यों न हो।',
  'hero.cta1':'नई पुस्तक पढ़ें','hero.cta2':'सभी पुस्तकें देखें','hero.scroll':'नीचे जाएँ',
  'stat.titles':'प्रकाशित पुस्तकें','stat.pages':'कुल पृष्ठ',
  'stat.ku':'किंडल अनलिमिटेड पर निःशुल्क','stat.markets':'अमेज़न मार्केटप्लेस',
@@ -430,15 +493,21 @@ hi:{
  'feat.buy1':'Amazon.com से खरीदें','feat.buy2':'Amazon.in से खरीदें',
  'books.tag':'पुस्तकालय','books.head':'सभी <em>पुस्तकें</em>',
  'books.sub':'सूफ़ी इल्हाम की हर कृति — किंडल और पेपरबैक में, विश्वभर में अमेज़न पर। अधिक जानने के लिए किसी भी पुस्तक पर क्लिक करें।',
- 'f.all':'सभी पुस्तकें','f.phil':'दर्शन','f.self':'स्व-सहायता','f.ku':'किंडल अनलिमिटेड','f.pb':'पेपरबैक','f.maple':'मेपल फ़ॉल्स रोमांस',
+ 'f.all':'सभी पुस्तकें','f.phil':'दर्शन','f.self':'स्व-सहायता','f.ku':'किंडल अनलिमिटेड','f.pb':'पेपरबैक','f.fiction':'साहित्यिक कथा','f.maple':'मेपल फ़ॉल्स रोमांस','f.tithe':'द टाइद क्राउन',
  'card.more':'और पढ़ें','card.buy':'अमेज़न',
- 'nav.maple':'मेपल फ़ॉल्स','foot.maple':'मेपल फ़ॉल्स रोमांस',
+ 'nav.maple':'मेपल फ़ॉल्स','foot.maple':'मेपल फ़ॉल्स रोमांस','nav.tithe':'टाइद क्राउन','foot.tithe':'द टाइद क्राउन',
  'mf.tag':'मेपल फ़ॉल्स रोमांस सीरीज़',
  'mf.head':'पाँच प्रेम कहानियाँ। <em>एक ऐसा क़स्बा जो कभी नहीं छोड़ता।</em>',
  'mf.lede':'कुछ जगहें ज़िंदगी बदल देती हैं। यह जगह दिल चुरा लेगी। स्वागत है <strong>मेपल फ़ॉल्स, वरमॉन्ट</strong> में &mdash; मेपल के पेड़ों वाली सड़क के आख़िरी सिरे पर बसा एक छोटा-सा क़स्बा, जहाँ किताबों की दुकान की बत्तियाँ जलती रहती हैं, बेकरी के तंदूर गरम रहते हैं, और हर प्रेम कहानी को उसका हैप्पी एंडिंग मिलता है।',
  'mf.lede2':'चिड़चिड़ा नायक और धूप-सी नायिका। दुश्मनी से मोहब्बत तक। दूसरे मौक़े। बर्फ़ के ढेर। आतिशबाज़ियाँ। एक क़स्बा जहाँ हर किसी को उसका अंत मिलता है &mdash; और पाँचों किताबें किंडल अनलिमिटेड पर मुफ़्त पढ़ी जा सकती हैं।',
  'mf.order':'पढ़ने का क्रम','mf.note':'किताब 1 से शुरू कीजिए, या कहीं से भी जुड़ जाइए &mdash; मेपल फ़ॉल्स आपके लिए जगह रख लेगा।',
  'mf.cta1':'किताब 1 से शुरू करें','mf.cta2':'पूरी सीरीज़ अमेज़न पर देखें',
+ 'tc.tag':'द टाइद क्राउन त्रयी',
+ 'tc.head':'तीन पुस्तकें। <em>एक ऐसा ताज जो कभी नहीं छोड़ता।</em>',
+ 'tc.lede':'एक संपूर्ण वयस्क गॉथिक डार्क रोमांटसी त्रयी। क्राउन उस आत्मा से जादू काट लेता है जो उसे स्वीकार नहीं करती — और हर छिपती परछाई का पीछा करने के लिए अपने संग्राहक भेजता है। <strong>नेरिस पेल</strong> वह जादू गढ़ती है जिसे क्राउन मिटाना चाहता है। <strong>कैल्डन रू</strong> वह संग्राहक है जो एक स्वर्ण मुहर से उससे बंधा है — एक बंधन जो किसी ने नहीं चुना।',
+ 'tc.lede2':'शत्रु से प्रेमी तक। बलपूर्वक निकटता। एक धूसर-नैतिक संग्राहक जो पहले गिरता है। जुनूनी समर्पण। उसे छूना और मौत का जोखिम। एक धीमी लेकिन गहरी प्रेम-कथा जो कीमत चुकाने के बाद ही खुलती है — और तीनों पुस्तकें किंडल अनलिमिटेड पर मुफ़्त पढ़ी जा सकती हैं।',
+ 'tc.order':'पढ़ने का क्रम','tc.note':'किताब 1 से शुरू कीजिए — क्राउन हमेशा वही पूरा करता है जो वह शुरू करता है।',
+ 'tc.cta1':'किताब 1 से शुरू करें','tc.cta2':'पूरी सीरीज़ अमेज़न पर देखें',
  'themes.tag':'आवर्ती सूत्र','themes.head':'यह लेखन बार-बार <em>जिस ओर लौटता है</em>',
  'th1':'विश्वास','th1d':'आपके संबंधों, करियर और प्रसन्नता के नीचे छिपी संरचना — और यह सत्य कि उस संरचना को पुनः रचा जा सकता है।',
  'th2':'समय','th2d':'अतीत और भविष्य का जुनून चुपचाप जीवन क्यों चुरा लेता है, और जब घड़ी अपना अधिकार खो देती है तब क्या शेष रहता है।',
@@ -457,7 +526,7 @@ hi:{
  'j1':'पहली कृति। मन की छिपी संरचना में एक यात्रा — और उसे पुनः लिखने की विधि।',
  'j2':'सर्वाधिक चर्चित पुस्तक। यदि समय वास्तविक न हो, बल्कि एक सुंदर झूठ हो तो?',
  'j3':'जन्म से परे तक सीखना — उनके लिए जो सीखते रहने का साहस रखते हैं।',
- 'j4t':'छह नई कृतियाँ','j4':'न्यूरोफ़ोकस प्रोटोकॉल, द ह्यूमन ऑपरेटिंग मैनुअल, द वॉल वाज़ अ जेस्चर, द मैप इज़ फ़िनिश्ड, मोह तेरा प्रेम और प्रेम।',
+ 'j4t':'नौ नई कृतियाँ','j4':'न्यूरोफ़ोकस प्रोटोकॉल, द ह्यूमन ऑपरेटिंग मैनुअल, द वॉल वाज़ अ जेस्चर, द मैप इज़ फ़िनिश्ड, मोह तेरा प्रेम, प्रेम, द रिवर्स पोर्शन और डार्क गॉथिक रोमांटसी त्रयी द टाइद क्राउन।',
  'con.tag':'संपर्क करें','con.head':'नमस्ते <em>कहिए</em>',
  'con.sub':'पाठकों के संदेश, साक्षात्कार, सहयोग, थोक ऑर्डर या अनुवाद अधिकारों के लिए — सीधे संपर्क करें।',
  'con.phone':'फ़ोन','con.wa':'व्हाट्सएप','con.wad':'सीधे संदेश भेजें','con.store':'अमेज़न लेखक स्टोर',
@@ -468,7 +537,7 @@ hi:{
  'con.note':'आपका संदेश व्हाट्सएप पर +91 62017 57330 पर खुलेगा — इस वेबसाइट पर कुछ भी संग्रहीत नहीं होता।',
  's1':'पाठक संदेश','s2':'साक्षात्कार अनुरोध','s3':'सहयोग','s4':'थोक / बुकस्टोर ऑर्डर','s5':'अनुवाद अधिकार','s6':'अन्य',
  'cta.tag':'पढ़ना आरंभ करें','cta.head':'वहीं से शुरू कीजिए जहाँ <em>प्रश्न</em> सबसे प्रबल है',
- 'cta.sub':'ग्यारह पुस्तकें किंडल अनलिमिटेड पर निःशुल्क पढ़ी जा सकती हैं। नई पुस्तकों की सूचना के लिए अमेज़न पर लेखक को फ़ॉलो करें।',
+ 'cta.sub':'पंद्रह पुस्तकें किंडल अनलिमिटेड पर निःशुल्क पढ़ी जा सकती हैं। नई पुस्तकों की सूचना के लिए अमेज़न पर लेखक को फ़ॉलो करें।',
  'cta.b1':'Amazon.com स्टोर','cta.b2':'Amazon.in स्टोर',
 'news.title':'नई पुस्तकों की सूचना पाएँ','news.sub':'नई पुस्तक प्रकाशित होने पर एक छोटा ईमेल। कोई स्पैम नहीं, कभी भी सदस्यता छोड़ें।','news.ph':'you@example.com','news.btn':'सदस्यता लें','news.note':'सदैव निःशुल्क। एक क्लिक में सदस्यता समाप्त।',
  'foot.about':'विश्वास, समय, ध्यान और संस्कारों के पार प्रतीक्षा करती स्वतंत्रता पर पुस्तकें। विश्वभर में अमेज़न पर किंडल और पेपरबैक में उपलब्ध।',
@@ -482,10 +551,10 @@ ur:{
  _name:'اردو', _dir:'rtl', _font:"'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Noto Naskh Arabic',var(--sans)",
  'nav.new':'نئی کتاب','nav.books':'کتابیں','nav.themes':'موضوعات','nav.about':'تعارف',
  'nav.contact':'رابطہ','nav.privacy':'رازداری','nav.store':'ایمازون اسٹور',
- 'hero.eyebrow':'پندرہ کتابیں · فلسفہ، خود شناسی اور رومانس',
+ 'hero.eyebrow':'انیس کتابیں · فلسفہ، خود شناسی، رومانس اور ڈارک رومانٹیسی',
  'hero.alias':'ایم ڈی نیر عالم کے نام سے بھی معروف',
  'hero.lede':'ایک مصنف اور گہرے مفکر، جو عقائد کے نظام اور خود شناسی کی کھوج کرتے ہیں — ایسی تحریر جو سماجی روایات کو چیلنج کرتی ہے اور آپ سے کہتی ہے کہ <strong>ہر ورثے میں ملے گمان پر سوال اٹھائیے۔</strong>',
- 'hero.lede2':'عقیدے کی ساخت سے وقت کے فریب تک، اے ڈی ایچ ڈی اور توجہ سے محض دیکھ لینے کی پرسکون آزادی تک — اور اب ورمونٹ کے میپل فالز کی پانچ محبت بھری کہانیاں۔ پندرہ کتابیں، ایک ہی جستجو: سچ، خواہ کتنا ہی بے چین کرنے والا ہو۔',
+ 'hero.lede2':'عقیدے کی ساخت سے وقت کے فریب تک، اے ڈی ایچ ڈی اور توجہ سے محض دیکھ لینے کی پرسکون آزادی تک — ورمونٹ کے میپل فالز کی پانچ محبت بھری کہانیاں، اور اب ایک ڈارک گوتھک رومانٹیسی سہ گانہ، دی ٹائتھ کراؤن۔ انیس کتابیں، ایک ہی جستجو: سچ، خواہ کتنا ہی بے چین کرنے والا ہو۔',
  'hero.cta1':'نئی کتاب پڑھیے','hero.cta2':'تمام کتابیں دیکھیے','hero.scroll':'نیچے',
  'stat.titles':'شائع شدہ کتابیں','stat.pages':'کل صفحات',
  'stat.ku':'کنڈل انلمیٹڈ پر مفت','stat.markets':'ایمازون مارکیٹ',
@@ -499,15 +568,21 @@ ur:{
  'feat.buy1':'Amazon.com سے خریدیں','feat.buy2':'Amazon.in سے خریدیں',
  'books.tag':'کتب خانہ','books.head':'تمام <em>کتابیں</em>',
  'books.sub':'صوفی الہام کی ہر تصنیف — کنڈل اور پیپربیک میں، دنیا بھر میں ایمازون پر۔ مزید جاننے کے لیے کسی بھی کتاب پر کلک کیجیے۔',
- 'f.all':'تمام کتابیں','f.phil':'فلسفہ','f.self':'خود مدد','f.ku':'کنڈل انلمیٹڈ','f.pb':'پیپربیک','f.maple':'میپل فالز رومانس',
+ 'f.all':'تمام کتابیں','f.phil':'فلسفہ','f.self':'خود مدد','f.ku':'کنڈل انلمیٹڈ','f.pb':'پیپربیک','f.fiction':'ادبی افسانہ','f.maple':'میپل فالز رومانس','f.tithe':'دی ٹائتھ کراؤن',
  'card.more':'مزید پڑھیے','card.buy':'ایمازون',
- 'nav.maple':'میپل فالز','foot.maple':'میپل فالز رومانس',
+ 'nav.maple':'میپل فالز','foot.maple':'میپل فالز رومانس','nav.tithe':'ٹائتھ کراؤن','foot.tithe':'دی ٹائتھ کراؤن',
  'mf.tag':'میپل فالز رومانس سیریز',
  'mf.head':'پانچ محبت کی کہانیاں۔ <em>ایک ایسا قصبہ جو کبھی نہیں چھوڑتا۔</em>',
  'mf.lede':'کچھ جگہیں زندگی بدل دیتی ہیں۔ یہ جگہ دل چرا لے گی۔ خوش آمدید <strong>میپل فالز، ورمونٹ</strong> میں &mdash; میپل کے درختوں والی سڑک کے آخری سرے پر بسا ایک چھوٹا سا قصبہ، جہاں کتابوں کی دکان کی روشنیاں جلتی رہتی ہیں، بیکری کے تنور گرم رہتے ہیں، اور ہر محبت کی کہانی کو اس کا خوشگوار انجام ملتا ہے۔',
  'mf.lede2':'چڑچڑا ہیرو اور دھوپ جیسی ہیروئن۔ دشمنی سے محبت تک۔ دوسرے مواقع۔ برف کے ڈھیر۔ آتش بازیاں۔ ایک قصبہ جہاں ہر کسی کو اس کا انجام ملتا ہے &mdash; اور پانچوں کتابیں کنڈل انلمیٹڈ پر مفت پڑھی جا سکتی ہیں۔',
  'mf.order':'پڑھنے کی ترتیب','mf.note':'کتاب 1 سے شروع کیجیے، یا کہیں سے بھی شامل ہو جائیے &mdash; میپل فالز آپ کے لیے جگہ رکھ لے گا۔',
  'mf.cta1':'کتاب 1 سے شروع کیجیے','mf.cta2':'پوری سیریز ایمازون پر دیکھیے',
+ 'tc.tag':'دی ٹائتھ کراؤن سہ گانہ',
+ 'tc.head':'تین کتابیں۔ <em>ایک ایسا تاج جو کبھی نہیں چھوڑتا۔</em>',
+ 'tc.lede':'ایک مکمل بالغ گوتھک ڈارک رومانٹیسی سہ گانہ۔ کراؤن اس روح سے جادو کاٹ دیتا ہے جو اسے تسلیم نہ کرے — اور ہر چھپتے سائے کا پیچھا کرنے کے لیے اپنے جمع کنندگان بھیجتا ہے۔ <strong>نیریس پیل</strong> وہ جادو تخلیق کرتی ہے جسے کراؤن مٹانا چاہتا ہے۔ <strong>کالڈن رو</strong> وہ جمع کنندہ ہے جو ایک سنہری مہر سے اس سے بندھا ہے — ایسا بندھن جو کسی نے نہیں چنا۔',
+ 'tc.lede2':'دشمنی سے محبت تک۔ جبری قربت۔ ایک اخلاقی طور پر مبہم جمع کنندہ جو پہلے گرتا ہے۔ جنونی لگن۔ اسے چھونا اور موت کا خطرہ۔ ایک آہستہ مگر گہری محبت جو قیمت چکانے کے بعد ہی کھلتی ہے — اور تینوں کتابیں کنڈل انلمیٹڈ پر مفت پڑھی جا سکتی ہیں۔',
+ 'tc.order':'پڑھنے کی ترتیب','tc.note':'کتاب 1 سے شروع کیجیے — کراؤن ہمیشہ وہی مکمل کرتا ہے جو شروع کرتا ہے۔',
+ 'tc.cta1':'کتاب 1 سے شروع کیجیے','tc.cta2':'پوری سیریز ایمازون پر دیکھیے',
  'themes.tag':'بار بار آنے والے موضوعات','themes.head':'یہ تحریر بار بار <em>جس طرف لوٹتی ہے</em>',
  'th1':'عقیدہ','th1d':'آپ کے رشتوں، پیشے اور خوشی کے نیچے چھپی ساخت — اور یہ حقیقت کہ اس ساخت کو نئے سرے سے تعمیر کیا جا سکتا ہے۔',
  'th2':'وقت','th2d':'ماضی اور مستقبل کا جنون خاموشی سے زندگی کیوں چرا لیتا ہے، اور جب گھڑی اپنا اختیار کھو دیتی ہے تو کیا باقی رہتا ہے۔',
@@ -526,7 +601,7 @@ ur:{
  'j1':'پہلی تصنیف۔ ذہن کی پوشیدہ ساخت میں ایک سفر — اور اسے نئے سرے سے لکھنے کا طریقہ۔',
  'j2':'سب سے زیادہ زیرِ بحث کتاب۔ اگر وقت حقیقی نہ ہو، بلکہ ایک خوبصورت جھوٹ ہو تو؟',
  'j3':'پیدائش سے آگے تک سیکھنا — ان کے لیے جو سیکھتے رہنے کی جرأت رکھتے ہیں۔',
- 'j4t':'چھ نئی تصانیف','j4':'نیوروفوکس پروٹوکول، دی ہیومن آپریٹنگ مینوئل، دی وال واز اے جیسچر، دی میپ اِز فِنِشڈ، موہ تیرا پریم اور پریم۔',
+ 'j4t':'نو نئی تصانیف','j4':'نیوروفوکس پروٹوکول، دی ہیومن آپریٹنگ مینوئل، دی وال واز اے جیسچر، دی میپ اِز فِنِشڈ، موہ تیرا پریم، پریم، دی ریور کا پورشن اور ڈارک گوتھک رومانٹیسی سہ گانہ دی ٹائتھ کراؤن۔',
  'con.tag':'رابطہ کیجیے','con.head':'سلام <em>کہیے</em>',
  'con.sub':'قارئین کے پیغامات، انٹرویو، اشتراک، تھوک آرڈر یا ترجمے کے حقوق کے لیے — براہِ راست رابطہ کیجیے۔',
  'con.phone':'فون','con.wa':'واٹس ایپ','con.wad':'براہِ راست پیغام','con.store':'ایمازون مصنف اسٹور',
@@ -537,7 +612,7 @@ ur:{
  'con.note':'آپ کا پیغام واٹس ایپ پر ‎+91 62017 57330‎ پر کھلے گا — اس ویب سائٹ پر کچھ محفوظ نہیں ہوتا۔',
  's1':'قاری کا پیغام','s2':'انٹرویو کی درخواست','s3':'اشتراک','s4':'تھوک / بک اسٹور آرڈر','s5':'ترجمے کے حقوق','s6':'دیگر',
  'cta.tag':'پڑھنا شروع کیجیے','cta.head':'وہیں سے شروع کیجیے جہاں <em>سوال</em> سب سے بلند ہے',
- 'cta.sub':'گیارہ کتابیں کنڈل انلمیٹڈ پر مفت پڑھی جا سکتی ہیں۔ نئی کتابوں کی اطلاع کے لیے ایمازون پر مصنف کو فالو کیجیے۔',
+ 'cta.sub':'پندرہ کتابیں کنڈل انلمیٹڈ پر مفت پڑھی جا سکتی ہیں۔ نئی کتابوں کی اطلاع کے لیے ایمازون پر مصنف کو فالو کیجیے۔',
  'cta.b1':'Amazon.com اسٹور','cta.b2':'Amazon.in اسٹور',
 'news.title':'نئی کتابوں کی اطلاع پائیں','news.sub':'نئی کتاب شائع ہونے پر ایک مختصر ای میل۔ کوئی اسپیم نہیں، کسی بھی وقت رکنیت ختم کریں۔','news.ph':'you@example.com','news.btn':'رکنیت لیں','news.note':'ہمیشہ مفت۔ ایک کلک میں رکنیت ختم۔',
  'foot.about':'عقیدے، وقت، توجہ اور مشروط سوچ کے پار منتظر آزادی پر کتابیں۔ دنیا بھر میں ایمازون پر کنڈل اور پیپربیک میں دستیاب۔',
@@ -551,10 +626,10 @@ hinglish:{
  _name:'Hinglish', _dir:'ltr', _font:"var(--sans)",
  'nav.new':'Nayi Kitab','nav.books':'Kitabein','nav.themes':'Themes','nav.about':'Parichay',
  'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
- 'hero.eyebrow':'Pandrah Kitabein · Philosophy, Self-Discovery aur Romance',
+ 'hero.eyebrow':'Unnees Kitabein · Philosophy, Self-Discovery, Romance aur Dark Romantasy',
  'hero.alias':'MD Naiyer Alam ke naam se bhi jaane jaate hain',
  'hero.lede':'Ek author aur gehre thinker, jo belief systems aur self-discovery ko explore karte hain — aisi writing jo society ke banaye rules ko challenge karti hai aur aapse kehti hai ki <strong>jo bhi maan liya hai, us par sawaal kijiye.</strong>',
- 'hero.lede2':'Belief ki architecture se lekar time ke illusion tak, ADHD aur attention se lekar sirf dekh paane ki shaant azadi tak — aur ab Vermont ke Maple Falls ki paanch love stories. Pandrah kitabein, ek hi talash: sach, chahe kitna hi uncomfortable ho.',
+ 'hero.lede2':'Belief ki architecture se lekar time ke illusion tak, ADHD aur attention se lekar sirf dekh paane ki shaant azadi tak — Vermont ke Maple Falls ki paanch love stories, aur ab ek dark gothic romantasy trilogy, The Tithe Crown. Unnees kitabein, ek hi talash: sach, chahe kitna hi uncomfortable ho.',
  'hero.cta1':'Nayi Kitab Padhiye','hero.cta2':'Saari Kitabein Dekhiye','hero.scroll':'Scroll',
  'stat.titles':'Published Kitabein','stat.pages':'Total Pages',
  'stat.ku':'Kindle Unlimited par Free','stat.markets':'Amazon Marketplaces',
@@ -568,15 +643,21 @@ hinglish:{
  'feat.buy1':'Amazon.com se khareedein','feat.buy2':'Amazon.in se khareedein',
  'books.tag':'The Library','books.head':'Saari <em>Kitabein</em>',
  'books.sub':'Sufi Ilham ki har kitab — Kindle aur paperback mein, duniya bhar mein Amazon par. Zyada jaanne ke liye kisi bhi kitab par click kijiye.',
- 'f.all':'Saari Kitabein','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.maple':'Maple Falls Romance',
+ 'f.all':'Saari Kitabein','f.phil':'Philosophy','f.self':'Self-Help','f.ku':'Kindle Unlimited','f.pb':'Paperback','f.fiction':'Literary Fiction','f.maple':'Maple Falls Romance','f.tithe':'The Tithe Crown',
  'card.more':'Aur Padhiye','card.buy':'Amazon',
- 'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance',
+ 'nav.maple':'Maple Falls','foot.maple':'Maple Falls Romance','nav.tithe':'Tithe Crown','foot.tithe':'The Tithe Crown',
  'mf.tag':'Maple Falls Romance Series',
  'mf.head':'Paanch love stories. <em>Ek town jo kabhi chhodta nahi.</em>',
  'mf.lede':'Kuch shehar zindagi badal dete hain. Yeh wala dil chura lega. Welcome to <strong>Maple Falls, Vermont</strong> &mdash; maple ke pedon wali sadak ke aakhiri sire par basa ek chhota sa town, jahan bookshop ki lights jalti rehti hain, bakery ke oven garam rehte hain, aur har love story ko uska happily-ever-after milta hai.',
  'mf.lede2':'Grumpy sunshine. Enemies to lovers. Second chances. Barf ke dher. Fireworks. Ek town jahan sabko unka ending milta hai &mdash; aur paanchon kitabein Kindle Unlimited par free hain.',
  'mf.order':'Padhne ka order','mf.note':'Book 1 se shuru kijiye, ya kahin se bhi jump kar lijiye &mdash; Maple Falls aapke liye seat rakh lega.',
  'mf.cta1':'Book 1 se shuru kijiye','mf.cta2':'Poori series Amazon par dekhiye',
+ 'tc.tag':'The Tithe Crown Trilogy',
+ 'tc.head':'Teen kitabein. <em>Ek Crown jo kabhi chhodta nahi.</em>',
+ 'tc.lede':'Ek complete adult gothic dark romantasy trilogy. Crown us soul se magic kaat deta hai jo use declare nahi karti — aur har chhupte shadow ko dhoondhne ke liye apne collectors bhejta hai. <strong>Neris Pell</strong> wahi magic forge karti hai jise Crown mitana chahta hai. <strong>Calden Rue</strong> wo collector hai jo ek gold seal se usse bandha hai — ek bandhan jo kisi ne choose nahi kiya.',
+ 'tc.lede2':'Enemies to lovers. Forced proximity. Ek morally grey collector jo pehle gir jaata hai. Obsessive devotion. Use touch karo aur maut ka khatra. Ek slow burn jo tabhi khulti hai jab uski keemat chukayi jaaye &mdash; aur teeno kitabein Kindle Unlimited par free hain.',
+ 'tc.order':'Padhne ka order','tc.note':'Book 1 se shuru kijiye &mdash; Crown hamesha wahi poora karta hai jo shuru karta hai.',
+ 'tc.cta1':'Book 1 se shuru kijiye','tc.cta2':'Poori series Amazon par dekhiye',
  'themes.tag':'Baar Baar Aane Wale Themes','themes.head':'Ye writing baar baar <em>jahan lautti hai</em>',
  'th1':'Belief','th1d':'Aapke rishton, career aur khushi ke neeche chhupi architecture — aur ye sach ki us architecture ko dobara banaya ja sakta hai.',
  'th2':'Time','th2d':'Past aur future ka obsession chupchaap zindagi kyun chura leta hai, aur jab ghadi apna adhikar kho deti hai tab kya bachta hai.',
@@ -595,7 +676,7 @@ hinglish:{
  'j1':'Pehli kitab. Mind ki chhupi architecture mein ek safar — aur use dobara likhne ka tarika.',
  'j2':'Sabse zyada charchit kitab. Agar time real na ho, balki ek khoobsurat jhooth ho toh?',
  'j3':'Janm se aage tak seekhna — un logon ke liye jo seekhte rehne ki himmat rakhte hain.',
- 'j4t':'Chhe Nayi Kitabein','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem aur PREM.',
+ 'j4t':'Nau Nayi Kitabein','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem, PREM, The River&#39;s Portion aur dark gothic romantasy trilogy The Tithe Crown.',
  'con.tag':'Sampark Kijiye','con.head':'Kahiye <em>hello</em>',
  'con.sub':'Reader messages, interviews, collaboration, bulk order ya translation rights ke liye — seedha sampark kijiye.',
  'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Seedha message bhejiye','con.store':'Amazon Author Store',
@@ -606,7 +687,7 @@ hinglish:{
  'con.note':'Aapka message WhatsApp par +91 62017 57330 par khulega — is website par kuch bhi store nahi hota.',
  's1':'Reader Message','s2':'Interview Request','s3':'Collaboration','s4':'Bulk / Bookstore Order','s5':'Translation Rights','s6':'Other',
  'cta.tag':'Padhna Shuru Kijiye','cta.head':'Wahin se shuru kijiye jahan <em>sawaal</em> sabse tez hai',
- 'cta.sub':'Gyarah kitabein Kindle Unlimited par free padhi ja sakti hain. Nayi kitabon ki update ke liye Amazon par author ko follow kijiye.',
+ 'cta.sub':'Pandrah kitabein Kindle Unlimited par free padhi ja sakti hain. Nayi kitabon ki update ke liye Amazon par author ko follow kijiye.',
  'cta.b1':'Amazon.com Store','cta.b2':'Amazon.in Store',
 'news.title':'Nayi kitabon ki update paayein','news.sub':'Nayi kitab live hone par ek chhota email. No spam, kabhi bhi unsubscribe.','news.ph':'you@example.com','news.btn':'Subscribe karein','news.note':'Hamesha free. Ek click mein unsubscribe.',
  'foot.about':'Belief, time, attention aur conditioning ke paar intezaar karti azadi par kitabein. Duniya bhar mein Amazon par Kindle aur paperback mein available.',
