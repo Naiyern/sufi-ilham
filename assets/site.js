@@ -307,8 +307,30 @@
   function initModal(){
     var mod=document.getElementById('modal'); if(!mod) return;
     var body=document.getElementById('modal-body'), last=null;
+    var STORE_US='https://www.amazon.com/author/sufibookauthor';
     function open(card){
       var d=JSON.parse(card.getAttribute('data-book'));
+      var links='';
+      if(d.comingSoon){
+        links =
+          '<div class="m-coming">Coming soon — not yet published. Follow the author on Amazon '+
+          'to be notified on release day.</div>'+
+          '<div class="m-links">'+
+            (d.seriesUrl?'<a class="btn btn-gold" href="'+d.seriesUrl+'" target="_blank" rel="noopener">See the Series on Amazon <span class="arw">→</span></a>':'')+
+            '<a class="btn btn-ghost" href="'+STORE_US+'" target="_blank" rel="noopener">Follow on Amazon</a>'+
+          '</div>';
+      } else {
+        links = '<div class="m-links">';
+        if(d.us) links+='<a class="btn btn-gold" href="'+d.us+'" target="_blank" rel="noopener">Amazon.com <span class="arw">→</span></a>';
+        if(d.paperback) links+='<a class="btn btn-gold" href="'+d.paperback+'" target="_blank" rel="noopener">Paperback <span class="arw">→</span></a>';
+        if(d.in) links+='<a class="btn btn-ghost" href="'+d.in+'" target="_blank" rel="noopener">Amazon.in</a>';
+        links+='</div>';
+        var more='';
+        if(d.uk) more+='<a href="'+d.uk+'" target="_blank" rel="noopener">Amazon.co.uk</a>';
+        if(d.ca) more+='<a href="'+d.ca+'" target="_blank" rel="noopener">Amazon.ca</a>';
+        if(d.au) more+='<a href="'+d.au+'" target="_blank" rel="noopener">Amazon.com.au</a>';
+        if(more) links+='<div class="m-stores"><span class="m-stores-t">More stores:</span>'+more+'</div>';
+      }
       body.innerHTML =
         '<div class="m-grid">'+
           '<div class="m-cover"><img src="'+d.img+'" alt="'+d.title+' cover"></div>'+
@@ -319,16 +341,7 @@
             (d.quote?'<p class="m-quote">'+d.quote+'</p>':'')+
             '<div class="m-desc">'+d.desc+'</div>'+
             '<ul class="m-spec">'+d.spec.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul>'+
-            '<div class="m-links">'+
-              '<a class="btn btn-gold" href="'+d.us+'" target="_blank" rel="noopener">Amazon.com <span class="arw">→</span></a>'+
-              '<a class="btn btn-ghost" href="'+d.in+'" target="_blank" rel="noopener">Amazon.in</a>'+
-            '</div>'+
-            '<div class="m-stores">'+
-              '<span class="m-stores-t">More stores:</span>'+
-              '<a href="'+d.uk+'" target="_blank" rel="noopener">Amazon.co.uk</a>'+
-              '<a href="'+d.ca+'" target="_blank" rel="noopener">Amazon.ca</a>'+
-              '<a href="'+d.au+'" target="_blank" rel="noopener">Amazon.com.au</a>'+
-            '</div>'+
+            links+
           '</div>'+
         '</div>';
       mod.classList.add('open');
@@ -401,10 +414,10 @@ en:{
  _name:'English', _dir:'ltr', _font:"var(--sans)",
  'nav.new':'New Release','nav.books':'Books','nav.themes':'Themes','nav.about':'About',
  'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
- 'hero.eyebrow':'Nineteen Books · Philosophy, Self-Discovery, Romance &amp; Dark Romantasy',
+ 'hero.eyebrow':'Twenty-Six Books · Philosophy, Romance, Myth &amp; Dark Romantasy',
  'hero.alias':'Also known as MD Naiyer Alam',
  'hero.lede':'An author and deep thinker exploring belief systems and self-discovery — writing that challenges societal norms and asks you to <strong>question every assumption you inherited.</strong>',
- 'hero.lede2':'From the architecture of belief to the illusion of time, from ADHD and attention to the quiet freedom of simply seeing — five small-town love stories in Maple Falls, Vermont, and now a dark gothic romantasy trilogy, The Tithe Crown. Nineteen books, one pursuit: the truth, however uncomfortable.',
+ 'hero.lede2':'From the architecture of belief to the illusion of time, from ADHD and attention to the quiet freedom of simply seeing — five small-town love stories in Maple Falls, Vermont, a dark gothic romantasy trilogy, The Tithe Crown, the seven-book Cartographers of Lost Tomorrows saga, the mythic Song of the Unbroken Sky trilogy and the standalone romance The Spare Key Summer. Twenty-six books, one pursuit: the truth, however uncomfortable.',
  'hero.cta1':'Read the New Release','hero.cta2':'Browse All Books','hero.scroll':'Scroll',
  'stat.titles':'Published Titles','stat.pages':'Pages in Print',
  'stat.ku':'Free on Kindle Unlimited','stat.markets':'Amazon Marketplaces',
@@ -451,7 +464,7 @@ en:{
  'j1':'The debut. A journey into the hidden architecture of the mind — and how to rewrite it.',
  'j2':'The most talked-about title. What if time isn\'t real, but a beautiful lie?',
  'j3':'Learning from birth to beyond — for those brave enough to keep attending.',
- 'j4t':'Nine New Works','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem, PREM, The River&#39;s Portion and the dark gothic romantasy trilogy The Tithe Crown.',
+ 'j4t':'Twenty-Two New Works','j4':'NeuroFocus Protocol, The Human Operating Manual, Moh Tera Prem, PREM, The River&#39;s Portion, the Maple Falls romances, The Tithe Crown trilogy — and now the Cartographers saga, the Song of the Unbroken Sky trilogy and The Spare Key Summer.',
  'con.tag':'Get In Touch','con.head':'Say <em>hello</em>',
  'con.sub':'For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.',
  'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Message directly','con.store':'Amazon Author Store',
@@ -462,7 +475,7 @@ en:{
  'con.note':'Your message opens in WhatsApp to +91 62017 57330 — nothing is stored on this website.',
  's1':'Reader Message','s2':'Interview Request','s3':'Collaboration','s4':'Bulk / Bookstore Order','s5':'Translation Rights','s6':'Other',
  'cta.tag':'Start Reading','cta.head':'Begin where the <em>question</em> is loudest',
- 'cta.sub':'Fifteen titles — including all five Maple Falls romances and all three Tithe Crown novels — are free to read on Kindle Unlimited. Follow the author on Amazon to get new release updates the moment a book goes live.',
+ 'cta.sub':'Twenty-two titles — every Maple Falls romance, every Tithe Crown novel and all seven new releases — are free to read on Kindle Unlimited. Follow the author on Amazon to get new release updates the moment a book goes live.',
  'cta.b1':'Amazon.com Store','cta.b2':'Amazon.in Store',
 'news.title':'Get notified of new books','news.sub':'One short email when a new book goes live. No spam, unsubscribe anytime.','news.ph':'you@example.com','news.btn':'Subscribe','news.note':'Free forever. Unsubscribe in one click.',
  'foot.about':'Books on belief, time, attention and the freedom that waits on the other side of conditioning. Available worldwide on Amazon in Kindle and paperback.',
@@ -476,10 +489,10 @@ hi:{
  _name:'हिन्दी', _dir:'ltr', _font:"'Nirmala UI','Noto Sans Devanagari',var(--sans)",
  'nav.new':'नई पुस्तक','nav.books':'पुस्तकें','nav.themes':'विषय','nav.about':'परिचय',
  'nav.contact':'संपर्क','nav.privacy':'गोपनीयता','nav.store':'अमेज़न स्टोर',
- 'hero.eyebrow':'उन्नीस पुस्तकें · दर्शन, आत्म-खोज, रोमांस एवं डार्क रोमांटसी',
+ 'hero.eyebrow':'छब्बीस पुस्तकें · दर्शन, रोमांस, मिथक एवं डार्क रोमांटसी',
  'hero.alias':'एमडी नैयर आलम के नाम से भी जाने जाते हैं',
  'hero.lede':'एक लेखक और गहन विचारक, जो विश्वास-प्रणालियों और आत्म-खोज की पड़ताल करते हैं — ऐसा लेखन जो सामाजिक मान्यताओं को चुनौती देता है और आपसे कहता है कि <strong>विरासत में मिली हर धारणा पर प्रश्न कीजिए।</strong>',
- 'hero.lede2':'विश्वास की संरचना से लेकर समय के भ्रम तक, एडीएचडी और एकाग्रता से लेकर केवल देख पाने की शांत स्वतंत्रता तक — वरमॉन्ट के मेपल फ़ॉल्स की पाँच प्रेम कहानियाँ, और अब एक डार्क गॉथिक रोमांटसी त्रयी, द टाइद क्राउन। उन्नीस पुस्तकें, एक ही खोज: सत्य, चाहे वह कितना ही असहज क्यों न हो।',
+ 'hero.lede2':'विश्वास की संरचना से लेकर समय के भ्रम तक, एडीएचडी और एकाग्रता से लेकर केवल देख पाने की शांत स्वतंत्रता तक — मेपल फ़ॉल्स की पाँच प्रेम कहानियाँ, द टाइद क्राउन त्रयी, सात पुस्तकों वाली कार्टोग्राफ़र्स सागा, द सॉन्ग ऑफ़ द अनब्रोकन स्काई त्रयी और स्वतंत्र उपन्यास द स्पेयर की समर। छब्बीस पुस्तकें, एक ही खोज: सत्य, चाहे वह कितना ही असहज क्यों न हो।',
  'hero.cta1':'नई पुस्तक पढ़ें','hero.cta2':'सभी पुस्तकें देखें','hero.scroll':'नीचे जाएँ',
  'stat.titles':'प्रकाशित पुस्तकें','stat.pages':'कुल पृष्ठ',
  'stat.ku':'किंडल अनलिमिटेड पर निःशुल्क','stat.markets':'अमेज़न मार्केटप्लेस',
@@ -526,7 +539,7 @@ hi:{
  'j1':'पहली कृति। मन की छिपी संरचना में एक यात्रा — और उसे पुनः लिखने की विधि।',
  'j2':'सर्वाधिक चर्चित पुस्तक। यदि समय वास्तविक न हो, बल्कि एक सुंदर झूठ हो तो?',
  'j3':'जन्म से परे तक सीखना — उनके लिए जो सीखते रहने का साहस रखते हैं।',
- 'j4t':'नौ नई कृतियाँ','j4':'न्यूरोफ़ोकस प्रोटोकॉल, द ह्यूमन ऑपरेटिंग मैनुअल, द वॉल वाज़ अ जेस्चर, द मैप इज़ फ़िनिश्ड, मोह तेरा प्रेम, प्रेम, द रिवर्स पोर्शन और डार्क गॉथिक रोमांटसी त्रयी द टाइद क्राउन।',
+ 'j4t':'बाईस नई कृतियाँ','j4':'न्यूरोफ़ोकस प्रोटोकॉल, द ह्यूमन ऑपरेटिंग मैनुअल, मोह तेरा प्रेम, प्रेम, द रिवर्स पोर्शन, मेपल फ़ॉल्स शृंखला, द टाइद क्राउन त्रयी — और अब कार्टोग्राफ़र्स सागा, द सॉन्ग ऑफ़ द अनब्रोकन स्काई और द स्पेयर की समर।',
  'con.tag':'संपर्क करें','con.head':'नमस्ते <em>कहिए</em>',
  'con.sub':'पाठकों के संदेश, साक्षात्कार, सहयोग, थोक ऑर्डर या अनुवाद अधिकारों के लिए — सीधे संपर्क करें।',
  'con.phone':'फ़ोन','con.wa':'व्हाट्सएप','con.wad':'सीधे संदेश भेजें','con.store':'अमेज़न लेखक स्टोर',
@@ -537,7 +550,7 @@ hi:{
  'con.note':'आपका संदेश व्हाट्सएप पर +91 62017 57330 पर खुलेगा — इस वेबसाइट पर कुछ भी संग्रहीत नहीं होता।',
  's1':'पाठक संदेश','s2':'साक्षात्कार अनुरोध','s3':'सहयोग','s4':'थोक / बुकस्टोर ऑर्डर','s5':'अनुवाद अधिकार','s6':'अन्य',
  'cta.tag':'पढ़ना आरंभ करें','cta.head':'वहीं से शुरू कीजिए जहाँ <em>प्रश्न</em> सबसे प्रबल है',
- 'cta.sub':'पंद्रह पुस्तकें किंडल अनलिमिटेड पर निःशुल्क पढ़ी जा सकती हैं। नई पुस्तकों की सूचना के लिए अमेज़न पर लेखक को फ़ॉलो करें।',
+ 'cta.sub':'बाईस पुस्तकें किंडल अनलिमिटेड पर निःशुल्क पढ़ी जा सकती हैं — मेपल फ़ॉल्स, टाइद क्राउन और सभी सात नई पुस्तकें। नई पुस्तकों की सूचना के लिए अमेज़न पर लेखक को फ़ॉलो करें।',
  'cta.b1':'Amazon.com स्टोर','cta.b2':'Amazon.in स्टोर',
 'news.title':'नई पुस्तकों की सूचना पाएँ','news.sub':'नई पुस्तक प्रकाशित होने पर एक छोटा ईमेल। कोई स्पैम नहीं, कभी भी सदस्यता छोड़ें।','news.ph':'you@example.com','news.btn':'सदस्यता लें','news.note':'सदैव निःशुल्क। एक क्लिक में सदस्यता समाप्त।',
  'foot.about':'विश्वास, समय, ध्यान और संस्कारों के पार प्रतीक्षा करती स्वतंत्रता पर पुस्तकें। विश्वभर में अमेज़न पर किंडल और पेपरबैक में उपलब्ध।',
@@ -551,10 +564,10 @@ ur:{
  _name:'اردو', _dir:'rtl', _font:"'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Noto Naskh Arabic',var(--sans)",
  'nav.new':'نئی کتاب','nav.books':'کتابیں','nav.themes':'موضوعات','nav.about':'تعارف',
  'nav.contact':'رابطہ','nav.privacy':'رازداری','nav.store':'ایمازون اسٹور',
- 'hero.eyebrow':'انیس کتابیں · فلسفہ، خود شناسی، رومانس اور ڈارک رومانٹیسی',
+ 'hero.eyebrow':'چھبیس کتابیں · فلسفہ، رومانس، اساطیر اور ڈارک رومانٹیسی',
  'hero.alias':'ایم ڈی نیر عالم کے نام سے بھی معروف',
  'hero.lede':'ایک مصنف اور گہرے مفکر، جو عقائد کے نظام اور خود شناسی کی کھوج کرتے ہیں — ایسی تحریر جو سماجی روایات کو چیلنج کرتی ہے اور آپ سے کہتی ہے کہ <strong>ہر ورثے میں ملے گمان پر سوال اٹھائیے۔</strong>',
- 'hero.lede2':'عقیدے کی ساخت سے وقت کے فریب تک، اے ڈی ایچ ڈی اور توجہ سے محض دیکھ لینے کی پرسکون آزادی تک — ورمونٹ کے میپل فالز کی پانچ محبت بھری کہانیاں، اور اب ایک ڈارک گوتھک رومانٹیسی سہ گانہ، دی ٹائتھ کراؤن۔ انیس کتابیں، ایک ہی جستجو: سچ، خواہ کتنا ہی بے چین کرنے والا ہو۔',
+ 'hero.lede2':'عقیدے کی ساخت سے وقت کے فریب تک، اے ڈی ایچ ڈی اور توجہ سے محض دیکھ لینے کی پرسکون آزادی تک — میپل فالز کی پانچ محبت بھری کہانیاں، دی ٹائتھ کراؤن سہ گانہ، سات کتابوں پر مشتمل کارٹوگرافرز ساگا، دی سانگ آف دی ان بروکن اسکائی سہ گانہ اور آزاد ناول دی اسپیئر کی سمر۔ چھبیس کتابیں، ایک ہی جستجو: سچ، خواہ کتنا ہی بے چین کرنے والا ہو۔',
  'hero.cta1':'نئی کتاب پڑھیے','hero.cta2':'تمام کتابیں دیکھیے','hero.scroll':'نیچے',
  'stat.titles':'شائع شدہ کتابیں','stat.pages':'کل صفحات',
  'stat.ku':'کنڈل انلمیٹڈ پر مفت','stat.markets':'ایمازون مارکیٹ',
@@ -601,7 +614,7 @@ ur:{
  'j1':'پہلی تصنیف۔ ذہن کی پوشیدہ ساخت میں ایک سفر — اور اسے نئے سرے سے لکھنے کا طریقہ۔',
  'j2':'سب سے زیادہ زیرِ بحث کتاب۔ اگر وقت حقیقی نہ ہو، بلکہ ایک خوبصورت جھوٹ ہو تو؟',
  'j3':'پیدائش سے آگے تک سیکھنا — ان کے لیے جو سیکھتے رہنے کی جرأت رکھتے ہیں۔',
- 'j4t':'نو نئی تصانیف','j4':'نیوروفوکس پروٹوکول، دی ہیومن آپریٹنگ مینوئل، دی وال واز اے جیسچر، دی میپ اِز فِنِشڈ، موہ تیرا پریم، پریم، دی ریور کا پورشن اور ڈارک گوتھک رومانٹیسی سہ گانہ دی ٹائتھ کراؤن۔',
+ 'j4t':'بائیس نئی تصانیف','j4':'نیوروفوکس پروٹوکول، دی ہیومن آپریٹنگ مینوئل، موہ تیرا پریم، پریم، دی ریور کا پورشن، میپل فالز سلسلہ، دی ٹائتھ کراؤن سہ گانہ — اور اب کارٹوگرافرز ساگا، دی سانگ آف دی ان بروکن اسکائی اور دی اسپیئر کی سمر۔',
  'con.tag':'رابطہ کیجیے','con.head':'سلام <em>کہیے</em>',
  'con.sub':'قارئین کے پیغامات، انٹرویو، اشتراک، تھوک آرڈر یا ترجمے کے حقوق کے لیے — براہِ راست رابطہ کیجیے۔',
  'con.phone':'فون','con.wa':'واٹس ایپ','con.wad':'براہِ راست پیغام','con.store':'ایمازون مصنف اسٹور',
@@ -612,7 +625,7 @@ ur:{
  'con.note':'آپ کا پیغام واٹس ایپ پر ‎+91 62017 57330‎ پر کھلے گا — اس ویب سائٹ پر کچھ محفوظ نہیں ہوتا۔',
  's1':'قاری کا پیغام','s2':'انٹرویو کی درخواست','s3':'اشتراک','s4':'تھوک / بک اسٹور آرڈر','s5':'ترجمے کے حقوق','s6':'دیگر',
  'cta.tag':'پڑھنا شروع کیجیے','cta.head':'وہیں سے شروع کیجیے جہاں <em>سوال</em> سب سے بلند ہے',
- 'cta.sub':'پندرہ کتابیں کنڈل انلمیٹڈ پر مفت پڑھی جا سکتی ہیں۔ نئی کتابوں کی اطلاع کے لیے ایمازون پر مصنف کو فالو کیجیے۔',
+ 'cta.sub':'بائیس کتابیں کنڈل انلمیٹڈ پر مفت پڑھی جا سکتی ہیں — میپل فالز، ٹائتھ کراؤن اور تمام سات نئی کتابیں۔ نئی کتابوں کی اطلاع کے لیے ایمازون پر مصنف کو فالو کیجیے۔',
  'cta.b1':'Amazon.com اسٹور','cta.b2':'Amazon.in اسٹور',
 'news.title':'نئی کتابوں کی اطلاع پائیں','news.sub':'نئی کتاب شائع ہونے پر ایک مختصر ای میل۔ کوئی اسپیم نہیں، کسی بھی وقت رکنیت ختم کریں۔','news.ph':'you@example.com','news.btn':'رکنیت لیں','news.note':'ہمیشہ مفت۔ ایک کلک میں رکنیت ختم۔',
  'foot.about':'عقیدے، وقت، توجہ اور مشروط سوچ کے پار منتظر آزادی پر کتابیں۔ دنیا بھر میں ایمازون پر کنڈل اور پیپربیک میں دستیاب۔',
@@ -626,10 +639,10 @@ hinglish:{
  _name:'Hinglish', _dir:'ltr', _font:"var(--sans)",
  'nav.new':'Nayi Kitab','nav.books':'Kitabein','nav.themes':'Themes','nav.about':'Parichay',
  'nav.contact':'Contact','nav.privacy':'Privacy','nav.store':'Amazon Store',
- 'hero.eyebrow':'Unnees Kitabein · Philosophy, Self-Discovery, Romance aur Dark Romantasy',
+ 'hero.eyebrow':'Chhabbees Kitabein · Philosophy, Romance, Myth aur Dark Romantasy',
  'hero.alias':'MD Naiyer Alam ke naam se bhi jaane jaate hain',
  'hero.lede':'Ek author aur gehre thinker, jo belief systems aur self-discovery ko explore karte hain — aisi writing jo society ke banaye rules ko challenge karti hai aur aapse kehti hai ki <strong>jo bhi maan liya hai, us par sawaal kijiye.</strong>',
- 'hero.lede2':'Belief ki architecture se lekar time ke illusion tak, ADHD aur attention se lekar sirf dekh paane ki shaant azadi tak — Vermont ke Maple Falls ki paanch love stories, aur ab ek dark gothic romantasy trilogy, The Tithe Crown. Unnees kitabein, ek hi talash: sach, chahe kitna hi uncomfortable ho.',
+ 'hero.lede2':'Belief ki architecture se lekar time ke illusion tak, ADHD aur attention se lekar sirf dekh paane ki shaant azadi tak — Maple Falls ki paanch love stories, The Tithe Crown trilogy, saat kitabon wali Cartographers saga, The Song of the Unbroken Sky trilogy aur standalone romance The Spare Key Summer. Chhabbees kitabein, ek hi talash: sach, chahe kitna hi uncomfortable ho.',
  'hero.cta1':'Nayi Kitab Padhiye','hero.cta2':'Saari Kitabein Dekhiye','hero.scroll':'Scroll',
  'stat.titles':'Published Kitabein','stat.pages':'Total Pages',
  'stat.ku':'Kindle Unlimited par Free','stat.markets':'Amazon Marketplaces',
@@ -676,7 +689,7 @@ hinglish:{
  'j1':'Pehli kitab. Mind ki chhupi architecture mein ek safar — aur use dobara likhne ka tarika.',
  'j2':'Sabse zyada charchit kitab. Agar time real na ho, balki ek khoobsurat jhooth ho toh?',
  'j3':'Janm se aage tak seekhna — un logon ke liye jo seekhte rehne ki himmat rakhte hain.',
- 'j4t':'Nau Nayi Kitabein','j4':'NeuroFocus Protocol, The Human Operating Manual, The Wall Was a Gesture, The Map Is Finished, Moh Tera Prem, PREM, The River&#39;s Portion aur dark gothic romantasy trilogy The Tithe Crown.',
+ 'j4t':'Baees Nayi Kitabein','j4':'NeuroFocus Protocol, The Human Operating Manual, Moh Tera Prem, PREM, The River&#39;s Portion, Maple Falls series, The Tithe Crown trilogy — aur ab Cartographers saga, The Song of the Unbroken Sky aur The Spare Key Summer.',
  'con.tag':'Sampark Kijiye','con.head':'Kahiye <em>hello</em>',
  'con.sub':'Reader messages, interviews, collaboration, bulk order ya translation rights ke liye — seedha sampark kijiye.',
  'con.phone':'Phone','con.wa':'WhatsApp','con.wad':'Seedha message bhejiye','con.store':'Amazon Author Store',
@@ -687,7 +700,7 @@ hinglish:{
  'con.note':'Aapka message WhatsApp par +91 62017 57330 par khulega — is website par kuch bhi store nahi hota.',
  's1':'Reader Message','s2':'Interview Request','s3':'Collaboration','s4':'Bulk / Bookstore Order','s5':'Translation Rights','s6':'Other',
  'cta.tag':'Padhna Shuru Kijiye','cta.head':'Wahin se shuru kijiye jahan <em>sawaal</em> sabse tez hai',
- 'cta.sub':'Pandrah kitabein Kindle Unlimited par free padhi ja sakti hain. Nayi kitabon ki update ke liye Amazon par author ko follow kijiye.',
+ 'cta.sub':'Baees kitabein Kindle Unlimited par free padhi ja sakti hain — Maple Falls, Tithe Crown aur saaton nayi kitabein. Nayi kitabon ki update ke liye Amazon par author ko follow kijiye.',
  'cta.b1':'Amazon.com Store','cta.b2':'Amazon.in Store',
 'news.title':'Nayi kitabon ki update paayein','news.sub':'Nayi kitab live hone par ek chhota email. No spam, kabhi bhi unsubscribe.','news.ph':'you@example.com','news.btn':'Subscribe karein','news.note':'Hamesha free. Ek click mein unsubscribe.',
  'foot.about':'Belief, time, attention aur conditioning ke paar intezaar karti azadi par kitabein. Duniya bhar mein Amazon par Kindle aur paperback mein available.',

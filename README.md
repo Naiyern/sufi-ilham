@@ -1,9 +1,12 @@
 # Sufi Ilham — Official Author Website
 
 An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam),
-author of 19 titles on Amazon — ten works of philosophy, spirituality and self-discovery, the
+author of 26 titles on Amazon — ten works of philosophy, spirituality and self-discovery, the
 five-book **Maple Falls Romance** series, the three-book dark gothic romantasy trilogy
-**The Tithe Crown**, and the standalone literary novel **The River's Portion**. Every line of
+**The Tithe Crown**, the standalone literary novel **The River's Portion**, the first three
+books of the seven-book **Cartographers of Lost Tomorrows** saga (Books 4–7 coming soon),
+the three-book mythic romance trilogy **The Song of the Unbroken Sky**, and the standalone
+contemporary romance **The Spare Key Summer**. Every line of
 design, copy, code and music here was made for this site — no templates, no stock, no copied
 marketing text.
 
@@ -11,7 +14,7 @@ marketing text.
 
 | File | Description |
 |---|---|
-| `index.html` | Homepage — hero, 10-book library with live filters, the Maple Falls Romance series section, The Tithe Crown trilogy section, about, themes, contact strip |
+| `index.html` | Homepage — hero, 11-book library with live filters, the Maple Falls Romance section, The Tithe Crown section, the Cartographers of Lost Tomorrows saga section (3 live + 4 coming soon), The Song of the Unbroken Sky trilogy section, the Spare Key Summer standalone spotlight, about, themes, contact strip |
 | `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
 | `privacy.html` | Privacy Policy — 16 sections with sticky table of contents |
 | `terms.html` | Terms of Use — 15 sections, governing law: Bihar, India |
@@ -51,12 +54,13 @@ Keep all files together in the same folder so `sama.mp3` and the page links reso
   to right-to-left. Your choice follows you across every page.
 - **Cinematic Amazon routing** — clicking any store link opens an interstitial showing the
   book cover and a progress bar, then delivers the reader to the correct Amazon store in a
-  new tab. All 38 links (19 books × amazon.com and amazon.in) are wired the same way.
+  new tab. All 52 links (26 books × amazon.com and amazon.in) are wired the same way.
 - **Series shelves** — the Maple Falls Romance section has its own maple-warm palette, a
   reading-order strip, five numbered cards and a gentle layered snowfall over the section.
   The Tithe Crown section mirrors it with a dark gothic palette, its own reading-order strip
-  and three numbered cards. The homepage counters now read
-  19 titles · 3,804 pages · 15 free on Kindle Unlimited.
+  and three numbered cards. The Cartographers saga, Unbroken Sky trilogy and Spare Key
+  Summer spotlight reuse the same unified charcoal/cream/gold card system. The homepage
+  counters now read 26 titles · 4,500 pages · 22 free on Kindle Unlimited.
 - **Motion design** — custom cursor, drifting dust canvas, Maple Falls snowfall (paused
   off-screen), scroll progress bar, staggered
   reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
@@ -150,8 +154,50 @@ in `images/`. The five Maple Falls covers, the three Tithe Crown covers, The Riv
 cover, and the two newer love books (Moh Tera Prem, PREM) are loaded straight from Amazon's
 image CDN (`https://m.media-amazon.com/images/I/<id>._SL500_.jpg` or similar Amazon thumbnail
 URLs), which is always the live cover Amazon is showing. If a cover ever fails to load,
-`mfCover()` / `phCover()` in `index.html` swap in a styled placeholder so the layout never
-breaks.
+`mfCover()` / `phCover()` / `tcCover()` / `cgCover()` / `sgCover()` / `skCover()` in
+`index.html` swap in a styled placeholder so the layout never breaks.
+
+## The Cartographers of Lost Tomorrows
+
+A seven-book slow-burn romance and impossible-mystery saga. “Seven books. One harbor. Two
+hundred years of kept promises — and every one of them is coming due.” Books 1–3 are live
+($5.99 Kindle, paperback $14.99, free on Kindle Unlimited); Books 4–7 are shown as
+“Coming Soon” cards with dashed gold styling and no buy buttons. Section: `#cartographers`.
+
+| # | Title | ASIN | Pages | Published |
+|---|---|---|---|---|
+| 1 | The Map of Tomorrow | B0HJH4MH5D | 272 | 11 Sept 2026 |
+| 2 | The Tide of Unmade Days | B0HJMJWG6S | 219 | 12 Sept 2026 |
+| 3 | The Compass of the Dead | B0HJNDGLH1 | 268 | 13 Sept 2026 |
+| 4 | The Library of Drowned Days | — | — | Coming soon |
+| 5 | The Seven Unwritten Days | — | — | Coming soon |
+| 6 | The Last Cartographer | — | — | Coming soon |
+| 7 | The Future We Buried | — | — | Coming soon |
+
+Amazon series page: <https://www.amazon.com/dp/B0HJHF6Y1P>
+
+## The Song of the Unbroken Sky
+
+A complete mythic-romance trilogy of Valen and Elora — devotion, destiny, and the melody
+that awakens the living earth. All three are free on Kindle Unlimited. Section: `#song`.
+
+| # | Title | ASIN | Pages | Published |
+|---|---|---|---|---|
+| 1 | The Eden of Sunspire | B0HHZN5D7P | 96 | 6 Sept 2026 |
+| 2 | The Citadel of Sapphire Seas | B0HJ1JQRMT | 93 | 7 Sept 2026 |
+| 3 | The Chariot of Peace | B0HJ1R5LY6 | 80 | 7 Sept 2026 |
+
+Amazon series page: <https://www.amazon.com/dp/B0HHWGYSPL>
+
+## The Spare Key Summer
+
+A standalone contemporary romance novel (not a series): Nora Sullivan returns to Milwaukee
+for one summer and meets Eli Mercer. Free on Kindle Unlimited; Kindle and paperback.
+Section: `#spare-key` (feature-style spotlight with both ASINs shown).
+
+| Title | Kindle ASIN | Paperback ASIN | Pages | Published |
+|---|---|---|---|---|
+| The Spare Key Summer | B0HKHL8D6Q | B0HKKCX4H9 | 234 | 21 Sept 2026 |
 
 ## The books
 
@@ -170,10 +216,20 @@ breaks.
 13. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
 14. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
 15. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
-16. The Shadow Tithe: A Dark Gothic Romantasy — 222 pp · Tithe Crown #1 · new
-17. The Sea Tithe: A Dark Gothic Romantasy — 247 pp · Tithe Crown #2 · new
-18. The Crown Always Owns: A Dark Gothic Romantasy — 260 pp · Tithe Crown #3 · new
-19. The River's Portion — 243 pp · standalone literary fiction · new
+16. The Shadow Tithe: A Dark Gothic Romantasy — 222 pp · Tithe Crown #1
+17. The Sea Tithe: A Dark Gothic Romantasy — 247 pp · Tithe Crown #2
+18. The Crown Always Owns: A Dark Gothic Romantasy — 260 pp · Tithe Crown #3
+19. The River's Portion — 243 pp · standalone literary fiction
+20. The Map of Tomorrow — 272 pp · Cartographers #1 · new
+21. The Tide of Unmade Days — 219 pp · Cartographers #2 · new
+22. The Compass of the Dead — 268 pp · Cartographers #3 · new
+23. The Eden of Sunspire — 96 pp · Unbroken Sky #1 · new
+24. The Citadel of Sapphire Seas — 93 pp · Unbroken Sky #2 · new
+25. The Chariot of Peace — 80 pp · Unbroken Sky #3 · new
+26. The Spare Key Summer — 234 pp · standalone contemporary romance · new
+
+Plus four forthcoming Cartographers titles (not yet counted): The Library of Drowned Days,
+The Seven Unwritten Days, The Last Cartographer, The Future We Buried.
 
 ## Contact
 
