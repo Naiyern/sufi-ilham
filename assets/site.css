@@ -850,3 +850,7 @@ body.rtl .tc-num{text-align:left}
   nav ul a{font-size:.64rem;letter-spacing:.09em}
   .btn-nav{padding:8px 11px}
 }
+/* The Cartographers of Lost Tomorrows */
+.cartographers{background:linear-gradient(180deg,#101b23 0%,#0b1218 100%);color:#eef2ed;padding:clamp(5rem,9vw,8rem) 0}
+.cartographers .section-head{align-items:end}.cartographers .eyebrow{color:#a8c8c2}.cartographers h2{color:#f2eadb}.cartographers h2 em{color:#a8c8c2}.cartographers .section-head>p{color:#b6c2c0}.cartographer-grid{margin-top:3rem}.cartographers .card{background:#15242b;border-color:rgba(168,200,194,.18)}.cartographers .card:hover{border-color:rgba(168,200,194,.55)}.cartographers .kicker{color:#a8c8c2}.cartographers .card p{color:#c2cfcd}.cartographers .meta li{color:#c2cfcd}.cartographers .series-cta{text-align:center;margin-top:2.5rem}
+.new-books{background:#f5f0e7;padding:clamp(5rem,9vw,8rem) 0}.new-books .section-head{align-items:end}.new-books .grid{margin-top:3rem}.new-books .series-cta{text-align:center;margin-top:2.5rem}
