@@ -845,21 +845,145 @@ body.rtl .tc-num{text-align:left}
 .tc-jump:hover{color:#ffc2d2;border-color:#e0748f;background:rgba(178,58,85,.2)}
 
 /* the nav gained more items — tighten it just above the burger breakpoint */
-@media (max-width:1180px) and (min-width:981px){
-  nav ul{gap:14px}
-  nav ul a{font-size:.64rem;letter-spacing:.09em}
-  .btn-nav{padding:8px 11px}
+@media (max-width:1320px) and (min-width:981px){
+  nav ul{gap:13px}
+  nav ul a{font-size:.62rem;letter-spacing:.08em}
+  .btn-nav{padding:8px 10px;font-size:.6rem}
+  .lang-cur{display:none}
 }
-/* The Cartographers of Lost Tomorrows */
-.cartographers{background:linear-gradient(180deg,#101b23 0%,#0b1218 100%);color:#eef2ed;padding:clamp(5rem,9vw,8rem) 0}
-.cartographers .section-head{align-items:end}.cartographers .eyebrow{color:#a8c8c2}.cartographers h2{color:#f2eadb}.cartographers h2 em{color:#a8c8c2}.cartographers .section-head>p{color:#b6c2c0}.cartographer-grid{margin-top:3rem}.cartographers .card{background:#15242b;border-color:rgba(168,200,194,.18)}.cartographers .card:hover{border-color:rgba(168,200,194,.55)}.cartographers .kicker{color:#a8c8c2}.cartographers .card p{color:#c2cfcd}.cartographers .meta li{color:#c2cfcd}.cartographers .series-cta{text-align:center;margin-top:2.5rem}
-.new-books{background:#f5f0e7;padding:clamp(5rem,9vw,8rem) 0}.new-books .section-head{align-items:end}.new-books .grid{margin-top:3rem}.new-books .series-cta{text-align:center;margin-top:2.5rem}
-/* Unified editorial palette for the expanded catalogue */
-.new-books{background:var(--ink-2);color:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.new-books .section-head>p{color:var(--muted)}
-.new-books .card{background:linear-gradient(180deg,rgba(255,255,255,.062),rgba(255,255,255,.022));border-color:var(--line-soft)}
-.new-books .card p,.new-books .meta li{color:var(--muted)}
-.new-books .kicker{color:var(--gold)}
-.cartographers{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.cartographers .card-cover img,.new-books .card-cover img{box-shadow:0 18px 34px rgba(0,0,0,.34)}
-@media(max-width:700px){.new-books,.cartographers{padding-top:4.5rem;padding-bottom:4.5rem}.new-books .section-head,.cartographers .section-head{display:block}.new-books .section-head>p,.cartographers .section-head>p{margin-top:1rem}}
+
+/* ============ NEW SERIES · UNIFIED EDITORIAL SYSTEM ============
+   The Cartographers of Lost Tomorrows, The Song of the Unbroken Sky
+   and the Spare Key Summer spotlight share one visual language with
+   the rest of the site: dark charcoal grounds, cream text, muted gold
+   accents, and the same card DNA as the Maple Falls / Tithe shelves. */
+.cartographers,.song,.sparekey{position:relative;overflow:hidden}
+.cartographers{
+  background:
+    radial-gradient(1000px 480px at 12% -10%,rgba(154,196,186,.10),transparent 60%),
+    radial-gradient(820px 440px at 94% 8%,rgba(212,175,84,.08),transparent 62%),
+    linear-gradient(180deg,#131a1f,#10151a 55%,var(--ink));
+  border-top:1px solid rgba(154,196,186,.22);
+  border-bottom:1px solid rgba(154,196,186,.22);
+}
+.song{
+  background:
+    radial-gradient(1000px 480px at 88% -10%,rgba(212,175,84,.12),transparent 60%),
+    radial-gradient(820px 440px at 6% 10%,rgba(180,120,60,.08),transparent 62%),
+    linear-gradient(180deg,#17141a,#131217 55%,var(--ink));
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.sparekey{
+  background:linear-gradient(180deg,var(--ink) 0%,var(--ink-2) 100%);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.cartographers .wrap,.song .wrap,.sparekey .wrap{position:relative;z-index:1}
+
+/* section headers reuse .sec-head; per-series accent for the tag */
+.cg-tag{color:#a9cdc2}
+.cg-tag::before{background:#a9cdc2}
+.sg-tag{color:var(--gold)}
+.cg-head,.sg-head,.sk-head{max-width:58em}
+.cg-head h2 em{color:#c4e2d8;font-style:italic}
+.sg-head h2 em,.sk-head h2 em{color:var(--gold);font-style:italic}
+.cg-lede,.sg-lede,.sk-lede{color:var(--paper-2);font-family:var(--serif);
+  font-size:1.08rem;line-height:1.75;margin-top:6px}
+.cg-lede strong,.sg-lede strong,.sk-lede strong{color:var(--gold-lt);font-weight:400}
+.cg-lede2,.sg-lede2,.sk-lede2{color:var(--muted);font-size:.95rem;margin-top:14px;max-width:46em}
+.cg-copy{font-family:var(--serif);font-style:italic;font-size:1.25rem;line-height:1.55;
+  color:var(--gold-lt);margin-top:18px;max-width:34em;
+  border-left:2px solid #a9cdc2;padding-left:20px}
+body.rtl .cg-copy{border-left:0;border-right:2px solid #a9cdc2;padding-left:0;padding-right:20px}
+
+/* reading-order strips (mirror .mf-order / .tc-order) */
+.cg-order,.sg-order{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:38px;
+  padding:16px 20px;border-radius:3px}
+.cg-order{border:1px solid rgba(154,196,186,.28);
+  background:linear-gradient(90deg,rgba(154,196,186,.12),rgba(255,255,255,.02))}
+.sg-order{border:1px solid var(--line);
+  background:linear-gradient(90deg,rgba(212,175,84,.10),rgba(255,255,255,.02))}
+.cg-order-t,.sg-order-t{font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;white-space:nowrap}
+.cg-order-t{color:#a9cdc2}
+.sg-order-t{color:var(--gold)}
+.cg-steps,.sg-steps{list-style:none;display:flex;flex-wrap:wrap;gap:8px 10px;margin:0;padding:0}
+.cg-steps li,.sg-steps li{display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--muted);
+  border:1px solid var(--line-soft);border-radius:2px;padding:6px 11px;background:rgba(255,255,255,.02)}
+.cg-step-n,.sg-step-n{font-family:var(--serif);color:var(--gold);font-size:.8rem}
+.cg-step-t,.sg-step-t{letter-spacing:.02em}
+.cg-steps li.soon{border-style:dashed;color:var(--muted-2)}
+.soon-pill{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-lt);
+  border:1px solid var(--line);border-radius:2px;padding:2px 7px;white-space:nowrap}
+
+/* card grids — same .card DNA, per-series numbering and hooks */
+.cg-grid{grid-template-columns:repeat(4,1fr);gap:22px;align-items:stretch}
+.sg-grid{grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.cg-card,.sg-card{position:relative}
+.cg-card .card-cover{max-width:158px}
+.sg-card .card-cover{max-width:170px}
+.cg-card h3{font-size:1.08rem}
+.sg-card h3{font-size:1.12rem}
+.cg-card .kicker{color:#a9cdc2;font-size:.55rem}
+.sg-card .kicker{font-size:.56rem}
+.cg-card p,.sg-card p{font-size:.88rem}
+.cg-hook,.sg-hook{font-family:var(--serif);font-style:italic;color:var(--paper-2);
+  flex:0 0 auto;font-size:.94rem;margin-bottom:10px;line-height:1.5}
+.cg-card .meta li,.sg-card .meta li{font-size:.56rem;padding:5px 8px}
+.cg-card .lnk,.sg-card .lnk{min-width:86px;font-size:.6rem;padding:9px 8px}
+.cg-num,.sg-num{display:block;text-align:right;font-family:var(--serif);font-size:1.3rem;
+  color:rgba(224,187,99,.34);line-height:1;margin-bottom:2px;pointer-events:none;transition:color .4s}
+.cg-card:hover .cg-num{color:rgba(169,205,194,.85)}
+.sg-card:hover .sg-num{color:rgba(224,187,99,.85)}
+.cg-card::before{background:linear-gradient(90deg,transparent,#a9cdc2,transparent)}
+.cg-card:hover{border-color:rgba(154,196,186,.45)}
+body.rtl .cg-num,body.rtl .sg-num{text-align:left}
+
+/* coming-soon cards: same dimensions, clearly badged, honestly inert */
+.badge-soon{position:absolute;top:16px;left:16px;z-index:3;
+  font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;
+  color:var(--gold-lt);border:1px solid var(--line);border-radius:2px;
+  background:rgba(20,19,26,.85);padding:7px 12px;white-space:nowrap}
+.is-coming{border-style:dashed;border-color:rgba(212,175,84,.35)}
+.is-coming:hover{border-color:rgba(212,175,84,.6);transform:translateY(-6px)}
+.is-coming .card-cover img{filter:saturate(.55) brightness(.92)}
+.lnk.is-disabled{opacity:.5;cursor:not-allowed;border-style:dashed;color:var(--muted-2);
+  display:inline-flex;align-items:center;justify-content:center}
+.lnk.is-disabled:hover{border-color:var(--line-soft);color:var(--muted-2);background:none}
+.m-coming{border:1px dashed var(--line);border-radius:3px;background:rgba(212,175,84,.06);
+  color:var(--gold-lt);font-family:var(--serif);font-style:italic;font-size:1rem;
+  padding:16px 18px;margin-bottom:20px;line-height:1.6}
+
+/* series CTA rows (mirror .mf-cta / .tc-cta) */
+.cg-cta,.sg-cta,.sk-cta{margin-top:52px;text-align:center;padding-top:40px}
+.cg-cta{border-top:1px solid rgba(154,196,186,.22)}
+.sg-cta,.sk-cta{border-top:1px solid var(--line-soft)}
+.cg-cta p,.sg-cta p,.sk-cta p{font-family:var(--serif);font-size:1.18rem;color:var(--paper);margin-bottom:22px}
+.cg-cta-btns,.sg-cta-btns,.sk-cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* standalone spotlight reuses the .feat-* feature language */
+.sk-grid{margin-top:8px}
+.sk-note{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 4px}
+.sk-note span{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-lt);
+  border:1px solid var(--line);border-radius:2px;padding:7px 13px;background:rgba(212,175,84,.06)}
+
+/* filter jump buttons for the new shelves */
+.cg-jump{display:inline-flex;align-items:center;color:#a9cdc2;border-color:rgba(154,196,186,.45);
+  background:rgba(154,196,186,.10)}
+.cg-jump:hover{color:#d8efe8;border-color:#a9cdc2;background:rgba(154,196,186,.2)}
+.sg-jump,.sk-jump{display:inline-flex;align-items:center;color:var(--gold);border-color:var(--line);
+  background:rgba(212,175,84,.08)}
+.sg-jump:hover,.sk-jump:hover{color:var(--gold-lt);border-color:var(--gold);background:rgba(212,175,84,.18)}
+
+@media (max-width:1180px){ .cg-grid{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:1000px){ .cg-grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:860px){
+  .sg-grid{grid-template-columns:repeat(2,1fr)}
+  .sg-card .card-cover{max-width:170px}
+}
+@media (max-width:600px){
+  .cg-grid,.sg-grid{grid-template-columns:1fr;gap:22px}
+  .cg-order,.sg-order{gap:12px}
+  .cg-cta-btns .btn,.sg-cta-btns .btn,.sk-cta-btns .btn{flex:1;min-width:190px}
+  .cg-copy{font-size:1.1rem}
+}
