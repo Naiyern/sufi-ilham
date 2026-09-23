@@ -1,3 +1,7 @@
+import { initLang } from './i18n';
+import { initGo } from './amazon';
+import { initAudio } from './audio';
+
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
   Array.from(r.querySelectorAll(s)) as T[];
@@ -182,5 +186,10 @@ form?.addEventListener('submit', (e) => {
   )}%0A%0A${d.get('message')}`;
   open(`https://wa.me/${form.dataset.phone}?text=${msg}`, '_blank', 'noopener');
 });
+
+/* ---------- language, soundtrack, Amazon interstitial ---------- */
+initLang();
+initGo();
+initAudio();
 
 export {};

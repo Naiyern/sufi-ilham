@@ -68,6 +68,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href.repla
     <Footer />
     <BookModal />
 
+    <!-- ambient soundtrack -->
+    <audio id="bgm" loop preload="none" playsinline src={`${base}/sama.mp3`}></audio>
+
+    <!-- cinematic Amazon hand-off -->
+    <div class="go-ov" id="goOv" aria-hidden="true" role="dialog" aria-live="polite">
+      <div class="go-in">
+        <div class="go-book"></div>
+        <div class="go-title">Opening Amazon</div>
+        <div class="go-sub">Taking you to the secure Amazon store…</div>
+        <div class="go-bar"><i></i></div>
+        <button class="go-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
     <button class="icon-btn to-top" id="toTop" aria-label="Back to top">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
     </button>

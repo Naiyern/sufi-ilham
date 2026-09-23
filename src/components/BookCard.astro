@@ -28,8 +28,8 @@ const tags = [book.genre, book.ku ? 'ku' : '', book.series ?? ''].filter(Boolean
       {book.pages && <li>{book.pages} Pages</li>}
     </ul>
     <div class="card-links">
-      <button class="lnk pri js-open" type="button">Read More</button>
-      {book.us && <a class="lnk" href={book.us} target="_blank" rel="noopener">Amazon</a>}
+      <button class="lnk pri js-open" type="button" data-i18n="card.more">Read More</button>
+      {book.us && <a class="lnk" href={book.us} target="_blank" rel="noopener" data-i18n="card.buy">Amazon</a>}
     </div>
   </div>
 </article>

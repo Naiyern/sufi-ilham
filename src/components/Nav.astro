@@ -1,11 +1,12 @@
 ---
+import LangSwitch from './LangSwitch.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const links = [
-  { href: `${base}/#books`, label: 'Books' },
-  { href: `${base}/#series`, label: 'Series' },
-  { href: `${base}/#about`, label: 'About' },
-  { href: `${base}/#themes`, label: 'Themes' },
-  { href: `${base}/#contact`, label: 'Contact' },
+  { href: `${base}/#books`, label: 'Books', key: 'nav.books' },
+  { href: `${base}/#series`, label: 'Series', key: 'nav.series' },
+  { href: `${base}/#about`, label: 'About', key: 'nav.about' },
+  { href: `${base}/#themes`, label: 'Themes', key: 'nav.themes' },
+  { href: `${base}/#contact`, label: 'Contact', key: 'nav.contact' },
 ];
 ---
 
@@ -18,11 +19,21 @@ const links = [
 
     <nav id="menu" aria-label="Primary">
       <ul>
-        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        {links.map((l) => <li><a href={l.href} data-i18n={l.key}>{l.label}</a></li>)}
       </ul>
     </nav>
 
     <div class="nav-act">
+      <LangSwitch />
+
+      <button class="icon-btn" id="sndBtn" aria-label="Toggle ambient soundtrack" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M11 5 6 9H3v6h3l5 4V5z" />
+          <path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7" />
+          <path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13" />
+        </svg>
+      </button>
+
       <button class="icon-btn" id="themeBtn" aria-label="Toggle colour theme">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" id="themeIcon">
           <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />

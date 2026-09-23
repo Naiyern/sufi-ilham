@@ -1,0 +1,22 @@
+---
+import i18n from '../data/i18n.json';
+const langs = Object.entries(i18n as Record<string, any>).map(([code, d]) => ({
+  code,
+  name: d._name as string,
+  note: { en: '', hi: 'Hindi', ur: 'Urdu', hinglish: 'Roman' }[code] ?? '',
+}));
+---
+
+<span class="lang-wrap">
+  <button class="lang-btn" id="langBtn" type="button" aria-label="Change language" aria-expanded="false">
+    <span class="glb">◉</span><span class="lang-cur">English</span>
+  </button>
+  <div class="lang-menu" id="langMenu" role="menu">
+    {langs.map((l) => (
+      <button class={`lang-opt${l.code === 'en' ? ' on' : ''}`} data-lang={l.code} type="button" role="menuitem">
+        <span>{l.name}{l.note && <small> {l.note}</small>}</span>
+        <span class="tick">✓</span>
+      </button>
+    ))}
+  </div>
+</span>

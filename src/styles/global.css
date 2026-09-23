@@ -1,5 +1,6 @@
 /* ============ Sufi Ilham — design system ============ */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&family=Noto+Sans+Devanagari:wght@300..700&display=swap');
 
 :root {
   --ink: #07070a;
@@ -648,3 +649,113 @@ footer { border-top: 1px solid var(--line); padding: clamp(3.5rem, 7vw, 5.5rem) 
 .legal :is(th, td) { border: 1px solid var(--line); padding: .7rem .9rem; text-align: left; color: var(--fg-dim); }
 .legal th { color: var(--fg); background: var(--surface); }
 .legal a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- language switcher ---------- */
+.lang-wrap { position: relative; }
+.lang-btn {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .5rem .9rem;
+  border-radius: 100px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: .8rem;
+  cursor: pointer;
+  transition: border-color .3s, background .3s;
+}
+.lang-btn:hover { border-color: var(--gold); }
+.lang-btn .glb { color: var(--gold); font-size: .8rem; }
+.lang-menu {
+  position: absolute;
+  top: calc(100% + .6rem); right: 0;
+  min-width: 190px;
+  padding: .4rem;
+  border-radius: 14px;
+  border: 1px solid var(--line-2);
+  background: var(--ink-2);
+  box-shadow: var(--shadow);
+  display: grid; gap: .1rem;
+  opacity: 0; visibility: hidden;
+  transform: translateY(-8px);
+  transition: all .35s var(--ease);
+  z-index: 210;
+}
+.lang-menu.open { opacity: 1; visibility: visible; transform: none; }
+.lang-opt {
+  display: flex; align-items: center; justify-content: space-between; gap: .8rem;
+  width: 100%;
+  padding: .6rem .8rem;
+  border: 0; border-radius: 9px;
+  background: transparent;
+  font-size: .88rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background .25s;
+}
+.lang-opt:hover { background: var(--surface-2); }
+.lang-opt small { color: var(--fg-mute); font-size: .74rem; }
+.lang-opt .tick { opacity: 0; color: var(--gold); }
+.lang-opt.on .tick { opacity: 1; }
+.lang-opt.on { color: var(--gold); }
+
+/* language cross-fade */
+.lang-fade [data-i18n], .lang-fade [data-i18n-opt] {
+  opacity: .12;
+  transition: opacity .26s var(--ease);
+}
+
+/* RTL / script tuning */
+body.rtl { direction: rtl; }
+body.rtl .sec-tag::before { order: 2; }
+body.rtl .about-body p.first::first-letter { float: right; padding: .08em 0 0 .12em; }
+body.rtl .about-creed { border-left: 0; border-right: 2px solid var(--gold); padding-left: 0; padding-right: 1.2rem; }
+body.rtl .lang-menu { right: auto; left: 0; }
+body.rtl .c-row:hover { transform: translateX(-5px); }
+body.lang-ur { --serif: 'Noto Nastaliq Urdu', 'Fraunces', serif; }
+body.lang-ur h1, body.lang-ur h2, body.lang-ur h3 { line-height: 1.8; }
+body.lang-hi { --serif: 'Fraunces', 'Noto Sans Devanagari', serif; }
+
+/* sound button */
+#sndBtn .wave { opacity: .25; transition: opacity .35s; }
+#sndBtn.on .wave { opacity: 1; }
+#sndBtn.on { border-color: color-mix(in srgb, var(--gold) 55%, transparent); color: var(--gold); }
+
+/* ---------- cinematic Amazon hand-off ---------- */
+.go-ov {
+  position: fixed; inset: 0; z-index: 500;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(18px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .45s var(--ease), visibility .45s;
+}
+.go-ov.open { opacity: 1; visibility: visible; }
+.go-in { text-align: center; padding: 2rem; max-width: 380px; }
+.go-book {
+  width: 140px; margin: 0 auto 1.6rem;
+  animation: goFloat 2.4s var(--ease) infinite alternate;
+}
+.go-book img {
+  width: 100%; border-radius: 10px;
+  border: 1px solid var(--line-2);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.8);
+}
+@keyframes goFloat { from { transform: translateY(0) rotate(-1.5deg); } to { transform: translateY(-12px) rotate(1.5deg); } }
+.go-title { font-family: var(--serif); font-size: 1.5rem; margin-bottom: .5rem; }
+.go-sub { font-size: .88rem; color: var(--fg-dim); margin-bottom: 1.4rem; }
+.go-bar { height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.go-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-2)); }
+.go-ov.open .go-bar i { animation: goBar 1.5s linear forwards; }
+@keyframes goBar { to { width: 100%; } }
+.go-cancel {
+  margin-top: 1.4rem;
+  padding: .5rem 1.2rem;
+  border-radius: 100px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  font-size: .8rem;
+  color: var(--fg-mute);
+  cursor: pointer;
+  transition: color .3s, border-color .3s;
+}
+.go-cancel:hover { color: var(--fg); border-color: var(--gold); }
+@media (prefers-reduced-motion: reduce) { .go-book { animation: none; } }

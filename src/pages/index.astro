@@ -63,12 +63,12 @@ const jsonld = [
   <section class="hero" id="top">
     <div class="wrap hero-grid">
       <div>
-        <div class="sec-tag">{published.length} Books · Philosophy, Romance, Myth &amp; Dark Romantasy</div>
+        <div class="sec-tag" data-i18n="hero.eyebrow">{published.length} Books · Philosophy, Romance, Myth &amp; Dark Romantasy</div>
         <h1>
           <span class="l"><span style="--d:.05s">Sufi</span></span>
           <span class="l"><span style="--d:.16s">Ilham</span></span>
         </h1>
-        <p class="sub">Also known as MD Naiyer Alam</p>
+        <p class="sub" data-i18n="hero.alias">Also known as MD Naiyer Alam</p>
         <p class="lede">
           An author, deep thinker and seeker of truth exploring belief, consciousness and identity — writing that
           challenges societal norms and asks you to question every assumption you inherited.
@@ -79,8 +79,8 @@ const jsonld = [
           the standalone romance The Spare Key Summer.
         </p>
         <div class="hero-cta">
-          <a class="btn pri" href="#books">Browse all books →</a>
-          {featured?.us && <a class="btn" href={featured.us} target="_blank" rel="noopener">Read the new release</a>}
+          <a class="btn pri" href="#books" data-i18n="hero.cta2">Browse all books →</a>
+          {featured?.us && <a class="btn" href={featured.us} target="_blank" rel="noopener" data-i18n="hero.cta1">Read the new release</a>}
         </div>
       </div>
 
@@ -101,7 +101,7 @@ const jsonld = [
         {stats.map((s) => (
           <div class="stat">
             <b data-count={s.n} data-suffix={s.suffix ?? ''}>0</b>
-            <span>{s.label}</span>
+            <span data-i18n={s.key}>{s.label}</span>
           </div>
         ))}
       </div>
@@ -112,7 +112,7 @@ const jsonld = [
   <section id="books">
     <div class="wrap">
       <div class="reveal">
-        <div class="sec-tag">The Library</div>
+        <div class="sec-tag" data-i18n="books.tag">The Library</div>
         <h2>Every book, <em>one shelf</em></h2>
         <p class="sec-sub">
           Filter by genre, or search by title. Each cover opens the full description, specs and every Amazon
@@ -144,8 +144,8 @@ const jsonld = [
   <!-- ============ QUOTE ============ -->
   <section class="quote-sec">
     <div class="wrap reveal">
-      <blockquote>“The map is not the country. Walk until you know the difference.”</blockquote>
-      <cite>— The Map Is Finished</cite>
+      <blockquote data-i18n="quote.text">“The map is not the country. Walk until you know the difference.”</blockquote>
+      <cite data-i18n="quote.cite">— The Map Is Finished</cite>
     </div>
   </section>
 
@@ -168,8 +168,8 @@ const jsonld = [
       </div>
 
       <div class="about-body reveal" style="--d:120ms">
-        <div class="sec-tag">About the Author</div>
-        <h2 style="margin-bottom:1.6rem">A fearless pursuit <em>of truth</em></h2>
+        <div class="sec-tag" data-i18n="about.tag">About the Author</div>
+        <h2 style="margin-bottom:1.6rem" data-i18n="about.head">A fearless pursuit <em>of truth</em></h2>
         <p class="first">
           Sufi Ilham, also known as MD Naiyer Alam, is an author, deep thinker, and seeker of truth who explores
           belief, consciousness, identity, and self-discovery.
@@ -188,7 +188,7 @@ const jsonld = [
           genuinely our own. Through my words, I seek to inspire transformation — to break free from conditioning,
           confront reality without fear, and live with greater clarity, courage, and awareness.
         </p>
-        <p class="about-creed">Sufi Ilham is not just a name. It is a way of being.</p>
+        <p class="about-creed" data-i18n="about.creed">Sufi Ilham is not just a name. It is a way of being.</p>
       </div>
     </div>
   </section>
@@ -197,22 +197,22 @@ const jsonld = [
   <section id="themes">
     <div class="wrap">
       <div class="reveal">
-        <div class="sec-tag">Recurring Threads</div>
-        <h2>What the work <em>keeps returning to</em></h2>
+        <div class="sec-tag" data-i18n="themes.tag">Recurring Threads</div>
+        <h2 data-i18n="themes.head">What the work <em>keeps returning to</em></h2>
       </div>
       <div class="t-grid reveal">
         {themes.map((t) => (
           <div class="t-cell">
             <b>{t.n}</b>
-            <h3>{t.name}</h3>
-            <p>{t.text}</p>
+            <h3 data-i18n={`th${t.n.replace(/^0/, "")}`}>{t.name}</h3>
+            <p data-i18n={`th${t.n.replace(/^0/, "")}d`}>{t.text}</p>
           </div>
         ))}
       </div>
 
       <div class="reveal" style="margin-top:5rem">
-        <div class="sec-tag">The Path So Far</div>
-        <h2>A writing <em>journey</em></h2>
+        <div class="sec-tag" data-i18n="jour.tag">The Path So Far</div>
+        <h2 data-i18n="jour.head">A writing <em>journey</em></h2>
       </div>
       <div class="time reveal">
         {journey.map((j) => (
@@ -232,8 +232,8 @@ const jsonld = [
   <section id="contact">
     <div class="wrap contact-grid">
       <div class="reveal">
-        <div class="sec-tag">Get In Touch</div>
-        <h2>Say <em>hello</em></h2>
+        <div class="sec-tag" data-i18n="con.tag">Get In Touch</div>
+        <h2 data-i18n="con.head">Say <em>hello</em></h2>
         <p class="sec-sub">
           For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.
         </p>
@@ -260,10 +260,10 @@ const jsonld = [
       </div>
 
       <form class="form reveal" id="waForm" data-phone={site.phoneRaw} style="--d:100ms">
-        <div><label for="n">Your Name</label><input id="n" name="name" required /></div>
-        <div><label for="e">Email</label><input id="e" name="email" type="email" required /></div>
+        <div><label for="n" data-i18n="con.name">Your Name</label><input id="n" name="name" required /></div>
+        <div><label for="e" data-i18n="con.email">Email</label><input id="e" name="email" type="email" required /></div>
         <div>
-          <label for="s">Subject</label>
+          <label for="s" data-i18n="con.subject">Subject</label>
           <select id="s" name="subject">
             <option>Reader Message</option>
             <option>Interview Request</option>
@@ -273,8 +273,8 @@ const jsonld = [
             <option>Other</option>
           </select>
         </div>
-        <div><label for="m">Message</label><textarea id="m" name="message" required></textarea></div>
-        <button class="btn pri" type="submit">Send via WhatsApp →</button>
+        <div><label for="m" data-i18n="con.msg">Message</label><textarea id="m" name="message" required></textarea></div>
+        <button class="btn pri" type="submit" data-i18n="con.send">Send via WhatsApp →</button>
         <p class="note">
           Your message opens in WhatsApp to {site.phone} — nothing is stored on this website.
         </p>

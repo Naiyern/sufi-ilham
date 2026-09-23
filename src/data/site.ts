@@ -101,10 +101,10 @@ export const site = {
 export const published = books.filter((b) => !b.comingSoon);
 
 export const stats = [
-  { n: published.length, label: 'Published Titles' },
-  { n: 5000, suffix: '+', label: 'Pages in Print' },
-  { n: published.filter((b) => b.ku).length, label: 'Free on Kindle Unlimited' },
-  { n: 5, label: 'Amazon Marketplaces' },
+  { n: published.length, label: 'Published Titles', key: 'stat.titles' },
+  { n: 5000, suffix: '+', label: 'Pages in Print', key: 'stat.pages' },
+  { n: published.filter((b) => b.ku).length, label: 'Free on Kindle Unlimited', key: 'stat.ku' },
+  { n: 5, label: 'Amazon Marketplaces', key: 'stat.markets' },
 ];
 
 export const themes = [
