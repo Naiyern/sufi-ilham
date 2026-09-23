@@ -44,15 +44,22 @@ export function applyLang(code: string, animate = false) {
       const v = t(o.getAttribute('data-i18n-opt')!);
       if (v) o.textContent = v;
     });
-    document.querySelectorAll<HTMLElement>('.lang-cur').forEach((e) => { e.textContent = (d as any)._name; });
+    const short = document.querySelector<HTMLElement>(`.lang-opt[data-lang="${code}"]`)?.dataset.short;
+    document.querySelectorAll<HTMLElement>('.lang-cur').forEach((e) => {
+      e.textContent = short || code.toUpperCase();
+    });
     document.querySelectorAll<HTMLElement>('.lang-opt').forEach((b) => {
-      b.classList.toggle('on', b.getAttribute('data-lang') === code);
+      const on = b.getAttribute('data-lang') === code;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-checked', String(on));
     });
   };
 
-  if (animate && !RM) {
-    document.body.classList.add('lang-fade');
-    setTimeout(() => { swap(); document.body.classList.remove('lang-fade'); }, 260);
+  /* Swap in place. A whole-page flash reads as a glitch, so instead we let
+     the browser cross-fade only the glyphs that actually change. */
+  const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
+  if (animate && !RM && typeof doc.startViewTransition === 'function') {
+    doc.startViewTransition(() => swap());
   } else swap();
 }
 
