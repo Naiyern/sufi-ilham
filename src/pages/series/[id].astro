@@ -17,7 +17,9 @@ const soon = list.filter((b) => b.comingSoon);
 const pages = out.reduce((a, b) => a + (b.pages ?? 0), 0);
 const ld = (seriesLd as Record<string, unknown>)[s.id];
 const hero = out[0];
-const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.replace(/^\//, '')}`;
+// og:image must be an absolute URL, so resolve local covers against site.url
+// (not the path-only base) and fall back to the layout default when absent.
+const heroImg = hero && !hero.img.startsWith('data:') ? coverUrl(hero.img, site.url) : undefined;
 ---
 
 <Base
@@ -31,7 +33,7 @@ const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.r
       {out.slice(0, 5).map((b, i) => (
         <img
           src={coverUrl(b.img, base)}
-          alt="" loading="lazy" style={`--i:${i}`}
+          alt="" loading="lazy" width="400" height="600" style={`--i:${i}`}
         />
       ))}
     </div>

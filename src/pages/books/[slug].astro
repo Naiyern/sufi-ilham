@@ -30,7 +30,8 @@ const jsonld = [
     description: plain.slice(0, 400),
     numberOfPages: book.pages ?? undefined,
     inLanguage: 'en',
-    ...(book.img.startsWith('data:') ? {} : { image: book.img.startsWith('http') ? book.img : `${site.url}/${book.img}` }),
+    // structured data wants a fetchable URL, so inline data: placeholders are omitted
+    ...(book.img.startsWith('data:') ? {} : { image: coverUrl(book.img, site.url) }),
     url: book.us,
   },
 ];
@@ -46,8 +47,7 @@ const jsonld = [
 
       <div class="bp-grid" style="margin-top:2rem">
         <div class="reveal in">
-          <img src={img} alt={`${book.title} cover`} width="400" height="600"
-            style="border:1px solid var(--rule)" />
+          <img class="bp-cover" src={img} alt={`${book.title} cover`} width="400" height="600" />
           <div class="buy-row">
             {stores.filter(([, u]) => u).map(([l, u], i) => (
               <a class={`btn${i === 0 ? ' pri' : ''}`} href={u} target="_blank" rel="noopener">{l}</a>

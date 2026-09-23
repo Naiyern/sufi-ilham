@@ -81,7 +81,10 @@ body::before {
 }
 :root[data-theme='dark'] body::before { mix-blend-mode: screen; opacity: .35; }
 
-img { max-width: 100%; display: block; }
+/* height:auto is what stops stretching: without it, an <img width height>
+   squeezed by max-width keeps its attribute height and distorts. With it the
+   attributes only reserve space and the box follows the file's real shape. */
+img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; }
 
@@ -165,7 +168,7 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
 .mast-in { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 
 .logo { display: flex; align-items: baseline; gap: .6rem; }
-.logo b { font-family: var(--display); font-size: 1.45rem; letter-spacing: -0.02em; font-weight: 400; }
+.logo b { font-family: var(--display); font-size: 1.45rem; letter-spacing: -0.02em; font-weight: 400; white-space: nowrap; }
 .logo .est { font-family: var(--mono); font-size: .58rem; letter-spacing: .2em; color: var(--ink-3); text-transform: uppercase; }
 
 .mast nav ul { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
@@ -208,6 +211,8 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
   .burger { display: grid; }
   .seek span { display: none; }
 }
+/* phones: keep the masthead on one row */
+@media (max-width: 560px) { .logo .est { display: none; } }
 
 /* =============== COVER / HERO =============== */
 .cover { padding: clamp(7rem, 14vw, 11rem) 0 clamp(2rem, 5vw, 4rem); }
@@ -337,9 +342,13 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
   line-height: .8; color: transparent;
   -webkit-text-stroke: 1px var(--rule-2);
 }
-.spread-fan { display: flex; margin-top: 1.6rem; }
+/* align-items:flex-start — a stretching flex row would pull every cover to the
+   tallest one's height. A fixed 2:3 frame + object-fit keeps mixed-ratio
+   covers (Amazon 1:1.6, inline SVG 2:3) uniform without distorting any. */
+.spread-fan { display: flex; align-items: flex-start; margin-top: 1.6rem; }
 .spread-fan img {
-  width: 30%; border: 1px solid var(--rule); margin-right: -12%;
+  width: 30%; aspect-ratio: 2 / 3; object-fit: cover;
+  border: 1px solid var(--rule); margin-right: -12%;
   transition: transform .5s var(--ease);
   box-shadow: 0 16px 34px -18px rgba(0,0,0,.5);
 }
@@ -358,7 +367,13 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
   padding-left: 1.3rem; border-left: 3px solid var(--mark);
 }
 .sig { font-family: var(--display); font-style: italic; font-size: 1.7rem; margin-top: 2rem; color: var(--ink-2); }
-@media (max-width: 880px) { .essay-grid { grid-template-columns: 1fr; } }
+@media (max-width: 880px) {
+  .essay-grid { grid-template-columns: 1fr; }
+  /* single column: keep the featured cover (a ~280px-wide file) from being
+     blown up to full tablet width, where it turns soft and pushes the copy
+     a whole screen down */
+  #new .plate { max-width: 400px; }
+}
 
 /* =============== FIGURES / THEMES =============== */
 .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; border-top: 1px solid var(--fg); }
@@ -495,7 +510,21 @@ kbd { font: inherit; font-size: .6rem; padding: .1rem .34rem; border: 1px solid 
 
 /* =============== LANGUAGE MENU =============== */
 /* =============== SERIES HUB =============== */
-.s-hero { padding-top: clamp(7rem, 12vw, 9.5rem); }
+.s-hero { padding-top: clamp(7rem, 12vw, 9.5rem); overflow: hidden; }
+/* faint fan of the series' covers behind the headline (decorative) */
+.s-hero-bg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  display: flex; gap: 1.4rem; justify-content: center; align-items: center;
+  opacity: .11; filter: grayscale(1) blur(2px);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent 75%);
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent 75%);
+}
+.s-hero-bg img {
+  flex: none; width: 190px; aspect-ratio: 2 / 3; object-fit: cover;
+  transform: rotate(calc((var(--i) - 2) * 5deg)) translateY(calc(var(--i) * 12px));
+}
+.s-hero-in { position: relative; z-index: 1; }
+@media (max-width: 640px) { .s-hero-bg { display: none; } }
 .s-facts { display: flex; flex-wrap: wrap; border: 1px solid var(--fg); margin: 2rem 0; }
 .s-facts div { flex: 1 1 130px; padding: 1.1rem 1.2rem; border-right: 1px solid var(--rule); }
 .s-facts div:last-child { border-right: 0; }
@@ -514,7 +543,13 @@ kbd { font: inherit; font-size: .6rem; padding: .1rem .34rem; border: 1px solid 
 .bp-bar { position: fixed; left: 0; top: 0; height: 2px; width: 100%; transform: scaleX(var(--bp,0)); transform-origin: 0 50%; background: var(--mark); z-index: 299; }
 .bp-grid { display: grid; grid-template-columns: 300px 1fr; gap: clamp(1.8rem, 5vw, 4rem); align-items: start; }
 .bp-grid > div:first-child { position: sticky; top: 100px; }
-@media (max-width: 860px) { .bp-grid { grid-template-columns: 1fr; } .bp-grid > div:first-child { position: static; max-width: 240px; } }
+.bp-cover { width: 100%; border: 1px solid var(--rule); }
+@media (max-width: 860px) {
+  .bp-grid { grid-template-columns: 1fr; }
+  /* cap the cover, not the column, so the store buttons get the full width */
+  .bp-grid > div:first-child { position: static; }
+  .bp-cover { max-width: 240px; }
+}
 
 /* =============== LEGAL =============== */
 .legal { max-width: 800px; }

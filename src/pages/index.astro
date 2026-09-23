@@ -4,8 +4,16 @@ import LedgerRow from '../components/LedgerRow.astro';
 import Cover from '../components/Cover.astro';
 import { books, published, series, seriesBooks, site, themes, journey, bookBySlug, coverUrl } from '../data/site';
 import seriesLd from '../data/series-jsonld.json';
+import { publicImageSize } from '../data/image-size';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* Author photos: width/height come from the real files at build time, so a
+   replacement portrait of any shape (square, 4:5, 2:3) gets matching
+   attributes automatically. Fallbacks are the current files' sizes. */
+const [portraitW, portraitH] = await publicImageSize('images/sufi-ilham-portrait.jpg', [900, 900]);
+const [fluteW, fluteH] = await publicImageSize('images/sufi-ilham-flute.jpg', [900, 900]);
+const [childW, childH] = await publicImageSize('images/sufi-ilham-childhood.jpg', [760, 760]);
 
 const filters = [
   { id: 'all', label: 'All' },
@@ -211,7 +219,7 @@ const jsonld = [
                 {list.slice(0, 4).map((b) => (
                   <img
                     src={coverUrl(b.img, base)}
-                    alt="" loading="lazy"
+                    alt="" loading="lazy" width="400" height="600"
                   />
                 ))}
               </div>
@@ -252,16 +260,16 @@ const jsonld = [
       <div class="essay-grid">
         <div class="reveal">
           <figure class="plate" style="margin:0">
-            <img src={`${base}/images/sufi-ilham-portrait.jpg`} alt="Portrait of Sufi Ilham" width="900" height="1100" />
+            <img src={`${base}/images/sufi-ilham-portrait.jpg`} alt="Portrait of Sufi Ilham" width={portraitW} height={portraitH} />
             <figcaption><span>Sufi Ilham</span><span>MD Naiyer Alam</span></figcaption>
           </figure>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:.9rem">
             <figure class="plate" style="margin:0">
-              <img src={`${base}/images/sufi-ilham-flute.jpg`} alt="Sufi Ilham playing the bansuri" width="760" height="760" loading="lazy" />
+              <img src={`${base}/images/sufi-ilham-flute.jpg`} alt="Sufi Ilham playing the bansuri" width={fluteW} height={fluteH} loading="lazy" />
               <figcaption><span>The flute</span><span>Today</span></figcaption>
             </figure>
             <figure class="plate" style="margin:0">
-              <img src={`${base}/images/sufi-ilham-childhood.jpg`} alt="Sufi Ilham as a child" width="760" height="760" loading="lazy" />
+              <img src={`${base}/images/sufi-ilham-childhood.jpg`} alt="Sufi Ilham as a child" width={childW} height={childH} loading="lazy" />
               <figcaption><span>Where it began</span><span>—</span></figcaption>
             </figure>
           </div>
