@@ -1,6 +1,7 @@
 import { initLang } from './i18n';
 import { initGo } from './amazon';
 import { initAudio } from './audio';
+import { initCmdk } from './cmdk';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -205,5 +206,37 @@ news?.addEventListener('submit', (e) => {
 initLang();
 initGo();
 initAudio();
+initCmdk();
+
+/* ---------- 3D tilt on book covers ---------- */
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(hover:hover)').matches) {
+  $$('.card').forEach((c) => {
+    const el = c as HTMLElement;
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e as PointerEvent).clientX - r.left;
+      const py = (e as PointerEvent).clientY - r.top;
+      const rx = ((py / r.height) - 0.5) * -7;
+      const ry = ((px / r.width) - 0.5) * 7;
+      el.style.transform = `translateY(-7px) perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
+}
+
+/* ---------- per-article reading progress ---------- */
+const bp = $('#bpBar');
+if (bp) {
+  const article = $('#bookBody');
+  const onBp = () => {
+    if (!article) return;
+    const r = article.getBoundingClientRect();
+    const total = r.height - innerHeight;
+    const done = Math.min(1, Math.max(0, -r.top / (total > 0 ? total : 1)));
+    bp.style.setProperty('--bp', String(done));
+  };
+  addEventListener('scroll', onBp, { passive: true });
+  onBp();
+}
 
 export {};

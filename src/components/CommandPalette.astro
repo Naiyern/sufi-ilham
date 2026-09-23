@@ -1,0 +1,38 @@
+---
+import { books, series } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const index = [
+  ...books.map((b) => ({
+    t: b.title,
+    s: b.kicker ?? '',
+    u: `${base}/books/${b.slug}`,
+    k: 'Book',
+    img: b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`,
+  })),
+  ...series.map((s) => ({ t: s.name, s: s.tagline, u: `${base}/series/${s.id}`, k: 'Series', img: '' })),
+  { t: 'About the Author', s: 'A fearless pursuit of truth', u: `${base}/#about`, k: 'Page', img: '' },
+  { t: 'Themes', s: 'Belief · Time · Attention · Seeing', u: `${base}/#themes`, k: 'Page', img: '' },
+  { t: 'Contact', s: 'Interviews, rights, reader mail', u: `${base}/contact`, k: 'Page', img: '' },
+  { t: 'All Books', s: 'The complete library', u: `${base}/#books`, k: 'Page', img: '' },
+];
+---
+
+<div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="cmdk-box">
+    <div class="cmdk-top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="cmdk-ic">
+        <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+      </svg>
+      <input id="cmdkInput" type="text" placeholder="Search books, series, pages…" autocomplete="off" spellcheck="false" />
+      <kbd>ESC</kbd>
+    </div>
+    <div class="cmdk-list" id="cmdkList"></div>
+    <div class="cmdk-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><kbd>⌘</kbd><kbd>K</kbd> toggle</span>
+    </div>
+  </div>
+  <script type="application/json" id="cmdkData" set:html={JSON.stringify(index)}></script>
+</div>

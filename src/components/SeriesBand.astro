@@ -2,6 +2,7 @@
 import BookCard from './BookCard.astro';
 import type { Series } from '../data/site';
 import { seriesBooks } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 interface Props { s: Series }
 const { s } = Astro.props;
 const list = seriesBooks(s.id);
@@ -21,6 +22,10 @@ const list = seriesBooks(s.id);
         ))}
       </ul>
     </div>
+    <div class="hero-cta" style="margin-top:2rem">
+      <a class="btn pri" href={`${base}/series/${s.id}`} style="--b:var(--accent)">Explore the series →</a>
+    </div>
+
     <div class="grid" style="margin-top:3rem">
       {list.map((b, i) => <BookCard book={b} delay={i * 70} />)}
     </div>

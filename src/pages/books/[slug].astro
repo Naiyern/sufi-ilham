@@ -37,7 +37,8 @@ const jsonld = [
 ---
 
 <Base title={`${book.title} — Sufi Ilham`} description={plain.slice(0, 180)} type="book" jsonld={jsonld}>
-  <section style="padding-top:9rem">
+  <div class="bp-bar" id="bpBar"></div>
+  <section style="padding-top:9rem" id="bookBody">
     <div class="wrap">
       <p style="font-size:.82rem;color:var(--fg-mute)">
         <a href={`${base}/`}>Home</a> · <a href={`${base}/#books`}>Books</a> · {book.title}
@@ -65,6 +66,12 @@ const jsonld = [
           <div class="desc" set:html={book.desc} />
         </div>
       </div>
+
+      {book.series && (
+        <p style="margin-top:2.6rem">
+          <a class="btn" href={`${base}/series/${book.series}`}>View the full series →</a>
+        </p>
+      )}
 
       {related.length > 0 && (
         <div style="margin-top:6rem">

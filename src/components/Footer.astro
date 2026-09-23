@@ -8,10 +8,10 @@ const cols = [
     h: 'Series',
     items: [
       ...seriesBooks('maple').slice(0, 2).map((b) => ({ label: b.title, href: `${base}/books/${b.slug}` })),
-      { label: 'Maple Falls Romance', href: `${base}/#maple` },
-      { label: 'The Tithe Crown', href: `${base}/#tithe` },
-      { label: 'Cartographers of Lost Tomorrows', href: `${base}/#carto` },
-      { label: 'The Song of the Unbroken Sky', href: `${base}/#song` },
+      { label: 'Maple Falls Romance', href: `${base}/series/maple` },
+      { label: 'The Tithe Crown', href: `${base}/series/tithe` },
+      { label: 'Cartographers of Lost Tomorrows', href: `${base}/series/carto` },
+      { label: 'The Song of the Unbroken Sky', href: `${base}/series/song` },
     ],
   },
   {
@@ -23,6 +23,7 @@ const cols = [
       { label: 'Contact', href: `${base}/#contact` },
       { label: 'Privacy Policy', href: `${base}/privacy` },
       { label: 'Terms of Use', href: `${base}/terms` },
+      { label: 'RSS Feed', href: `${base}/rss.xml` },
       { label: 'Amazon Store', href: site.amazonUS },
     ],
   },
