@@ -1,0 +1,96 @@
+---
+import Base from '../../layouts/Base.astro';
+import BookCard from '../../components/BookCard.astro';
+import { series, seriesBooks, site, type Series } from '../../data/site';
+import seriesLd from '../../data/series-jsonld.json';
+
+export function getStaticPaths() {
+  return series.map((s) => ({ params: { id: s.id }, props: { s } }));
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { s } = Astro.props as { s: Series };
+const list = seriesBooks(s.id);
+const out = list.filter((b) => !b.comingSoon);
+const soon = list.filter((b) => b.comingSoon);
+const pages = out.reduce((a, b) => a + (b.pages ?? 0), 0);
+const ld = (seriesLd as Record<string, unknown>)[s.id];
+const hero = out[0];
+const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.replace(/^\//, '')}`;
+---
+
+<Base
+  title={`${s.name} — Sufi Ilham`}
+  description={s.lede.slice(0, 180)}
+  image={heroImg}
+  jsonld={ld ? [ld] : []}
+>
+  <section class="s-hero" style={`--accent:${s.accent}`}>
+    <div class="s-hero-bg" aria-hidden="true">
+      {out.slice(0, 5).map((b, i) => (
+        <img
+          src={b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`}
+          alt="" loading="lazy" style={`--i:${i}`}
+        />
+      ))}
+    </div>
+
+    <div class="wrap s-hero-in">
+      <p class="crumb"><a href={`${base}/`}>Home</a> · <a href={`${base}/#series`}>Series</a></p>
+      <span class="label mark">{list.length}-Book Series</span>
+      <h1>{s.tagline}</h1>
+      <p class="lede" style="margin-top:1rem">{s.lede}</p>
+
+      <div class="s-facts">
+        <div><b>{out.length}</b><span>Available now</span></div>
+        {soon.length > 0 && <div><b>{soon.length}</b><span>Coming soon</span></div>}
+        <div><b>{pages.toLocaleString()}</b><span>Pages</span></div>
+        <div><b>{out.filter((b) => b.ku).length}</b><span>On Kindle Unlimited</span></div>
+      </div>
+
+      <div class="cover-cta">
+        {hero?.us && <a class="btn solid" href={hero.us} target="_blank" rel="noopener">Start with Book 1 →</a>}
+        <a class="btn" href="#order">Reading order</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="order" style={`--accent:${s.accent}`}>
+    <div class="wrap">
+      <div class="reveal">
+        <span class="label mark">Reading order</span>
+        <h2 style="margin:.5rem 0 1rem">Read them in sequence</h2>
+        <p class="lede">{s.note}</p>
+      </div>
+
+      <ol class="s-track reveal">
+        {list.map((b) => (
+          <li class={b.comingSoon ? 'soon-step' : ''}>
+            <span class="s-num">{b.order}</span>
+            <div class="s-step">
+              <a href={`${base}/books/${b.slug}`}><h3>{b.title}</h3></a>
+              <p>{b.blurb}</p>
+              <div class="s-meta">
+                {b.comingSoon
+                  ? <span>Forthcoming</span>
+                  : <>
+                      {b.ku && <span>Kindle Unlimited</span>}
+                      {b.pages && <span>{b.pages} pages</span>}
+                      {b.us && <a href={b.us} target="_blank" rel="noopener">Amazon ↗</a>}
+                    </>}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="shelf-scroll" style="margin-top:3.5rem">
+        {list.map((b, i) => <BookCard book={b} delay={i * 60} />)}
+      </div>
+
+      <div style="margin-top:4rem;text-align:center">
+        <a class="btn" href={`${base}/#series`}>← All series</a>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,30 @@
+---
+/* A cover that degrades gracefully: remote covers (Amazon CDN) may be slow,
+   blocked by a network, or 404 — in which case we paint a typographic plate
+   instead of leaving a broken image. */
+interface Props {
+  src: string;
+  title: string;
+  w?: number;
+  h?: number;
+  eager?: boolean;
+  cls?: string;
+}
+const { src, title, w = 400, h = 600, eager = false, cls = '' } = Astro.props;
+const initials = title.replace(/[^A-Za-z ]/g, '').split(/\s+/).filter(Boolean).slice(0, 2)
+  .map((x) => x[0].toUpperCase()).join('');
+---
+
+<span class={`cv ${cls}`} data-fallback={initials} style={`--ar:${w}/${h}`}>
+  <img
+    src={src}
+    alt={`${title} cover`}
+    width={w}
+    height={h}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={eager ? 'high' : 'auto'}
+    onerror="this.closest('.cv')?.classList.add('failed')"
+  />
+  <span class="cv-ph" aria-hidden="true"><b>{initials}</b><i>{title}</i></span>
+</span>

@@ -1,0 +1,87 @@
+---
+import Base from '../../layouts/Base.astro';
+import BookCard from '../../components/BookCard.astro';
+import { books, site, seriesBooks, type Book } from '../../data/site';
+
+export function getStaticPaths() {
+  return books.map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { book } = Astro.props as { book: Book };
+const img = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
+const plain = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+const stores: [string, string | undefined][] = [
+  ['Amazon.com', book.us], ['Amazon.in', book.in], ['Amazon UK', book.uk],
+  ['Amazon CA', book.ca], ['Amazon AU', book.au], ['Paperback', book.paperback],
+];
+
+const related = (book.series ? seriesBooks(book.series) : books.filter((b) => b.genre === book.genre))
+  .filter((b) => b.slug !== book.slug)
+  .slice(0, 4);
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Book',
+    name: book.title,
+    author: { '@type': 'Person', name: site.name, alternateName: site.altName },
+    description: plain.slice(0, 400),
+    numberOfPages: book.pages ?? undefined,
+    inLanguage: 'en',
+    image: img.startsWith('http') ? img : `${site.url}/${book.img}`,
+    url: book.us,
+  },
+];
+---
+
+<Base title={`${book.title} — Sufi Ilham`} description={plain.slice(0, 180)} type="book" jsonld={jsonld}>
+  <div class="bp-bar" id="bpBar"></div>
+  <section style="padding-top:9rem" id="bookBody">
+    <div class="wrap">
+      <p class="crumb">
+        <a href={`${base}/`}>Home</a> · <a href={`${base}/#books`}>Books</a> · {book.title}
+      </p>
+
+      <div class="bp-grid" style="margin-top:2rem">
+        <div class="reveal in">
+          <img src={img} alt={`${book.title} cover`} width="400" height="600"
+            style="border:1px solid var(--rule)" />
+          <div class="buy-row">
+            {stores.filter(([, u]) => u).map(([l, u], i) => (
+              <a class={`btn${i === 0 ? ' pri' : ''}`} href={u} target="_blank" rel="noopener">{l}</a>
+            ))}
+          </div>
+        </div>
+
+        <div class="reveal in">
+          {book.kicker && <span class="label mark">{book.kicker}</span>}
+          <h1 style="font-size:clamp(2.1rem,5vw,3.6rem)">{book.title}</h1>
+          {book.sub && <p style="font-family:var(--display);font-style:italic;font-size:1.25rem;margin-top:.6rem;color:var(--ink-2)">{book.sub}</p>}
+          {book.quote && <p class="pull">{book.quote}</p>}
+          <ul class="specs" style="margin:1.6rem 0">
+            {(book.spec ?? []).map((s) => <li>{s}</li>)}
+          </ul>
+          <div class="desc" set:html={book.desc} />
+        </div>
+      </div>
+
+      {book.series && (
+        <p style="margin-top:2.6rem">
+          <a class="btn" href={`${base}/series/${book.series}`}>View the full series →</a>
+        </p>
+      )}
+
+      {related.length > 0 && (
+        <div style="margin-top:6rem">
+          <span class="label mark">Keep reading</span>
+          <h2>{book.series ? 'More in this series' : 'You may also like'}</h2>
+          <div class="shelf-scroll" style="margin-top:1.6rem">
+            {related.map((b, i) => <BookCard book={b} delay={i * 70} />)}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
