@@ -73,14 +73,14 @@ export function initGo() {
       } catch { /* ignore */ }
     }
 
-    const card = a.closest('[data-book]');
+    const card = a.closest('[data-slug]') as HTMLElement | null;
     let cover = '';
     let nm = a.getAttribute('data-go-name') || '';
-    if (card) {
+    if (card?.dataset.slug) {
       try {
-        const d = JSON.parse(card.getAttribute('data-book')!);
-        cover = d.img?.startsWith('http') ? d.img : `${import.meta.env.BASE_URL}/${d.img}`.replace(/\/+/g, '/');
-        nm = nm || d.title;
+        const store = JSON.parse(document.getElementById('bookStore')?.textContent || '{}');
+        const d = store[card.dataset.slug];
+        if (d) { cover = d.img; nm = nm || d.title; }
       } catch { /* ignore */ }
     }
     const mim = document.querySelector<HTMLImageElement>('#modal.open #mImg');

@@ -3,7 +3,14 @@
    An editorial / printed-journal design language.
    Paper first, ink second, gold only as a rule-mark.
    ========================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..700;1,6..72,200..700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+/* Self-hosted: a remote @import is render-blocking and strands the page
+   if the font host is slow or unreachable. */
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/newsreader';
+@import '@fontsource-variable/newsreader/wght-italic.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
 
 :root {
   /* paper */
@@ -19,8 +26,8 @@
   --mark-2: #9a7420;    /* antique gold */
   --field: rgba(22, 21, 15, 0.04);
 
-  --display: 'Instrument Serif', Georgia, serif;
-  --text: 'Newsreader', Georgia, serif;
+  --display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --text: 'Newsreader Variable', 'Newsreader', Georgia, serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --wrap: 1300px;
@@ -534,3 +541,17 @@ kbd { font: inherit; font-size: .6rem; padding: .1rem .34rem; border: 1px solid 
 .skip:focus { left: 1rem; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .grain { display: none; }
+
+/* ---------- resilient covers ---------- */
+.cv { position: relative; display: block; aspect-ratio: var(--ar, 2/3); background: var(--paper-3); overflow: hidden; }
+.cv img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; }
+.cv.failed img { display: none; }
+.cv-ph {
+  position: absolute; inset: 0; z-index: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .5rem; padding: 1rem; text-align: center;
+  background: linear-gradient(150deg, var(--paper-3), var(--paper-2));
+  border: 1px solid var(--rule);
+}
+.cv-ph b { font-family: var(--display); font-size: 2.2rem; color: var(--mark); font-weight: 400; }
+.cv-ph i { font-family: var(--mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); font-style: normal; line-height: 1.5; }

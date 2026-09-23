@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import LedgerRow from '../components/LedgerRow.astro';
+import Cover from '../components/Cover.astro';
 import { books, published, series, seriesBooks, site, themes, journey, bookBySlug } from '../data/site';
 import seriesLd from '../data/series-jsonld.json';
 
@@ -113,9 +114,9 @@ const jsonld = [
         <span class="label">No. 01</span>
       </div>
 
-      <div class="essay-grid" data-book={JSON.stringify(featured)}>
+      <div class="essay-grid" data-slug={featured.slug}>
         <figure class="plate reveal js-open" style="margin:0;cursor:pointer">
-          <img src={featImg} alt={`${featured.title} cover`} width="400" height="600" />
+          <Cover src={featImg} title={featured.title} eager={true} />
           <figcaption><span>{featured.title}</span><span>2026</span></figcaption>
         </figure>
 
@@ -158,9 +159,9 @@ const jsonld = [
         {recent.map((b) => {
           const src = b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`;
           return (
-            <article class="spine" data-book={JSON.stringify(b)}>
+            <article class="spine" data-slug={b.slug}>
               <div class="spine-img js-open">
-                <img src={src} alt={`${b.title} cover`} loading="lazy" width="400" height="600" />
+                <Cover src={src} title={b.title} />
               </div>
               <h3 class="js-open">{b.title}</h3>
               <span class="label">{b.pages ? `${b.pages} pp` : ''}{b.ku ? ' · KU' : ''}</span>

@@ -163,14 +163,19 @@ type Book = {
   spec?: string[]; us?: string; in?: string; uk?: string; ca?: string; au?: string; paperback?: string;
 };
 const modal = $('#modal');
-const BASE = document.querySelector('base')?.getAttribute('href') ?? '';
 let lastFocus: HTMLElement | null = null;
+
+/* shared book store, emitted once per page */
+const BOOKS: Record<string, Book> = (() => {
+  const el = document.getElementById('bookStore');
+  try { return el ? JSON.parse(el.textContent || '{}') : {}; } catch { return {}; }
+})();
 
 const openModal = (b: Book) => {
   if (!modal) return;
   lastFocus = document.activeElement as HTMLElement;
   const img = $<HTMLImageElement>('#mImg')!;
-  img.src = b.img.startsWith('http') ? b.img : `${BASE}/${b.img.replace(/^\//, '')}`.replace(/\/+/g, '/');
+  img.src = b.img;
   img.alt = `${b.title} cover`;
   $('#mKicker')!.textContent = b.kicker || '';
   $('#mTitle')!.textContent = b.title;
@@ -200,8 +205,9 @@ const closeModal = () => {
 document.addEventListener('click', (e) => {
   const t = e.target as HTMLElement;
   if (t.closest('.js-open') || t.closest('.lrow')) {
-    const card = t.closest('[data-book]') as HTMLElement | null;
-    if (card?.dataset.book) openModal(JSON.parse(card.dataset.book));
+    const card = t.closest('[data-slug]') as HTMLElement | null;
+    const b = card?.dataset.slug ? BOOKS[card.dataset.slug] : null;
+    if (b) openModal(b);
   }
   if (t.closest('#modalClose') || t === modal) closeModal();
 });

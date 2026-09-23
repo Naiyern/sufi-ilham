@@ -1,14 +1,15 @@
 ---
 import type { Book } from '../data/site';
+import Cover from './Cover.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 interface Props { book: Book; delay?: number }
 const { book, delay = 0 } = Astro.props;
 const src = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
 ---
 
-<article class="spine reveal" style={`--d:${delay}ms`} data-book={JSON.stringify(book)}>
+<article class="spine reveal" style={`--d:${delay}ms`} data-slug={book.slug}>
   <div class="spine-img js-open">
-    <img src={src} alt={`${book.title} cover`} loading="lazy" decoding="async" width="400" height="600" />
+    <Cover src={src} title={book.title} />
   </div>
   <h3 class="js-open">{book.title}</h3>
   <span class="label">

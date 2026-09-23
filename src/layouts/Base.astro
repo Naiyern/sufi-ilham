@@ -45,8 +45,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href.repla
     <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
     <link rel="alternate" type="application/rss+xml" title="Sufi Ilham — Books" href={`${base}/rss.xml`} />
     <link rel="manifest" href={`${base}/site.webmanifest`} />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
+    <link rel="dns-prefetch" href="https://m.media-amazon.com" />
     <script defer data-domain="naiyern.github.io" src="https://plausible.io/js/script.outbound-links.js"></script>
 
     {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
