@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://naiyern.github.io/sufi-ilham/sitemap.xml
