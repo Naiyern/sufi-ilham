@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import BookCard from '../../components/BookCard.astro';
+import { books, site, seriesBooks, type Book } from '../../data/site';
+
+export function getStaticPaths() {
+  return books.map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { book } = Astro.props as { book: Book };
+const img = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
+const plain = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+const stores: [string, string | undefined][] = [
+  ['Amazon.com', book.us], ['Amazon.in', book.in], ['Amazon UK', book.uk],
+  ['Amazon CA', book.ca], ['Amazon AU', book.au], ['Paperback', book.paperback],
+];
+
+const related = (book.series ? seriesBooks(book.series) : books.filter((b) => b.genre === book.genre))
+  .filter((b) => b.slug !== book.slug)
+  .slice(0, 4);
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Book',
+    name: book.title,
+    author: { '@type': 'Person', name: site.name, alternateName: site.altName },
+    description: plain.slice(0, 400),
+    numberOfPages: book.pages ?? undefined,
+    inLanguage: 'en',
+    image: img.startsWith('http') ? img : `${site.url}/${book.img}`,
+    url: book.us,
+  },
+];
+---
+
+<Base title={`${book.title} — Sufi Ilham`} description={plain.slice(0, 180)} type="book" jsonld={jsonld}>
+  <section style="padding-top:9rem">
+    <div class="wrap">
+      <p style="font-size:.82rem;color:var(--fg-mute)">
+        <a href={`${base}/`}>Home</a> · <a href={`${base}/#books`}>Books</a> · {book.title}
+      </p>
+
+      <div class="about-grid" style="margin-top:2rem;align-items:start">
+        <div class="reveal in">
+          <img src={img} alt={`${book.title} cover`} width="400" height="600"
+            style="border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)" />
+          <div class="buy-row">
+            {stores.filter(([, u]) => u).map(([l, u], i) => (
+              <a class={`btn${i === 0 ? ' pri' : ''}`} href={u} target="_blank" rel="noopener">{l}</a>
+            ))}
+          </div>
+        </div>
+
+        <div class="reveal in">
+          {book.kicker && <div class="sec-tag">{book.kicker}</div>}
+          <h1 style="font-size:clamp(2.1rem,5vw,3.6rem)">{book.title}</h1>
+          {book.sub && <p class="sub" style="font-family:var(--serif);font-style:italic;color:var(--gold);font-size:1.15rem;margin-top:.8rem">{book.sub}</p>}
+          {book.quote && <p class="about-creed">{book.quote}</p>}
+          <ul class="meta" style="margin:1.6rem 0">
+            {(book.spec ?? []).map((s) => <li>{s}</li>)}
+          </ul>
+          <div class="desc" set:html={book.desc} />
+        </div>
+      </div>
+
+      {related.length > 0 && (
+        <div style="margin-top:6rem">
+          <div class="sec-tag">Keep reading</div>
+          <h2>{book.series ? 'More in this series' : 'You may also like'}</h2>
+          <div class="grid" style="margin-top:2.4rem">
+            {related.map((b, i) => <BookCard book={b} delay={i * 70} />)}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</Base>

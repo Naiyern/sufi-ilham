@@ -1,0 +1,35 @@
+---
+import type { Book } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+interface Props { book: Book; delay?: number }
+const { book, delay = 0 } = Astro.props;
+const src = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
+const blurb = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 132);
+const tags = [book.genre, book.ku ? 'ku' : '', book.series ?? ''].filter(Boolean).join(' ');
+---
+
+<article
+  class="card reveal"
+  style={`--d:${delay}ms`}
+  data-tags={tags}
+  data-title={book.title.toLowerCase()}
+  data-book={JSON.stringify(book)}
+>
+  {book.comingSoon && <span class="soon">Coming soon</span>}
+  <div class="card-cover js-open">
+    <img src={src} alt={`${book.title} cover`} loading="lazy" decoding="async" width="400" height="600" />
+  </div>
+  <div class="card-body">
+    {book.kicker && <div class="kicker">{book.kicker}</div>}
+    <h3 class="js-open">{book.title}</h3>
+    <p>{blurb}…</p>
+    <ul class="meta">
+      {book.ku && <li class="ku">Kindle Unlimited</li>}
+      {book.pages && <li>{book.pages} Pages</li>}
+    </ul>
+    <div class="card-links">
+      <button class="lnk pri js-open" type="button">Read More</button>
+      {book.us && <a class="lnk" href={book.us} target="_blank" rel="noopener">Amazon</a>}
+    </div>
+  </div>
+</article>

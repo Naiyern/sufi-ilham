@@ -1,0 +1,27 @@
+---
+import BookCard from './BookCard.astro';
+import type { Series } from '../data/site';
+import { seriesBooks } from '../data/site';
+interface Props { s: Series }
+const { s } = Astro.props;
+const list = seriesBooks(s.id);
+---
+
+<section class="series-band" id={s.id} style={`--accent:${s.accent}`}>
+  <div class="wrap">
+    <div class="series-head reveal">
+      <div class="sec-tag" style="color:var(--accent)">{s.name}</div>
+      <h2>{s.tagline}</h2>
+      <p class="sec-sub">{s.lede}</p>
+      <p class="sec-sub" style="font-size:.95rem">{s.note}</p>
+      <ul class="order-list">
+        {list.map((b) => (
+          <li><b>{b.order}</b>{b.title}{b.comingSoon ? ' · Coming soon' : ''}</li>
+        ))}
+      </ul>
+    </div>
+    <div class="grid" style="margin-top:3rem">
+      {list.map((b, i) => <BookCard book={b} delay={i * 70} />)}
+    </div>
+  </div>
+</section>

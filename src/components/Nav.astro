@@ -1,0 +1,36 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const links = [
+  { href: `${base}/#books`, label: 'Books' },
+  { href: `${base}/#series`, label: 'Series' },
+  { href: `${base}/#about`, label: 'About' },
+  { href: `${base}/#themes`, label: 'Themes' },
+  { href: `${base}/#contact`, label: 'Contact' },
+];
+---
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href={`${base}/`} aria-label="Sufi Ilham — home">
+      <span class="brand-mark">S</span>
+      <span class="brand-txt"><b>Sufi Ilham</b><span>Author</span></span>
+    </a>
+
+    <nav id="menu" aria-label="Primary">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="nav-act">
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle colour theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" id="themeIcon">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+        </svg>
+      </button>
+      <button class="icon-btn burger" id="burger" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+      </button>
+    </div>
+  </div>
+</header>
