@@ -11,7 +11,7 @@ const single = books.filter((b) => !b.series).slice(0, 8);
         <a class="logo" href={`${base}/`} style="margin-bottom:1rem">
           <b>Sufi Ilham</b><span class="est">MD Naiyer Alam</span>
         </a>
-        <p style="font-size:.9rem;max-width:36ch" data-i18n="foot.about">
+        <p style="font-size:.9rem;max-width:36ch">
           Books on belief, time, attention and the freedom that waits on the other side of conditioning.
           Available worldwide on Amazon in Kindle and paperback.
         </p>
@@ -24,7 +24,7 @@ const single = books.filter((b) => !b.series).slice(0, 8);
       </div>
 
       <div class="colo">
-        <h4 data-i18n="foot.books">Selected works</h4>
+        <h4>Selected works</h4>
         <ul>{single.map((b) => <li><a href={`${base}/books/${b.slug}`}>{b.title}</a></li>)}</ul>
       </div>
 
@@ -36,16 +36,16 @@ const single = books.filter((b) => !b.series).slice(0, 8);
       </div>
 
       <div class="colo">
-        <h4 data-i18n="foot.explore">Explore</h4>
+        <h4>Explore</h4>
         <ul>
           <li><a href={`${base}/#index`}>The index</a></li>
-          <li><a href={`${base}/#essay`} data-i18n="foot.aboutl">The author</a></li>
+          <li><a href={`${base}/#essay`}>The author</a></li>
           <li><a href={`${base}/#figures`}>Themes</a></li>
-          <li><a href={`${base}/contact`} data-i18n="foot.msg">Enquiries</a></li>
+          <li><a href={`${base}/contact`}>Enquiries</a></li>
           <li><a href={`${base}/rss.xml`}>RSS feed</a></li>
-          <li><a href={site.amazonUS} target="_blank" rel="noopener" data-i18n="nav.store">Amazon store</a></li>
-          <li><a href={`${base}/privacy`} data-i18n="foot.privacy">Privacy</a></li>
-          <li><a href={`${base}/terms`} data-i18n="foot.terms">Terms</a></li>
+          <li><a href={site.amazonUS} target="_blank" rel="noopener">Amazon store</a></li>
+          <li><a href={`${base}/privacy`}>Privacy</a></li>
+          <li><a href={`${base}/terms`}>Terms</a></li>
         </ul>
       </div>
     </div>

@@ -1,4 +1,3 @@
-import { initLang } from './i18n';
 import { initGo } from './amazon';
 import { initAudio } from './audio';
 import { initCmdk } from './cmdk';
@@ -235,8 +234,7 @@ news?.addEventListener('submit', (e) => {
   news.reset();
 });
 
-/* ---------- language, soundtrack, Amazon interstitial ---------- */
-initLang();
+/* ---------- soundtrack, Amazon interstitial ---------- */
 initGo();
 initAudio();
 initCmdk();

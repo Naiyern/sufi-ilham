@@ -1,5 +1,3 @@
-import { t } from './i18n';
-
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* Cinematic interstitial before handing the reader to Amazon. The tab is
@@ -31,10 +29,10 @@ export function initGo() {
     popup = win;
     (window as any).plausible?.('Amazon Click', { props: { book: name || url, url } });
 
-    titleEl.textContent = name || t('go.title') || 'Opening Amazon';
-    subEl.textContent = t('go.sub') || 'Taking you to the secure Amazon store…';
+    titleEl.textContent = name || 'Opening Amazon';
+    subEl.textContent = 'Taking you to the secure Amazon store…';
     bookEl.innerHTML = cover ? `<img src="${cover}" alt="">` : '';
-    cancel.textContent = t('go.cancel') || 'Cancel';
+    cancel.textContent = 'Cancel';
     ov.classList.add('open');
     ov.setAttribute('aria-hidden', 'false');
 

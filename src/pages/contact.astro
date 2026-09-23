@@ -11,17 +11,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section style="padding-top:9rem">
     <div class="wrap essay-grid">
       <div class="reveal in">
-        <span class="label mark" data-i18n="con.tag">Get in touch</span>
-        <h1 style="font-size:clamp(2.6rem,7vw,4.4rem);margin:.5rem 0 1rem" data-i18n="con.head">Say <em>hello</em></h1>
-        <p class="lede" data-i18n="con.sub">
+        <span class="label mark">Get in touch</span>
+        <h1 style="font-size:clamp(2.6rem,7vw,4.4rem);margin:.5rem 0 1rem">Say <em>hello</em></h1>
+        <p class="lede">
           For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.
         </p>
         <div class="rows" style="margin-top:1.6rem">
           <a class="rowlink" href={`tel:+${site.phoneRaw}`}>
-            <span class="k" data-i18n="con.phone">Phone</span><span class="v">{site.phone}</span><span class="arw">↗</span>
+            <span class="k">Phone</span><span class="v">{site.phone}</span><span class="arw">↗</span>
           </a>
           <a class="rowlink" href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">
-            <span class="k" data-i18n="con.wa">WhatsApp</span><span class="v" data-i18n="con.wad">Message directly</span><span class="arw">↗</span>
+            <span class="k">WhatsApp</span><span class="v">Message directly</span><span class="arw">↗</span>
           </a>
           <a class="rowlink" href={site.instagram} target="_blank" rel="noopener">
             <span class="k">Instagram</span><span class="v">@Sufiilham07</span><span class="arw">↗</span>
@@ -30,7 +30,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <span class="k">Personal</span><span class="v">@naiyer_fx</span><span class="arw">↗</span>
           </a>
           <a class="rowlink" href={site.amazonUS} target="_blank" rel="noopener">
-            <span class="k" data-i18n="con.store">Amazon</span><span class="v" data-i18n="con.stored">Follow for new releases</span><span class="arw">↗</span>
+            <span class="k">Amazon</span><span class="v">Follow for new releases</span><span class="arw">↗</span>
           </a>
           <div class="rowlink">
             <span class="k">Based in</span><span class="v">{site.location}</span>
@@ -40,10 +40,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
 
       <form class="form reveal in" id="waForm" data-phone={site.phoneRaw} style="--d:100ms">
-        <div><label for="n" data-i18n="con.name">Your Name</label><input id="n" name="name" required /></div>
-        <div><label for="e" data-i18n="con.email">Email</label><input id="e" name="email" type="email" required /></div>
+        <div><label for="n">Your Name</label><input id="n" name="name" required /></div>
+        <div><label for="e">Email</label><input id="e" name="email" type="email" required /></div>
         <div>
-          <label for="s" data-i18n="con.subject">Subject</label>
+          <label for="s">Subject</label>
           <select id="s" name="subject">
             <option>Reader Message</option>
             <option>Interview Request</option>
@@ -53,9 +53,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <option>Other</option>
           </select>
         </div>
-        <div><label for="m" data-i18n="con.msg">Message</label><textarea id="m" name="message" required></textarea></div>
-        <button class="btn solid" type="submit" data-i18n="con.send">Send via WhatsApp →</button>
-        <p class="note" data-i18n="con.note">
+        <div><label for="m">Message</label><textarea id="m" name="message" required></textarea></div>
+        <button class="btn solid" type="submit">Send via WhatsApp →</button>
+        <p class="note">
           Your message opens in WhatsApp — nothing is stored on this website.
         </p>
       </form>

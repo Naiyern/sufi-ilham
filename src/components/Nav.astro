@@ -1,5 +1,4 @@
 ---
-import LangSwitch from './LangSwitch.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const links = [
   { href: `${base}/#index`, label: 'Index', key: 'nav.books' },
@@ -18,7 +17,7 @@ const links = [
     </a>
 
     <nav id="menu" aria-label="Primary">
-      <ul>{links.map((l) => <li><a href={l.href} data-i18n={l.key}>{l.label}</a></li>)}</ul>
+      <ul>{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
     </nav>
 
     <div class="mast-act">
@@ -29,7 +28,6 @@ const links = [
         <span>Search</span><kbd>/</kbd>
       </button>
 
-      <LangSwitch />
 
       <button class="mini" id="sndBtn" aria-label="Toggle ambient soundtrack" aria-pressed="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">

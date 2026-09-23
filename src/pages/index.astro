@@ -65,7 +65,7 @@ const jsonld = [
     <div class="wrap">
       <div class="cover-top">
         <span>The Collected Works</span>
-        <span data-i18n="hero.eyebrow">Vol. I — {new Date().getFullYear()}</span>
+        <span>Vol. I — {new Date().getFullYear()}</span>
         <span>{site.location}</span>
       </div>
 
@@ -76,14 +76,14 @@ const jsonld = [
 
       <div class="cover-grid">
         <div>
-          <p class="lede" data-i18n="hero.lede">
+          <p class="lede">
             An author, deep thinker and seeker of truth exploring belief, consciousness and identity — writing that
             challenges societal norms and asks you to question every assumption you inherited.
           </p>
           <div class="cover-cta">
             <a class="btn solid" href="#index">Enter the archive</a>
             {featured.us && (
-              <a class="btn" href={featured.us} target="_blank" rel="noopener" data-i18n="hero.cta1">Read the new release</a>
+              <a class="btn" href={featured.us} target="_blank" rel="noopener">Read the new release</a>
             )}
           </div>
         </div>
@@ -109,7 +109,7 @@ const jsonld = [
   <section id="new">
     <div class="wrap">
       <div class="folio reveal">
-        <h2 data-i18n="feat.head">The new release</h2>
+        <h2>The new release</h2>
         <span class="label">No. 01</span>
       </div>
 
@@ -122,23 +122,23 @@ const jsonld = [
         <div class="reveal" style="--d:100ms">
           <span class="label mark">{featured.kicker}</span>
           <h3 style="font-size:clamp(1.8rem,4vw,3rem);margin:.6rem 0 1rem">{featured.title}</h3>
-          <p class="pull" data-i18n="feat.quote">
+          <p class="pull">
             “You are not broken. You are running old settings — and settings can be changed.”
           </p>
-          <p class="drop" data-i18n="feat.p1">
+          <p class="drop">
             You are the most complex machine on the planet, and you were shipped with zero documentation. So you've
             done what everyone does with an undocumented machine: pushed the same three buttons harder. More
             motivation. More discipline. More guilt.
           </p>
-          <p data-i18n="feat.p2">
+          <p>
             Written in the calm, precise voice of a premium hardware manual — with 111 original diagrams, 34
             write-in worksheets and 10 complete system modules — it treats your life as a living system of energy,
             emotion, attention and habit.
           </p>
           <ul class="specs">{(featured.spec ?? []).map((s) => <li>{s}</li>)}</ul>
           <div class="cover-cta">
-            <button class="btn solid js-open" type="button" data-i18n="card.more">Read more</button>
-            {featured.us && <a class="btn" href={featured.us} target="_blank" rel="noopener" data-i18n="card.buy">Amazon</a>}
+            <button class="btn solid js-open" type="button">Read more</button>
+            {featured.us && <a class="btn" href={featured.us} target="_blank" rel="noopener">Amazon</a>}
           </div>
         </div>
       </div>
@@ -175,10 +175,10 @@ const jsonld = [
   <section id="index">
     <div class="wrap">
       <div class="folio reveal">
-        <h2 data-i18n="books.head">The index</h2>
+        <h2>The index</h2>
         <span class="label">{books.length} entries</span>
       </div>
-      <p class="lede reveal" style="margin-bottom:2rem" data-i18n="books.sub">
+      <p class="lede reveal" style="margin-bottom:2rem">
         Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon. Click any entry to read more.
       </p>
 
@@ -244,8 +244,8 @@ const jsonld = [
   <section id="essay" class="spread">
     <div class="wrap">
       <div class="folio reveal">
-        <h2 data-i18n="about.head">The author</h2>
-        <span class="label" data-i18n="about.tag">A fearless pursuit of truth</span>
+        <h2>The author</h2>
+        <span class="label">A fearless pursuit of truth</span>
       </div>
 
       <div class="essay-grid">
@@ -267,28 +267,28 @@ const jsonld = [
         </div>
 
         <div class="reveal" style="--d:100ms">
-          <p class="drop" data-i18n="about.p1">
+          <p class="drop">
             Sufi Ilham, also known as MD Naiyer Alam, is an author, deep thinker, and seeker of truth who explores
             belief, consciousness, identity, and self-discovery.
           </p>
-          <p data-i18n="about.p2">
+          <p>
             “Sufi Ilham” is a name I gave myself. To me, it represents the meaning I live — a reminder that life is
             not merely something to exist through, but something to understand, question, and experience authentically.
           </p>
-          <p data-i18n="about.p3">
+          <p>
             My writing challenges inherited beliefs and societal conditioning, inviting readers to question
             assumptions rather than accept them blindly. I explore the raw and often uncomfortable realities of
             existence, philosophy, human nature, and the search for truth.
           </p>
-          <p data-i18n="about.p4">
+          <p>
             I believe authenticity begins when we dare to look beyond what we have been taught and discover what is
             genuinely our own.
           </p>
-          <p data-i18n="about.p5">
+          <p>
             Through my words, I seek to inspire transformation — to break free from conditioning, confront reality
             without fear, and live with greater clarity, courage, and awareness.
           </p>
-          <p class="pull" data-i18n="about.creed">Sufi Ilham is not just a name. It is a way of being.</p>
+          <p class="pull">Sufi Ilham is not just a name. It is a way of being.</p>
           <p class="sig">Sufi Ilham</p>
         </div>
       </div>
@@ -299,22 +299,22 @@ const jsonld = [
   <section id="figures">
     <div class="wrap">
       <div class="folio reveal">
-        <h2 data-i18n="themes.head">Recurring threads</h2>
-        <span class="label" data-i18n="themes.tag">What the work returns to</span>
+        <h2>Recurring threads</h2>
+        <span class="label">What the work returns to</span>
       </div>
       <div class="cols reveal">
         {themes.map((t) => (
           <div class="col">
             <span class="num">{t.n}</span>
-            <h3 data-i18n={`th${t.n.replace(/^0/, '')}`}>{t.name}</h3>
-            <p data-i18n={`th${t.n.replace(/^0/, '')}d`}>{t.text}</p>
+            <h3>{t.name}</h3>
+            <p>{t.text}</p>
           </div>
         ))}
       </div>
 
       <div class="folio reveal" style="margin-top:4.5rem">
-        <h2 data-i18n="jour.head">The annals</h2>
-        <span class="label" data-i18n="jour.tag">The path so far</span>
+        <h2>The annals</h2>
+        <span class="label">The path so far</span>
       </div>
       <div class="annals reveal">
         {journey.map((j) => (
@@ -330,8 +330,8 @@ const jsonld = [
   <!-- ================= COLOPHON QUOTE ================= -->
   <section style="text-align:center">
     <div class="wrap reveal">
-      <p class="label mark" data-i18n="quote.cite">— The Map Is Finished</p>
-      <h2 style="max-width:18ch;margin:1rem auto 0;font-style:italic" data-i18n="quote.text">
+      <p class="label mark">— The Map Is Finished</p>
+      <h2 style="max-width:18ch;margin:1rem auto 0;font-style:italic">
         “The map is not the country. Walk until you know the difference.”
       </h2>
     </div>
@@ -341,21 +341,21 @@ const jsonld = [
   <section id="enquiries" class="spread">
     <div class="wrap">
       <div class="folio reveal">
-        <h2 data-i18n="con.head">Enquiries</h2>
-        <span class="label" data-i18n="con.tag">Get in touch</span>
+        <h2>Enquiries</h2>
+        <span class="label">Get in touch</span>
       </div>
 
       <div class="essay-grid">
         <div class="reveal">
-          <p class="lede" data-i18n="con.sub">
+          <p class="lede">
             For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.
           </p>
           <div class="rows" style="margin-top:1.6rem">
             <a class="rowlink" href={`tel:+${site.phoneRaw}`}>
-              <span class="k" data-i18n="con.phone">Phone</span><span class="v">{site.phone}</span><span class="arw">↗</span>
+              <span class="k">Phone</span><span class="v">{site.phone}</span><span class="arw">↗</span>
             </a>
             <a class="rowlink" href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">
-              <span class="k" data-i18n="con.wa">WhatsApp</span><span class="v" data-i18n="con.wad">Message directly</span><span class="arw">↗</span>
+              <span class="k">WhatsApp</span><span class="v">Message directly</span><span class="arw">↗</span>
             </a>
             <a class="rowlink" href={site.instagram} target="_blank" rel="noopener">
               <span class="k">Instagram</span><span class="v">@Sufiilham07</span><span class="arw">↗</span>
@@ -364,7 +364,7 @@ const jsonld = [
               <span class="k">Personal</span><span class="v">@naiyer_fx</span><span class="arw">↗</span>
             </a>
             <a class="rowlink" href={site.amazonUS} target="_blank" rel="noopener">
-              <span class="k" data-i18n="con.store">Amazon</span><span class="v" data-i18n="con.stored">Follow for new releases</span><span class="arw">↗</span>
+              <span class="k">Amazon</span><span class="v">Follow for new releases</span><span class="arw">↗</span>
             </a>
             <div class="rowlink">
               <span class="k">Based in</span><span class="v">{site.location} · Available worldwide</span>
@@ -373,33 +373,32 @@ const jsonld = [
         </div>
 
         <form class="form reveal" id="waForm" data-phone={site.phoneRaw} style="--d:100ms">
-          <div><label for="n" data-i18n="con.name">Your name</label><input id="n" name="name" required /></div>
-          <div><label for="e" data-i18n="con.email">Email</label><input id="e" name="email" type="email" required /></div>
+          <div><label for="n">Your name</label><input id="n" name="name" required /></div>
+          <div><label for="e">Email</label><input id="e" name="email" type="email" required /></div>
           <div>
-            <label for="s" data-i18n="con.subject">Subject</label>
+            <label for="s">Subject</label>
             <select id="s" name="subject">
               <option>Reader Message</option><option>Interview Request</option>
               <option>Collaboration</option><option>Bulk / Bookstore Order</option>
               <option>Translation Rights</option><option>Other</option>
             </select>
           </div>
-          <div><label for="m" data-i18n="con.msg">Message</label><textarea id="m" name="message" required></textarea></div>
-          <button class="btn solid" type="submit" data-i18n="con.send">Send via WhatsApp →</button>
-          <p class="note" data-i18n="con.note">Opens in WhatsApp — nothing is stored on this website.</p>
+          <div><label for="m">Message</label><textarea id="m" name="message" required></textarea></div>
+          <button class="btn solid" type="submit">Send via WhatsApp →</button>
+          <p class="note">Opens in WhatsApp — nothing is stored on this website.</p>
         </form>
       </div>
 
       <div class="subscribe reveal">
         <span class="label mark">The list</span>
-        <h3 style="margin:.5rem 0 .4rem" data-i18n="news.title">Get notified of new books</h3>
-        <p data-i18n="news.sub">One short email when a new book goes live. No spam, unsubscribe anytime.</p>
+        <h3 style="margin:.5rem 0 .4rem">Get notified of new books</h3>
+        <p>One short email when a new book goes live. No spam, unsubscribe anytime.</p>
         <form class="sub-form" id="newsForm" data-phone={site.phoneRaw}>
           <label class="sr-only" for="newsEmail">Email address</label>
-          <input id="newsEmail" name="email" type="email" required placeholder="you@example.com"
-            data-i18n="news.ph" data-i18n-attr="placeholder" />
-          <button class="btn solid" type="submit" data-i18n="news.btn">Subscribe</button>
+          <input id="newsEmail" name="email" type="email" required placeholder="you@example.com" />
+          <button class="btn solid" type="submit">Subscribe</button>
         </form>
-        <p class="note" id="newsNote" data-i18n="news.note">Free forever. Unsubscribe in one click.</p>
+        <p class="note" id="newsNote">Free forever. Unsubscribe in one click.</p>
       </div>
     </div>
   </section>
