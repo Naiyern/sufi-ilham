@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import LedgerRow from '../components/LedgerRow.astro';
 import Cover from '../components/Cover.astro';
-import { books, published, series, seriesBooks, site, themes, journey, bookBySlug } from '../data/site';
+import { books, published, series, seriesBooks, site, themes, journey, bookBySlug, coverUrl } from '../data/site';
 import seriesLd from '../data/series-jsonld.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -19,7 +19,7 @@ const filters = [
 
 const pages = published.reduce((a, b) => a + (b.pages ?? 0), 0);
 const featured = bookBySlug('the-human-operating-manual')!;
-const featImg = featured.img.startsWith('http') ? featured.img : `${base}/${featured.img.replace(/^\//, '')}`;
+const featImg = coverUrl(featured.img, base);
 const recent = published.slice(0, 10);
 
 const ticker = [
@@ -157,7 +157,7 @@ const jsonld = [
     <div class="wrap">
       <div class="shelf-scroll reveal">
         {recent.map((b) => {
-          const src = b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`;
+          const src = coverUrl(b.img, base);
           return (
             <article class="spine" data-slug={b.slug}>
               <div class="spine-img js-open">
@@ -210,7 +210,7 @@ const jsonld = [
               <div class="spread-fan">
                 {list.slice(0, 4).map((b) => (
                   <img
-                    src={b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`}
+                    src={coverUrl(b.img, base)}
                     alt="" loading="lazy"
                   />
                 ))}

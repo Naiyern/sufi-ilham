@@ -1,12 +1,12 @@
 ---
-import { books } from '../data/site';
+import { books, coverUrl } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 /* One shared store instead of repeating the full record in every
    data-book attribute (that duplication cost ~89KB on the home page). */
 const store = Object.fromEntries(
   books.map((b) => [b.slug, {
     ...b,
-    img: b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`,
+    img: coverUrl(b.img, base),
   }]),
 );
 ---

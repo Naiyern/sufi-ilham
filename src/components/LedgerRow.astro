@@ -1,9 +1,10 @@
 ---
+import { coverUrl } from '../data/site';
 import type { Book } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 interface Props { book: Book; n: number }
 const { book, n } = Astro.props;
-const src = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
+const src = coverUrl(book.img, base);
 const kindMap: Record<string, string> = {
   'self-help': 'Self-Help', philosophy: 'Philosophy', fiction: 'Fiction',
   romance: 'Romance', romantasy: 'Romantasy',

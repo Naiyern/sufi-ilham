@@ -1,10 +1,11 @@
 ---
+import { coverUrl } from '../data/site';
 import type { Book } from '../data/site';
 import Cover from './Cover.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 interface Props { book: Book; delay?: number }
 const { book, delay = 0 } = Astro.props;
-const src = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
+const src = coverUrl(book.img, base);
 ---
 
 <article class="spine reveal" style={`--d:${delay}ms`} data-slug={book.slug}>
