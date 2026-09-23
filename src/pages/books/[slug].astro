@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import { books, site, seriesBooks, type Book } from '../../data/site';
+import { books, site, seriesBooks, type Book, coverUrl } from '../../data/site';
 
 export function getStaticPaths() {
   return books.map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
@@ -9,7 +9,7 @@ export function getStaticPaths() {
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { book } = Astro.props as { book: Book };
-const img = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
+const img = coverUrl(book.img, base);
 const plain = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
 const stores: [string, string | undefined][] = [
@@ -30,7 +30,7 @@ const jsonld = [
     description: plain.slice(0, 400),
     numberOfPages: book.pages ?? undefined,
     inLanguage: 'en',
-    image: img.startsWith('http') ? img : `${site.url}/${book.img}`,
+    ...(book.img.startsWith('data:') ? {} : { image: book.img.startsWith('http') ? book.img : `${site.url}/${book.img}` }),
     url: book.us,
   },
 ];

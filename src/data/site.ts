@@ -160,3 +160,10 @@ export const journey = [
       "NeuroFocus Protocol, The Human Operating Manual, Moh Tera Prem, PREM, The River's Portion, the Maple Falls romances, The Tithe Crown trilogy — and now the Cartographers saga, the Song of the Unbroken Sky trilogy and The Spare Key Summer.",
   },
 ];
+
+/** Resolve a cover to a usable URL. Remote (http) and inline (data:) sources
+ *  are already absolute; only repo-relative paths get the base prefix. */
+export function coverUrl(img: string, base = import.meta.env.BASE_URL): string {
+  if (/^(https?:|data:)/.test(img)) return img;
+  return `${base.replace(/\/$/, '')}/${img.replace(/^\//, '')}`;
+}

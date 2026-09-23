@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
 import { series, seriesBooks, site, type Series } from '../../data/site';
+import { coverUrl } from '../../data/site';
 import seriesLd from '../../data/series-jsonld.json';
 
 export function getStaticPaths() {
@@ -29,7 +30,7 @@ const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.r
     <div class="s-hero-bg" aria-hidden="true">
       {out.slice(0, 5).map((b, i) => (
         <img
-          src={b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`}
+          src={coverUrl(b.img, base)}
           alt="" loading="lazy" style={`--i:${i}`}
         />
       ))}

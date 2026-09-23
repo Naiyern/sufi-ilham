@@ -1,5 +1,5 @@
 ---
-import { books, series } from '../data/site';
+import { books, series, coverUrl } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const index = [
@@ -8,7 +8,7 @@ const index = [
     s: b.kicker ?? '',
     u: `${base}/books/${b.slug}`,
     k: 'Book',
-    img: b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`,
+    img: coverUrl(b.img, base),
   })),
   ...series.map((s) => ({ t: s.name, s: s.tagline, u: `${base}/series/${s.id}`, k: 'Series', img: '' })),
   { t: 'About the Author', s: 'A fearless pursuit of truth', u: `${base}/#about`, k: 'Page', img: '' },
