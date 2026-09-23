@@ -1,17 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import BookCard from '../components/BookCard.astro';
-import SeriesBand from '../components/SeriesBand.astro';
-import Featured from '../components/Featured.astro';
-import SpareKey from '../components/SpareKey.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { books, published, series, site, stats, themes, journey, standalone } from '../data/site';
+import LedgerRow from '../components/LedgerRow.astro';
+import { books, published, series, seriesBooks, site, themes, journey, bookBySlug } from '../data/site';
 import seriesLd from '../data/series-jsonld.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const filters = [
-  { id: 'all', label: `All ${books.length}` },
+  { id: 'all', label: 'All' },
   { id: 'philosophy', label: 'Philosophy' },
   { id: 'self-help', label: 'Self-Help' },
   { id: 'fiction', label: 'Fiction' },
@@ -20,38 +16,38 @@ const filters = [
   { id: 'ku', label: 'Kindle Unlimited' },
 ];
 
-const featured = standalone.slice(0, 1)[0];
+const pages = published.reduce((a, b) => a + (b.pages ?? 0), 0);
+const featured = bookBySlug('the-human-operating-manual')!;
+const featImg = featured.img.startsWith('http') ? featured.img : `${base}/${featured.img.replace(/^\//, '')}`;
+const recent = published.slice(0, 10);
+
+const ticker = [
+  'Twenty-six published titles',
+  'Philosophy · Romance · Myth · Dark Romantasy',
+  'Free on Kindle Unlimited',
+  'Five Amazon marketplaces',
+  'Kindle & Paperback worldwide',
+];
 
 const jsonld = [
   ...Object.values(seriesLd as Record<string, unknown>),
   {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: site.name,
-    alternateName: site.altName,
-    jobTitle: 'Author',
-    description:
-      'Author, deep thinker and seeker of truth exploring belief, consciousness, identity and self-discovery.',
-    telephone: '+91-6201757330',
-    url: site.url,
+    '@context': 'https://schema.org', '@type': 'Person',
+    name: site.name, alternateName: site.altName, jobTitle: 'Author',
+    description: 'Author, deep thinker and seeker of truth exploring belief, consciousness, identity and self-discovery.',
+    telephone: '+91-6201757330', url: site.url,
     image: `${site.url}/images/sufi-ilham-portrait.jpg`,
     sameAs: [site.instagram, site.instagram2, site.amazonUS, site.amazonIN],
   },
   {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Books by Sufi Ilham',
-    numberOfItems: books.length,
+    '@context': 'https://schema.org', '@type': 'ItemList',
+    name: 'Books by Sufi Ilham', numberOfItems: books.length,
     itemListElement: books.map((b, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
+      '@type': 'ListItem', position: i + 1,
       item: {
-        '@type': 'Book',
-        name: b.title,
+        '@type': 'Book', name: b.title,
         author: { '@type': 'Person', name: site.name, alternateName: site.altName },
-        url: b.us || site.url,
-        numberOfPages: b.pages ?? undefined,
-        inLanguage: 'en',
+        url: b.us || site.url, numberOfPages: b.pages ?? undefined, inLanguage: 'en',
       },
     })),
   },
@@ -59,246 +55,354 @@ const jsonld = [
 ---
 
 <Base
-  title={`Sufi Ilham — Author of ${published.length} Books | Philosophy, Romance, Myth & Dark Romantasy`}
-  description={`Official website of Sufi Ilham (MD Naiyer Alam) — author of ${published.length} books across philosophy, self-help, literary fiction, small-town romance, mythic romance and dark romantasy.`}
+  title={`Sufi Ilham — The Archive | ${published.length} Books on Belief, Time, Love & Myth`}
+  description={`The complete works of Sufi Ilham (MD Naiyer Alam) — ${published.length} books across philosophy, self-help, literary fiction, small-town romance, mythic romance and dark romantasy.`}
   type="profile"
   jsonld={jsonld}
 >
-  <!-- ============ HERO ============ -->
-  <section class="hero" id="top">
-    <div class="wrap hero-grid">
-      <div>
-        <div class="sec-tag" data-i18n="hero.eyebrow">{published.length} Books · Philosophy, Romance, Myth &amp; Dark Romantasy</div>
-        <h1>
-          <span class="l"><span style="--d:.05s">Sufi</span></span>
-          <span class="l"><span style="--d:.16s">Ilham</span></span>
-        </h1>
-        <p class="sub" data-i18n="hero.alias">Also known as MD Naiyer Alam</p>
-        <p class="hero-rot" aria-label="Genres">
-          <span>Writing on</span>
-          <span class="rot" id="rot" aria-live="polite">
-            <i>belief</i><i>time</i><i>attention</i><i>love</i><i>myth</i><i>freedom</i>
-          </span>
-        </p>
-        <p class="lede">
-          An author, deep thinker and seeker of truth exploring belief, consciousness and identity — writing that
-          challenges societal norms and asks you to question every assumption you inherited.
-        </p>
-        <p class="lede" style="color:var(--fg-mute);font-size:.95rem">
-          From the architecture of belief to the illusion of time — five small-town love stories in Maple Falls,
-          a gothic romantasy trilogy, the seven-book Cartographers saga, the mythic Song of the Unbroken Sky and
-          the standalone romance The Spare Key Summer.
-        </p>
-        <div class="hero-cta">
-          <a class="btn pri" href="#books" data-i18n="hero.cta2">Browse all books →</a>
-          {featured?.us && <a class="btn" href={featured.us} target="_blank" rel="noopener" data-i18n="hero.cta1">Read the new release</a>}
-        </div>
-      </div>
-
-      <div class="portrait-wrap reveal">
-        <div class="portrait-ring"></div>
-        <div class="portrait">
-          <img
-            src={`${base}/images/sufi-ilham-portrait.jpg`}
-            alt="Portrait of Sufi Ilham"
-            width="900" height="1200" fetchpriority="high"
-          />
-        </div>
-      </div>
-    </div>
-
+  <!-- ================= COVER ================= -->
+  <section class="cover" id="top">
     <div class="wrap">
-      <a class="scroll-hint" href="#featured" aria-label="Scroll to content">
-        <span data-i18n="hero.scroll">Scroll</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-      </a>
-      <div class="stats reveal">
-        {stats.map((s) => (
-          <div class="stat">
-            <b data-count={s.n} data-suffix={s.suffix ?? ''}>0</b>
-            <span data-i18n={s.key}>{s.label}</span>
+      <div class="cover-top">
+        <span>The Collected Works</span>
+        <span data-i18n="hero.eyebrow">Vol. I — {new Date().getFullYear()}</span>
+        <span>{site.location}</span>
+      </div>
+
+      <h1>
+        <span class="ln"><span style="--d:.05s">Sufi</span></span>
+        <span class="ln"><span style="--d:.15s" class="thin">Ilham</span></span>
+      </h1>
+
+      <div class="cover-grid">
+        <div>
+          <p class="lede" data-i18n="hero.lede">
+            An author, deep thinker and seeker of truth exploring belief, consciousness and identity — writing that
+            challenges societal norms and asks you to question every assumption you inherited.
+          </p>
+          <div class="cover-cta">
+            <a class="btn solid" href="#index">Enter the archive</a>
+            {featured.us && (
+              <a class="btn" href={featured.us} target="_blank" rel="noopener" data-i18n="hero.cta1">Read the new release</a>
+            )}
           </div>
-        ))}
+        </div>
+
+        <div class="cover-meta">
+          <div><span>Titles</span><span>{published.length}</span></div>
+          <div><span>Pages in print</span><span>{pages.toLocaleString()}</span></div>
+          <div><span>On Kindle Unlimited</span><span>{published.filter((b) => b.ku).length}</span></div>
+          <div><span>Series</span><span>{series.length}</span></div>
+          <div><span>Marketplaces</span><span>5</span></div>
+        </div>
+      </div>
+
+      <div class="ticker">
+        <div class="ticker-in">
+          {[...ticker, ...ticker].map((t) => <span>{t} <b>·</b></span>)}
+        </div>
       </div>
     </div>
   </section>
 
-  <Featured />
-
-  <!-- ============ ALL BOOKS ============ -->
-  <section id="books">
+  <!-- ================= THE NEW RELEASE ================= -->
+  <section id="new">
     <div class="wrap">
-      <div class="reveal">
-        <div class="sec-tag" data-i18n="books.tag">The Library</div>
-        <h2>Every book, <em>one shelf</em></h2>
-        <p class="sec-sub">
-          Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon. Click any book to read more.
-          Filter by genre, or search by title.
-        </p>
+      <div class="folio reveal">
+        <h2 data-i18n="feat.head">The new release</h2>
+        <span class="label">No. 01</span>
       </div>
 
-      <div class="toolbar reveal">
-        {filters.map((f) => (
-          <button class="chip" data-filter={f.id} aria-pressed={f.id === 'all' ? 'true' : 'false'}>{f.label}</button>
-        ))}
-        <input class="search" id="bookSearch" type="search" placeholder="Search titles…" aria-label="Search books" />
-      </div>
+      <div class="essay-grid" data-book={JSON.stringify(featured)}>
+        <figure class="plate reveal js-open" style="margin:0;cursor:pointer">
+          <img src={featImg} alt={`${featured.title} cover`} width="400" height="600" />
+          <figcaption><span>{featured.title}</span><span>2026</span></figcaption>
+        </figure>
 
-      <div class="grid" id="bookGrid">
-        {books.map((b, i) => <BookCard book={b} delay={(i % 8) * 60} />)}
+        <div class="reveal" style="--d:100ms">
+          <span class="label mark">{featured.kicker}</span>
+          <h3 style="font-size:clamp(1.8rem,4vw,3rem);margin:.6rem 0 1rem">{featured.title}</h3>
+          <p class="pull" data-i18n="feat.quote">
+            “You are not broken. You are running old settings — and settings can be changed.”
+          </p>
+          <p class="drop" data-i18n="feat.p1">
+            You are the most complex machine on the planet, and you were shipped with zero documentation. So you've
+            done what everyone does with an undocumented machine: pushed the same three buttons harder. More
+            motivation. More discipline. More guilt.
+          </p>
+          <p data-i18n="feat.p2">
+            Written in the calm, precise voice of a premium hardware manual — with 111 original diagrams, 34
+            write-in worksheets and 10 complete system modules — it treats your life as a living system of energy,
+            emotion, attention and habit.
+          </p>
+          <ul class="specs">{(featured.spec ?? []).map((s) => <li>{s}</li>)}</ul>
+          <div class="cover-cta">
+            <button class="btn solid js-open" type="button" data-i18n="card.more">Read more</button>
+            {featured.us && <a class="btn" href={featured.us} target="_blank" rel="noopener" data-i18n="card.buy">Amazon</a>}
+          </div>
+        </div>
       </div>
-      <p id="bookEmpty" style="display:none;text-align:center;padding:3rem 0;color:var(--fg-mute)">
-        No books match that search.
+    </div>
+  </section>
+
+  <!-- ================= SHELF ================= -->
+  <section id="shelf" style="padding-top:0">
+    <div class="wrap">
+      <div class="folio reveal">
+        <h2>Recently published</h2>
+        <span class="label">Scroll →</span>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="shelf-scroll reveal">
+        {recent.map((b) => {
+          const src = b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`;
+          return (
+            <article class="spine" data-book={JSON.stringify(b)}>
+              <div class="spine-img js-open">
+                <img src={src} alt={`${b.title} cover`} loading="lazy" width="400" height="600" />
+              </div>
+              <h3 class="js-open">{b.title}</h3>
+              <span class="label">{b.pages ? `${b.pages} pp` : ''}{b.ku ? ' · KU' : ''}</span>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE INDEX (ledger) ================= -->
+  <section id="index">
+    <div class="wrap">
+      <div class="folio reveal">
+        <h2 data-i18n="books.head">The index</h2>
+        <span class="label">{books.length} entries</span>
+      </div>
+      <p class="lede reveal" style="margin-bottom:2rem" data-i18n="books.sub">
+        Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon. Click any entry to read more.
       </p>
-    </div>
-  </section>
 
-  <!-- ============ SERIES ============ -->
-  <div id="series">
-    {series.map((s) => <SeriesBand s={s} />)}
-  </div>
-
-  <SpareKey />
-
-  <!-- ============ QUOTE ============ -->
-  <section class="quote-sec">
-    <div class="wrap reveal">
-      <blockquote data-i18n="quote.text">“The map is not the country. Walk until you know the difference.”</blockquote>
-      <cite data-i18n="quote.cite">— The Map Is Finished</cite>
-    </div>
-  </section>
-
-  <!-- ============ ABOUT ============ -->
-  <section id="about">
-    <div class="wrap about-grid">
-      <div class="about-photo reveal">
-        <img src={`${base}/images/sufi-ilham-portrait.jpg`} alt="Sufi Ilham" width="900" height="900" loading="lazy" />
-        <div class="cap">Sufi Ilham · MD Naiyer Alam</div>
-        <div class="gal">
-          <figure>
-            <img src={`${base}/images/sufi-ilham-flute.jpg`} alt="Sufi Ilham playing the bansuri flute" width="760" height="760" loading="lazy" />
-            <figcaption>The flute · today</figcaption>
-          </figure>
-          <figure>
-            <img src={`${base}/images/sufi-ilham-childhood.jpg`} alt="Sufi Ilham as a child" width="760" height="760" loading="lazy" />
-            <figcaption>Where it began</figcaption>
-          </figure>
-        </div>
-      </div>
-
-      <div class="about-body reveal" style="--d:120ms">
-        <div class="sec-tag" data-i18n="about.tag">About the Author</div>
-        <h2 style="margin-bottom:1.6rem" data-i18n="about.head">A fearless pursuit <em>of truth</em></h2>
-        <p class="first">
-          Sufi Ilham, also known as MD Naiyer Alam, is an author, deep thinker, and seeker of truth who explores
-          belief, consciousness, identity, and self-discovery.
-        </p>
-        <p>
-          “Sufi Ilham” is a name I gave myself. To me, it represents the meaning I live — a reminder that life is
-          not merely something to exist through, but something to understand, question, and experience authentically.
-        </p>
-        <p>
-          My writing challenges inherited beliefs and societal conditioning, inviting readers to question assumptions
-          rather than accept them blindly. I explore the raw and often uncomfortable realities of existence,
-          philosophy, human nature, and the search for truth.
-        </p>
-        <p>
-          I believe authenticity begins when we dare to look beyond what we have been taught and discover what is
-          genuinely our own. Through my words, I seek to inspire transformation — to break free from conditioning,
-          confront reality without fear, and live with greater clarity, courage, and awareness.
-        </p>
-        <p class="about-creed" data-i18n="about.creed">Sufi Ilham is not just a name. It is a way of being.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ THEMES ============ -->
-  <section id="themes">
-    <div class="wrap">
-      <div class="reveal">
-        <div class="sec-tag" data-i18n="themes.tag">Recurring Threads</div>
-        <h2 data-i18n="themes.head">What the work <em>keeps returning to</em></h2>
-      </div>
-      <div class="t-grid reveal">
-        {themes.map((t) => (
-          <div class="t-cell">
-            <b>{t.n}</b>
-            <h3 data-i18n={`th${t.n.replace(/^0/, "")}`}>{t.name}</h3>
-            <p data-i18n={`th${t.n.replace(/^0/, "")}d`}>{t.text}</p>
-          </div>
+      <div class="filters reveal">
+        {filters.map((f) => (
+          <button class="fbtn" data-filter={f.id} aria-pressed={f.id === 'all' ? 'true' : 'false'}>{f.label}</button>
         ))}
+        <input class="sr-only" id="bookSearch" type="search" aria-label="Search books" />
+        <span class="fcount" id="fcount">{books.length} shown</span>
       </div>
 
-      <div class="reveal" style="margin-top:5rem">
-        <div class="sec-tag" data-i18n="jour.tag">The Path So Far</div>
-        <h2 data-i18n="jour.head">A writing <em>journey</em></h2>
+      <div class="ledger reveal" id="bookGrid">
+        {books.map((b, i) => <LedgerRow book={b} n={i + 1} />)}
       </div>
-      <div class="time reveal">
-        {journey.map((j) => (
-          <div class="tl">
-            <time>{j.date}</time>
-            <div>
-              <h3>{j.title}</h3>
-              <p>{j.text}</p>
+      <p id="bookEmpty" style="display:none;padding:2.4rem 0;color:var(--ink-3)">No entries match.</p>
+    </div>
+  </section>
+
+  <!-- ================= SERIES SPREADS ================= -->
+  <div id="series">
+    {series.map((s, i) => {
+      const list = seriesBooks(s.id);
+      return (
+        <section class="spread">
+          <div class="wrap spread-grid">
+            <div class="reveal">
+              <span class="spread-num">{String(i + 1).padStart(2, '0')}</span>
+              <div class="spread-fan">
+                {list.slice(0, 4).map((b) => (
+                  <img
+                    src={b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`}
+                    alt="" loading="lazy"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div class="reveal" style="--d:100ms">
+              <span class="label mark">{s.name}</span>
+              <h2 style="margin:.5rem 0 1rem">{s.tagline}</h2>
+              {s.hook && <p class="pull" style="font-size:clamp(1.2rem,2.4vw,1.7rem)">{s.hook}</p>}
+              <p>{s.lede}</p>
+              <ol class="ord">
+                {list.map((b) => (
+                  <li>
+                    <b>{String(b.order).padStart(2, '0')}</b>
+                    <a href={`${base}/books/${b.slug}`}>{b.title}</a>
+                    <span class="s">{b.comingSoon ? 'Soon' : b.pages ? `${b.pages} pp` : ''}</span>
+                  </li>
+                ))}
+              </ol>
+              <div class="cover-cta">
+                <a class="btn" href={`${base}/series/${s.id}`}>Explore the series →</a>
+              </div>
             </div>
           </div>
+        </section>
+      );
+    })}
+  </div>
+
+  <!-- ================= ESSAY / AUTHOR ================= -->
+  <section id="essay" class="spread">
+    <div class="wrap">
+      <div class="folio reveal">
+        <h2 data-i18n="about.head">The author</h2>
+        <span class="label" data-i18n="about.tag">A fearless pursuit of truth</span>
+      </div>
+
+      <div class="essay-grid">
+        <div class="reveal">
+          <figure class="plate" style="margin:0">
+            <img src={`${base}/images/sufi-ilham-portrait.jpg`} alt="Portrait of Sufi Ilham" width="900" height="1100" />
+            <figcaption><span>Sufi Ilham</span><span>MD Naiyer Alam</span></figcaption>
+          </figure>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:.9rem">
+            <figure class="plate" style="margin:0">
+              <img src={`${base}/images/sufi-ilham-flute.jpg`} alt="Sufi Ilham playing the bansuri" width="760" height="760" loading="lazy" />
+              <figcaption><span>The flute</span><span>Today</span></figcaption>
+            </figure>
+            <figure class="plate" style="margin:0">
+              <img src={`${base}/images/sufi-ilham-childhood.jpg`} alt="Sufi Ilham as a child" width="760" height="760" loading="lazy" />
+              <figcaption><span>Where it began</span><span>—</span></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="reveal" style="--d:100ms">
+          <p class="drop" data-i18n="about.p1">
+            Sufi Ilham, also known as MD Naiyer Alam, is an author, deep thinker, and seeker of truth who explores
+            belief, consciousness, identity, and self-discovery.
+          </p>
+          <p data-i18n="about.p2">
+            “Sufi Ilham” is a name I gave myself. To me, it represents the meaning I live — a reminder that life is
+            not merely something to exist through, but something to understand, question, and experience authentically.
+          </p>
+          <p data-i18n="about.p3">
+            My writing challenges inherited beliefs and societal conditioning, inviting readers to question
+            assumptions rather than accept them blindly. I explore the raw and often uncomfortable realities of
+            existence, philosophy, human nature, and the search for truth.
+          </p>
+          <p data-i18n="about.p4">
+            I believe authenticity begins when we dare to look beyond what we have been taught and discover what is
+            genuinely our own.
+          </p>
+          <p data-i18n="about.p5">
+            Through my words, I seek to inspire transformation — to break free from conditioning, confront reality
+            without fear, and live with greater clarity, courage, and awareness.
+          </p>
+          <p class="pull" data-i18n="about.creed">Sufi Ilham is not just a name. It is a way of being.</p>
+          <p class="sig">Sufi Ilham</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FIGURES / THEMES ================= -->
+  <section id="figures">
+    <div class="wrap">
+      <div class="folio reveal">
+        <h2 data-i18n="themes.head">Recurring threads</h2>
+        <span class="label" data-i18n="themes.tag">What the work returns to</span>
+      </div>
+      <div class="cols reveal">
+        {themes.map((t) => (
+          <div class="col">
+            <span class="num">{t.n}</span>
+            <h3 data-i18n={`th${t.n.replace(/^0/, '')}`}>{t.name}</h3>
+            <p data-i18n={`th${t.n.replace(/^0/, '')}d`}>{t.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="folio reveal" style="margin-top:4.5rem">
+        <h2 data-i18n="jour.head">The annals</h2>
+        <span class="label" data-i18n="jour.tag">The path so far</span>
+      </div>
+      <div class="annals reveal">
+        {journey.map((j) => (
+          <div class="annal">
+            <time>{j.date}</time>
+            <div><h3>{j.title}</h3><p>{j.text}</p></div>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- ============ CONTACT ============ -->
-  <section id="contact">
-    <div class="wrap contact-grid">
-      <div class="reveal">
-        <div class="sec-tag" data-i18n="con.tag">Get In Touch</div>
-        <h2 data-i18n="con.head">Say <em>hello</em></h2>
-        <p class="sec-sub">
-          For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.
-        </p>
-        <div class="c-list">
-          <a class="c-row" href={`tel:+${site.phoneRaw}`}>
-            <span class="ic">☏</span><span class="tx"><b>Phone</b><span>{site.phone}</span></span>
-          </a>
-          <a class="c-row" href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">
-            <span class="ic">✆</span><span class="tx"><b>WhatsApp</b><span>Message directly</span></span>
-          </a>
-          <a class="c-row" href={site.instagram} target="_blank" rel="noopener">
-            <span class="ic">◎</span><span class="tx"><b>Instagram · Author</b><span>@Sufiilham07</span></span>
-          </a>
-          <a class="c-row" href={site.instagram2} target="_blank" rel="noopener">
-            <span class="ic">◎</span><span class="tx"><b>Instagram · Personal</b><span>@naiyer_fx</span></span>
-          </a>
-          <a class="c-row" href={site.amazonUS} target="_blank" rel="noopener">
-            <span class="ic">✦</span><span class="tx"><b>Amazon Author Store</b><span>Follow for new releases</span></span>
-          </a>
-          <div class="c-row">
-            <span class="ic">◈</span><span class="tx"><b>Based in {site.location}</b><span>Available worldwide</span></span>
-          </div>
-        </div>
-      </div>
-
-      <form class="form reveal" id="waForm" data-phone={site.phoneRaw} style="--d:100ms">
-        <div><label for="n" data-i18n="con.name">Your Name</label><input id="n" name="name" required /></div>
-        <div><label for="e" data-i18n="con.email">Email</label><input id="e" name="email" type="email" required /></div>
-        <div>
-          <label for="s" data-i18n="con.subject">Subject</label>
-          <select id="s" name="subject">
-            <option>Reader Message</option>
-            <option>Interview Request</option>
-            <option>Collaboration</option>
-            <option>Bulk / Bookstore Order</option>
-            <option>Translation Rights</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div><label for="m" data-i18n="con.msg">Message</label><textarea id="m" name="message" required></textarea></div>
-        <button class="btn pri" type="submit" data-i18n="con.send">Send via WhatsApp →</button>
-        <p class="note">
-          Your message opens in WhatsApp to {site.phone} — nothing is stored on this website.
-        </p>
-      </form>
+  <!-- ================= COLOPHON QUOTE ================= -->
+  <section style="text-align:center">
+    <div class="wrap reveal">
+      <p class="label mark" data-i18n="quote.cite">— The Map Is Finished</p>
+      <h2 style="max-width:18ch;margin:1rem auto 0;font-style:italic" data-i18n="quote.text">
+        “The map is not the country. Walk until you know the difference.”
+      </h2>
     </div>
   </section>
-  <CtaBand />
+
+  <!-- ================= ENQUIRIES ================= -->
+  <section id="enquiries" class="spread">
+    <div class="wrap">
+      <div class="folio reveal">
+        <h2 data-i18n="con.head">Enquiries</h2>
+        <span class="label" data-i18n="con.tag">Get in touch</span>
+      </div>
+
+      <div class="essay-grid">
+        <div class="reveal">
+          <p class="lede" data-i18n="con.sub">
+            For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.
+          </p>
+          <div class="rows" style="margin-top:1.6rem">
+            <a class="rowlink" href={`tel:+${site.phoneRaw}`}>
+              <span class="k" data-i18n="con.phone">Phone</span><span class="v">{site.phone}</span><span class="arw">↗</span>
+            </a>
+            <a class="rowlink" href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">
+              <span class="k" data-i18n="con.wa">WhatsApp</span><span class="v" data-i18n="con.wad">Message directly</span><span class="arw">↗</span>
+            </a>
+            <a class="rowlink" href={site.instagram} target="_blank" rel="noopener">
+              <span class="k">Instagram</span><span class="v">@Sufiilham07</span><span class="arw">↗</span>
+            </a>
+            <a class="rowlink" href={site.instagram2} target="_blank" rel="noopener">
+              <span class="k">Personal</span><span class="v">@naiyer_fx</span><span class="arw">↗</span>
+            </a>
+            <a class="rowlink" href={site.amazonUS} target="_blank" rel="noopener">
+              <span class="k" data-i18n="con.store">Amazon</span><span class="v" data-i18n="con.stored">Follow for new releases</span><span class="arw">↗</span>
+            </a>
+            <div class="rowlink">
+              <span class="k">Based in</span><span class="v">{site.location} · Available worldwide</span>
+            </div>
+          </div>
+        </div>
+
+        <form class="form reveal" id="waForm" data-phone={site.phoneRaw} style="--d:100ms">
+          <div><label for="n" data-i18n="con.name">Your name</label><input id="n" name="name" required /></div>
+          <div><label for="e" data-i18n="con.email">Email</label><input id="e" name="email" type="email" required /></div>
+          <div>
+            <label for="s" data-i18n="con.subject">Subject</label>
+            <select id="s" name="subject">
+              <option>Reader Message</option><option>Interview Request</option>
+              <option>Collaboration</option><option>Bulk / Bookstore Order</option>
+              <option>Translation Rights</option><option>Other</option>
+            </select>
+          </div>
+          <div><label for="m" data-i18n="con.msg">Message</label><textarea id="m" name="message" required></textarea></div>
+          <button class="btn solid" type="submit" data-i18n="con.send">Send via WhatsApp →</button>
+          <p class="note" data-i18n="con.note">Opens in WhatsApp — nothing is stored on this website.</p>
+        </form>
+      </div>
+
+      <div class="subscribe reveal">
+        <span class="label mark">The list</span>
+        <h3 style="margin:.5rem 0 .4rem" data-i18n="news.title">Get notified of new books</h3>
+        <p data-i18n="news.sub">One short email when a new book goes live. No spam, unsubscribe anytime.</p>
+        <form class="sub-form" id="newsForm" data-phone={site.phoneRaw}>
+          <label class="sr-only" for="newsEmail">Email address</label>
+          <input id="newsEmail" name="email" type="email" required placeholder="you@example.com"
+            data-i18n="news.ph" data-i18n-attr="placeholder" />
+          <button class="btn solid" type="submit" data-i18n="news.btn">Subscribe</button>
+        </form>
+        <p class="note" id="newsNote" data-i18n="news.note">Free forever. Unsubscribe in one click.</p>
+      </div>
+    </div>
+  </section>
+
+  <img class="peek" id="peek" alt="" aria-hidden="true" />
 </Base>

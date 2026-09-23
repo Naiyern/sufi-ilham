@@ -37,9 +37,9 @@ const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.r
 
     <div class="wrap s-hero-in">
       <p class="crumb"><a href={`${base}/`}>Home</a> · <a href={`${base}/#series`}>Series</a></p>
-      <div class="sec-tag" style="color:var(--accent)">{list.length}-Book Series</div>
+      <span class="label mark">{list.length}-Book Series</span>
       <h1>{s.tagline}</h1>
-      <p class="sec-sub">{s.lede}</p>
+      <p class="lede" style="margin-top:1rem">{s.lede}</p>
 
       <div class="s-facts">
         <div><b>{out.length}</b><span>Available now</span></div>
@@ -48,8 +48,8 @@ const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.r
         <div><b>{out.filter((b) => b.ku).length}</b><span>On Kindle Unlimited</span></div>
       </div>
 
-      <div class="hero-cta">
-        {hero?.us && <a class="btn pri" href={hero.us} target="_blank" rel="noopener">Start with Book 1 →</a>}
+      <div class="cover-cta">
+        {hero?.us && <a class="btn solid" href={hero.us} target="_blank" rel="noopener">Start with Book 1 →</a>}
         <a class="btn" href="#order">Reading order</a>
       </div>
     </div>
@@ -58,9 +58,9 @@ const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.r
   <section id="order" style={`--accent:${s.accent}`}>
     <div class="wrap">
       <div class="reveal">
-        <div class="sec-tag" style="color:var(--accent)">Reading order</div>
-        <h2>Read them <em>in sequence</em></h2>
-        <p class="sec-sub">{s.note}</p>
+        <span class="label mark">Reading order</span>
+        <h2 style="margin:.5rem 0 1rem">Read them in sequence</h2>
+        <p class="lede">{s.note}</p>
       </div>
 
       <ol class="s-track reveal">
@@ -72,9 +72,9 @@ const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.r
               <p>{b.blurb}</p>
               <div class="s-meta">
                 {b.comingSoon
-                  ? <span class="tag-soon">Coming soon</span>
+                  ? <span>Forthcoming</span>
                   : <>
-                      {b.ku && <span class="tag-ku">Kindle Unlimited</span>}
+                      {b.ku && <span>Kindle Unlimited</span>}
                       {b.pages && <span>{b.pages} pages</span>}
                       {b.us && <a href={b.us} target="_blank" rel="noopener">Amazon ↗</a>}
                     </>}
@@ -84,7 +84,7 @@ const heroImg = hero?.img.startsWith('http') ? hero.img : `${base}/${hero?.img.r
         ))}
       </ol>
 
-      <div class="grid" style="margin-top:4.5rem">
+      <div class="shelf-scroll" style="margin-top:3.5rem">
         {list.map((b, i) => <BookCard book={b} delay={i * 60} />)}
       </div>
 

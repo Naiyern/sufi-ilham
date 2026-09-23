@@ -40,14 +40,14 @@ const jsonld = [
   <div class="bp-bar" id="bpBar"></div>
   <section style="padding-top:9rem" id="bookBody">
     <div class="wrap">
-      <p style="font-size:.82rem;color:var(--fg-mute)">
+      <p class="crumb">
         <a href={`${base}/`}>Home</a> · <a href={`${base}/#books`}>Books</a> · {book.title}
       </p>
 
-      <div class="about-grid" style="margin-top:2rem;align-items:start">
+      <div class="bp-grid" style="margin-top:2rem">
         <div class="reveal in">
           <img src={img} alt={`${book.title} cover`} width="400" height="600"
-            style="border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)" />
+            style="border:1px solid var(--rule)" />
           <div class="buy-row">
             {stores.filter(([, u]) => u).map(([l, u], i) => (
               <a class={`btn${i === 0 ? ' pri' : ''}`} href={u} target="_blank" rel="noopener">{l}</a>
@@ -56,11 +56,11 @@ const jsonld = [
         </div>
 
         <div class="reveal in">
-          {book.kicker && <div class="sec-tag">{book.kicker}</div>}
+          {book.kicker && <span class="label mark">{book.kicker}</span>}
           <h1 style="font-size:clamp(2.1rem,5vw,3.6rem)">{book.title}</h1>
-          {book.sub && <p class="sub" style="font-family:var(--serif);font-style:italic;color:var(--gold);font-size:1.15rem;margin-top:.8rem">{book.sub}</p>}
-          {book.quote && <p class="about-creed">{book.quote}</p>}
-          <ul class="meta" style="margin:1.6rem 0">
+          {book.sub && <p style="font-family:var(--display);font-style:italic;font-size:1.25rem;margin-top:.6rem;color:var(--ink-2)">{book.sub}</p>}
+          {book.quote && <p class="pull">{book.quote}</p>}
+          <ul class="specs" style="margin:1.6rem 0">
             {(book.spec ?? []).map((s) => <li>{s}</li>)}
           </ul>
           <div class="desc" set:html={book.desc} />
@@ -75,9 +75,9 @@ const jsonld = [
 
       {related.length > 0 && (
         <div style="margin-top:6rem">
-          <div class="sec-tag">Keep reading</div>
+          <span class="label mark">Keep reading</span>
           <h2>{book.series ? 'More in this series' : 'You may also like'}</h2>
-          <div class="grid" style="margin-top:2.4rem">
+          <div class="shelf-scroll" style="margin-top:1.6rem">
             {related.map((b, i) => <BookCard book={b} delay={i * 70} />)}
           </div>
         </div>

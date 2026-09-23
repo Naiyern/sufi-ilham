@@ -20,14 +20,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href.repla
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
-    <meta name="theme-color" content="#07070a" />
+    <meta name="theme-color" content="#f3f0e9" />
     <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content={type} />
@@ -55,8 +55,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href.repla
       (() => {
         const t = localStorage.getItem('theme');
         if (t) document.documentElement.dataset.theme = t;
-        else if (window.matchMedia('(prefers-color-scheme: light)').matches)
-          document.documentElement.dataset.theme = 'light';
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+          document.documentElement.dataset.theme = 'dark';
       })();
     </script>
   </head>

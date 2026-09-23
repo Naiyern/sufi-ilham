@@ -5,11 +5,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 <Base title="Page not found — Sufi Ilham" description="This page does not exist.">
   <section style="min-height:70svh;display:grid;place-items:center;text-align:center">
     <div class="wrap">
-      <div class="sec-tag" style="justify-content:center">404</div>
+      <span class="label mark">Error 404</span>
       <h1 style="font-size:clamp(2.6rem,8vw,6rem)">The map is <em>not the country</em></h1>
-      <p class="sec-sub" style="margin-inline:auto">This page wandered off. The library, however, is exactly where you left it.</p>
-      <div class="hero-cta" style="justify-content:center">
-        <a class="btn pri" href={`${base}/`}>Back home</a>
+      <p class="lede" style="margin:1rem auto 0">This page wandered off. The library, however, is exactly where you left it.</p>
+      <div class="cover-cta" style="justify-content:center;margin-top:1.6rem">
+        <a class="btn solid" href={`${base}/`}>Back home</a>
         <a class="btn" href={`${base}/#books`}>Browse books</a>
       </div>
     </div>

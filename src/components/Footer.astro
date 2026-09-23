@@ -1,64 +1,58 @@
 ---
-import { site, books, seriesBooks } from '../data/site';
+import { site, books, series } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const single = books.filter((b) => !b.series).slice(0, 8);
-const cols = [
-  { h: 'Books', items: single.map((b) => ({ label: b.title, href: `${base}/books/${b.slug}` })) },
-  {
-    h: 'Series',
-    items: [
-      ...seriesBooks('maple').slice(0, 2).map((b) => ({ label: b.title, href: `${base}/books/${b.slug}` })),
-      { label: 'Maple Falls Romance', href: `${base}/series/maple` },
-      { label: 'The Tithe Crown', href: `${base}/series/tithe` },
-      { label: 'Cartographers of Lost Tomorrows', href: `${base}/series/carto` },
-      { label: 'The Song of the Unbroken Sky', href: `${base}/series/song` },
-    ],
-  },
-  {
-    h: 'Explore',
-    items: [
-      { label: 'All Books', href: `${base}/#books` },
-      { label: 'About the Author', href: `${base}/#about` },
-      { label: 'Themes', href: `${base}/#themes` },
-      { label: 'Contact', href: `${base}/#contact` },
-      { label: 'Privacy Policy', href: `${base}/privacy` },
-      { label: 'Terms of Use', href: `${base}/terms` },
-      { label: 'RSS Feed', href: `${base}/rss.xml` },
-      { label: 'Amazon Store', href: site.amazonUS },
-    ],
-  },
-];
 ---
 
-<footer>
+<footer class="colophon">
   <div class="wrap">
-    <div class="f-grid">
-      <div class="f-col">
-        <a class="brand" href={`${base}/`} style="margin-bottom:1.1rem">
-          <span class="brand-mark">S</span>
-          <span class="brand-txt"><b>Sufi Ilham</b><span>Author</span></span>
+    <div class="colo-grid">
+      <div class="colo">
+        <a class="logo" href={`${base}/`} style="margin-bottom:1rem">
+          <b>Sufi Ilham</b><span class="est">MD Naiyer Alam</span>
         </a>
-        <p style="font-size:.88rem;max-width:34ch">
+        <p style="font-size:.9rem;max-width:36ch" data-i18n="foot.about">
           Books on belief, time, attention and the freedom that waits on the other side of conditioning.
           Available worldwide on Amazon in Kindle and paperback.
         </p>
-        <p style="font-size:.84rem">
-          <a href={`tel:+${site.phoneRaw}`}>☏ &nbsp;{site.phone}</a><br />
-          <a href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">✆ &nbsp;WhatsApp</a><br />
-          <a href={site.instagram} target="_blank" rel="noopener">◎ &nbsp;@Sufiilham07</a><br />
-          ◈ &nbsp;{site.location}
+        <p class="note" style="margin-top:1.2rem">
+          <a href={`tel:+${site.phoneRaw}`}>{site.phone}</a><br />
+          <a href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">WhatsApp</a> ·
+          <a href={site.instagram} target="_blank" rel="noopener">@Sufiilham07</a><br />
+          {site.location}
         </p>
       </div>
-      {cols.map((c) => (
-        <div class="f-col">
-          <h4>{c.h}</h4>
-          <ul>{c.items.map((i) => <li><a href={i.href}>{i.label}</a></li>)}</ul>
-        </div>
-      ))}
+
+      <div class="colo">
+        <h4 data-i18n="foot.books">Selected works</h4>
+        <ul>{single.map((b) => <li><a href={`${base}/books/${b.slug}`}>{b.title}</a></li>)}</ul>
+      </div>
+
+      <div class="colo">
+        <h4>Series</h4>
+        <ul>
+          {series.map((s) => <li><a href={`${base}/series/${s.id}`}>{s.name}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="colo">
+        <h4 data-i18n="foot.explore">Explore</h4>
+        <ul>
+          <li><a href={`${base}/#index`}>The index</a></li>
+          <li><a href={`${base}/#essay`} data-i18n="foot.aboutl">The author</a></li>
+          <li><a href={`${base}/#figures`}>Themes</a></li>
+          <li><a href={`${base}/contact`} data-i18n="foot.msg">Enquiries</a></li>
+          <li><a href={`${base}/rss.xml`}>RSS feed</a></li>
+          <li><a href={site.amazonUS} target="_blank" rel="noopener" data-i18n="nav.store">Amazon store</a></li>
+          <li><a href={`${base}/privacy`} data-i18n="foot.privacy">Privacy</a></li>
+          <li><a href={`${base}/terms`} data-i18n="foot.terms">Terms</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="f-bot">
-      <span>© {new Date().getFullYear()} Sufi Ilham (MD Naiyer Alam). All rights reserved.</span>
-      <span><a href={`${base}/privacy`}>Privacy</a> · <a href={`${base}/terms`}>Terms</a></span>
+
+    <div class="colo-bot">
+      <span>© {new Date().getFullYear()} Sufi Ilham · All rights reserved</span>
+      <span>Set in Instrument Serif, Newsreader &amp; IBM Plex Mono</span>
     </div>
   </div>
 </footer>

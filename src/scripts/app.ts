@@ -11,7 +11,7 @@ const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document
 const themeBtn = $('#themeBtn');
 themeBtn?.addEventListener('click', () => {
   const root = document.documentElement;
-  const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+  const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
   root.dataset.theme = next;
   localStorage.setItem('theme', next);
 });
@@ -92,26 +92,27 @@ const counters = new IntersectionObserver(
 );
 $$('[data-count]').forEach((el) => counters.observe(el));
 
-/* ---------- book filter + search ---------- */
+/* ---------- ledger filter + count ---------- */
 const grid = $('#bookGrid');
 if (grid) {
-  const cards = $$('.card', grid);
-  const chips = $$('.chip[data-filter]');
+  const rows = $$('.lrow', grid);
+  const chips = $$('.fbtn[data-filter]');
   const search = $<HTMLInputElement>('#bookSearch');
   const empty = $('#bookEmpty');
+  const count = $('#fcount');
   let filter = 'all';
 
   const apply = () => {
     const q = (search?.value || '').trim().toLowerCase();
     let shown = 0;
-    cards.forEach((c) => {
-      const tags = c.dataset.tags || '';
-      const title = c.dataset.title || '';
-      const ok = (filter === 'all' || tags.includes(filter)) && (!q || title.includes(q));
+    rows.forEach((c) => {
+      const ok = (filter === 'all' || (c.dataset.tags || '').includes(filter)) &&
+                 (!q || (c.dataset.title || '').includes(q));
       c.style.display = ok ? '' : 'none';
       if (ok) shown++;
     });
     if (empty) empty.style.display = shown ? 'none' : '';
+    if (count) count.textContent = `${shown} shown`;
   };
 
   chips.forEach((chip) =>
@@ -123,6 +124,38 @@ if (grid) {
     }),
   );
   search?.addEventListener('input', apply);
+
+  /* open modal from a ledger row */
+  rows.forEach((r) => {
+    r.addEventListener('click', () => r.classList.add('js-open'));
+    r.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+        e.preventDefault();
+        (r as HTMLElement).click();
+      }
+    });
+  });
+
+  /* cursor-following cover preview */
+  const peek = $<HTMLImageElement>('#peek');
+  if (peek && matchMedia('(hover:hover)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let raf = 0, x = 0, y = 0;
+    const move = () => { peek.style.left = x + 'px'; peek.style.top = y + 'px'; raf = 0; };
+    rows.forEach((r) => {
+      r.addEventListener('pointerenter', () => {
+        const c = r.dataset.cover;
+        if (!c) return;
+        peek.src = c;
+        peek.classList.add('on');
+      });
+      r.addEventListener('pointerleave', () => peek.classList.remove('on'));
+    });
+    grid.addEventListener('pointermove', (e) => {
+      x = (e as PointerEvent).clientX + 90;
+      y = (e as PointerEvent).clientY;
+      if (!raf) raf = requestAnimationFrame(move);
+    });
+  }
 }
 
 /* ---------- modal ---------- */
@@ -167,7 +200,7 @@ const closeModal = () => {
 
 document.addEventListener('click', (e) => {
   const t = e.target as HTMLElement;
-  if (t.closest('.js-open')) {
+  if (t.closest('.js-open') || t.closest('.lrow')) {
     const card = t.closest('[data-book]') as HTMLElement | null;
     if (card?.dataset.book) openModal(JSON.parse(card.dataset.book));
   }
@@ -210,7 +243,7 @@ initCmdk();
 
 /* ---------- 3D tilt on book covers ---------- */
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(hover:hover)').matches) {
-  $$('.card').forEach((c) => {
+  $$('.spine').forEach((c) => {
     const el = c as HTMLElement;
     el.addEventListener('pointermove', (e) => {
       const r = el.getBoundingClientRect();
@@ -218,7 +251,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(hove
       const py = (e as PointerEvent).clientY - r.top;
       const rx = ((py / r.height) - 0.5) * -7;
       const ry = ((px / r.width) - 0.5) * 7;
-      el.style.transform = `translateY(-7px) perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
     });
     el.addEventListener('pointerleave', () => { el.style.transform = ''; });
   });
