@@ -4,7 +4,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 interface Props { book: Book; delay?: number }
 const { book, delay = 0 } = Astro.props;
 const src = book.img.startsWith('http') ? book.img : `${base}/${book.img.replace(/^\//, '')}`;
-const blurb = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 132);
+const blurb = book.blurb ?? (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 132) + '…';
 const tags = [book.genre, book.ku ? 'ku' : '', book.series ?? ''].filter(Boolean).join(' ');
 ---
 
@@ -22,7 +22,7 @@ const tags = [book.genre, book.ku ? 'ku' : '', book.series ?? ''].filter(Boolean
   <div class="card-body">
     {book.kicker && <div class="kicker">{book.kicker}</div>}
     <h3 class="js-open">{book.title}</h3>
-    <p>{blurb}…</p>
+    <p>{blurb}</p>
     <ul class="meta">
       {book.ku && <li class="ku">Kindle Unlimited</li>}
       {book.pages && <li>{book.pages} Pages</li>}

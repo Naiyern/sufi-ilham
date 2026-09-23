@@ -1,0 +1,48 @@
+---
+import { bookBySlug } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const b = bookBySlug('the-spare-key-summer')!;
+const src = b.img.startsWith('http') ? b.img : `${base}/${b.img.replace(/^\//, '')}`;
+const tags = ['Standalone Novel', 'Contemporary Romance', 'Slow-Burn', 'Milwaukee'];
+---
+
+<section class="sparekey" id="spare-key">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;max-width:64ch;margin-inline:auto">
+      <div class="sec-tag" style="justify-content:center" data-i18n="s1">Standalone Novel · Contemporary Romance</div>
+      <h2 data-i18n="s2">One summer. <em>One spare key.</em></h2>
+      <p class="sec-sub" style="margin-inline:auto" data-i18n="s3">
+        A warm, slow-burn contemporary romance about second chances, family, ambition and belonging —
+        <strong>a standalone novel</strong>: no series, no cliffhanger, one complete summer in Milwaukee.
+      </p>
+    </div>
+
+    <div class="sk-grid" data-book={JSON.stringify(b)}>
+      <div class="feat-cover reveal js-open">
+        <span class="feat-badge">Standalone</span>
+        <img src={src} alt={`${b.title} cover`} width="400" height="600" loading="lazy" />
+      </div>
+
+      <div class="reveal" style="--d:110ms">
+        <div class="kicker">{b.kicker}</div>
+        <h3 style="font-size:clamp(1.6rem,3vw,2.3rem)">{b.title}</h3>
+        <p class="q">
+          “She came home to help her mother sell the laundromat. She didn’t expect to find a reason to stay.”
+        </p>
+        <p>
+          <b>Nora Sullivan</b> returns to Milwaukee after losing the job she thought she had finally earned. She
+          plans to stay only for the summer while helping her mother sell the family laundromat.
+        </p>
+        <p>
+          Then she meets <b>Eli Mercer</b>, who repairs appliances behind the laundromat and wants to keep the
+          neighborhood alive.
+        </p>
+        <ul class="meta">{tags.map((t) => <li>{t}</li>)}</ul>
+        <div class="hero-cta">
+          <button class="btn pri js-open" type="button" data-i18n="card.more">Read More</button>
+          {b.us && <a class="btn" href={b.us} target="_blank" rel="noopener" data-i18n="card.buy">Amazon</a>}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

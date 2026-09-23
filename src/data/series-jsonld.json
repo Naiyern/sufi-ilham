@@ -1,0 +1,326 @@
+{
+ "maple": {
+  "@context": "https://schema.org",
+  "@type": "BookSeries",
+  "name": "Maple Falls Romance",
+  "url": "https://www.amazon.com/dp/B0H7Q6GQPV",
+  "author": {
+   "@type": "Person",
+   "name": "Sufi Ilham",
+   "alternateName": "MD Naiyer Alam"
+  },
+  "numberOfItems": 5,
+  "description": "Five small-town romances set in Maple Falls, Vermont — a town at the end of a maple-lined street where every love story gets the happily-ever-after it deserves.",
+  "hasPart": [
+   {
+    "@type": "Book",
+    "position": 1,
+    "name": "The Bookshop at the End of Maple Street",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HDSLBTX7"
+    },
+    "url": "https://www.amazon.com/dp/B0HDSLBTX7",
+    "numberOfPages": 123,
+    "datePublished": "2026-08-17",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 2,
+    "name": "A Recipe for Maple Falls",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HFKCQXS4"
+    },
+    "url": "https://www.amazon.com/dp/B0HFKCQXS4",
+    "numberOfPages": 76,
+    "datePublished": "2026-08-17",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 3,
+    "name": "The Christmas Letters of Maple Falls",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HFMFQW2C"
+    },
+    "url": "https://www.amazon.com/dp/B0HFMFQW2C",
+    "numberOfPages": 78,
+    "datePublished": "2026-08-18",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 4,
+    "name": "A Second Chance in Maple Falls",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HFP1KFF1"
+    },
+    "url": "https://www.amazon.com/dp/B0HFP1KFF1",
+    "numberOfPages": 68,
+    "datePublished": "2026-08-18",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 5,
+    "name": "A Wedding at the End of Maple Street",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HFNWTV82"
+    },
+    "url": "https://www.amazon.com/dp/B0HFNWTV82",
+    "numberOfPages": 76,
+    "datePublished": "2026-08-18",
+    "inLanguage": "en"
+   }
+  ]
+ },
+ "tithe": {
+  "@context": "https://schema.org",
+  "@type": "BookSeries",
+  "name": "The Tithe Crown",
+  "url": "https://www.amazon.com/dp/B0HGBX47WJ",
+  "author": {
+   "@type": "Person",
+   "name": "Sufi Ilham",
+   "alternateName": "MD Naiyer Alam"
+  },
+  "numberOfItems": 3,
+  "description": "A complete dark gothic romantasy trilogy. The Crown cuts magic from any soul that will not declare it — and sends its collectors after every shadow that hides. Enemies to lovers, forced proximity, and a slow burn that only opens once it has cost them something.",
+  "hasPart": [
+   {
+    "@type": "Book",
+    "position": 1,
+    "name": "The Shadow Tithe: A Dark Gothic Romantasy",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HGBM3WX2"
+    },
+    "url": "https://www.amazon.com/dp/B0HGBM3WX2",
+    "numberOfPages": 222,
+    "datePublished": "2026-08-24",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 2,
+    "name": "The Sea Tithe: A Dark Gothic Romantasy",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HGF5G8QM"
+    },
+    "url": "https://www.amazon.com/dp/B0HGF5G8QM",
+    "numberOfPages": 247,
+    "datePublished": "2026-08-25",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 3,
+    "name": "The Crown Always Owns: A Dark Gothic Romantasy",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HGG8N7VD"
+    },
+    "url": "https://www.amazon.com/dp/B0HGG8N7VD",
+    "numberOfPages": 260,
+    "datePublished": "2026-08-25",
+    "inLanguage": "en"
+   }
+  ]
+ },
+ "carto": {
+  "@context": "https://schema.org",
+  "@type": "BookSeries",
+  "name": "The Cartographers of Lost Tomorrows",
+  "url": "https://www.amazon.com/dp/B0HJHF6Y1P",
+  "author": {
+   "@type": "Person",
+   "name": "Sufi Ilham",
+   "alternateName": "MD Naiyer Alam"
+  },
+  "numberOfItems": 7,
+  "description": "Seven books. One harbor. Two hundred years of kept promises — and every one of them is coming due. A slow-burn romance and impossible mystery: chart-restorer Cassia Merel, a map that predicts her death, and Elias Rooke, a man dead for twenty-seven years. Books 1–3 available now; Books 4–7 coming soon.",
+  "hasPart": [
+   {
+    "@type": "Book",
+    "position": 1,
+    "name": "The Map of Tomorrow (The Cartographers of Lost Tomorrows Book 1)",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HJH4MH5D"
+    },
+    "url": "https://www.amazon.com/dp/B0HJH4MH5D",
+    "numberOfPages": 272,
+    "datePublished": "2026-09-11",
+    "inLanguage": "en",
+    "description": "Every night, a map appears showing events that have not happened yet. The newest one shows Cassia Merel’s death — and the name Elias Rooke."
+   },
+   {
+    "@type": "Book",
+    "position": 2,
+    "name": "The Tide of Unmade Days (The Cartographers of Lost Tomorrows Book 2)",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HJMJWG6S"
+    },
+    "url": "https://www.amazon.com/dp/B0HJMJWG6S",
+    "numberOfPages": 219,
+    "datePublished": "2026-09-12",
+    "inLanguage": "en",
+    "description": "Saltmere’s unmapped street surfaces with bills for a day no one lived — and a drowned bell scheduled to ring again."
+   },
+   {
+    "@type": "Book",
+    "position": 3,
+    "name": "The Compass of the Dead (The Cartographers of Lost Tomorrows Book 3)",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HJNDGLH1"
+    },
+    "url": "https://www.amazon.com/dp/B0HJNDGLH1",
+    "numberOfPages": 268,
+    "datePublished": "2026-09-13",
+    "inLanguage": "en",
+    "description": "The compass points at anything not yet paid for. Cassia and Elias walk the road of the standing dead."
+   },
+   {
+    "@type": "Book",
+    "position": 4,
+    "name": "The Library of Drowned Days",
+    "author": {
+     "@type": "Person",
+     "name": "Sufi Ilham",
+     "alternateName": "MD Naiyer Alam"
+    },
+    "creativeWorkStatus": "Forthcoming",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 5,
+    "name": "The Seven Unwritten Days",
+    "author": {
+     "@type": "Person",
+     "name": "Sufi Ilham",
+     "alternateName": "MD Naiyer Alam"
+    },
+    "creativeWorkStatus": "Forthcoming",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 6,
+    "name": "The Last Cartographer",
+    "author": {
+     "@type": "Person",
+     "name": "Sufi Ilham",
+     "alternateName": "MD Naiyer Alam"
+    },
+    "creativeWorkStatus": "Forthcoming",
+    "inLanguage": "en"
+   },
+   {
+    "@type": "Book",
+    "position": 7,
+    "name": "The Future We Buried",
+    "author": {
+     "@type": "Person",
+     "name": "Sufi Ilham",
+     "alternateName": "MD Naiyer Alam"
+    },
+    "creativeWorkStatus": "Forthcoming",
+    "inLanguage": "en"
+   }
+  ]
+ },
+ "song": {
+  "@context": "https://schema.org",
+  "@type": "BookSeries",
+  "name": "The Song of the Unbroken Sky",
+  "url": "https://www.amazon.com/dp/B0HHWGYSPL",
+  "author": {
+   "@type": "Person",
+   "name": "Sufi Ilham",
+   "alternateName": "MD Naiyer Alam"
+  },
+  "numberOfItems": 3,
+  "description": "A complete mythic romance trilogy of Valen and Elora — devotion, destiny, and the melody that awakens the living earth. From the valley of Sunspire to the wall-less citadel of Aethelgard and the Sovereign Song.",
+  "hasPart": [
+   {
+    "@type": "Book",
+    "position": 1,
+    "name": "The Eden of Sunspire: A Mythic Novel of Transcendent Romance (The Song of the Unbroken Sky Book 1)",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HHZN5D7P"
+    },
+    "url": "https://www.amazon.com/dp/B0HHZN5D7P",
+    "numberOfPages": 96,
+    "datePublished": "2026-09-06",
+    "inLanguage": "en",
+    "description": "In the valley of Sunspire, Valen’s flute can calm shadow serpents — and his bond with Elora is a sanctuary against the dark."
+   },
+   {
+    "@type": "Book",
+    "position": 2,
+    "name": "The Citadel of Sapphire Seas: A Saga of Sovereign Wisdom & Eternal Devotion (The Song of the Unbroken Sky Book 2)",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HJ1JQRMT"
+    },
+    "url": "https://www.amazon.com/dp/B0HJ1JQRMT",
+    "numberOfPages": 93,
+    "datePublished": "2026-09-07",
+    "inLanguage": "en",
+    "description": "King Valen rules a wall-less city of peace — until Master Theron arrives with twelve wagons of scrolls."
+   },
+   {
+    "@type": "Book",
+    "position": 3,
+    "name": "The Chariot of Peace: The Supreme Finale of Cosmic Harmony & Transcendent Love (The Song of the Unbroken Sky Book 3)",
+    "bookFormat": "https://schema.org/EBook",
+    "identifier": {
+     "@type": "PropertyValue",
+     "propertyID": "ASIN",
+     "value": "B0HJ1R5LY6"
+    },
+    "url": "https://www.amazon.com/dp/B0HJ1R5LY6",
+    "numberOfPages": 80,
+    "datePublished": "2026-09-07",
+    "inLanguage": "en",
+    "description": "On the Plain of Sundered Vows, Arjan casts down his bow — and time itself stops for the Sovereign Song."
+   }
+  ]
+ }
+}

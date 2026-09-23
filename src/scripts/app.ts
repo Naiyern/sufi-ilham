@@ -187,6 +187,20 @@ form?.addEventListener('submit', (e) => {
   open(`https://wa.me/${form.dataset.phone}?text=${msg}`, '_blank', 'noopener');
 });
 
+/* ---------- newsletter -> WhatsApp opt-in ---------- */
+const news = $<HTMLFormElement>('#newsForm');
+news?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = (new FormData(news).get('email') || '').toString().trim();
+  if (!email) return;
+  (window as any).plausible?.('Newsletter Signup');
+  const msg = `Hello Sufi Ilham,%0A%0APlease add me to your new-release list.%0AEmail: ${encodeURIComponent(email)}`;
+  open(`https://wa.me/${news.dataset.phone}?text=${msg}`, '_blank', 'noopener');
+  const note = $('#newsNote');
+  if (note) note.textContent = 'Thanks — confirm the message in WhatsApp and you are on the list.';
+  news.reset();
+});
+
 /* ---------- language, soundtrack, Amazon interstitial ---------- */
 initLang();
 initGo();

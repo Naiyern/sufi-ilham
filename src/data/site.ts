@@ -22,6 +22,7 @@ export type Book = {
   genre?: string;
   ku?: boolean;
   pages?: number | null;
+  blurb?: string;
 };
 
 export const books = booksRaw as Book[];
@@ -37,6 +38,7 @@ export type Series = {
   id: NonNullable<Book['series']>;
   name: string;
   tagline: string;
+  hook?: string;
   lede: string;
   accent: string;
   note: string;
@@ -47,6 +49,7 @@ export const series: Series[] = [
     id: 'maple',
     name: 'The Maple Falls Romance Series',
     tagline: 'Five love stories. One town that never lets go.',
+    hook: 'Some towns change your life. This one will steal your heart.',
     lede:
       'Welcome to Maple Falls, Vermont — a small town at the end of a maple-lined street, where the bookshop keeps its lights on, the bakery keeps its ovens warm, and every love story gets the happily-ever-after it deserves.',
     accent: '#c9713f',
@@ -61,11 +64,11 @@ export const series: Series[] = [
       'A completed adult gothic dark romantasy trilogy. The Crown cuts magic out of a soul that will not declare it — and sends its collectors to hunt down every shadow that hides.',
     accent: '#8d6bd6',
     note:
-      'Enemies to lovers. Forced proximity. A morally grey collector who falls first. Obsessive devotion. A slow burn that turns open-door only after it costs them something — all three books free on Kindle Unlimited.',
+      'Enemies to lovers. Forced proximity. A morally grey collector who falls first. Obsessive devotion. Touch-her-and-die stakes. A slow burn that turns open-door only after it costs them something — and all three books are free to read on Kindle Unlimited.',
   },
   {
     id: 'carto',
-    name: 'The Cartographers of Lost Tomorrows',
+    name: 'The Cartographers of Lost Tomorrows · A Seven-Book Saga',
     tagline: 'Seven books. One harbor.',
     lede:
       'A slow-burn romance and impossible mystery in a fog-bound harbor city that files its secrets under water. Chart-restorer Cassia Merel finds a map that predicts her own death — and the name of Elias Rooke, a man officially dead for twenty-seven years.',

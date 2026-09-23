@@ -21,7 +21,8 @@
   "slug": "the-human-operating-manual",
   "genre": "self-help",
   "ku": true,
-  "pages": 383
+  "pages": 383,
+  "blurb": "The manual you should have been issued at birth. 111 diagrams, 34 worksheets and 10 system modules that treat your life as a living system of energy, emotion, attention and habit."
  },
  {
   "img": "https://m.media-amazon.com/images/I/61WfbMQaj8L._SL500_.jpg",
@@ -46,7 +47,8 @@
   "slug": "moh-tera-prem-where-attachment-ends-and-love-begins",
   "genre": "philosophy",
   "ku": true,
-  "pages": 211
+  "pages": 211,
+  "blurb": "Moh is the love that grips; prem is the love that asks nothing back. Thirty-two contemplations on the boundary between attachment and love — for the reader awake at 2 a.m."
  },
  {
   "img": "https://m.media-amazon.com/images/I/71Vt++JRxFL._SL500_.jpg",
@@ -71,7 +73,8 @@
   "slug": "prem-the-ancient-path-of-selfless-unconditional-love",
   "genre": "philosophy",
   "ku": true,
-  "pages": 285
+  "pages": 285,
+  "blurb": "The ancient Sanskrit path of selfless, unconditional love — from the bhakti poets, the Sufis, the Upanishads and the Buddha."
  },
  {
   "img": "images/cover-laozi.jpg",
@@ -95,7 +98,8 @@
   "slug": "laozi-the-man-who-disappeared-into-the-dao",
   "genre": "philosophy",
   "ku": false,
-  "pages": 318
+  "pages": 318,
+  "blurb": "A biography of a man whose historical footprint is almost invisible and whose philosophical shadow stretches across two and a half millennia — with a guided reading of the Daodejing in twelve movements."
  },
  {
   "img": "images/cover-wall-gesture.jpg",
@@ -119,7 +123,8 @@
   "slug": "the-wall-was-a-gesture",
   "genre": "philosophy",
   "ku": false,
-  "pages": 334
+  "pages": 334,
+  "blurb": "A philosophical work in twenty-two chapters — from the quiet sense of being a separate self to the peace of seeing that the world was never outside you."
  },
  {
   "img": "images/cover-map-finished.jpg",
@@ -142,7 +147,8 @@
   "slug": "the-map-is-finished",
   "genre": "philosophy",
   "ku": false,
-  "pages": 320
+  "pages": 320,
+  "blurb": "\"The map is not the country. Walk until you know the difference.\" One continuous journey in twenty chapters through attention, freedom, and what remains when the map ends."
  },
  {
   "img": "images/cover-neurofocus.jpg",
@@ -165,7 +171,8 @@
   "slug": "neurofocus-protocol",
   "genre": "self-help",
   "ku": false,
-  "pages": 362
+  "pages": 362,
+  "blurb": "Uncover the hidden strengths of ADHD — creativity, fast thinking, hyperfocus — and design a life that works with your brain instead of against it."
  },
  {
   "img": "images/cover-fractured-time.jpg",
@@ -188,7 +195,8 @@
   "slug": "fractured-time",
   "genre": "philosophy",
   "ku": true,
-  "pages": 56
+  "pages": 56,
+  "blurb": "What if time isn't real — but a beautiful lie you've been hypnotized into believing? A bold unraveling of one of the greatest illusions you've ever lived by."
  },
  {
   "img": "images/cover-belief-unveiled.jpg",
@@ -211,7 +219,8 @@
   "slug": "belief-unveiled",
   "genre": "self-help",
   "ku": true,
-  "pages": 66
+  "pages": 66,
+  "blurb": "A journey into the hidden architecture of your mind, revealing how unconscious beliefs silently dictate your reality — and exactly how to rewrite them."
  },
  {
   "img": "images/cover-infinite-classroom.jpg",
@@ -235,7 +244,8 @@
   "slug": "the-infinite-classroom",
   "genre": "self-help",
   "ku": true,
-  "pages": 76
+  "pages": 76,
+  "blurb": "Life never stopped teaching — most of us simply stopped attending. A journey of learning from birth to beyond, for those brave enough to turn the page."
  },
  {
   "img": "https://m.media-amazon.com/images/I/71gTrLsy6aL._SL500_.jpg",
@@ -260,7 +270,8 @@
   "slug": "the-river-s-portion",
   "genre": "fiction",
   "ku": true,
-  "pages": 243
+  "pages": 243,
+  "blurb": "A relic authenticator and a face-restorer in the city of Nahrabad, a pressed flower in a Qur’an, and a house that still remembers the flood of 2002."
  },
  {
   "img": "https://m.media-amazon.com/images/I/91XMirDKUwL._SL500_.jpg",
@@ -286,7 +297,8 @@
   "order": 1,
   "genre": "romance",
   "ku": true,
-  "pages": 123
+  "pages": 123,
+  "blurb": "A burned-out Manhattan editor inherits her late aunt’s failing bookshop — and collides with the grumpy carpenter who has loved the place his whole life."
  },
  {
   "img": "https://m.media-amazon.com/images/I/81HRS8UyYoL._SL500_.jpg",
@@ -312,7 +324,8 @@
   "order": 2,
   "genre": "romance",
   "ku": true,
-  "pages": 76
+  "pages": 76,
+  "blurb": "A fallen food critic, the small-town baker he once destroyed, and one perfect pear cardamom pie that undoes thirty years of silence."
  },
  {
   "img": "https://m.media-amazon.com/images/I/81qJ58Ir9ML._SL500_.jpg",
@@ -338,7 +351,8 @@
   "order": 3,
   "genre": "romance",
   "ku": true,
-  "pages": 78
+  "pages": 78,
+  "blurb": "A city girl who always leaves, a single-dad dairy farmer who never does, and a seven-year-old’s letter to Santa asking for someone who will stay."
  },
  {
   "img": "https://m.media-amazon.com/images/I/81LSKY1mO3L._SL500_.jpg",
@@ -364,7 +378,8 @@
   "order": 4,
   "genre": "romance",
   "ku": true,
-  "pages": 68
+  "pages": 68,
+  "blurb": "Ten years after he left for Silicon Valley, he’s back with city shoes and a second chance. She’s not sure she wants to give it."
  },
  {
   "img": "https://m.media-amazon.com/images/I/81hpEU1wgBL._SL500_.jpg",
@@ -390,7 +405,8 @@
   "order": 5,
   "genre": "romance",
   "ku": true,
-  "pages": 76
+  "pages": 76,
+  "blurb": "A wedding planner who doesn’t believe in her own love story, and the fire chief who stopped believing in weddings eight years ago."
  },
  {
   "img": "https://m.media-amazon.com/images/I/71djkfV-EjL._SL500_.jpg",
@@ -416,7 +432,8 @@
   "order": 1,
   "genre": "romantasy",
   "ku": true,
-  "pages": 222
+  "pages": 222,
+  "blurb": "A forger who hides magic from the Crown, and the collector sent to hunt her — bound together by a gold seal that neither of them chose."
  },
  {
   "img": "https://m.media-amazon.com/images/I/41RmGxerMvL._SL500_.jpg",
@@ -442,7 +459,8 @@
   "order": 2,
   "genre": "romantasy",
   "ku": true,
-  "pages": 247
+  "pages": 247,
+  "blurb": "On the run with the bond that follows them everywhere, Neris and Calden are hunted by the woman who taught the Tithe its manners."
  },
  {
   "img": "https://m.media-amazon.com/images/I/61MbpIlhokL._SL500_.jpg",
@@ -468,7 +486,8 @@
   "order": 3,
   "genre": "romantasy",
   "ku": true,
-  "pages": 260
+  "pages": 260,
+  "blurb": "Inland, shadows do not arrive at all. The Crown has never needed permission to own something — and Neris is done asking for one."
  },
  {
   "img": "https://m.media-amazon.com/images/I/41JGSmjfJzL._SL500_.jpg",
@@ -495,7 +514,8 @@
   "order": 1,
   "genre": "fiction",
   "ku": true,
-  "pages": 272
+  "pages": 272,
+  "blurb": "Every night, a map appears showing events that have not happened yet. The newest one shows Cassia’s death — and the name of a man dead for twenty-seven years."
  },
  {
   "img": "https://m.media-amazon.com/images/I/41oqEmb-oEL._SL500_.jpg",
@@ -522,7 +542,8 @@
   "order": 2,
   "genre": "fiction",
   "ku": true,
-  "pages": 219
+  "pages": 219,
+  "blurb": "Saltmere’s unmapped street has surfaced with bills for a day no one lived — and a drowned bell scheduled to ring again."
  },
  {
   "img": "https://m.media-amazon.com/images/I/41QmgEYdQtL._SL500_.jpg",
@@ -549,7 +570,8 @@
   "order": 3,
   "genre": "fiction",
   "ku": true,
-  "pages": 268
+  "pages": 268,
+  "blurb": "The compass points at anything not yet paid for. Cassia and Elias walk the road of the standing dead — and the Trust is waiting with terms."
  },
  {
   "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%20600%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%231b242b%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%230d1216%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%27400%27%20height%3D%27600%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Crect%20x%3D%2722%27%20y%3D%2722%27%20width%3D%27356%27%20height%3D%27556%27%20fill%3D%27none%27%20stroke%3D%27%23e0bb63%27%20stroke-width%3D%271.5%27%20stroke-dasharray%3D%277%206%27%2F%3E%3Ctext%20x%3D%27200%27%20y%3D%27110%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2714%27%20letter-spacing%3D%275%27%20fill%3D%27%23a9cdc2%27%3ECARTOGRAPHERS%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27252%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%27104%27%20fill%3D%27%23e0bb63%27%3EIV%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27348%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3EThe%20Library%20of%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27388%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3EDrowned%20Days%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27492%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2718%27%20letter-spacing%3D%277%27%20fill%3D%27%23a9cdc2%27%3ECOMING%20SOON%3C%2Ftext%3E%3C%2Fsvg%3E",
@@ -570,7 +592,8 @@
   "order": 4,
   "genre": "fiction",
   "ku": false,
-  "pages": null
+  "pages": null,
+  "blurb": "The Library of Drowned Days is the fourth book of The Cartographers of Lost Tomorrows. The saga continues — cover and description to be revealed."
  },
  {
   "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%20600%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%231b242b%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%230d1216%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%27400%27%20height%3D%27600%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Crect%20x%3D%2722%27%20y%3D%2722%27%20width%3D%27356%27%20height%3D%27556%27%20fill%3D%27none%27%20stroke%3D%27%23e0bb63%27%20stroke-width%3D%271.5%27%20stroke-dasharray%3D%277%206%27%2F%3E%3Ctext%20x%3D%27200%27%20y%3D%27110%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2714%27%20letter-spacing%3D%275%27%20fill%3D%27%23a9cdc2%27%3ECARTOGRAPHERS%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27252%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%27104%27%20fill%3D%27%23e0bb63%27%3EV%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27348%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3EThe%20Seven%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27388%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3EUnwritten%20Days%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27492%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2718%27%20letter-spacing%3D%277%27%20fill%3D%27%23a9cdc2%27%3ECOMING%20SOON%3C%2Ftext%3E%3C%2Fsvg%3E",
@@ -591,7 +614,8 @@
   "order": 5,
   "genre": "fiction",
   "ku": false,
-  "pages": null
+  "pages": null,
+  "blurb": "The Seven Unwritten Days is the fifth book of The Cartographers of Lost Tomorrows. The saga continues — cover and description to be revealed."
  },
  {
   "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%20600%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%231b242b%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%230d1216%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%27400%27%20height%3D%27600%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Crect%20x%3D%2722%27%20y%3D%2722%27%20width%3D%27356%27%20height%3D%27556%27%20fill%3D%27none%27%20stroke%3D%27%23e0bb63%27%20stroke-width%3D%271.5%27%20stroke-dasharray%3D%277%206%27%2F%3E%3Ctext%20x%3D%27200%27%20y%3D%27110%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2714%27%20letter-spacing%3D%275%27%20fill%3D%27%23a9cdc2%27%3ECARTOGRAPHERS%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27252%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%27104%27%20fill%3D%27%23e0bb63%27%3EVI%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27348%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3EThe%20Last%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27388%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3ECartographer%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27492%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2718%27%20letter-spacing%3D%277%27%20fill%3D%27%23a9cdc2%27%3ECOMING%20SOON%3C%2Ftext%3E%3C%2Fsvg%3E",
@@ -612,7 +636,8 @@
   "order": 6,
   "genre": "fiction",
   "ku": false,
-  "pages": null
+  "pages": null,
+  "blurb": "The Last Cartographer is the sixth book of The Cartographers of Lost Tomorrows. The saga continues — cover and description to be revealed."
  },
  {
   "img": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20400%20600%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%231b242b%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%230d1216%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%27400%27%20height%3D%27600%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Crect%20x%3D%2722%27%20y%3D%2722%27%20width%3D%27356%27%20height%3D%27556%27%20fill%3D%27none%27%20stroke%3D%27%23e0bb63%27%20stroke-width%3D%271.5%27%20stroke-dasharray%3D%277%206%27%2F%3E%3Ctext%20x%3D%27200%27%20y%3D%27110%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2714%27%20letter-spacing%3D%275%27%20fill%3D%27%23a9cdc2%27%3ECARTOGRAPHERS%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27252%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%27104%27%20fill%3D%27%23e0bb63%27%3EVII%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27348%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3EThe%20Future%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27388%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2727%27%20fill%3D%27%23f6e3a8%27%3EWe%20Buried%3C%2Ftext%3E%3Ctext%20x%3D%27200%27%20y%3D%27492%27%20text-anchor%3D%27middle%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2718%27%20letter-spacing%3D%277%27%20fill%3D%27%23a9cdc2%27%3ECOMING%20SOON%3C%2Ftext%3E%3C%2Fsvg%3E",
@@ -633,7 +658,8 @@
   "order": 7,
   "genre": "fiction",
   "ku": false,
-  "pages": null
+  "pages": null,
+  "blurb": "The Future We Buried is the seventh and final book of The Cartographers of Lost Tomorrows. The saga concludes — cover and description to be revealed."
  },
  {
   "img": "https://m.media-amazon.com/images/I/51wJKfr3-3L._SL500_.jpg",
@@ -659,7 +685,8 @@
   "order": 1,
   "genre": "fiction",
   "ku": true,
-  "pages": 96
+  "pages": 96,
+  "blurb": "In the valley of Sunspire, Valen’s flute can calm shadow serpents — and his bond with Elora is an unbreakable sanctuary against the dark."
  },
  {
   "img": "https://m.media-amazon.com/images/I/51XgasIs7OL._SL500_.jpg",
@@ -685,7 +712,8 @@
   "order": 2,
   "genre": "fiction",
   "ku": true,
-  "pages": 93
+  "pages": 93,
+  "blurb": "King Valen rules a wall-less city of peace — until Master Theron arrives with twelve wagons of scrolls to correct the king’s heart."
  },
  {
   "img": "https://m.media-amazon.com/images/I/51gabGOooOL._SL500_.jpg",
@@ -711,7 +739,8 @@
   "order": 3,
   "genre": "fiction",
   "ku": true,
-  "pages": 80
+  "pages": 80,
+  "blurb": "On the Plain of Sundered Vows, Arjan casts down his bow — and his unarmed charioteer smiles as time itself stops."
  },
  {
   "img": "https://m.media-amazon.com/images/I/810q8v-HH6L._SY342_.jpg",
@@ -738,6 +767,7 @@
   "slug": "the-spare-key-summer",
   "genre": "romance",
   "ku": true,
-  "pages": 234
+  "pages": 234,
+  "blurb": "She came home to help her mother sell the laundromat. She didn’t expect to find a reason to stay — a standalone slow-burn romance set over one Milwaukee summer."
  }
 ]

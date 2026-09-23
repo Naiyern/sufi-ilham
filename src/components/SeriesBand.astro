@@ -12,6 +12,7 @@ const list = seriesBooks(s.id);
     <div class="series-head reveal">
       <div class="sec-tag" style="color:var(--accent)">{s.name}</div>
       <h2>{s.tagline}</h2>
+      {s.hook && <p class="sec-sub" style="font-family:var(--serif);font-style:italic;color:var(--fg)">{s.hook}</p>}
       <p class="sec-sub">{s.lede}</p>
       <p class="sec-sub" style="font-size:.95rem">{s.note}</p>
       <ul class="order-list">

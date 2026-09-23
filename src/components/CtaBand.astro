@@ -1,0 +1,32 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="cta">
+  <div class="wrap reveal" style="text-align:center;max-width:70ch;margin-inline:auto">
+    <div class="sec-tag" style="justify-content:center" data-i18n="cta.tag">Start Reading</div>
+    <h2 data-i18n="cta.head">Begin where the <em>question is loudest</em></h2>
+    <p class="sec-sub" style="margin-inline:auto" data-i18n="cta.sub">
+      Twenty-two titles — every Maple Falls romance, every Tithe Crown novel and all seven new releases — are free
+      to read on Kindle Unlimited. Follow the author on Amazon to get new release updates the moment a book goes live.
+    </p>
+    <div class="hero-cta" style="justify-content:center">
+      <a class="btn pri" href={site.amazonUS} target="_blank" rel="noopener" data-i18n="cta.b1">Amazon.com Store →</a>
+      <a class="btn" href={site.amazonIN} target="_blank" rel="noopener" data-i18n="cta.b2">Amazon.in Store</a>
+    </div>
+
+    <div class="news">
+      <h3 data-i18n="news.title">Get notified of new books</h3>
+      <p data-i18n="news.sub">One short email when a new book goes live. No spam, unsubscribe anytime.</p>
+      <form class="news-form" id="newsForm" data-phone={site.phoneRaw}>
+        <label class="sr-only" for="newsEmail">Email address</label>
+        <input
+          id="newsEmail" name="email" type="email" required
+          placeholder="you@example.com" data-i18n="news.ph" data-i18n-attr="placeholder"
+        />
+        <button class="btn pri" type="submit" data-i18n="news.btn">Subscribe</button>
+      </form>
+      <p class="note" id="newsNote" data-i18n="news.note">Free forever. Unsubscribe in one click.</p>
+    </div>
+  </div>
+</section>

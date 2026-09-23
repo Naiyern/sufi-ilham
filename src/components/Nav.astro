@@ -2,6 +2,7 @@
 import LangSwitch from './LangSwitch.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const links = [
+  { href: `${base}/#featured`, label: 'New Release', key: 'nav.new' },
   { href: `${base}/#books`, label: 'Books', key: 'nav.books' },
   { href: `${base}/#series`, label: 'Series', key: 'nav.series' },
   { href: `${base}/#about`, label: 'About', key: 'nav.about' },
@@ -14,7 +15,7 @@ const links = [
   <div class="wrap nav-in">
     <a class="brand" href={`${base}/`} aria-label="Sufi Ilham — home">
       <span class="brand-mark">S</span>
-      <span class="brand-txt"><b>Sufi Ilham</b><span>Author</span></span>
+      <span class="brand-txt"><b>Sufi Ilham</b><span>Author · Seeker of Truth</span></span>
     </a>
 
     <nav id="menu" aria-label="Primary">

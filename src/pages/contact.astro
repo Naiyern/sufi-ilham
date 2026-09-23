@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base
+  title="Contact — Sufi Ilham"
+  description="Reach Sufi Ilham (MD Naiyer Alam) for reader messages, interviews, collaborations, bulk orders or translation rights."
+>
+  <section style="padding-top:9rem">
+    <div class="wrap contact-grid">
+      <div class="reveal in">
+        <div class="sec-tag" data-i18n="con.tag">Get In Touch</div>
+        <h1 style="font-size:clamp(2.4rem,6vw,4rem)" data-i18n="con.head">Say <em>hello</em></h1>
+        <p class="sec-sub" data-i18n="con.sub">
+          For reader messages, interviews, collaborations, bulk orders or translation rights — reach out directly.
+        </p>
+        <div class="c-list">
+          <a class="c-row" href={`tel:+${site.phoneRaw}`}>
+            <span class="ic">☏</span><span class="tx"><b data-i18n="con.phone">Phone</b><span>{site.phone}</span></span>
+          </a>
+          <a class="c-row" href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">
+            <span class="ic">✆</span><span class="tx"><b data-i18n="con.wa">WhatsApp</b><span data-i18n="con.wad">Message directly</span></span>
+          </a>
+          <a class="c-row" href={site.instagram} target="_blank" rel="noopener">
+            <span class="ic">◎</span><span class="tx"><b>Instagram · Author</b><span>@Sufiilham07</span></span>
+          </a>
+          <a class="c-row" href={site.instagram2} target="_blank" rel="noopener">
+            <span class="ic">◎</span><span class="tx"><b>Instagram · Personal</b><span>@naiyer_fx</span></span>
+          </a>
+          <a class="c-row" href={site.amazonUS} target="_blank" rel="noopener">
+            <span class="ic">✦</span><span class="tx"><b data-i18n="con.store">Amazon Author Store</b><span data-i18n="con.stored">Follow for new releases</span></span>
+          </a>
+          <div class="c-row">
+            <span class="ic">◈</span><span class="tx"><b>Based in {site.location}</b><span data-i18n="con.basedd">Available worldwide</span></span>
+          </div>
+        </div>
+        <p style="margin-top:2rem"><a href={`${base}/`} class="btn">← Back to the site</a></p>
+      </div>
+
+      <form class="form reveal in" id="waForm" data-phone={site.phoneRaw} style="--d:100ms">
+        <div><label for="n" data-i18n="con.name">Your Name</label><input id="n" name="name" required /></div>
+        <div><label for="e" data-i18n="con.email">Email</label><input id="e" name="email" type="email" required /></div>
+        <div>
+          <label for="s" data-i18n="con.subject">Subject</label>
+          <select id="s" name="subject">
+            <option>Reader Message</option>
+            <option>Interview Request</option>
+            <option>Collaboration</option>
+            <option>Bulk / Bookstore Order</option>
+            <option>Translation Rights</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div><label for="m" data-i18n="con.msg">Message</label><textarea id="m" name="message" required></textarea></div>
+        <button class="btn pri" type="submit" data-i18n="con.send">Send via WhatsApp →</button>
+        <p class="note" data-i18n="con.note">
+          Your message opens in WhatsApp — nothing is stored on this website.
+        </p>
+      </form>
+    </div>
+  </section>
+</Base>
