@@ -235,3 +235,14 @@ The Seven Unwritten Days, The Last Cartographer, The Future We Buried.
 
 Phone / WhatsApp: **+91 62017 57330** · Bihar, India · Available worldwide
 Instagram: **@Sufiilham07** (author) · **@naiyer_fx** (personal)
+
+## Main portrait — exact image workflow
+
+The main photo (`public/images/sufi-ilham-portrait.png` / `.jpg` / `.webp`) is always used
+**byte-for-byte as uploaded** — never cropped, resized or AI-processed. It renders full-frame
+at its native ratio on every device.
+
+- Local replace: `node scripts/replace-portrait.mjs /path/to/photo.png` then `npm run build && cp -r dist/. .`
+- GitHub-only replace: copy `docs/rebuild-on-photo-upload.yml` to `.github/workflows/` once
+  (needs repo admin rights); afterwards, uploading a new portrait into `public/images/`
+  rebuilds and deploys the site automatically.

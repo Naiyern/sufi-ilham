@@ -19,16 +19,26 @@ themeBtn?.addEventListener('click', () => {
 const nav = $('#nav');
 const menu = $('#menu');
 const burger = $('#burger');
-burger?.addEventListener('click', () => {
-  const open = menu?.classList.toggle('open');
-  burger.setAttribute('aria-expanded', String(!!open));
+const setMenu = (open: boolean) => {
+  menu?.classList.toggle('open', open);
+  document.body.classList.toggle('menu-open', open);
+  burger?.setAttribute('aria-expanded', String(open));
+};
+burger?.addEventListener('click', () => setMenu(!menu?.classList.contains('open')));
+$$('#menu a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+/* tap on the scrim (or anywhere outside) closes the menu */
+document.addEventListener('click', (e) => {
+  if (!menu?.classList.contains('open')) return;
+  const t = e.target as Node;
+  if (menu.contains(t) || (burger && burger.contains(t))) return;
+  setMenu(false);
 });
-$$('#menu a').forEach((a) =>
-  a.addEventListener('click', () => {
-    menu?.classList.remove('open');
-    burger?.setAttribute('aria-expanded', 'false');
-  }),
-);
+addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') setMenu(false);
+});
+addEventListener('resize', () => {
+  if (window.innerWidth > 1000) setMenu(false);
+});
 
 /* ---------- scroll: progress, sticky nav, to-top ---------- */
 const progress = $('#progress');

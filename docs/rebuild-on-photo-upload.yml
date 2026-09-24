@@ -1,0 +1,56 @@
+# When a new main portrait is uploaded to public/images/ (via GitHub web UI
+# or any push), rebuild the static site and sync the build output to the
+# repository root (GitHub Pages serves the root, and dist/ is gitignored).
+# The photo itself is never modified — it is served byte-for-byte.
+name: rebuild-on-photo-upload
+
+on:
+  push:
+    paths:
+      - 'public/images/sufi-ilham-portrait.png'
+      - 'public/images/sufi-ilham-portrait.jpg'
+      - 'public/images/sufi-ilham-portrait.jpeg'
+      - 'public/images/sufi-ilham-portrait.webp'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Sync build output to repo root (Pages serves root)
+        run: |
+          rm -rf _astro
+          cp -r dist/. .
+          rm -rf dist
+
+      - name: Commit rebuilt site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "chore: rebuild site with new portrait (exact image, untouched)"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
