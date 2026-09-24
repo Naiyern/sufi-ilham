@@ -590,3 +590,254 @@ kbd { font: inherit; font-size: .6rem; padding: .1rem .34rem; border: 1px solid 
 }
 .cv-ph b { font-family: var(--display); font-size: 2.2rem; color: var(--mark); font-weight: 400; }
 .cv-ph i { font-family: var(--mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); font-style: normal; line-height: 1.5; }
+
+/* ---------- author portrait — device-accurate frame ----------
+   Any replacement photo (square, 4:5, 3:4) is cropped to a consistent
+   editorial square without stretching. Works on all devices. */
+.author-main { --author-aspect: 1; }
+.author-main .author-frame {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  position: relative;
+}
+.author-main .author-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  display: block;
+  filter: grayscale(1) contrast(1.06);
+  transition: filter .8s var(--ease), transform .9s var(--ease);
+}
+.author-main:hover .author-frame img { filter: grayscale(0) contrast(1); }
+.author-main figcaption { margin-top: .6rem; }
+/* small author plates — keep squares consistent too */
+.plate--small { aspect-ratio: 1 / 1; overflow: hidden; background: var(--paper-3); border: 1px solid var(--rule); }
+.plate--small img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+
+/* =========================================================
+   RESPONSIVE ACCURACY LAYER — tablet + mobile parity
+   Ordered large → small. Each query only adds what must change.
+   ========================================================= */
+
+/* ----- Base fluidity ----- */
+html { scrollbar-gutter: stable; }
+body { font-size: clamp(16px, 1.15vw + 0.6rem, 18px); }
+.wrap { width: min(100% - var(--gutter) * 2, var(--wrap)); }
+
+/* ----- 1100px: tighten ledger before it overflows ----- */
+@media (max-width: 1100px) {
+  .lrow { grid-template-columns: 50px 1fr 150px 110px 90px; gap: .9rem; }
+  .lrow .ttl { font-size: clamp(1rem, 1.6vw, 1.45rem); }
+}
+
+/* ----- 1024px (tablet landscape): harmonise 2-col grids ----- */
+@media (max-width: 1024px) {
+  :root { --gutter: clamp(1rem, 3vw, 2rem); }
+  section { padding: clamp(3.2rem, 7vw, 6rem) 0; }
+  .cover { padding: clamp(6rem, 12vw, 9rem) 0 clamp(1.6rem, 4vw, 3rem); }
+  .cover h1 { font-size: clamp(3rem, 10vw, 8.5rem); }
+  .essay-grid { gap: clamp(1.6rem, 4vw, 3rem); }
+  .spread-grid { gap: clamp(1.6rem, 4vw, 3rem); }
+  .s-hero { padding-top: clamp(6rem, 10vw, 8rem); }
+}
+
+/* ----- 900px: cover stacks — do it cleanly on both tablet sizes ----- */
+@media (max-width: 900px) {
+  .cover-grid { grid-template-columns: 1fr; gap: 1.6rem; }
+  .cover-meta { grid-template-columns: 1fr 1fr; gap: .5rem .9rem; }
+  .cover-meta div { padding-bottom: .45rem; }
+  .author-main .author-frame { aspect-ratio: 1 / 1; max-width: 560px; margin-inline: auto; }
+}
+
+/* ----- 880px: main stacking breakpoint (keep in sync) ----- */
+@media (max-width: 880px) {
+  .folio { flex-wrap: wrap; gap: .6rem 1rem; }
+  .folio h2 { font-size: clamp(2rem, 5.5vw, 3.4rem); }
+  .lrow { grid-template-columns: 36px 1fr auto; row-gap: .25rem; padding: .95rem 0; }
+  .lrow .kind, .lrow .go { display: none; }
+  .lrow .ttl small { font-size: .78rem; line-height: 1.35; }
+  .essay-grid { grid-template-columns: 1fr; gap: 2rem; }
+  #new .plate { max-width: 420px; margin-inline: auto; }
+  #new .essay-grid > div:last-child { max-width: 640px; }
+  .cols { grid-template-columns: 1fr 1fr; }
+  .col { padding: 1.6rem 1.2rem 1.6rem 0; }
+  .col:nth-child(2n) { border-right: 0; }
+  .col:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .annal { gap: 1.2rem; }
+}
+
+/* ----- 860px: series + footer + book page ----- */
+@media (max-width: 860px) {
+  .spread-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .spread-num { font-size: clamp(4rem, 18vw, 8rem); }
+  .spread-fan { max-width: 420px; }
+  .spread-fan img { width: 28%; }
+  .colo-grid { grid-template-columns: 1fr 1fr; gap: 2rem 1.6rem; }
+  .bp-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .bp-grid > div:first-child { position: static; display: grid; justify-items: start; }
+  .bp-cover { max-width: 280px; width: 100%; }
+  .bp-grid .buy-row { width: 100%; }
+}
+
+/* ----- 768px: iPad portrait — the “not same” breakpoint ----- */
+@media (max-width: 768px) {
+  :root { --gutter: 1.1rem; }
+  section { padding: 3rem 0; }
+  .mast { padding: .5rem 0; }
+  .mast-in { gap: .6rem; }
+  .logo b { font-size: 1.3rem; }
+  .cover-top { padding-bottom: .65rem; font-size: .6rem; letter-spacing: .16em; }
+  .cover h1 { margin-top: 1.2rem; }
+  .cover h1 .ln > span { animation-duration: .9s; }
+  .ticker { margin-top: 1.8rem; padding: .45rem 0; }
+  .ticker span { font-size: .62rem; letter-spacing: .14em; }
+  .folio { margin-bottom: 1.6rem; padding-bottom: .6rem; }
+  .shelf-scroll { gap: 1rem; padding-bottom: 1rem; scroll-padding-inline: var(--gutter); }
+  .spine { flex: 0 0 clamp(160px, 42vw, 200px); }
+  .spine h3 { font-size: .98rem; line-height: 1.2; }
+  .ledger { border-top-width: 1px; }
+  .filters { gap: .4rem .9rem; margin-bottom: 1.2rem; }
+  .fbtn { font-size: .64rem; padding-bottom: 4px; min-height: 32px; }
+  .fcount { font-size: .62rem; }
+  .subscribe { padding: 1.4rem; margin-top: 2rem; }
+  .s-facts { margin: 1.4rem 0; }
+  .s-facts div { padding: .9rem 1rem; }
+  .s-facts b { font-size: 1.7rem; }
+  .s-track li { gap: .9rem; padding: 1.2rem 0; }
+  .s-hero-bg { opacity: .08; }
+  .legal { padding-inline: 0; }
+  .legal table { font-size: .82rem; display: block; overflow-x: auto; white-space: nowrap; }
+  .to-top { right: .8rem; bottom: .8rem; }
+}
+
+/* ----- 640px: large phone ----- */
+@media (max-width: 640px) {
+  .wrap { width: min(100% - 2rem, var(--wrap)); }
+  section { padding: 2.6rem 0; }
+  .cover { padding-top: 5.2rem; }
+  .cover-top { flex-wrap: wrap; justify-content: center; gap: .35rem .9rem; text-align: center; }
+  .cover-top span { white-space: nowrap; }
+  .cover h1 { font-size: clamp(2.8rem, 15vw, 4.2rem); line-height: .95; }
+  .cover-grid .lede { font-size: 1.02rem; line-height: 1.55; }
+  .cover-cta { gap: .6rem; }
+  .btn { padding: .78rem 1.2rem; font-size: .68rem; min-height: 44px; }
+  .cols { grid-template-columns: 1fr; border-top: 1px solid var(--fg); }
+  .col { border-right: 0; border-bottom: 1px solid var(--rule); padding: 1.4rem 0; }
+  .col:last-child { border-bottom: 0; }
+  .col:nth-child(n+3) { border-top: 0; }
+  .annal { grid-template-columns: 1fr; gap: .35rem; padding: 1.2rem 0; }
+  .annal time { font-size: .66rem; }
+  .pull { font-size: clamp(1.25rem, 5vw, 1.6rem); margin: 1.4rem 0; padding-left: 1rem; border-left-width: 2px; }
+  .drop::first-letter { font-size: 3.4em; }
+  .lrow { grid-template-columns: 32px 1fr; align-items: start; padding: .85rem 0; gap: .45rem .7rem; }
+  .lrow .n { font-size: .64rem; padding-top: .15rem; }
+  .lrow .ttl { font-size: 1.02rem; line-height: 1.22; }
+  .lrow .ttl small { font-size: .74rem; margin-top: .22rem; line-height: 1.4; }
+  .lrow .pg { grid-column: 2; display: block; font-size: .62rem; letter-spacing: .08em; margin-top: -.1rem; }
+  .lrow:hover { padding-left: .4rem; }
+  .shelf-scroll { margin-inline: -.9rem; padding-inline: .9rem; gap: .85rem; }
+  .spine { flex: 0 0 156px; }
+  .spine-img { aspect-ratio: 2/3; }
+  .spread-fan { margin-top: 1.2rem; max-width: 360px; }
+  .spread-fan img { width: 30%; }
+  .colo-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .colo-bot { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .form input, .form select, .form textarea { font-size: 16px; /* prevents iOS zoom */ }
+  .sub-form { gap: .6rem; }
+  .sub-form input { flex-basis: 100%; min-height: 44px; }
+  .sub-form .btn { width: 100%; justify-content: center; }
+  .rowlink { padding: .85rem 0; gap: .35rem .8rem; }
+  .rowlink .k { width: 100%; font-size: .6rem; }
+  .rowlink .v { font-size: .92rem; word-break: break-word; }
+  .modal { padding: .8rem; align-items: start; padding-top: 4vh; }
+  .modal-in { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.2rem; max-height: 92svh; }
+  .modal-in img { max-width: 200px; margin-inline: auto; display: block; }
+  .modal h2 { font-size: 1.55rem; }
+  .modal .q { font-size: 1rem; }
+  .s-hero-bg { display: none; }
+  .s-facts { border-left: 1px solid var(--fg); border-right: 1px solid var(--fg); }
+  .s-facts div { flex-basis: 50%; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .s-facts div:nth-child(2n) { border-right: 0; }
+  .s-facts div:nth-last-child(-n+2) { border-bottom: 0; }
+  .s-track li { grid-template-columns: 36px 1fr; gap: .8rem; }
+  .s-num { font-size: 1.35rem; }
+  .bp-bar { height: 2px; }
+  .author-main .author-frame { max-width: 420px; }
+}
+
+/* ----- 560px: mast phone tweak (existing) + refinements ----- */
+@media (max-width: 560px) {
+  .logo .est { display: none; }
+  .mast nav { width: min(88vw, 320px); padding-top: 5rem; }
+  .mast nav a { font-size: .88rem; padding: .9rem 0; }
+  .seek { padding: .38rem .55rem; min-width: 36px; justify-content: center; }
+  .seek span, .seek kbd { display: none; }
+  .mini { width: 36px; height: 36px; }
+}
+
+/* ----- 480px: compact phone ----- */
+@media (max-width: 480px) {
+  .wrap { width: min(100% - 1.6rem, var(--wrap)); }
+  section { padding: 2.2rem 0; }
+  .cover { padding-top: 4.8rem; }
+  .cover h1 { font-size: clamp(2.6rem, 14vw, 3.6rem); }
+  .cover-top { font-size: .56rem; letter-spacing: .12em; }
+  .cover-meta { grid-template-columns: 1fr; gap: .4rem; }
+  .folio h2 { font-size: 1.7rem; }
+  .folio .label { font-size: .6rem; letter-spacing: .18em; }
+  .lede { font-size: .98rem; }
+  .shelf-scroll { gap: .75rem; }
+  .spine { flex-basis: 148px; }
+  .spread-num { font-size: 4.2rem; }
+  .annals { border-top-width: 1px; }
+  .s-facts b { font-size: 1.5rem; }
+  .bp-cover { max-width: 220px; }
+  .modal { padding: .6rem; }
+  .modal-in { padding: 1rem; }
+}
+
+/* ----- 375px: SE / small Android ----- */
+@media (max-width: 375px) {
+  .wrap { width: min(100% - 1.2rem, var(--wrap)); }
+  .cover h1 { font-size: 2.55rem; }
+  .btn { padding: .72rem 1rem; font-size: .64rem; letter-spacing: .12em; }
+  .lrow .ttl { font-size: .96rem; }
+  .spine { flex-basis: 138px; }
+  .spine h3 { font-size: .92rem; }
+  .s-facts div { padding: .75rem .85rem; }
+  .author-main .author-frame { max-width: 100%; }
+}
+
+/* ----- Motion / hover — disable expensive effects on touch ----- */
+@media (hover: none), (pointer: coarse) {
+  .plate img { filter: grayscale(0) contrast(1); }
+  .plate:hover img { filter: grayscale(0) contrast(1); }
+  .author-main .author-frame img { filter: grayscale(0) contrast(1); }
+  .spine:hover .spine-img img { transform: none; }
+  .spine-img::after { display: none; }
+  .spread-fan img:hover { transform: none; }
+  .lrow:hover { background: transparent; padding-left: 0; }
+  .rowlink:hover { padding-left: 0; background: transparent; }
+  .peek { display: none !important; }
+}
+
+/* ----- Ensure no horizontal overflow on any device ----- */
+html, body { max-width: 100%; overflow-x: clip; }
+.wrap, section, .mast-in, .cover, .folio, .ledger, .shelf-scroll,
+.spread-grid, .essay-grid, .cols, .annals, .colo-grid, .form, .subscribe {
+  min-width: 0;
+  max-width: 100%;
+}
+img, video, iframe { max-width: 100%; }
+.shelf-scroll, .filters, .cover-cta, .buy-row, .s-meta {
+  flex-wrap: wrap;
+}
+
+/* ----- Print / high-contrast safety ----- */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-in { animation: none; }
+  .cover h1 .ln > span { animation: none; transform: none; }
+  .reveal { opacity: 1; transform: none; }
+}
