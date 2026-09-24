@@ -158,11 +158,18 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
 /* =============== MASTHEAD =============== */
 .mast {
   position: fixed; inset: 0 0 auto; z-index: 200;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(14px);
+  background: transparent;
   border-bottom: 1px solid transparent;
   transition: border-color .4s, padding .4s var(--ease);
   padding: .55rem 0;
+}
+/* Blur lives on a pseudo-element: backdrop-filter on .mast itself would
+   create a containing block and break the fixed off-canvas menu. */
+.mast::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .mast.stuck { border-bottom-color: var(--fg); }
 .mast-in { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
@@ -210,6 +217,15 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
   .mast nav a { display: block; padding: 1rem 0; font-size: .95rem; border-bottom: 1px solid var(--rule); }
   .burger { display: grid; }
   .seek span { display: none; }
+}
+/* off-canvas menu: scrim + scroll lock while open */
+body.menu-open { overflow: hidden; }
+body.menu-open::before {
+  content: ""; position: fixed; inset: 0; z-index: 190;
+  background: rgb(12 10 6 / .38);
+}
+@media (max-width: 1000px) {
+  .mast nav.open { box-shadow: -24px 0 60px rgb(10 8 4 / .25); }
 }
 /* phones: keep the masthead on one row */
 @media (max-width: 560px) { .logo .est { display: none; } }
