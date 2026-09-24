@@ -1,9 +1,17 @@
 ---
-import { books, series, coverUrl } from '../data/site';
+import { books, series, coverUrl, byNewest, newReleases } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const ordered = [...byNewest, ...books.filter((b) => b.comingSoon)];
 
 const index = [
-  ...books.map((b) => ({
+  {
+    t: 'New releases',
+    s: newReleases.map((b) => b.title).join(' · '),
+    u: `${base}/#new`,
+    k: 'Page',
+    img: newReleases[0] ? coverUrl(newReleases[0].img, base) : '',
+  },
+  ...ordered.map((b) => ({
     t: b.title,
     s: b.kicker ?? '',
     u: `${base}/books/${b.slug}`,
@@ -11,10 +19,10 @@ const index = [
     img: coverUrl(b.img, base),
   })),
   ...series.map((s) => ({ t: s.name, s: s.tagline, u: `${base}/series/${s.id}`, k: 'Series', img: '' })),
-  { t: 'About the Author', s: 'A fearless pursuit of truth', u: `${base}/#about`, k: 'Page', img: '' },
-  { t: 'Themes', s: 'Belief · Time · Attention · Seeing', u: `${base}/#themes`, k: 'Page', img: '' },
+  { t: 'About the Author', s: 'A fearless pursuit of truth', u: `${base}/#essay`, k: 'Page', img: '' },
+  { t: 'Themes', s: 'Belief · Time · Attention · Seeing', u: `${base}/#figures`, k: 'Page', img: '' },
   { t: 'Contact', s: 'Interviews, rights, reader mail', u: `${base}/contact`, k: 'Page', img: '' },
-  { t: 'All Books', s: 'The complete library', u: `${base}/#books`, k: 'Page', img: '' },
+  { t: 'All Books', s: 'The complete library', u: `${base}/#index`, k: 'Page', img: '' },
 ];
 ---
 

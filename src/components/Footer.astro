@@ -1,7 +1,7 @@
 ---
-import { site, books, series } from '../data/site';
+import { site, series, byNewest } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const single = books.filter((b) => !b.series).slice(0, 8);
+const latest = byNewest.slice(0, 6);
 ---
 
 <footer class="colophon">
@@ -12,7 +12,7 @@ const single = books.filter((b) => !b.series).slice(0, 8);
           <b>Sufi Ilham</b><span class="est">MD Naiyer Alam</span>
         </a>
         <p style="font-size:.9rem;max-width:36ch">
-          Books on belief, time, attention and the freedom that waits on the other side of conditioning.
+          Books on belief, love, myth and suspense — philosophy, romance, thriller and dark romantasy.
           Available worldwide on Amazon in Kindle and paperback.
         </p>
         <p class="note" style="margin-top:1.2rem">
@@ -24,8 +24,8 @@ const single = books.filter((b) => !b.series).slice(0, 8);
       </div>
 
       <div class="colo">
-        <h4>Selected works</h4>
-        <ul>{single.map((b) => <li><a href={`${base}/books/${b.slug}`}>{b.title}</a></li>)}</ul>
+        <h4>Latest titles</h4>
+        <ul>{latest.map((b) => <li><a href={`${base}/books/${b.slug}`}>{b.title}</a></li>)}</ul>
       </div>
 
       <div class="colo">

@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import { books, site, seriesBooks, type Book, coverUrl } from '../../data/site';
+import { books, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
 
 export function getStaticPaths() {
   return books.map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
@@ -17,9 +17,9 @@ const stores: [string, string | undefined][] = [
   ['Amazon CA', book.ca], ['Amazon AU', book.au], ['Paperback', book.paperback],
 ];
 
-const related = (book.series ? seriesBooks(book.series) : books.filter((b) => b.genre === book.genre))
-  .filter((b) => b.slug !== book.slug)
-  .slice(0, 4);
+const sameShelf = (book.series ? seriesBooks(book.series) : books.filter((b) => b.genre === book.genre))
+  .filter((b) => b.slug !== book.slug && !b.comingSoon);
+const related = (sameShelf.length ? sameShelf : byNewest.filter((b) => b.slug !== book.slug)).slice(0, 4);
 
 const jsonld = [
   {
@@ -29,6 +29,7 @@ const jsonld = [
     author: { '@type': 'Person', name: site.name, alternateName: site.altName },
     description: plain.slice(0, 400),
     numberOfPages: book.pages ?? undefined,
+    ...(book.published && book.published.length > 7 ? { datePublished: book.published } : {}),
     inLanguage: 'en',
     // structured data wants a fetchable URL, so inline data: placeholders are omitted
     ...(book.img.startsWith('data:') ? {} : { image: coverUrl(book.img, site.url) }),
@@ -42,7 +43,7 @@ const jsonld = [
   <section style="padding-top:9rem" id="bookBody">
     <div class="wrap">
       <p class="crumb">
-        <a href={`${base}/`}>Home</a> · <a href={`${base}/#books`}>Books</a> · {book.title}
+        <a href={`${base}/`}>Home</a> · <a href={`${base}/#index`}>Books</a> · {book.title}
       </p>
 
       <div class="bp-grid" style="margin-top:2rem">
@@ -56,7 +57,8 @@ const jsonld = [
         </div>
 
         <div class="reveal in">
-          {book.kicker && <span class="label mark">{book.kicker}</span>}
+          {isNewRelease(book) && <span class="label mark">New release · {formatPublished(book.published)}</span>}
+          {book.kicker && <span class="label">{book.kicker}</span>}
           <h1 style="font-size:clamp(2.1rem,5vw,3.6rem)">{book.title}</h1>
           {book.sub && <p style="font-family:var(--display);font-style:italic;font-size:1.25rem;margin-top:.6rem;color:var(--ink-2)">{book.sub}</p>}
           {book.quote && <p class="pull">{book.quote}</p>}
