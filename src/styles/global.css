@@ -205,7 +205,7 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
 .seek:hover { border-color: var(--fg); color: var(--fg); }
 .seek svg { width: 13px; height: 13px; }
 
-@media (max-width: 1000px) {
+@media (max-width: 1180px) {
   .mast nav {
     position: fixed; inset: 0 0 0 auto; width: min(86vw, 330px);
     background: var(--paper-2); border-left: 1px solid var(--fg);
@@ -224,7 +224,7 @@ body.menu-open::before {
   content: ""; position: fixed; inset: 0; z-index: 190;
   background: rgb(12 10 6 / .38);
 }
-@media (max-width: 1000px) {
+@media (max-width: 1180px) {
   .mast nav.open { box-shadow: -24px 0 60px rgb(10 8 4 / .25); }
 }
 /* phones: keep the masthead on one row */
@@ -377,6 +377,67 @@ body.menu-open::before {
 
 /* =============== ESSAY / ABOUT =============== */
 .essay-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(1.8rem, 5vw, 4rem); align-items: start; }
+
+/* new releases — one card per book that shares the newest publication day */
+.release-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.6rem, 4vw, 3rem);
+  align-items: start;
+}
+.release {
+  display: grid;
+  grid-template-columns: minmax(132px, .78fr) 1.15fr;
+  gap: 1rem 1.25rem;
+  align-items: start;
+}
+#new .plate img { filter: none; }
+.release h3 { font-size: clamp(1.45rem, 2.2vw, 2.15rem); margin: .35rem 0 .45rem; }
+.release h3 a { border-bottom: 1px solid transparent; }
+.release h3 a:hover { border-bottom-color: var(--mark); }
+.release-sub {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--ink-3);
+  margin: 0 0 .4rem;
+  font-size: 1.02rem;
+}
+.release .pull {
+  font-size: clamp(1.12rem, 1.5vw, 1.38rem);
+  margin: .7rem 0 .9rem;
+  padding-left: .85rem;
+}
+.release .specs { margin: .8rem 0 0; }
+.release .cover-cta { margin-top: 1.1rem; }
+.ribbon {
+  position: absolute;
+  z-index: 3;
+  top: .7rem;
+  left: .7rem;
+  background: var(--mark);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: .58rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: .28rem .48rem;
+  pointer-events: none;
+}
+.pill {
+  display: inline-block;
+  margin-left: .55rem;
+  font-family: var(--mono);
+  font-size: .58rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-style: normal;
+  color: var(--mark);
+  border: 1px solid var(--mark);
+  padding: .1rem .38rem;
+  vertical-align: middle;
+  position: relative;
+  top: -0.12em;
+}
 .pull {
   font-family: var(--display); font-size: clamp(1.5rem, 3.2vw, 2.4rem);
   line-height: 1.16; color: var(--fg); margin: 2rem 0;
@@ -665,8 +726,9 @@ body { font-size: clamp(16px, 1.15vw + 0.6rem, 18px); }
   .lrow .kind, .lrow .go { display: none; }
   .lrow .ttl small { font-size: .78rem; line-height: 1.35; }
   .essay-grid { grid-template-columns: 1fr; gap: 2rem; }
-  #new .plate { max-width: 420px; margin-inline: auto; }
-  #new .essay-grid > div:last-child { max-width: 640px; }
+  .release-grid { grid-template-columns: 1fr; gap: 2.4rem; }
+  .release { grid-template-columns: minmax(160px, 220px) 1fr; }
+  #new .plate { max-width: 420px; }
   .cols { grid-template-columns: 1fr 1fr; }
   .col { padding: 1.6rem 1.2rem 1.6rem 0; }
   .col:nth-child(2n) { border-right: 0; }
@@ -736,6 +798,9 @@ body { font-size: clamp(16px, 1.15vw + 0.6rem, 18px); }
   .annal { grid-template-columns: 1fr; gap: .35rem; padding: 1.2rem 0; }
   .annal time { font-size: .66rem; }
   .pull { font-size: clamp(1.25rem, 5vw, 1.6rem); margin: 1.4rem 0; padding-left: 1rem; border-left-width: 2px; }
+  .release { grid-template-columns: 1fr; }
+  .release .plate { max-width: 260px; }
+  .release .pull { font-size: 1.2rem; }
   .drop::first-letter { font-size: 3.4em; }
   .lrow { grid-template-columns: 32px 1fr; align-items: start; padding: .85rem 0; gap: .45rem .7rem; }
   .lrow .n { font-size: .64rem; padding-top: .15rem; }

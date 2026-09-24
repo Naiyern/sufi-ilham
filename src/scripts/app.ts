@@ -37,7 +37,7 @@ addEventListener('keydown', (e) => {
   if (e.key === 'Escape') setMenu(false);
 });
 addEventListener('resize', () => {
-  if (window.innerWidth > 1000) setMenu(false);
+  if (window.innerWidth > 1180) setMenu(false);
 });
 
 /* ---------- scroll: progress, sticky nav, to-top ---------- */

@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import LedgerRow from '../components/LedgerRow.astro';
 import Cover from '../components/Cover.astro';
-import { books, published, series, seriesBooks, site, themes, journey, bookBySlug, coverUrl } from '../data/site';
+import { books, published, series, seriesBooks, site, themes, journey, coverUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished } from '../data/site';
 import seriesLd from '../data/series-jsonld.json';
 import { publicImageSize } from '../data/image-size';
 import { resolvePortrait } from '../data/portrait';
@@ -19,25 +19,27 @@ const [childW, childH] = await publicImageSize('images/sufi-ilham-childhood.jpg'
 
 const filters = [
   { id: 'all', label: 'All' },
+  { id: 'new', label: 'New' },
   { id: 'philosophy', label: 'Philosophy' },
   { id: 'self-help', label: 'Self-Help' },
   { id: 'fiction', label: 'Fiction' },
   { id: 'romance', label: 'Romance' },
   { id: 'romantasy', label: 'Romantasy' },
+  { id: 'thriller', label: 'Thriller' },
   { id: 'ku', label: 'Kindle Unlimited' },
 ];
 
-const pages = published.reduce((a, b) => a + (b.pages ?? 0), 0);
-const featured = bookBySlug('the-human-operating-manual')!;
-const featImg = coverUrl(featured.img, base);
-const recent = published.slice(0, 10);
+const pages = pageCount;
+const recent = byNewest.slice(0, 10);
+const indexed = [...byNewest, ...books.filter((b) => b.comingSoon)];
+const newestNames = newReleases.map((b) => b.title).join(' and ');
 
 const ticker = [
-  'Twenty-six published titles',
-  'Philosophy · Romance · Myth · Dark Romantasy',
-  'Free on Kindle Unlimited',
-  'Five Amazon marketplaces',
-  'Kindle & Paperback worldwide',
+  `${published.length} published titles`,
+  `New · ${newReleases.map((b) => b.title).join(' · ')}`,
+  'Philosophy · Romance · Thriller · Myth',
+  `${published.filter((b) => b.ku).length} free on Kindle Unlimited`,
+  'Kindle & paperback worldwide',
 ];
 
 const jsonld = [
@@ -53,12 +55,14 @@ const jsonld = [
   {
     '@context': 'https://schema.org', '@type': 'ItemList',
     name: 'Books by Sufi Ilham', numberOfItems: books.length,
-    itemListElement: books.map((b, i) => ({
+    itemListElement: indexed.map((b, i) => ({
       '@type': 'ListItem', position: i + 1,
       item: {
         '@type': 'Book', name: b.title,
         author: { '@type': 'Person', name: site.name, alternateName: site.altName },
-        url: b.us || site.url, numberOfPages: b.pages ?? undefined, inLanguage: 'en',
+        url: b.us || site.url, numberOfPages: b.pages ?? undefined,
+        ...(b.published && b.published.length > 7 ? { datePublished: b.published } : {}),
+        inLanguage: 'en',
       },
     })),
   },
@@ -66,8 +70,8 @@ const jsonld = [
 ---
 
 <Base
-  title={`Sufi Ilham — The Archive | ${published.length} Books on Belief, Time, Love & Myth`}
-  description={`The complete works of Sufi Ilham (MD Naiyer Alam) — ${published.length} books across philosophy, self-help, literary fiction, small-town romance, mythic romance and dark romantasy.`}
+  title={`Sufi Ilham — The Archive | ${published.length} Books on Belief, Love, Myth & Suspense`}
+  description={`The complete works of Sufi Ilham (MD Naiyer Alam) — ${published.length} books. Newest: ${newestNames}.`}
   type="profile"
   jsonld={jsonld}
 >
@@ -88,14 +92,12 @@ const jsonld = [
       <div class="cover-grid">
         <div>
           <p class="lede">
-            An author, deep thinker and seeker of truth exploring belief, consciousness and identity — writing that
-            challenges societal norms and asks you to question every assumption you inherited.
+            An author, deep thinker and seeker of truth — {published.length} books on belief, love, myth and suspense.
+            The newest — <em>{newestNames}</em> — went live {formatPublished(latestPublished)}.
           </p>
           <div class="cover-cta">
-            <a class="btn solid" href="#index">Enter the archive</a>
-            {featured.us && (
-              <a class="btn" href={featured.us} target="_blank" rel="noopener">Read the new release</a>
-            )}
+            <a class="btn solid" href="#new">See the new releases</a>
+            <a class="btn" href="#index">Enter the archive</a>
           </div>
         </div>
 
@@ -103,6 +105,7 @@ const jsonld = [
           <div><span>Titles</span><span>{published.length}</span></div>
           <div><span>Pages in print</span><span>{pages.toLocaleString()}</span></div>
           <div><span>On Kindle Unlimited</span><span>{published.filter((b) => b.ku).length}</span></div>
+          <div><span>Latest</span><span>{formatPublished(latestPublished)}</span></div>
           <div><span>Series</span><span>{series.length}</span></div>
           <div><span>Marketplaces</span><span>5</span></div>
         </div>
@@ -116,42 +119,50 @@ const jsonld = [
     </div>
   </section>
 
-  <!-- ================= THE NEW RELEASE ================= -->
+  <!-- ================= NEW RELEASES (dated, not hardcoded) ================= -->
   <section id="new">
     <div class="wrap">
       <div class="folio reveal">
-        <h2>The new release</h2>
-        <span class="label">No. 01</span>
+        <h2>New releases</h2>
+        <span class="label">{formatPublished(latestPublished)}</span>
       </div>
+      <p class="lede reveal" style="margin-bottom:2rem">
+        {newReleases.length === 1
+          ? `Live on Amazon since ${formatPublished(latestPublished)} — not last season’s catalogue.`
+          : newReleases.length === 2
+            ? `Two books went live on ${formatPublished(latestPublished)}${newReleases.every((b) => b.ku) ? ' — both free on Kindle Unlimited' : ''}.`
+            : `${newReleases.length} books went live on ${formatPublished(latestPublished)}${newReleases.every((b) => b.ku) ? ', all free on Kindle Unlimited' : ''}.`}
+      </p>
 
-      <div class="essay-grid" data-slug={featured.slug}>
-        <figure class="plate reveal js-open" style="margin:0;cursor:pointer">
-          <Cover src={featImg} title={featured.title} eager={true} />
-          <figcaption><span>{featured.title}</span><span>2026</span></figcaption>
-        </figure>
-
-        <div class="reveal" style="--d:100ms">
-          <span class="label mark">{featured.kicker}</span>
-          <h3 style="font-size:clamp(1.8rem,4vw,3rem);margin:.6rem 0 1rem">{featured.title}</h3>
-          <p class="pull">
-            “You are not broken. You are running old settings — and settings can be changed.”
-          </p>
-          <p class="drop">
-            You are the most complex machine on the planet, and you were shipped with zero documentation. So you've
-            done what everyone does with an undocumented machine: pushed the same three buttons harder. More
-            motivation. More discipline. More guilt.
-          </p>
-          <p>
-            Written in the calm, precise voice of a premium hardware manual — with 111 original diagrams, 34
-            write-in worksheets and 10 complete system modules — it treats your life as a living system of energy,
-            emotion, attention and habit.
-          </p>
-          <ul class="specs">{(featured.spec ?? []).map((s) => <li>{s}</li>)}</ul>
-          <div class="cover-cta">
-            <button class="btn solid js-open" type="button">Read more</button>
-            {featured.us && <a class="btn" href={featured.us} target="_blank" rel="noopener">Amazon</a>}
-          </div>
-        </div>
+      <div class="release-grid">
+        {newReleases.map((b, i) => {
+          const src = coverUrl(b.img, base);
+          return (
+            <article class="release reveal" style={`--d:${i * 80}ms`} data-slug={b.slug}>
+              <figure class="plate js-open" style="margin:0;cursor:pointer">
+                <span class="ribbon">New</span>
+                <Cover src={src} title={b.title} eager={i === 0} />
+                <figcaption>
+                  <span>{b.kicker}</span>
+                  <span>{formatPublished(b.published)}</span>
+                </figcaption>
+              </figure>
+              <div>
+                <span class="label mark">{b.kicker}</span>
+                <h3><a href={`${base}/books/${b.slug}`}>{b.title}</a></h3>
+                {b.sub && <p class="release-sub">{b.sub}</p>}
+                {b.quote && <p class="pull">{b.quote}</p>}
+                {b.blurb && <p>{b.blurb}</p>}
+                <ul class="specs">{(b.spec ?? []).slice(0, 5).map((s) => <li>{s}</li>)}</ul>
+                <div class="cover-cta">
+                  <button class="btn solid js-open" type="button">Read more</button>
+                  <a class="btn" href={`${base}/books/${b.slug}`}>Book page</a>
+                  {b.us && <a class="btn" href={b.us} target="_blank" rel="noopener">Amazon</a>}
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -161,7 +172,7 @@ const jsonld = [
     <div class="wrap">
       <div class="folio reveal">
         <h2>Recently published</h2>
-        <span class="label">Scroll →</span>
+        <span class="label">Newest first →</span>
       </div>
     </div>
     <div class="wrap">
@@ -171,10 +182,13 @@ const jsonld = [
           return (
             <article class="spine" data-slug={b.slug}>
               <div class="spine-img js-open">
+                {isNewRelease(b) && <span class="ribbon">New</span>}
                 <Cover src={src} title={b.title} />
               </div>
               <h3 class="js-open">{b.title}</h3>
-              <span class="label">{b.pages ? `${b.pages} pp` : ''}{b.ku ? ' · KU' : ''}</span>
+              <span class="label">
+                {formatPublished(b.published)}{b.pages ? ` · ${b.pages} pp` : ''}{b.ku ? ' · KU' : ''}
+              </span>
             </article>
           );
         })}
@@ -187,10 +201,10 @@ const jsonld = [
     <div class="wrap">
       <div class="folio reveal">
         <h2>The index</h2>
-        <span class="label">{books.length} entries</span>
+        <span class="label">{published.length} live · {books.length - published.length} forthcoming</span>
       </div>
       <p class="lede reveal" style="margin-bottom:2rem">
-        Every title by Sufi Ilham — in Kindle and paperback, worldwide on Amazon. Click any entry to read more.
+        Every title by Sufi Ilham, newest first — Kindle and paperback, worldwide on Amazon. Click any entry to read more.
       </p>
 
       <div class="filters reveal">
@@ -202,7 +216,7 @@ const jsonld = [
       </div>
 
       <div class="ledger reveal" id="bookGrid">
-        {books.map((b, i) => <LedgerRow book={b} n={i + 1} />)}
+        {indexed.map((b, i) => <LedgerRow book={b} n={i + 1} />)}
       </div>
       <p id="bookEmpty" style="display:none;padding:2.4rem 0;color:var(--ink-3)">No entries match.</p>
     </div>

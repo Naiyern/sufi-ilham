@@ -1,12 +1,13 @@
 # Sufi Ilham — Official Author Website
 
 An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam),
-author of 26 titles on Amazon — ten works of philosophy, spirituality and self-discovery, the
+author of 27 titles on Amazon — ten works of philosophy, spirituality and self-discovery, the
 five-book **Maple Falls Romance** series, the three-book dark gothic romantasy trilogy
 **The Tithe Crown**, the standalone literary novel **The River's Portion**, the first three
 books of the seven-book **Cartographers of Lost Tomorrows** saga (Books 4–7 coming soon),
-the three-book mythic romance trilogy **The Song of the Unbroken Sky**, and the standalone
-contemporary romance **The Spare Key Summer**. Every line of
+the three-book mythic romance trilogy **The Song of the Unbroken Sky**, the standalone
+contemporary romance **The Spare Key Summer**, and the standalone psychological thriller
+**The Quiet Tenancy**. Every line of
 design, copy, code and music here was made for this site — no templates, no stock, no copied
 marketing text.
 
@@ -14,7 +15,7 @@ marketing text.
 
 | File | Description |
 |---|---|
-| `index.html` | Homepage — hero, 11-book library with live filters, the Maple Falls Romance section, The Tithe Crown section, the Cartographers of Lost Tomorrows saga section (3 live + 4 coming soon), The Song of the Unbroken Sky trilogy section, the Spare Key Summer standalone spotlight, about, themes, contact strip |
+| `index.html` | Homepage — hero, new-releases feature (dated from the catalogue, not hardcoded), recently-published shelf, full index with live filters, series spreads, about, themes, contact strip |
 | `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
 | `privacy.html` | Privacy Policy — 16 sections with sticky table of contents |
 | `terms.html` | Terms of Use — 15 sections, governing law: Bihar, India |
@@ -60,7 +61,7 @@ Keep all files together in the same folder so `sama.mp3` and the page links reso
   The Tithe Crown section mirrors it with a dark gothic palette, its own reading-order strip
   and three numbered cards. The Cartographers saga, Unbroken Sky trilogy and Spare Key
   Summer spotlight reuse the same unified charcoal/cream/gold card system. The homepage
-  counters now read 26 titles · 4,500 pages · 22 free on Kindle Unlimited.
+  counters are computed from the catalogue — currently 27 published titles, 5,344 pages, and every Kindle Unlimited title counted live. The new-release feature follows the newest `published` date (21 September 2026: *The Quiet Tenancy* and *The Spare Key Summer*), so it cannot stay stuck on an older book.
 - **Motion design** — custom cursor, drifting dust canvas, Maple Falls snowfall (paused
   off-screen), scroll progress bar, staggered
   reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
@@ -189,6 +190,17 @@ that awakens the living earth. All three are free on Kindle Unlimited. Section: 
 
 Amazon series page: <https://www.amazon.com/dp/B0HHWGYSPL>
 
+## The Quiet Tenancy
+
+A standalone psychological thriller. Cassie Adler is paid to live ninety days in a Brooklyn
+Heights brownstone and notice everything — then the house starts keeping a schedule of its own.
+Free on Kindle Unlimited; Kindle and paperback. It shares its publication day with *The Spare Key
+Summer*, and both are the site’s current new releases.
+
+| Title | Kindle ASIN | Paperback ASIN | Pages | Published |
+|---|---|---|---|---|
+| The Quiet Tenancy | B0HKK6RFRS | B0HKKKG6RM | 278 | 21 Sept 2026 |
+
 ## The Spare Key Summer
 
 A standalone contemporary romance novel (not a series): Nora Sullivan returns to Milwaukee
@@ -227,6 +239,7 @@ Section: `#spare-key` (feature-style spotlight with both ASINs shown).
 24. The Citadel of Sapphire Seas — 93 pp · Unbroken Sky #2 · new
 25. The Chariot of Peace — 80 pp · Unbroken Sky #3 · new
 26. The Spare Key Summer — 234 pp · standalone contemporary romance · new
+27. The Quiet Tenancy — 278 pp · standalone psychological thriller · new
 
 Plus four forthcoming Cartographers titles (not yet counted): The Library of Drowned Days,
 The Seven Unwritten Days, The Last Cartographer, The Future We Buried.

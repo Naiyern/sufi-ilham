@@ -23,6 +23,8 @@ export type Book = {
   ku?: boolean;
   pages?: number | null;
   blurb?: string;
+  /** ISO date (YYYY-MM-DD) or month (YYYY-MM) when the day is not verified. */
+  published?: string;
 };
 
 export const books = booksRaw as Book[];
@@ -103,9 +105,52 @@ export const site = {
 
 export const published = books.filter((b) => !b.comingSoon);
 
+/** Sort key: exact days outrank a month-only date in the same month; undated books sink. */
+function dateKey(iso?: string): string {
+  if (!iso) return '';
+  return /^\d{4}-\d{2}$/.test(iso) ? `${iso}-00` : iso;
+}
+
+/** Newest verified publication first. Ties keep catalogue order (stable). */
+export const byNewest = [...published].sort((a, b) => {
+  const da = dateKey(a.published);
+  const db = dateKey(b.published);
+  if (da && db && da !== db) return db.localeCompare(da);
+  if (da && !db) return -1;
+  if (!da && db) return 1;
+  return 0;
+});
+
+/** Newest exact day on the list — month-only dates never win “new release”. */
+export const latestPublished = byNewest.find((b) => /^\d{4}-\d{2}-\d{2}$/.test(b.published ?? ''))?.published ?? '';
+
+/**
+ * Every title that shares that day. Derived from `published`, so the next
+ * book does not require a hardcoded homepage feature.
+ */
+export const newReleases = latestPublished
+  ? byNewest.filter((b) => b.published === latestPublished)
+  : byNewest.slice(0, 1);
+
+export function isNewRelease(book: Book): boolean {
+  return !!book.published && book.published === latestPublished;
+}
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+
+export function formatPublished(iso?: string): string {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-').map(Number);
+  if (!y || !m) return iso;
+  const month = MONTHS[m - 1] ?? '';
+  return d ? `${d} ${month} ${y}` : `${month} ${y}`;
+}
+
+export const pageCount = published.reduce((a, b) => a + (b.pages ?? 0), 0);
+
 export const stats = [
   { n: published.length, label: 'Published Titles', key: 'stat.titles' },
-  { n: 5000, suffix: '+', label: 'Pages in Print', key: 'stat.pages' },
+  { n: pageCount, label: 'Pages in Print', key: 'stat.pages' },
   { n: published.filter((b) => b.ku).length, label: 'Free on Kindle Unlimited', key: 'stat.ku' },
   { n: 5, label: 'Amazon Marketplaces', key: 'stat.markets' },
 ];
@@ -154,10 +199,19 @@ export const journey = [
     text: 'Learning from birth to beyond — for those brave enough to keep attending.',
   },
   {
-    date: '2026',
-    title: 'Twenty-Two New Works',
-    text:
-      "NeuroFocus Protocol, The Human Operating Manual, Moh Tera Prem, PREM, The River's Portion, the Maple Falls romances, The Tithe Crown trilogy — and now the Cartographers saga, the Song of the Unbroken Sky trilogy and The Spare Key Summer.",
+    date: 'Jul 2026',
+    title: 'The Human Operating Manual',
+    text: 'The long-form systems manual — 383 pages, still in print, no longer the newest book on the shelf.',
+  },
+  {
+    date: 'Aug 2026',
+    title: "Maple Falls, the Tithe Crown, The River's Portion",
+    text: 'Five small-town romances, a finished gothic trilogy, and a standalone novel of debt and tawbah.',
+  },
+  {
+    date: '21 Sept 2026',
+    title: 'The Quiet Tenancy & The Spare Key Summer',
+    text: 'The current new releases: a Brooklyn psychological thriller, and a standalone Milwaukee romance. Both are free on Kindle Unlimited.',
   },
 ];
 
