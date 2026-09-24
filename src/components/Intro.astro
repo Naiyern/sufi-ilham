@@ -1,0 +1,61 @@
+---
+---
+
+<div
+  id="intro"
+  class="intro"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="introTitle"
+  aria-describedby="introSub"
+>
+  <div class="intro-frame">
+    <span class="intro-kicker">The Archive</span>
+    <p class="intro-hello">Welcome to</p>
+    <p class="intro-title" id="introTitle">Sufi Library</p>
+    <span class="intro-rule" aria-hidden="true"></span>
+    <p class="intro-sub" id="introSub">The collected works of Sufi Ilham</p>
+    <button class="intro-enter" id="introEnter" type="button">Enter</button>
+    <p class="intro-hint">Tap anywhere</p>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const el = document.getElementById('intro');
+    if (!el) {
+      root.classList.add('intro-done');
+      return;
+    }
+    if (root.classList.contains('intro-done')) {
+      el.remove();
+      return;
+    }
+
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let done = false;
+    const dismiss = () => {
+      if (done) return;
+      done = true;
+      el.classList.add('out');
+      root.classList.add('intro-done');
+      try { sessionStorage.setItem('si_intro', '1'); } catch { /* private mode */ }
+      setTimeout(() => el.remove(), 800);
+    };
+
+    el.addEventListener('click', dismiss);
+    document.getElementById('introEnter')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dismiss();
+    });
+    addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') {
+        if (done) return;
+        if (e.key === ' ') e.preventDefault();
+        dismiss();
+      }
+    });
+    setTimeout(dismiss, reduce ? 1600 : 5200);
+  })();
+</script>

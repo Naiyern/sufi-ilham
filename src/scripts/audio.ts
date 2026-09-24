@@ -71,5 +71,7 @@ export function initAudio() {
   a.addEventListener('play', paint);
   a.addEventListener('pause', paint);
 
-  if (wanted) start(); else paint();
+  /* Do not fetch the 3.4 MB soundtrack until a gesture — play() on load
+     was the main reason the homepage felt heavy even with preload="none". */
+  if (wanted) arm(); else paint();
 }
