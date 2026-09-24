@@ -4,6 +4,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BookModal from '../components/BookModal.astro';
 import CommandPalette from '../components/CommandPalette.astro';
+import Intro from '../components/Intro.astro';
 import { site } from '../data/site';
 import { resolvePortrait } from '../data/portrait';
 
@@ -19,6 +20,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const portrait = resolvePortrait();
 const { title, description, image = `${site.url}/${portrait.rel}`, type = 'website', jsonld = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href.replace(/\/$/, '');
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isHome = path === (base || '/') || path === '/';
 ---
 
 <!doctype html>
@@ -59,10 +62,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href.repla
         if (t) document.documentElement.dataset.theme = t;
         else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
           document.documentElement.dataset.theme = 'dark';
+        try {
+          if (sessionStorage.getItem('si_intro') === '1')
+            document.documentElement.classList.add('intro-done');
+        } catch { /* private mode */ }
       })();
     </script>
+    <noscript>
+      <style>html { overflow: auto } #intro { display: none !important }</style>
+    </noscript>
   </head>
   <body>
+    {isHome && <Intro />}
     <div class="progress" id="progress"></div>
     <div class="grain" aria-hidden="true"></div>
     <a class="skip" href="#main">Skip to content</a>

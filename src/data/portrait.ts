@@ -1,7 +1,6 @@
 /* Build-time only. Resolves whichever file is the current main portrait.
-   The photo is used EXACTLY as uploaded — never cropped, resized or
-   regenerated. Drop any of these into public/images/ (whichever was
-   modified most recently wins) and rebuild:
+   Drop any of these into public/images/ (whichever was modified most
+   recently wins) and rebuild:
      public/images/sufi-ilham-portrait.png | .jpg | .jpeg | .webp
    width/height attributes are read from the real file by publicImageSize. */
 import fs from 'node:fs';
