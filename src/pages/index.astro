@@ -5,13 +5,15 @@ import Cover from '../components/Cover.astro';
 import { books, published, series, seriesBooks, site, themes, journey, bookBySlug, coverUrl } from '../data/site';
 import seriesLd from '../data/series-jsonld.json';
 import { publicImageSize } from '../data/image-size';
+import { resolvePortrait } from '../data/portrait';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-/* Author photos: width/height come from the real files at build time, so a
-   replacement portrait of any shape (square, 4:5, 2:3) gets matching
-   attributes automatically. Fallbacks are the current files' sizes. */
-const [portraitW, portraitH] = await publicImageSize('images/sufi-ilham-portrait.jpg', [900, 900]);
+/* Main portrait: whichever file exists in public/images/ (png/jpg/webp),
+   used EXACTLY as uploaded — no crop, no AI. width/height come from the
+   real file at build time, so any shape gets matching attributes. */
+const portrait = resolvePortrait();
+const [portraitW, portraitH] = await publicImageSize(portrait.rel, [900, 1200]);
 const [fluteW, fluteH] = await publicImageSize('images/sufi-ilham-flute.jpg', [900, 900]);
 const [childW, childH] = await publicImageSize('images/sufi-ilham-childhood.jpg', [760, 760]);
 
@@ -45,7 +47,7 @@ const jsonld = [
     name: site.name, alternateName: site.altName, jobTitle: 'Author',
     description: 'Author, deep thinker and seeker of truth exploring belief, consciousness, identity and self-discovery.',
     telephone: '+91-6201757330', url: site.url,
-    image: `${site.url}/images/sufi-ilham-portrait.jpg`,
+    image: `${site.url}/${portrait.rel}`,
     sameAs: [site.instagram, site.instagram2, site.amazonUS, site.amazonIN],
   },
   {
@@ -260,19 +262,16 @@ const jsonld = [
       <div class="essay-grid">
         <div class="reveal">
           <figure class="plate author-main" style="margin:0">
-            <div class="author-frame">
-              <img
-                src={`${base}/images/sufi-ilham-portrait.jpg`}
-                srcset={`${base}/images/sufi-ilham-portrait-400.jpg 400w, ${base}/images/sufi-ilham-portrait-600.jpg 600w, ${base}/images/sufi-ilham-portrait-900.jpg 900w, ${base}/images/sufi-ilham-portrait-1200.jpg 1200w`}
-                sizes="(max-width: 640px) 92vw, (max-width: 880px) 560px, 520px"
-                alt="Portrait of Sufi Ilham"
-                width={portraitW}
-                height={portraitH}
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-              />
-            </div>
+            <img
+              src={`${base}/${portrait.rel}`}
+              alt="Portrait of Sufi Ilham"
+              width={portraitW}
+              height={portraitH}
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+              style="width:100%;height:auto;display:block"
+            />
             <figcaption><span>Sufi Ilham</span><span>MD Naiyer Alam</span></figcaption>
           </figure>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:.9rem">
@@ -305,7 +304,7 @@ const jsonld = [
               <figcaption><span>Where it began</span><span>—</span></figcaption>
             </figure>
           </div>
-          <p class="note" style="margin-top:.9rem;text-align:center">To change this photo: replace <code style="font-size:.62rem">public/images/sufi-ilham-portrait.jpg</code> with your new image (any size/ratio) and rebuild — it will auto-crop and stay sharp on all devices.</p>
+          <p class="note" style="margin-top:.9rem;text-align:center">Main photo displays exactly as uploaded — no crop, no AI. To update: replace <code style="font-size:.62rem">public/images/sufi-ilham-portrait.jpg</code> (or <code style="font-size:.62rem">.png</code>) with your exact file and rebuild — or upload it on GitHub and the action rebuilds automatically.</p>
         </div>
 
         <div class="reveal" style="--d:100ms">
