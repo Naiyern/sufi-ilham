@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Base title="Privacy Policy — Sufi Ilham" description="How this website handles your information — plain language, no legal fog.">
@@ -173,7 +174,7 @@ Protection Act, 2023, the EU/UK GDPR, or the California Consumer Privacy Act —
 information (this Site does neither), and to be free from discrimination for exercising any of them.</p>
 <p>Because this Site itself stores no personal data, such requests will normally concern either your
 newsletter subscription or messages you have sent the author directly. To exercise any right, contact
-<strong>+91 62017 57330</strong> or use the <a href="contact.html" style="color:var(--gold)">contact page</a>;
+<strong>+91 62017 57330</strong> or use the <a href={`${base}/contact/`} style="color:var(--gold)">contact page</a>;
 your request will be honoured promptly and normally within 30 days, free of charge. If you are in the
 EU or UK you also have the right to lodge a complaint with your local data protection authority.</p>
 
@@ -193,7 +194,7 @@ clear there. Continued use of the Site after an update constitutes acceptance of
 <div class="callout"><p><strong>Sufi Ilham</strong> (MD Naiyer Alam)<br>
 Phone / WhatsApp: <a href="tel:+916201757330" style="color:var(--gold)">+91 62017 57330</a><br>
 Location: Bihar, India<br>
-Or use the <a href="contact.html" style="color:var(--gold)">contact form</a>.</p></div>
+Or use the <a href={`${base}/contact/`} style="color:var(--gold)">contact form</a>.</p></div>
 </div>
 </div></div></div>
 

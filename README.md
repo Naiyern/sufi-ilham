@@ -26,7 +26,7 @@ marketing text.
 | `site.webmanifest` | Web app manifest (installable, correct name and theme colour) |
 | `images/` | 3 author photos + 8 book covers |
 | `sama.mp3` | Original Sufi ambient soundtrack, 5:52 (3.4 MB) |
-| `robots.txt` / `sitemap.xml` | Search engine files |
+| `robots.txt` / `sitemap-index.xml` / `sitemap-0.xml` | Search engine files |
 | `.nojekyll` | Tells GitHub Pages to publish the files as-is |
 
 The CSS and JavaScript used to be pasted inline into all four pages. They now live in
@@ -42,8 +42,24 @@ folder onto the page. It goes live in about 20 seconds.
 
 **Vercel:** https://vercel.com/new → import or drag the folder.
 
-**GitHub Pages (this repo):** already live at <https://naiyern.github.io/sufi-ilham/> —
-pushing to `main` rebuilds it automatically.
+**GitHub Pages (this repo):** live at <https://naiyern.github.io/sufi-ilham/>. Pages serves
+the **repository root** of `main` (branch source, `build_type: legacy`), so the built site is
+committed to the root:
+
+```bash
+npm ci
+npm run build      # astro build + scripts/verify-build.mjs
+npm run deploy     # copies dist/ over the root and re-verifies there
+git add -A && git commit -m "Rebuild site" && git push
+```
+
+Pages has no build step of its own here, so a plain `git push` of root files is what goes live.
+
+**Trailing slashes matter.** `<base>/<page>/` is the real URL and `<base>/<page>` only redirects
+to it. Never commit `privacy.html`, `terms.html` or `contact.html` to the root or to `public/`:
+Pages serves that file for the extensionless URL too, so a stub that redirects to `/privacy`
+redirects to itself and the page hangs on "Redirecting…". `npm run build` fails if any such
+stub reappears, or if any internal link stops resolving.
 
 **Any web host / cPanel:** upload the contents of this folder to `public_html`.
 
@@ -255,7 +271,7 @@ The main photo (`public/images/sufi-ilham-portrait.png` / `.jpg` / `.webp`) is a
 **byte-for-byte as uploaded** — never cropped, resized or AI-processed. It renders full-frame
 at its native ratio on every device.
 
-- Local replace: `node scripts/replace-portrait.mjs /path/to/photo.png` then `npm run build && cp -r dist/. .`
+- Local replace: `node scripts/replace-portrait.mjs /path/to/photo.png` then `npm run build && npm run deploy`
 - GitHub-only replace: copy `docs/rebuild-on-photo-upload.yml` to `.github/workflows/` once
   (needs repo admin rights); afterwards, uploading a new portrait into `public/images/`
   rebuilds and deploys the site automatically.

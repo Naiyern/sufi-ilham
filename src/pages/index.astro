@@ -147,14 +147,14 @@ const jsonld = [
               </figure>
               <div>
                 <span class="label mark">{b.kicker}</span>
-                <h3><a href={`${base}/books/${b.slug}`}>{b.title}</a></h3>
+                <h3><a href={`${base}/books/${b.slug}/`}>{b.title}</a></h3>
                 {b.sub && <p class="release-sub">{b.sub}</p>}
                 {b.quote && <p class="pull">{b.quote}</p>}
                 {b.blurb && <p>{b.blurb}</p>}
                 <ul class="specs">{(b.spec ?? []).slice(0, 5).map((s) => <li>{s}</li>)}</ul>
                 <div class="cover-cta">
                   <button class="btn solid js-open" type="button">Read more</button>
-                  <a class="btn" href={`${base}/books/${b.slug}`}>Book page</a>
+                  <a class="btn" href={`${base}/books/${b.slug}/`}>Book page</a>
                   {b.us && <a class="btn" href={b.us} target="_blank" rel="noopener">Amazon</a>}
                 </div>
               </div>
@@ -248,13 +248,13 @@ const jsonld = [
                 {list.map((b) => (
                   <li>
                     <b>{String(b.order).padStart(2, '0')}</b>
-                    <a href={`${base}/books/${b.slug}`}>{b.title}</a>
+                    <a href={`${base}/books/${b.slug}/`}>{b.title}</a>
                     <span class="s">{b.comingSoon ? 'Soon' : b.pages ? `${b.pages} pp` : ''}</span>
                   </li>
                 ))}
               </ol>
               <div class="cover-cta">
-                <a class="btn" href={`${base}/series/${s.id}`}>Explore the series →</a>
+                <a class="btn" href={`${base}/series/${s.id}/`}>Explore the series →</a>
               </div>
             </div>
           </div>

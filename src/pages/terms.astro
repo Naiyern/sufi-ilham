@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Base title="Terms of Use — Sufi Ilham" description="The ground rules for using this website and the copyrighted work it presents.">
@@ -78,7 +79,7 @@ advertising.</p>
 <p>You may unsubscribe at any time using the one-click link in any email, or by contacting the author.
 The newsletter is offered as a free courtesy: its frequency may vary and it may be paused or
 discontinued at any time. How your address is stored and handled is described in the
-<a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p>
+<a href={`${base}/privacy/`} style="color:var(--gold)">Privacy Policy</a>.</p>
 
 <h2 id="disclaimer">7. No Professional Advice</h2>
 <p>The books and this Site explore philosophy, psychology, attention, habit and belief for
@@ -117,7 +118,7 @@ resemble work already independently in progress, and no compensation will be owe
 
 <h2 id="privacy">12. Privacy</h2>
 <p>Your use of the Site is also governed by the
-<a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>, which forms part of these Terms
+<a href={`${base}/privacy/`} style="color:var(--gold)">Privacy Policy</a>, which forms part of these Terms
 and explains the cookie-free analytics, the optional newsletter, and the browser local storage used to
 remember your language and sound preferences.</p>
 
@@ -136,7 +137,7 @@ updated Terms.</p>
 <div class="callout"><p><strong>Sufi Ilham</strong> (MD Naiyer Alam)<br>
 Phone / WhatsApp: <a href="tel:+916201757330" style="color:var(--gold)">+91 62017 57330</a><br>
 Location: Bihar, India<br>
-Or use the <a href="contact.html" style="color:var(--gold)">contact form</a>.</p></div>
+Or use the <a href={`${base}/contact/`} style="color:var(--gold)">contact form</a>.</p></div>
 </div></div></div>
 
 <button class="totop" id="totop" aria-label="Back to top">↑</button>
