@@ -25,13 +25,13 @@ const latest = byNewest.slice(0, 6);
 
       <div class="colo">
         <h4>Latest titles</h4>
-        <ul>{latest.map((b) => <li><a href={`${base}/books/${b.slug}`}>{b.title}</a></li>)}</ul>
+        <ul>{latest.map((b) => <li><a href={`${base}/books/${b.slug}/`}>{b.title}</a></li>)}</ul>
       </div>
 
       <div class="colo">
         <h4>Series</h4>
         <ul>
-          {series.map((s) => <li><a href={`${base}/series/${s.id}`}>{s.name}</a></li>)}
+          {series.map((s) => <li><a href={`${base}/series/${s.id}/`}>{s.name}</a></li>)}
         </ul>
       </div>
 
@@ -40,10 +40,10 @@ const latest = byNewest.slice(0, 6);
         <ul>
           <li><a href={`${base}/#index`}>All books</a></li>
           <li><a href={`${base}/#essay`}>The author</a></li>
-          <li><a href={`${base}/contact`}>Enquiries</a></li>
+          <li><a href={`${base}/contact/`}>Enquiries</a></li>
           <li><a href={site.amazonUS} target="_blank" rel="noopener">Amazon store</a></li>
-          <li><a href={`${base}/privacy`}>Privacy</a></li>
-          <li><a href={`${base}/terms`}>Terms</a></li>
+          <li><a href={`${base}/privacy/`}>Privacy</a></li>
+          <li><a href={`${base}/terms/`}>Terms</a></li>
         </ul>
       </div>
     </div>

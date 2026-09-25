@@ -7,11 +7,11 @@ export function GET(context: { site?: URL }) {
   return rss({
     title: 'Sufi Ilham — Books',
     description: `New releases from Sufi Ilham (MD Naiyer Alam). Latest: ${newReleases.map((b) => b.title).join(' · ')}.`,
-    site: origin,
+    site: `${origin}/`,
     items: byNewest.map((b) => ({
       title: b.title,
       description: b.blurb ?? b.sub ?? '',
-      link: `${origin}/books/${b.slug}`,
+      link: `${origin}/books/${b.slug}/`,
       pubDate: b.published && b.published.length > 7 ? new Date(`${b.published}T12:00:00Z`) : undefined,
       categories: [b.genre ?? 'Books'],
     })),
