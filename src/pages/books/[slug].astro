@@ -1,8 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import PdfReader from '../../components/PdfReader.astro';
 import { books, site, seriesBooks, type Book, coverUrl, pdfUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
+
+type Reader = { slug: string; chapters: { id: string; title: string }[]; source?: string };
+const readerFiles = import.meta.glob<Reader>('../../data/reader/*.json', { eager: true, import: 'default' });
+const readers: Record<string, Reader> = {};
+for (const mod of Object.values(readerFiles)) readers[mod.slug] = mod;
 
 export function getStaticPaths() {
   return books.map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
@@ -15,6 +19,8 @@ const plain = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').tr
 
 const pdf = book.free && book.pdf ? pdfUrl(book.pdf, base) : '';
 const readUrl = book.free ? `${base}/read/${book.slug}/` : '';
+const reader = book.free ? readers[book.slug] : undefined;
+const chapters = reader?.chapters ?? [];
 
 const stores: [string, string | undefined][] = [
   ['Amazon.com', book.us], ['Amazon.in', book.in], ['Amazon UK', book.uk],
@@ -56,10 +62,10 @@ const jsonld = [
           {book.free ? (
             <>
               <div class="buy-row">
-                <a class="btn pri" href="#reader">Read free online ↓</a>
+                <a class="btn pri" href={readUrl}>Read free online →</a>
                 {pdf && <a class="btn" href={pdf} download>Download PDF</a>}
               </div>
-              <p class="free-note">100% free — no sign-up, no payment. Read it right here or download your own copy.</p>
+              <p class="free-note">100% free — no sign-up, no payment. Read it in your browser with adjustable text, night mode and Urdu typography, or download your own copy.</p>
             </>
           ) : (
             <div class="buy-row">
@@ -85,19 +91,31 @@ const jsonld = [
         </div>
       </div>
 
-      {book.free && pdf && (
+      {book.free && (
         <section id="reader" class="reader-block reveal">
           <div class="reader-head">
             <div>
-              <span class="label mark">Read free</span>
+              <span class="label mark">Read free online</span>
               <h2 dir={book.dir ?? undefined} style="margin:.3rem 0 0">{book.title}</h2>
             </div>
             <div class="reader-actions">
-              <a class="btn" href={readUrl}>Full-screen reader ↗</a>
-              <a class="btn pri" href={pdf} download>Download PDF</a>
+              <a class="btn pri" href={readUrl}>Start reading →</a>
+              {pdf && <a class="btn" href={pdf} download>Download PDF</a>}
             </div>
           </div>
-          <PdfReader src={pdf} title={book.title} download={pdf} />
+          <p style="color:var(--ink-2);max-width:52ch">Read the full book right in your browser — reflowable text, adjustable size and line-spacing, sepia and night modes, and beautiful Nastaliq typography for Urdu. Your place is saved automatically.</p>
+          {chapters.length > 0 && (
+            <ol class="chap-list">
+              {chapters.map((c, i) => (
+                <li>
+                  <a href={`${readUrl}#${c.id}`}>
+                    <span class="chap-n">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="chap-t" dir={book.dir ?? undefined}>{c.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          )}
         </section>
       )}
 

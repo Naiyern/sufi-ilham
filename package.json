@@ -8,6 +8,8 @@
     "build": "astro build && node scripts/verify-build.mjs",
     "build:only": "astro build",
     "verify": "node scripts/verify-build.mjs",
+    "reader": "node scripts/pdf-to-chapters.mjs",
+    "reader:darya": "node scripts/pdf-to-chapters.mjs darya-ka-aik-hissa",
     "deploy": "npm run build && cp -r dist/. . && rm -f privacy.html terms.html contact.html dist/privacy.html dist/terms.html dist/contact.html && node scripts/verify-build.mjs --root",
     "preview": "astro preview"
   },
@@ -17,6 +19,7 @@
     "@fontsource-variable/newsreader": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource/noto-nastaliq-urdu": "^5.3.0",
     "astro": "^5.18.2",
     "pdfjs-dist": "^4.10.38",
     "sharp": "^0.35.4"

@@ -655,6 +655,16 @@ kbd { font: inherit; font-size: .6rem; padding: .1rem .34rem; border: 1px solid 
   font-size: .85rem; padding: 1.4rem 0; }
 .pdfjs-fallback a { text-decoration: underline; margin: 0 .25rem; }
 
+/* Chapter list on the book page */
+.chap-list { list-style: none; margin: 1.8rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .4rem; }
+.chap-list a { display: flex; align-items: baseline; gap: .7rem; padding: .7rem .8rem;
+  border: 1px solid var(--rule); border-radius: 8px; text-decoration: none; color: inherit;
+  transition: border-color .15s, background .15s; }
+.chap-list a:hover { border-color: var(--gold, #c99a3f); background: color-mix(in srgb, var(--gold, #c99a3f) 8%, transparent); }
+.chap-list .chap-n { font-family: var(--mono); font-size: .72rem; color: var(--ink-3); flex: 0 0 auto; }
+.chap-list .chap-t { font-family: var(--display); font-size: 1.05rem; }
+
 /* =============== LEGAL =============== */
 .legal { max-width: 800px; }
 .legal h1 { font-size: clamp(2.6rem, 7vw, 4.4rem); }

@@ -1,75 +1,279 @@
 ---
+import '@fontsource/noto-nastaliq-urdu/400.css';
+import '@fontsource/noto-nastaliq-urdu/700.css';
 import { books, type Book, pdfUrl } from '../../data/site';
-import PdfReader from '../../components/PdfReader.astro';
 
-// Only free titles that ship a PDF get a full-screen reader.
+type Reader = {
+  slug: string; title: string; author?: string; sub?: string;
+  dir?: 'rtl' | 'ltr'; lang?: string; source?: string;
+  chapters: { id: string; title: string; html: string }[];
+};
+
+const readerFiles = import.meta.glob<Reader>('../../data/reader/*.json', { eager: true, import: 'default' });
+const readers: Record<string, Reader> = {};
+for (const mod of Object.values(readerFiles)) readers[mod.slug] = mod;
+
 export function getStaticPaths() {
-  return books
-    .filter((b) => b.free && b.pdf)
-    .map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
+  // Reader exists for every free book (uses extracted chapters when available).
+  return books.filter((b) => b.free).map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
 }
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { book } = Astro.props as { book: Book };
-const pdf = pdfUrl(book.pdf!, base);
+const reader = readers[book.slug];
+const pdf = book.pdf ? pdfUrl(book.pdf, base) : '';
 const backUrl = `${base}/books/${book.slug}/`;
+const dir = reader?.dir ?? book.dir ?? 'ltr';
+const lang = reader?.lang ?? (dir === 'rtl' ? 'ur' : 'en');
+const isPlaceholder = reader?.source === 'placeholder-sample';
+const chapters = reader?.chapters ?? [];
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang={lang} dir={dir} data-rtheme="sepia">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{book.title} — Read free · Sufi Ilham</title>
-    <meta name="robots" content="index,follow" />
+    <meta name="description" content={`Read ${book.title} by Sufi Ilham free online.`} />
     <link rel="icon" href={`${base}/favicon.ico`} sizes="any" />
-    <style>
-      :root { color-scheme: dark; }
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { height: 100%; }
-      body {
-        display: flex; flex-direction: column; height: 100vh;
-        background: #07070a; color: #e9e6df;
-        font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      }
-      .rbar {
-        display: flex; align-items: center; gap: .8rem;
-        padding: .6rem .9rem; border-bottom: 1px solid #23232b;
-        background: #0c0c11; flex: 0 0 auto;
-      }
-      .rbar .ttl {
-        font-weight: 600; font-size: 1rem; margin-right: auto;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      }
-      .rbar .ttl small { display: block; font-weight: 400; font-size: .72rem; color: #9a968c; }
-      .rbtn {
-        display: inline-flex; align-items: center; gap: .35rem;
-        padding: .5rem .85rem; border: 1px solid #35353f; border-radius: 6px;
-        color: #e9e6df; text-decoration: none; font-size: .82rem; white-space: nowrap;
-        transition: border-color .15s, background .15s;
-      }
-      .rbtn:hover { border-color: #d9b45e; }
-      .rbtn.pri { background: #d9b45e; color: #12100a; border-color: #d9b45e; font-weight: 600; }
-      .rread { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; }
-      .rread .pdfjs { flex: 1 1 auto; max-height: none; border: 0; border-radius: 0; background: #14141a; }
-      @media (max-width: 640px) {
-        .rbar .ttl small { display: none; }
-        .rbtn { padding: .5rem .7rem; }
-      }
+    <style is:inline>
+      :root { --rf: 1.25rem; --rlh: 2.15; --rmw: 44rem; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { min-height: 100vh; transition: background .25s, color .25s; }
+      html[data-rtheme="light"] body { background: #f7f5ef; color: #1c1a15; }
+      html[data-rtheme="sepia"] body { background: #ece3d0; color: #40372a; }
+      html[data-rtheme="dark"]  body { background: #14140f; color: #d8d2c4; }
+
+      .rprogress { position: fixed; inset: 0 auto auto 0; height: 3px; width: 100%;
+        transform: scaleX(var(--p,0)); transform-origin: left; background: #c99a3f; z-index: 50; }
+      html[dir="rtl"] .rprogress { transform-origin: right; }
+
+      .rtop { position: sticky; top: 0; z-index: 40; display: flex; align-items: center;
+        gap: .5rem; padding: .55rem clamp(.6rem, 3vw, 1.2rem);
+        backdrop-filter: blur(8px); border-bottom: 1px solid rgba(120,110,90,.25); }
+      html[data-rtheme="light"] .rtop { background: rgba(247,245,239,.85); }
+      html[data-rtheme="sepia"] .rtop { background: rgba(236,227,208,.85); }
+      html[data-rtheme="dark"]  .rtop { background: rgba(20,20,15,.85); }
+      .rtop .sp { margin-inline-start: auto; }
+      .rttl { font: 600 .95rem/1.2 var(--display, Georgia, serif); white-space: nowrap;
+        overflow: hidden; text-overflow: ellipsis; max-width: 42vw; }
+
+      .ricon { display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
+        min-width: 2.1rem; height: 2.1rem; padding: 0 .6rem; cursor: pointer;
+        border: 1px solid rgba(120,110,90,.35); border-radius: 7px; background: transparent;
+        color: inherit; font: 500 .8rem/1 system-ui, sans-serif; text-decoration: none; }
+      .ricon:hover { border-color: #c99a3f; }
+      .ricon.pri { background: #c99a3f; border-color: #c99a3f; color: #241c08; font-weight: 700; }
+
+      .rpanel { position: fixed; z-index: 45; top: 3.4rem;
+        border: 1px solid rgba(120,110,90,.35); border-radius: 10px; padding: .9rem;
+        box-shadow: 0 18px 50px rgba(0,0,0,.35); display: none; min-width: 240px; }
+      html[data-rtheme="light"] .rpanel { background: #fffdf7; }
+      html[data-rtheme="sepia"] .rpanel { background: #f3ecdd; }
+      html[data-rtheme="dark"]  .rpanel { background: #1e1e17; }
+      .rpanel.open { display: block; }
+      #rsettings { inset-inline-end: clamp(.6rem, 3vw, 1.2rem); }
+      #rtoc { inset-inline-start: clamp(.6rem, 3vw, 1.2rem); max-height: 70vh; overflow: auto; max-width: min(88vw, 340px); }
+      .rrow { display: flex; align-items: center; gap: .5rem; margin: .35rem 0 .8rem; }
+      .rrow > span { font: 600 .7rem/1 system-ui; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+      .rseg { display: flex; gap: .3rem; flex-wrap: wrap; }
+      .rseg button { flex: 1 1 auto; padding: .45rem .5rem; border: 1px solid rgba(120,110,90,.35);
+        border-radius: 6px; background: transparent; color: inherit; cursor: pointer; font: 500 .8rem/1 system-ui; }
+      .rseg button[aria-pressed="true"] { background: #c99a3f; border-color: #c99a3f; color: #241c08; font-weight: 700; }
+      #rtoc ol { list-style: none; margin: .4rem 0 0; padding: 0; counter-reset: c; }
+      #rtoc a { display: block; padding: .5rem .55rem; border-radius: 6px; text-decoration: none;
+        color: inherit; font-size: .9rem; border: 1px solid transparent; }
+      #rtoc a:hover { border-color: rgba(120,110,90,.35); }
+      #rtoc a b { opacity: .55; margin-inline-end: .4rem; font-variant-numeric: tabular-nums; }
+
+      main.rbook { max-width: var(--rmw); margin: 0 auto; padding: clamp(1.6rem, 5vw, 3.4rem) clamp(1.1rem, 5vw, 2rem) 30vh; }
+      .rbanner { margin: 0 0 2rem; padding: .7rem .9rem; border-radius: 8px; font-size: .82rem;
+        border: 1px dashed #c99a3f; background: rgba(201,154,63,.12); }
+      .rhead { text-align: center; margin: 1rem 0 3.2rem; }
+      .rhead h1 { font: 700 clamp(2rem, 6vw, 3rem)/1.5 "Noto Nastaliq Urdu", var(--display, serif); margin: 0; }
+      .rhead .rauthor { margin-top: 1rem; font-size: 1.1rem; opacity: .8; }
+      .rchap { margin: 0 0 3.5rem; scroll-margin-top: 4rem; }
+      .rchap h2 { font: 700 clamp(1.4rem, 4vw, 2rem)/1.7 "Noto Nastaliq Urdu", var(--display, serif);
+        text-align: center; margin: 0 0 1.8rem; padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(120,110,90,.25); }
+      .rchap p { font-size: var(--rf); line-height: var(--rlh); margin: 0 0 1.3rem; text-align: justify; }
+      html[lang="ur"] .rchap p, html[dir="rtl"] .rchap p {
+        font-family: "Noto Nastaliq Urdu", serif; text-align: right; }
+      html[lang="ur"] .rchap { font-feature-settings: "kern" 1; }
+      .rempty { text-align: center; opacity: .8; padding: 4rem 0; }
+      .rempty a { color: #c99a3f; }
+
+      @media (max-width: 640px) { .rttl { max-width: 34vw; } .ricon span.lbl { display: none; } }
+      @media print { .rtop, .rprogress, .rpanel { display: none !important; } }
     </style>
   </head>
   <body>
-    <div class="rbar">
-      <a class="rbtn" href={backUrl} aria-label="Back to book page">← Back</a>
-      <span class="ttl" dir={book.dir ?? undefined}>
-        {book.title}
-        {book.altTitle && <small>{book.altTitle} · free to read</small>}
-      </span>
-      <a class="rbtn" href={pdf} target="_blank" rel="noopener">Open in tab ↗</a>
-      <a class="rbtn pri" href={pdf} download>Download PDF</a>
+    <div class="rprogress" id="rprogress"></div>
+
+    <header class="rtop">
+      <a class="ricon" href={backUrl} aria-label="Back to book page">←<span class="lbl"> Back</span></a>
+      {chapters.length > 0 && (
+        <button class="ricon" id="rtocBtn" aria-haspopup="true" aria-expanded="false">☰<span class="lbl"> Contents</span></button>
+      )}
+      <span class="rttl" dir={dir}>{book.title}</span>
+      <button class="ricon sp" id="rsetBtn" aria-haspopup="true" aria-expanded="false">Aa</button>
+      {pdf && <a class="ricon pri" href={pdf} download>Download<span class="lbl"> PDF</span></a>}
+    </header>
+
+    {chapters.length > 0 && (
+      <nav class="rpanel" id="rtoc" aria-label="Table of contents">
+        <div class="rrow"><span>Contents</span></div>
+        <ol>
+          {chapters.map((c, i) => (
+            <li><a href={`#${c.id}`} data-goto={c.id}><b>{String(i + 1).padStart(2, '0')}</b>{c.title}</a></li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    <div class="rpanel" id="rsettings" aria-label="Reading settings">
+      <div class="rrow"><span>Theme</span></div>
+      <div class="rseg" data-set="theme">
+        <button data-val="light">Light</button>
+        <button data-val="sepia">Sepia</button>
+        <button data-val="dark">Night</button>
+      </div>
+      <div class="rrow"><span>Text size</span></div>
+      <div class="rseg" data-set="font">
+        <button data-val="down" aria-label="Smaller text">A−</button>
+        <button data-val="reset">Reset</button>
+        <button data-val="up" aria-label="Larger text">A+</button>
+      </div>
+      <div class="rrow"><span>Line spacing</span></div>
+      <div class="rseg" data-set="lh">
+        <button data-val="tight">Tight</button>
+        <button data-val="normal">Normal</button>
+        <button data-val="airy">Airy</button>
+      </div>
     </div>
-    <div class="rread">
-      <PdfReader src={pdf} title={book.title} download={pdf} />
-    </div>
+
+    <main class="rbook" id="rbook">
+      {isPlaceholder && (
+        <p class="rbanner">Sample preview — this is placeholder text. Add the real manuscript PDF and it will be replaced automatically by your book’s own words.</p>
+      )}
+      <div class="rhead">
+        <h1 dir={dir}>{book.title}</h1>
+        {reader?.author && <p class="rauthor" dir={dir}>{reader.author}</p>}
+      </div>
+
+      {chapters.length > 0 ? (
+        chapters.map((c) => (
+          <section class="rchap" id={c.id}>
+            {c.title && <h2 dir={dir}>{c.title}</h2>}
+            <div set:html={c.html} />
+          </section>
+        ))
+      ) : (
+        <div class="rempty">
+          <p>The reading text for this book hasn’t been added yet.</p>
+          {pdf && <p>You can still <a href={pdf} download>download the PDF</a> or <a href={pdf} target="_blank" rel="noopener">open it in a new tab</a>.</p>}
+        </div>
+      )}
+    </main>
+
+    <script is:inline define:vars={{ slug: book.slug }}>
+      (function () {
+        var html = document.documentElement;
+        var K = 'reader:' + slug;
+        var KG = 'reader:prefs';
+        var prefs = { theme: 'sepia', font: 1.25, lh: 2.15 };
+        try { Object.assign(prefs, JSON.parse(localStorage.getItem(KG) || '{}')); } catch (e) {}
+
+        function apply() {
+          html.setAttribute('data-rtheme', prefs.theme);
+          html.style.setProperty('--rf', prefs.font + 'rem');
+          html.style.setProperty('--rlh', prefs.lh);
+          document.querySelectorAll('[data-set="theme"] button').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.val === prefs.theme));
+          });
+          var lhName = prefs.lh <= 1.8 ? 'tight' : prefs.lh >= 2.4 ? 'airy' : 'normal';
+          document.querySelectorAll('[data-set="lh"] button').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.val === lhName));
+          });
+          try { localStorage.setItem(KG, JSON.stringify(prefs)); } catch (e) {}
+        }
+        apply();
+
+        // Panels (settings + TOC), mutually exclusive.
+        function panel(btn, box) {
+          if (!btn || !box) return;
+          btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = box.classList.toggle('open');
+            btn.setAttribute('aria-expanded', String(open));
+            document.querySelectorAll('.rpanel').forEach(function (p) { if (p !== box) p.classList.remove('open'); });
+          });
+        }
+        panel(document.getElementById('rsetBtn'), document.getElementById('rsettings'));
+        panel(document.getElementById('rtocBtn'), document.getElementById('rtoc'));
+        document.addEventListener('click', function (e) {
+          if (!e.target.closest('.rpanel') && !e.target.closest('.ricon')) {
+            document.querySelectorAll('.rpanel').forEach(function (p) { p.classList.remove('open'); });
+          }
+        });
+
+        // Settings controls.
+        document.querySelector('[data-set="theme"]').addEventListener('click', function (e) {
+          var v = e.target.dataset.val; if (!v) return; prefs.theme = v; apply();
+        });
+        document.querySelector('[data-set="font"]').addEventListener('click', function (e) {
+          var v = e.target.dataset.val; if (!v) return;
+          if (v === 'up') prefs.font = Math.min(2.1, prefs.font + 0.08);
+          else if (v === 'down') prefs.font = Math.max(0.95, prefs.font - 0.08);
+          else prefs.font = 1.25;
+          apply();
+        });
+        document.querySelector('[data-set="lh"]').addEventListener('click', function (e) {
+          var v = e.target.dataset.val; if (!v) return;
+          prefs.lh = v === 'tight' ? 1.7 : v === 'airy' ? 2.5 : 2.15; apply();
+        });
+
+        // TOC smooth scroll + close.
+        document.querySelectorAll('#rtoc a[data-goto]').forEach(function (a) {
+          a.addEventListener('click', function (e) {
+            e.preventDefault();
+            var el = document.getElementById(a.dataset.goto);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('rtoc').classList.remove('open');
+          });
+        });
+
+        // Progress bar + save/restore position.
+        var bar = document.getElementById('rprogress');
+        var ticking = false;
+        function onScroll() {
+          var h = document.documentElement.scrollHeight - window.innerHeight;
+          var p = h > 0 ? window.scrollY / h : 0;
+          bar.style.setProperty('--p', p);
+          try { localStorage.setItem(K, String(window.scrollY)); } catch (e) {}
+          ticking = false;
+        }
+        addEventListener('scroll', function () {
+          if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+        }, { passive: true });
+        onScroll();
+        try {
+          var y = parseInt(localStorage.getItem(K) || '0', 10);
+          if (y > 0) requestAnimationFrame(function () { window.scrollTo(0, y); });
+        } catch (e) {}
+
+        // Keyboard: t = contents, +/- = size, j/k or arrows = scroll.
+        addEventListener('keydown', function (e) {
+          if (e.target.matches('input,textarea')) return;
+          if (e.key === 't') document.getElementById('rtocBtn')?.click();
+          else if (e.key === '+' || e.key === '=') { prefs.font = Math.min(2.1, prefs.font + 0.08); apply(); }
+          else if (e.key === '-') { prefs.font = Math.max(0.95, prefs.font - 0.08); apply(); }
+          else if (e.key === 'j' || e.key === 'ArrowDown') scrollBy({ top: innerHeight * 0.9, behavior: 'smooth' });
+          else if (e.key === 'k' || e.key === 'ArrowUp') scrollBy({ top: -innerHeight * 0.9, behavior: 'smooth' });
+        });
+      })();
+    </script>
   </body>
 </html>
