@@ -1,5 +1,56 @@
 [
  {
+  "img": "images/cover-darya-ka-aik-hissa.jpg",
+  "title": "دریا کا ایک حصہ",
+  "altTitle": "Darya Ka Aik Hissa",
+  "sub": "Darya Ka Aik Hissa · A Part of the River — a free Urdu novella",
+  "kicker": "Urdu Fiction · Free to Read",
+  "quote": "\"دریا کسی ایک کنارے کا نہیں ہوتا؛ ہم سب اُس کے ایک حصے کی طرح بہتے رہتے ہیں۔\"",
+  "desc": "<p dir=\"rtl\" lang=\"ur\">یہ ناولٹ اُس انسان کی کہانی ہے جو دریا کے کنارے بیٹھ کر اپنے اندر کے بہاؤ کو سنتا ہے — محبت، جدائی، اور خود کو دوبارہ پانے کا سفر۔</p><p><b>Darya Ka Aik Hissa</b> (\"A Part of the River\") is a free Urdu novella by Sufi Ilham. It is offered to every reader at no cost — read the whole book online, right here on the page.</p>",
+  "spec": [
+   "Free to read — no purchase needed",
+   "Read the full book online in your browser",
+   "Language: Urdu",
+   "By Sufi Ilham",
+   "Published Sept 2026"
+  ],
+  "slug": "darya-ka-aik-hissa",
+  "published": "2026-09-29",
+  "genre": "fiction",
+  "dir": "rtl",
+  "free": true,
+  "pdf": "reads/darya-ka-aik-hissa.pdf",
+  "coverArt": "images/darya/cover-art.jpg",
+  "pages": null,
+  "blurb": "A free Urdu novella by Sufi Ilham — read the whole book online, completely free."
+ },
+ {
+  "img": "https://m.media-amazon.com/images/I/71C58DyMC2L._SL500_.jpg",
+  "title": "नसरुद्दीन की टेढ़ी तराज़ू",
+  "altTitle": "Nasruddin Ki Tedhi Tarazu",
+  "sub": "Nasruddin Ki Tedhi Tarazu · A Historical-Folkloric Novel",
+  "kicker": "Hindi Historical Fiction",
+  "quote": "\"जहाँ हर मज़ाक के पीछे एक सवाल है, और हर सवाल के पीछे इंसान।\"",
+  "desc": "<p lang=\"hi\">तेरहवीं सदी के अनातोलिया की धूल भरी राहों, बाज़ारों और मस्जिदों के बीच एक ऐसा आदमी चलता है जिसकी सबसे बड़ी ताक़त उसकी बुद्धि नहीं, बल्कि दुनिया की बेवकूफ़ियों को देखने की उसकी क्षमता है।</p><p lang=\"hi\"><b>मुल्ला नसरुद्दीन।</b></p><p lang=\"hi\">कभी वह हँसाता है, कभी उलझाता है, और कभी एक साधारण-सी बात के भीतर ऐसा सवाल रख देता है जिससे सामने वाला देर तक बच नहीं पाता।</p><p lang=\"hi\">गरीबी की कठोर ज़मीन, सुल्तानों की राजनीति, व्यापारियों की चालाकी और लोककथाओं की नसों के बीच यह कहानी उस आदमी की यात्रा है जो हर असमान तराज़ू में केवल वजन नहीं, बल्कि इंसान की नीयत देखता है।</p><p lang=\"hi\">इंसाफ़, धर्म, सत्ता, धन और इंसान की असली कीमत क्या है?</p><p lang=\"hi\">हँसी और व्यंग्य के पीछे छिपी यह ऐतिहासिक-लोककथात्मक कथा केवल अतीत की कहानी नहीं है। यह उन सवालों की कहानी है जो सदियों बाद भी हमारे सामने वैसे ही खड़े हैं।</p><p lang=\"hi\">“नसरुद्दीन की टेढ़ी तराज़ू” — जहाँ हर मज़ाक के पीछे एक सवाल है, और हर सवाल के पीछे इंसान।</p>",
+  "spec": [
+   "Kindle Unlimited",
+   "Kindle ₹199",
+   "Language: Hindi",
+   "Published 29 Sept 2026",
+   "Kindle ASIN B0HLFWT9TJ"
+  ],
+  "slug": "nasruddin-ki-tedhi-tarazu",
+  "published": "2026-09-29",
+  "genre": "fiction",
+  "ku": true,
+  "us": "https://www.amazon.com/dp/B0HLFWT9TJ",
+  "in": "https://www.amazon.in/dp/B0HLFWT9TJ",
+  "uk": "https://www.amazon.co.uk/dp/B0HLFWT9TJ",
+  "ca": "https://www.amazon.ca/dp/B0HLFWT9TJ",
+  "au": "https://www.amazon.com.au/dp/B0HLFWT9TJ",
+  "blurb": "In 13th-century Anatolia, Mullah Nasruddin weighs more than goods on his crooked scale — he weighs conscience. A witty historical-folkloric novel about justice, power, faith, and what a person is truly worth."
+ },
+ {
   "img": "https://m.media-amazon.com/images/I/71x+qs3EpiL._SL500_.jpg",
   "title": "The Quiet Tenancy",
   "sub": "A Psychological Thriller",
@@ -9,7 +60,7 @@
   "spec": [
    "Kindle Unlimited",
    "278 Pages",
-   "Kindle $7.42",
+   "Kindle ₹599 · $7.42",
    "Paperback $14.76",
    "Published 21 Sept 2026",
    "Kindle ASIN B0HKK6RFRS",
@@ -38,7 +89,7 @@
   "spec": [
    "Kindle Unlimited",
    "383 Pages",
-   "Kindle $1.99 / ₹199",
+   "Kindle ₹199 · $1.99",
    "Paperback $19.99",
    "Published Jul 2026"
   ],
@@ -64,7 +115,7 @@
   "spec": [
    "Kindle Unlimited",
    "211 Pages",
-   "Kindle $6.99",
+   "Kindle ₹249 · $6.99",
    "Paperback $14.99",
    "Published Aug 2026",
    "ASIN B0HFGNWFTV"
@@ -91,7 +142,7 @@
   "spec": [
    "Kindle Unlimited",
    "285 Pages",
-   "Kindle $6.99",
+   "Kindle ₹599 · $6.99",
    "Paperback $14.99",
    "Published Aug 2026",
    "ASIN B0HFFDVWVV"
@@ -117,13 +168,13 @@
   "desc": "<p>He is credited with one of the most translated books ever written. His name is not a name. His dates are uncertain by two centuries. And the first historian who tried to write his life — four hundred years after the fact — offered three candidates and admitted he could not choose between them.</p><p>This is the biography of a man whose historical footprint is almost invisible and whose philosophical shadow stretches across two and a half millennia. Following the evidence as far as the evidence goes, it examines the terse account in Sima Qian's <em>Shiji</em>, the shadowy Lao Dan of the <em>Zhuangzi</em>, the bamboo slips recovered from a tomb sealed around 300 BCE, the silk manuscripts of Mawangdui, and the long transformation of a possibly historical archivist into a legendary sage — and eventually a god who received imperial sacrifice.</p><p>Along the way, the philosophy is taken seriously as philosophy:</p><ul><li><b>Wu wei</b> examined not as passivity, but as a theory of how force defeats itself</li><li><b>Water</b> explored not as a familiar metaphor, but as a strategy for yielding, adapting and prevailing</li><li><b>Simplicity</b> understood not as an aesthetic ideal, but as a refusal to keep score</li></ul><p>Most importantly, the book refuses to manufacture certainty where the evidence does not permit it. History, legend, archaeology, textual transmission and later religious tradition are carefully distinguished rather than collapsed into a single convenient story.</p><p>Inside you will find a myth-versus-history source audit of twelve major claims, a full chronological timeline, a key-concept glossary with Chinese characters, and a scholarly bibliography for further reading.</p>",
   "spec": [
    "Paperback",
+   "Paperback $18.99",
    "318 Pages",
    "ISBN 979-8192120972",
    "6 x 0.8 x 9 inches",
    "Published 11 Aug 2026"
   ],
   "us": "https://www.amazon.com/dp/B0HDYHN1GT",
-  "in": "https://www.amazon.in/dp/B0HDYHN1GT",
   "uk": "https://www.amazon.co.uk/dp/B0HDYHN1GT",
   "ca": "https://www.amazon.ca/dp/B0HDYHN1GT",
   "au": "https://www.amazon.com.au/dp/B0HDYHN1GT",
@@ -195,7 +246,7 @@
   "spec": [
    "362 Pages",
    "Kindle Edition",
-   "$7.99 / ₹399",
+   "Kindle ₹399 · $7.99",
    "Published Apr 2026"
   ],
   "us": "https://www.amazon.com/NeuroFocus-Protocol-Mastering-Motivation-Distracted-ebook/dp/B0DRYQNKQQ",
@@ -220,7 +271,7 @@
   "spec": [
    "Kindle Unlimited",
    "56 Pages",
-   "Kindle Free / ₹0",
+   "Kindle ₹359",
    "Paperback $17.99"
   ],
   "us": "https://www.amazon.com/Fractured-Time-Journey-Boundaries-Illusions-ebook/dp/B0DMWLSKNW",
@@ -245,7 +296,7 @@
   "spec": [
    "Kindle Unlimited",
    "66 Pages",
-   "$5.99 / ₹99",
+   "Kindle ₹99 · $5.99",
    "Published Oct 2024"
   ],
   "us": "https://www.amazon.com/Belief-Unveiled-Truth-Beliefs-Stuck-ebook/dp/B0DK913BHH",
@@ -270,7 +321,7 @@
   "spec": [
    "Kindle Unlimited",
    "76 Pages",
-   "$4.99 / ₹199",
+   "Kindle ₹199 · $4.99",
    "Paperback available",
    "Published Feb 2025"
   ],
@@ -296,7 +347,7 @@
   "spec": [
    "Kindle Unlimited",
    "243 Pages",
-   "Kindle $4.99",
+   "Kindle ₹299 · $4.99",
    "Paperback $18.99",
    "Published 22 Aug 2026",
    "ASIN B0HG5S4DG2"
@@ -323,7 +374,7 @@
   "spec": [
    "Kindle Unlimited",
    "123 Pages",
-   "Kindle $2.99",
+   "Kindle ₹285 · $2.99",
    "Published 17 Aug 2026",
    "ASIN B0HDSLBTX7"
   ],
@@ -351,7 +402,7 @@
   "spec": [
    "Kindle Unlimited",
    "76 Pages",
-   "Kindle $2.99",
+   "Kindle ₹249 · $2.99",
    "Published 17 Aug 2026",
    "ASIN B0HFKCQXS4"
   ],
@@ -379,7 +430,7 @@
   "spec": [
    "Kindle Unlimited",
    "78 Pages",
-   "Kindle $2.99",
+   "Kindle ₹286 · $2.99",
    "Published 18 Aug 2026",
    "ASIN B0HFMFQW2C"
   ],
@@ -407,7 +458,7 @@
   "spec": [
    "Kindle Unlimited",
    "68 Pages",
-   "Kindle $2.99",
+   "Kindle ₹299 · $2.99",
    "Published 18 Aug 2026",
    "ASIN B0HFP1KFF1"
   ],
@@ -435,7 +486,7 @@
   "spec": [
    "Kindle Unlimited",
    "76 Pages",
-   "Kindle $2.99",
+   "Kindle ₹299 · $2.99",
    "Published 18 Aug 2026",
    "ASIN B0HFNWTV82"
   ],
@@ -463,7 +514,7 @@
   "spec": [
    "Kindle Unlimited",
    "222 Pages",
-   "Kindle $4.85",
+   "Kindle ₹243 · $4.85",
    "Published 24 Aug 2026",
    "ASIN B0HGBM3WX2"
   ],
@@ -491,7 +542,7 @@
   "spec": [
    "Kindle Unlimited",
    "247 Pages",
-   "Kindle $4.86",
+   "Kindle ₹291 · $4.86",
    "Published 25 Aug 2026",
    "ASIN B0HGF5G8QM"
   ],
@@ -519,7 +570,7 @@
   "spec": [
    "Kindle Unlimited",
    "260 Pages",
-   "Kindle $4.87",
+   "Kindle ₹299 · $4.87",
    "Published 25 Aug 2026",
    "ASIN B0HGG8N7VD"
   ],
@@ -547,7 +598,7 @@
   "spec": [
    "Kindle Unlimited",
    "272 Pages",
-   "Kindle $5.99",
+   "Kindle ₹499 · $5.99",
    "Paperback $14.99",
    "Published 11 Sept 2026",
    "ASIN B0HJH4MH5D"
@@ -576,7 +627,7 @@
   "spec": [
    "Kindle Unlimited",
    "219 Pages",
-   "Kindle $5.99",
+   "Kindle ₹573 · $5.99",
    "Paperback $14.99",
    "Published 12 Sept 2026",
    "ASIN B0HJMJWG6S"
@@ -603,9 +654,8 @@
   "quote": "“His desk is walking home. They mean to use it.”",
   "desc": "<p>The compass of the dead goes north by a different logic: it points at anything not yet paid for. Now it points at a desk — walking the old Carrying Way on its own legs, drawn by a debt owed since the winter of 1919.</p><p>With the war’s unwalked debts still moving on the road behind them, restorer <b>Cassia Merel</b> and <b>Elias Rooke</b> walk the saddles where the standing dead keep the hours — and at the end of the line, <b>Absalom Quill</b> of the Trust is waiting with terms. The trade will be struck formally, in a bothy at the road’s elbow, with the storm’s edge forty yards from the door.</p><p>Cassia will serve the reader’s objection of her career. The dead will be entered into navigation. And the compass will keep its needle raised for the one debt the road has never once refused to carry.</p>",
   "spec": [
-   "Kindle Unlimited",
    "268 Pages",
-   "Kindle $5.99",
+   "Kindle ₹573 · $5.99",
    "Paperback $14.99",
    "Published 13 Sept 2026",
    "ASIN B0HJNDGLH1"
@@ -722,7 +772,7 @@
   "spec": [
    "Kindle Unlimited",
    "96 Pages",
-   "Kindle $2.99",
+   "Kindle ₹249 · $2.99",
    "Published 6 Sept 2026",
    "ASIN B0HHZN5D7P"
   ],
@@ -750,7 +800,7 @@
   "spec": [
    "Kindle Unlimited",
    "93 Pages",
-   "Kindle $2.99",
+   "Kindle ₹249 · $2.99",
    "Published 7 Sept 2026",
    "ASIN B0HJ1JQRMT"
   ],
@@ -778,7 +828,7 @@
   "spec": [
    "Kindle Unlimited",
    "80 Pages",
-   "Kindle $3.39",
+   "Kindle ₹319 · $3.39",
    "Published 7 Sept 2026",
    "ASIN B0HJ1R5LY6"
   ],
@@ -806,7 +856,7 @@
   "spec": [
    "Kindle Unlimited",
    "234 Pages",
-   "Kindle $3.99",
+   "Kindle ₹299 · $3.99",
    "Paperback Available",
    "Published 21 Sept 2026",
    "Kindle ASIN B0HKHL8D6Q",

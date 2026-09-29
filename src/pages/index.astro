@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import LedgerRow from '../components/LedgerRow.astro';
 import Cover from '../components/Cover.astro';
-import { books, published, series, seriesBooks, site, themes, journey, coverUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished } from '../data/site';
+import AnimatedCover from '../components/AnimatedCover.astro';
+import { books, published, series, seriesBooks, site, themes, journey, coverUrl, pdfUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished } from '../data/site';
 import seriesLd from '../data/series-jsonld.json';
 import { publicImageSize } from '../data/image-size';
 import { resolvePortrait } from '../data/portrait';
@@ -13,8 +14,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
    width/height come from the real file at build time. */
 const portrait = resolvePortrait();
 const [portraitW, portraitH] = await publicImageSize(portrait.rel, [900, 1200]);
-const [fluteW, fluteH] = await publicImageSize('images/sufi-ilham-flute.jpg', [900, 900]);
-const [childW, childH] = await publicImageSize('images/sufi-ilham-childhood.jpg', [760, 760]);
+const [fluteW, fluteH] = await publicImageSize('images/sufi-ilham-flute.webp', [900, 900]);
+const [childW, childH] = await publicImageSize('images/sufi-ilham-childhood.webp', [760, 760]);
 
 const filters = [
   { id: 'all', label: 'All' },
@@ -25,6 +26,7 @@ const filters = [
   { id: 'romance', label: 'Romance' },
   { id: 'romantasy', label: 'Romantasy' },
   { id: 'thriller', label: 'Thriller' },
+  { id: 'free', label: 'Free to Read' },
   { id: 'ku', label: 'Kindle Unlimited' },
 ];
 
@@ -126,7 +128,9 @@ const jsonld = [
       </div>
       <p class="lede reveal" style="margin-bottom:2rem">
         {newReleases.length === 1
-          ? `Live on Amazon since ${formatPublished(latestPublished)} — not last season’s catalogue.`
+          ? (newReleases[0].free
+              ? `Free to read since ${formatPublished(latestPublished)} — read the whole book online, no payment.`
+              : `Live on Amazon since ${formatPublished(latestPublished)} — not last season’s catalogue.`)
           : newReleases.length === 2
             ? `Two books went live on ${formatPublished(latestPublished)}${newReleases.every((b) => b.ku) ? ' — both free on Kindle Unlimited' : ''}.`
             : `${newReleases.length} books went live on ${formatPublished(latestPublished)}${newReleases.every((b) => b.ku) ? ', all free on Kindle Unlimited' : ''}.`}
@@ -135,11 +139,25 @@ const jsonld = [
       <div class="release-grid">
         {newReleases.map((b, i) => {
           const src = coverUrl(b.img, base);
+          const art = b.coverArt ? coverUrl(b.coverArt, base) : '';
           return (
             <article class="release reveal" style={`--d:${i * 80}ms`} data-slug={b.slug}>
               <figure class="plate js-open" style="margin:0;cursor:pointer">
                 <span class="ribbon">New</span>
-                <Cover src={src} title={b.title} eager={i === 0} />
+                {art ? (
+                  <AnimatedCover
+                    art={art}
+                    title={b.title}
+                    roman={b.altTitle}
+                    tagline="A Part of the River"
+                    author="صوفی الہام"
+                    authorRoman="Sufi Ilham"
+                    note="Free Urdu Novella"
+                    dir={b.dir ?? 'rtl'}
+                  />
+                ) : (
+                  <Cover src={src} title={b.title} eager={i === 0} />
+                )}
                 <figcaption>
                   <span>{b.kicker}</span>
                   <span>{formatPublished(b.published)}</span>
@@ -153,9 +171,18 @@ const jsonld = [
                 {b.blurb && <p>{b.blurb}</p>}
                 <ul class="specs">{(b.spec ?? []).slice(0, 5).map((s) => <li>{s}</li>)}</ul>
                 <div class="cover-cta">
-                  <button class="btn solid js-open" type="button">Read more</button>
-                  <a class="btn" href={`${base}/books/${b.slug}/`}>Book page</a>
-                  {b.us && <a class="btn" href={b.us} target="_blank" rel="noopener">Amazon</a>}
+                  {b.free && b.pdf ? (
+                    <>
+                      <a class="btn solid" href={`${base}/read/${b.slug}/`}>Read free →</a>
+                      <a class="btn" href={`${base}/books/${b.slug}/`}>Book page</a>
+                    </>
+                  ) : (
+                    <>
+                      <button class="btn solid js-open" type="button">Read more</button>
+                      <a class="btn" href={`${base}/books/${b.slug}/`}>Book page</a>
+                      {b.us && <a class="btn" href={b.us} target="_blank" rel="noopener">Amazon</a>}
+                    </>
+                  )}
                 </div>
               </div>
             </article>
@@ -181,7 +208,20 @@ const jsonld = [
             <article class="spine" data-slug={b.slug}>
               <div class="spine-img js-open">
                 {isNewRelease(b) && <span class="ribbon">New</span>}
-                <Cover src={src} title={b.title} />
+                {b.coverArt ? (
+                  <AnimatedCover
+                    art={coverUrl(b.coverArt, base)}
+                    title={b.title}
+                    roman={b.altTitle}
+                    tagline="A Part of the River"
+                    author="صوفی الہام"
+                    authorRoman="Sufi Ilham"
+                    note="Free Urdu Novella"
+                    dir={b.dir ?? 'rtl'}
+                  />
+                ) : (
+                  <Cover src={src} title={b.title} />
+                )}
               </div>
               <h3 class="js-open">{b.title}</h3>
               <span class="label">
@@ -289,7 +329,7 @@ const jsonld = [
             <figure class="plate" style="margin:0">
               <div class="author-frame" style="aspect-ratio:1/1;overflow:hidden;background:var(--paper-3);border:1px solid var(--rule)">
                 <img
-                  src={`${base}/images/sufi-ilham-flute.jpg`}
+                  src={`${base}/images/sufi-ilham-flute.webp`}
                   alt="Sufi Ilham playing the bansuri"
                   width={fluteW}
                   height={fluteH}
@@ -303,7 +343,7 @@ const jsonld = [
             <figure class="plate" style="margin:0">
               <div class="author-frame" style="aspect-ratio:1/1;overflow:hidden;background:var(--paper-3);border:1px solid var(--rule)">
                 <img
-                  src={`${base}/images/sufi-ilham-childhood.jpg`}
+                  src={`${base}/images/sufi-ilham-childhood.webp`}
                   alt="Sufi Ilham as a child"
                   width={childW}
                   height={childH}

@@ -10,7 +10,7 @@ const kindMap: Record<string, string> = {
   'self-help': 'Self-Help', philosophy: 'Philosophy', fiction: 'Fiction',
   romance: 'Romance', romantasy: 'Romantasy', thriller: 'Thriller',
 };
-const tags = [book.genre, book.ku ? 'ku' : '', book.series ?? '', fresh ? 'new' : ''].filter(Boolean).join(' ');
+const tags = [book.genre, book.ku ? 'ku' : '', book.free ? 'free' : '', book.series ?? '', fresh ? 'new' : ''].filter(Boolean).join(' ');
 ---
 
 <div

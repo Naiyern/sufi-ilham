@@ -1,6 +1,7 @@
 import { initGo } from './amazon';
 import { initAudio } from './audio';
 import { initCmdk } from './cmdk';
+import { loadBooks, prefetchBooks, type Book } from './store';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -168,18 +169,11 @@ if (grid) {
 }
 
 /* ---------- modal ---------- */
-type Book = {
-  title: string; sub?: string; kicker?: string; quote?: string; desc?: string; img: string;
-  spec?: string[]; us?: string; in?: string; uk?: string; ca?: string; au?: string; paperback?: string;
-};
 const modal = $('#modal');
 let lastFocus: HTMLElement | null = null;
 
-/* shared book store, emitted once per page */
-const BOOKS: Record<string, Book> = (() => {
-  const el = document.getElementById('bookStore');
-  try { return el ? JSON.parse(el.textContent || '{}') : {}; } catch { return {}; }
-})();
+/* Prefetch the lazy book store on idle so a modal opens instantly on click. */
+if (modal) prefetchBooks();
 
 const openModal = (b: Book) => {
   if (!modal) return;
@@ -188,19 +182,29 @@ const openModal = (b: Book) => {
   img.src = b.img;
   img.alt = `${b.title} cover`;
   $('#mKicker')!.textContent = b.kicker || '';
-  $('#mTitle')!.textContent = b.title;
+  const titleEl = $('#mTitle')!;
+  titleEl.textContent = b.title;
+  if (b.dir) titleEl.setAttribute('dir', b.dir); else titleEl.removeAttribute('dir');
   $('#mSub')!.textContent = b.sub || '';
-  $('#mQuote')!.textContent = b.quote || '';
+  const quoteEl = $('#mQuote')!;
+  quoteEl.textContent = b.quote || '';
+  if (b.dir) quoteEl.setAttribute('dir', b.dir); else quoteEl.removeAttribute('dir');
   $('#mDesc')!.innerHTML = b.desc || '';
   $('#mSpec')!.innerHTML = (b.spec || []).map((s) => `<li>${s}</li>`).join('');
-  const stores: [string, string | undefined][] = [
-    ['Amazon.com', b.us], ['Amazon.in', b.in], ['UK', b.uk], ['Canada', b.ca], ['Australia', b.au],
-    ['Paperback', b.paperback],
-  ];
-  $('#mBuy')!.innerHTML = stores
-    .filter(([, u]) => u)
-    .map(([l, u], i) => `<a class="btn${i === 0 ? ' pri' : ''}" href="${u}" target="_blank" rel="noopener">${l}</a>`)
-    .join('');
+  if (b.free && b.pdf) {
+    const read = b.read || b.pdf;
+    $('#mBuy')!.innerHTML =
+      `<a class="btn pri" href="${read}">Read free online →</a>`;
+  } else {
+    const stores: [string, string | undefined][] = [
+      ['Amazon.com', b.us], ['Amazon.in', b.in], ['UK', b.uk], ['Canada', b.ca], ['Australia', b.au],
+      ['Paperback', b.paperback],
+    ];
+    $('#mBuy')!.innerHTML = stores
+      .filter(([, u]) => u)
+      .map(([l, u], i) => `<a class="btn${i === 0 ? ' pri' : ''}" href="${u}" target="_blank" rel="noopener">${l}</a>`)
+      .join('');
+  }
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
   $('#modalClose')?.focus();
@@ -216,8 +220,8 @@ document.addEventListener('click', (e) => {
   const t = e.target as HTMLElement;
   if (t.closest('.js-open') || t.closest('.lrow')) {
     const card = t.closest('[data-slug]') as HTMLElement | null;
-    const b = card?.dataset.slug ? BOOKS[card.dataset.slug] : null;
-    if (b) openModal(b);
+    const slug = card?.dataset.slug;
+    if (slug) loadBooks().then((db) => { const b = db[slug]; if (b) openModal(b); });
   }
   if (t.closest('#modalClose') || t === modal) closeModal();
 });
