@@ -35,10 +35,18 @@ export type Book = {
   altTitle?: string;
 };
 
+/**
+ * Cache-busting tag appended to PDF URLs. Bump this whenever a manuscript
+ * file is replaced so returning visitors never get a stale cached copy
+ * (e.g. an old placeholder) from their browser.
+ */
+export const PDF_VERSION = '2';
+
 /** Resolve a free book's PDF to a usable URL (same rules as coverUrl). */
 export function pdfUrl(pdf: string, base = import.meta.env.BASE_URL): string {
   if (/^(https?:|data:)/.test(pdf)) return pdf;
-  return `${base.replace(/\/$/, '')}/${pdf.replace(/^\//, '')}`;
+  const url = `${base.replace(/\/$/, '')}/${pdf.replace(/^\//, '')}`;
+  return `${url}?v=${PDF_VERSION}`;
 }
 
 export const books = booksRaw as Book[];
