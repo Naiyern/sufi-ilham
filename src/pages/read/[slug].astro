@@ -1,5 +1,6 @@
 ---
 import { books, type Book, pdfUrl } from '../../data/site';
+import PdfReader from '../../components/PdfReader.astro';
 
 // Only free titles that ship a PDF get a full-screen reader.
 export function getStaticPaths() {
@@ -49,7 +50,8 @@ const backUrl = `${base}/books/${book.slug}/`;
       }
       .rbtn:hover { border-color: #d9b45e; }
       .rbtn.pri { background: #d9b45e; color: #12100a; border-color: #d9b45e; font-weight: 600; }
-      .rframe { flex: 1 1 auto; width: 100%; border: 0; background: #1a1a1f; }
+      .rread { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; }
+      .rread .pdfjs { flex: 1 1 auto; max-height: none; border: 0; border-radius: 0; background: #14141a; }
       @media (max-width: 640px) {
         .rbar .ttl small { display: none; }
         .rbtn { padding: .5rem .7rem; }
@@ -66,6 +68,8 @@ const backUrl = `${base}/books/${book.slug}/`;
       <a class="rbtn" href={pdf} target="_blank" rel="noopener">Open in tab ↗</a>
       <a class="rbtn pri" href={pdf} download>Download PDF</a>
     </div>
-    <iframe class="rframe" src={`${pdf}#view=FitH`} title={`${book.title} — read online`}></iframe>
+    <div class="rread">
+      <PdfReader src={pdf} title={book.title} download={pdf} />
+    </div>
   </body>
 </html>

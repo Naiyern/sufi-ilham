@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
+import PdfReader from '../../components/PdfReader.astro';
 import { books, site, seriesBooks, type Book, coverUrl, pdfUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
 
 export function getStaticPaths() {
@@ -96,12 +97,7 @@ const jsonld = [
               <a class="btn pri" href={pdf} download>Download PDF</a>
             </div>
           </div>
-          <iframe class="reader-frame" src={`${pdf}#view=FitH`} title={`${book.title} — read online`} loading="lazy"></iframe>
-          <p class="reader-fallback">
-            Can't see the book above?
-            <a href={pdf} target="_blank" rel="noopener">Open it in a new tab</a> or
-            <a href={pdf} download>download the PDF</a>.
-          </p>
+          <PdfReader src={pdf} title={book.title} download={pdf} />
         </section>
       )}
 

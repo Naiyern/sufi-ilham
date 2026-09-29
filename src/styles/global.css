@@ -644,6 +644,17 @@ kbd { font: inherit; font-size: .6rem; padding: .1rem .34rem; border: 1px solid 
 .reader-fallback { margin-top: .9rem; font-size: .8rem; color: var(--ink-3); }
 .reader-fallback a { text-decoration: underline; margin: 0 .25rem; }
 
+/* PDF.js canvas reader */
+.pdfjs { max-height: min(85vh, 1000px); overflow-y: auto; overflow-x: hidden;
+  border: 1px solid var(--rule); border-radius: 6px; background: #14141a;
+  padding: 1rem clamp(.5rem, 2vw, 1.4rem); -webkit-overflow-scrolling: touch; }
+.pdfjs-pages { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.pdfjs-page { max-width: 820px; width: 100%; height: auto; display: block;
+  border-radius: 3px; box-shadow: 0 6px 22px rgba(0,0,0,.35); background: #fff; }
+.pdfjs-status, .pdfjs-fallback { text-align: center; color: var(--ink-3);
+  font-size: .85rem; padding: 1.4rem 0; }
+.pdfjs-fallback a { text-decoration: underline; margin: 0 .25rem; }
+
 /* =============== LEGAL =============== */
 .legal { max-width: 800px; }
 .legal h1 { font-size: clamp(2.6rem, 7vw, 4.4rem); }
