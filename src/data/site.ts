@@ -29,6 +29,8 @@ export type Book = {
   free?: boolean;
   /** Repo-relative path to the downloadable/readable PDF (e.g. reads/foo.pdf). */
   pdf?: string;
+  /** Optional text-free cover artwork used for the animated cover treatment. */
+  coverArt?: string;
   /** Text direction for the title/description, e.g. 'rtl' for Urdu/Arabic. */
   dir?: 'rtl' | 'ltr';
   /** Optional romanised/alternate title for search and English UI. */

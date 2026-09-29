@@ -1,0 +1,265 @@
+---
+/**
+ * AnimatedCover — a living book cover.
+ * Uses a text-free artwork (`art`) as the background and layers animated
+ * water shimmer, a slow drift and a soft light sheen beneath live web-font
+ * titles that fade in. Falls back to a still frame when the reader prefers
+ * reduced motion. All text is real, selectable HTML (crisp Nastaliq).
+ */
+import '@fontsource/noto-nastaliq-urdu/400.css';
+import '@fontsource/noto-nastaliq-urdu/600.css';
+
+interface Props {
+  art: string;
+  title: string;
+  roman?: string;
+  tagline?: string;
+  author?: string;
+  authorRoman?: string;
+  note?: string;
+  dir?: 'rtl' | 'ltr';
+  cls?: string;
+}
+const {
+  art,
+  title,
+  roman,
+  tagline,
+  author,
+  authorRoman,
+  note,
+  dir = 'rtl',
+  cls = '',
+} = Astro.props;
+---
+
+<div class={`acover ${cls}`} role="img" aria-label={`${title}${roman ? ' — ' + roman : ''}${author ? ', ' + author : ''}`}>
+  <div class="acover-art" style={`background-image:url('${art}')`}></div>
+  <div class="acover-shimmer" aria-hidden="true"></div>
+  <div class="acover-sheen" aria-hidden="true"></div>
+  <div class="acover-veil" aria-hidden="true"></div>
+
+  <div class="acover-txt">
+    <div class="acover-head">
+      <h3 class="acover-title" dir={dir} lang="ur">{title}</h3>
+      {roman && <p class="acover-roman">{roman}</p>}
+      {tagline && (
+        <>
+          <span class="acover-rule" aria-hidden="true"></span>
+          <p class="acover-tag">{tagline}</p>
+        </>
+      )}
+    </div>
+    <div class="acover-foot">
+      {author && <p class="acover-author" dir={dir} lang="ur">{author}</p>}
+      {authorRoman && <p class="acover-authorR">{authorRoman}</p>}
+      {note && <p class="acover-note">{note}</p>}
+    </div>
+  </div>
+</div>
+
+<style>
+  .acover {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 848 / 1264;
+    border-radius: 14px;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 24px 60px -18px rgba(20, 12, 4, 0.75),
+      0 4px 14px rgba(20, 12, 4, 0.35), inset 0 0 0 1px rgba(255, 231, 173, 0.14);
+    background: #1c1206;
+    color: #fff4dd;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  .acover-art {
+    position: absolute;
+    inset: -4%;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.04);
+    animation: acDrift 26s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  /* Sparkle over the water — a soft repeating light band that slides. */
+  .acover-shimmer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 58%;
+    background: repeating-linear-gradient(
+      100deg,
+      rgba(255, 244, 214, 0) 0 22px,
+      rgba(255, 244, 214, 0.06) 26px,
+      rgba(255, 244, 214, 0) 30px 60px
+    );
+    background-size: 220% 100%;
+    mix-blend-mode: screen;
+    opacity: 0.7;
+    -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
+    mask-image: linear-gradient(to top, #000 55%, transparent);
+    animation: acShimmer 9s linear infinite;
+  }
+
+  /* Slow glossy sheen sweeping across the whole cover. */
+  .acover-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 38%,
+      rgba(255, 240, 205, 0.16) 48%,
+      rgba(255, 240, 205, 0.05) 54%,
+      transparent 62%
+    );
+    background-size: 250% 100%;
+    background-position: 120% 0;
+    animation: acSheen 8.5s ease-in-out 1.2s infinite;
+  }
+
+  .acover-veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(20, 12, 4, 0.5) 0%,
+        rgba(20, 12, 4, 0) 26%
+      ),
+      linear-gradient(
+        to top,
+        rgba(14, 8, 3, 0.82) 0%,
+        rgba(20, 12, 4, 0.4) 15%,
+        rgba(20, 12, 4, 0) 34%
+      );
+  }
+
+  .acover-txt {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6.5% 7% 6%;
+    text-align: center;
+    text-shadow: 0 2px 10px rgba(16, 9, 2, 0.7);
+  }
+
+  .acover-title {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-weight: 600;
+    font-size: clamp(1.7rem, 8.5vw, 2.9rem);
+    line-height: 1.9;
+    color: #ffe6a6;
+    margin: 0;
+    opacity: 0;
+    animation: acRise 1s ease-out 0.15s forwards;
+  }
+
+  .acover-roman {
+    font-family: var(--display, Georgia, serif);
+    font-style: italic;
+    font-size: clamp(1.05rem, 4.4vw, 1.5rem);
+    letter-spacing: 0.02em;
+    color: #fff4dd;
+    margin: 0.15em 0 0;
+    opacity: 0;
+    animation: acRise 1s ease-out 0.45s forwards;
+  }
+
+  .acover-rule {
+    display: block;
+    width: 66px;
+    height: 1.4px;
+    margin: 0.7em auto 0.55em;
+    background: #f4d58a;
+    opacity: 0;
+    animation: acWide 0.9s ease-out 0.7s forwards;
+  }
+
+  .acover-tag {
+    font-family: var(--display, Georgia, serif);
+    font-size: clamp(0.68rem, 2.9vw, 0.9rem);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #f6e4c2;
+    margin: 0;
+    opacity: 0;
+    animation: acFade 1s ease-out 0.9s forwards;
+  }
+
+  .acover-author {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-weight: 600;
+    font-size: clamp(1.1rem, 4.6vw, 1.5rem);
+    line-height: 1.9;
+    color: #ffe6a6;
+    margin: 0;
+    opacity: 0;
+    animation: acFade 1s ease-out 1.05s forwards;
+  }
+
+  .acover-authorR {
+    font-family: var(--display, Georgia, serif);
+    font-size: clamp(0.82rem, 3.4vw, 1.05rem);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: #fbeed3;
+    margin: 0.1em 0 0;
+    opacity: 0;
+    animation: acFade 1s ease-out 1.2s forwards;
+  }
+
+  .acover-note {
+    font-family: var(--display, Georgia, serif);
+    font-size: clamp(0.6rem, 2.4vw, 0.72rem);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #eadab8;
+    opacity: 0;
+    margin: 0.5em 0 0;
+    animation: acFade 1s ease-out 1.35s forwards;
+  }
+  .acover-note { opacity: 0; }
+
+  @keyframes acDrift {
+    from { transform: scale(1.04) translate3d(0, 0, 0); }
+    to { transform: scale(1.1) translate3d(-1.5%, -1.5%, 0); }
+  }
+  @keyframes acShimmer {
+    from { background-position: 0 0; }
+    to { background-position: -220% 0; }
+  }
+  @keyframes acSheen {
+    0% { background-position: 120% 0; }
+    55%, 100% { background-position: -60% 0; }
+  }
+  @keyframes acRise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes acFade {
+    from { opacity: 0; }
+    to { opacity: 0.92; }
+  }
+  @keyframes acWide {
+    from { opacity: 0; transform: scaleX(0.2); }
+    to { opacity: 0.85; transform: scaleX(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .acover-art { animation: none; transform: scale(1.02); }
+    .acover-shimmer, .acover-sheen { animation: none; opacity: 0.35; }
+    .acover-title, .acover-roman, .acover-rule, .acover-tag,
+    .acover-author, .acover-authorR, .acover-note {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+    .acover-note { opacity: 0.85; }
+  }
+</style>
