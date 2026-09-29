@@ -27,6 +27,20 @@ const dir = reader?.dir ?? book.dir ?? 'ltr';
 const lang = reader?.lang ?? (dir === 'rtl' ? 'ur' : 'en');
 const isPlaceholder = reader?.source === 'placeholder-sample';
 const chapters = reader?.chapters ?? [];
+
+/* Per-book artwork. Chapter plates cycle over this list, so it decorates any
+   number of extracted chapters without touching the text pipeline. */
+const artBooks: Record<string, { hero?: string; plates: string[] }> = {
+  'darya-ka-aik-hissa': {
+    hero: 'images/darya/hero.jpg',
+    plates: ['images/darya/ch1.jpg', 'images/darya/ch2.jpg', 'images/darya/ch3.jpg'],
+  },
+};
+const art = artBooks[book.slug];
+const heroUrl = art?.hero ? `${base}/${art.hero}` : '';
+const plate = (i: number) =>
+  art && art.plates.length ? `${base}/${art.plates[i % art.plates.length]}` : '';
+
 ---
 
 <!doctype html>
@@ -105,6 +119,32 @@ const chapters = reader?.chapters ?? [];
       .rempty { text-align: center; opacity: .8; padding: 4rem 0; }
       .rempty a { color: #c99a3f; }
 
+      /* ---- visuals ---- */
+      .rhero { position: relative; width: 100%; max-width: 1100px; margin: 0 auto;
+        aspect-ratio: 21 / 9; overflow: hidden; }
+      .rhero img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.96); }
+      .rhero::after { content: ""; position: absolute; inset: 0;
+        background: linear-gradient(to bottom, transparent 40%, var(--rbg, #ece3d0) 100%); }
+      html[data-rtheme="light"] { --rbg: #f7f5ef; }
+      html[data-rtheme="sepia"] { --rbg: #ece3d0; }
+      html[data-rtheme="dark"]  { --rbg: #14140f; }
+
+      .rchap .plate { margin: 0 0 2rem; border-radius: 10px; overflow: hidden;
+        box-shadow: 0 14px 40px rgba(0,0,0,.28); }
+      .rchap .plate img { width: 100%; height: auto; display: block; }
+
+      .ornament { display: block; margin: 1.4rem auto 2rem; width: 132px; height: auto; color: #c99a3f; opacity: .9; }
+      .ornament.top { margin: 0 auto 1.4rem; }
+
+      /* Drop cap only for LTR — Urdu letters are connected, so a floated first
+         letter would break the ligature; RTL gets an ornamental opener instead. */
+      html[dir="ltr"] .rchap > div > p:first-of-type::first-letter {
+        float: left; font-family: var(--display, Georgia, serif); font-weight: 700;
+        font-size: 3.4em; line-height: .78; padding: .05em .12em 0 0; color: #b9822f; }
+      html[dir="rtl"] .rchap > div > p:first-of-type { font-size: calc(var(--rf) * 1.04); }
+      html[dir="rtl"] .rchap > div > p:first-of-type::before {
+        content: "﴾"; color: #c99a3f; margin-inline-end: .35rem; font-size: 1.3em; vertical-align: -.05em; }
+
       @media (max-width: 640px) { .rttl { max-width: 34vw; } .ricon span.lbl { display: none; } }
       @media print { .rtop, .rprogress, .rpanel { display: none !important; } }
     </style>
@@ -154,6 +194,12 @@ const chapters = reader?.chapters ?? [];
       </div>
     </div>
 
+    {heroUrl && (
+      <div class="rhero">
+        <img src={heroUrl} alt="" width="1100" height="471" fetchpriority="high" />
+      </div>
+    )}
+
     <main class="rbook" id="rbook">
       {isPlaceholder && (
         <p class="rbanner">Sample preview — this is placeholder text. Add the real manuscript PDF and it will be replaced automatically by your book’s own words.</p>
@@ -161,12 +207,26 @@ const chapters = reader?.chapters ?? [];
       <div class="rhead">
         <h1 dir={dir}>{book.title}</h1>
         {reader?.author && <p class="rauthor" dir={dir}>{reader.author}</p>}
+        <svg class="ornament" viewBox="0 0 240 24" fill="none" aria-hidden="true">
+          <path d="M12 12h72" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M156 12h72" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M96 12c6-7 12-7 12 0 0-7 6-7 12 0 6 7 12 7 12 0 0 7 6 7 12 0" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="120" cy="12" r="2.4" fill="currentColor"/>
+        </svg>
       </div>
 
       {chapters.length > 0 ? (
-        chapters.map((c) => (
+        chapters.map((c, i) => (
           <section class="rchap" id={c.id}>
+            {plate(i) && (
+              <figure class="plate"><img src={plate(i)} alt="" width="880" height="440" loading="lazy" /></figure>
+            )}
             {c.title && <h2 dir={dir}>{c.title}</h2>}
+            <svg class="ornament top" viewBox="0 0 240 24" fill="none" aria-hidden="true">
+              <path d="M40 12h56" stroke="currentColor" stroke-width="1.1"/>
+              <path d="M144 12h56" stroke="currentColor" stroke-width="1.1"/>
+              <path d="M104 12c4-6 8-6 8 0 0-6 4-6 8 0 4 6 8 6 8 0 0-6 4-6 8 0" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
             <div set:html={c.html} />
           </section>
         ))
