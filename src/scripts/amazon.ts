@@ -1,3 +1,5 @@
+import { booksNow } from './store';
+
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* Cinematic interstitial before handing the reader to Amazon. The tab is
@@ -77,11 +79,8 @@ export function initGo() {
     let cover = '';
     let nm = a.getAttribute('data-go-name') || '';
     if (card?.dataset.slug) {
-      try {
-        const store = JSON.parse(document.getElementById('bookStore')?.textContent || '{}');
-        const d = store[card.dataset.slug];
-        if (d) { cover = d.img; nm = nm || d.title; }
-      } catch { /* ignore */ }
+      const d = booksNow()?.[card.dataset.slug];
+      if (d) { cover = d.img; nm = nm || d.title; }
     }
     const mim = document.querySelector<HTMLImageElement>('#modal.open #mImg');
     if (!cover && mim) {

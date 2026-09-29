@@ -14,8 +14,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
    width/height come from the real file at build time. */
 const portrait = resolvePortrait();
 const [portraitW, portraitH] = await publicImageSize(portrait.rel, [900, 1200]);
-const [fluteW, fluteH] = await publicImageSize('images/sufi-ilham-flute.jpg', [900, 900]);
-const [childW, childH] = await publicImageSize('images/sufi-ilham-childhood.jpg', [760, 760]);
+const [fluteW, fluteH] = await publicImageSize('images/sufi-ilham-flute.webp', [900, 900]);
+const [childW, childH] = await publicImageSize('images/sufi-ilham-childhood.webp', [760, 760]);
 
 const filters = [
   { id: 'all', label: 'All' },
@@ -316,7 +316,7 @@ const jsonld = [
             <figure class="plate" style="margin:0">
               <div class="author-frame" style="aspect-ratio:1/1;overflow:hidden;background:var(--paper-3);border:1px solid var(--rule)">
                 <img
-                  src={`${base}/images/sufi-ilham-flute.jpg`}
+                  src={`${base}/images/sufi-ilham-flute.webp`}
                   alt="Sufi Ilham playing the bansuri"
                   width={fluteW}
                   height={fluteH}
@@ -330,7 +330,7 @@ const jsonld = [
             <figure class="plate" style="margin:0">
               <div class="author-frame" style="aspect-ratio:1/1;overflow:hidden;background:var(--paper-3);border:1px solid var(--rule)">
                 <img
-                  src={`${base}/images/sufi-ilham-childhood.jpg`}
+                  src={`${base}/images/sufi-ilham-childhood.webp`}
                   alt="Sufi Ilham as a child"
                   width={childW}
                   height={childH}

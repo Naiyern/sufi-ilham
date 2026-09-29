@@ -1,6 +1,7 @@
 import { initGo } from './amazon';
 import { initAudio } from './audio';
 import { initCmdk } from './cmdk';
+import { loadBooks, prefetchBooks, type Book } from './store';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -168,19 +169,11 @@ if (grid) {
 }
 
 /* ---------- modal ---------- */
-type Book = {
-  title: string; sub?: string; kicker?: string; quote?: string; desc?: string; img: string;
-  spec?: string[]; us?: string; in?: string; uk?: string; ca?: string; au?: string; paperback?: string;
-  free?: boolean; pdf?: string; read?: string; dir?: 'rtl' | 'ltr';
-};
 const modal = $('#modal');
 let lastFocus: HTMLElement | null = null;
 
-/* shared book store, emitted once per page */
-const BOOKS: Record<string, Book> = (() => {
-  const el = document.getElementById('bookStore');
-  try { return el ? JSON.parse(el.textContent || '{}') : {}; } catch { return {}; }
-})();
+/* Prefetch the lazy book store on idle so a modal opens instantly on click. */
+if (modal) prefetchBooks();
 
 const openModal = (b: Book) => {
   if (!modal) return;
@@ -227,8 +220,8 @@ document.addEventListener('click', (e) => {
   const t = e.target as HTMLElement;
   if (t.closest('.js-open') || t.closest('.lrow')) {
     const card = t.closest('[data-slug]') as HTMLElement | null;
-    const b = card?.dataset.slug ? BOOKS[card.dataset.slug] : null;
-    if (b) openModal(b);
+    const slug = card?.dataset.slug;
+    if (slug) loadBooks().then((db) => { const b = db[slug]; if (b) openModal(b); });
   }
   if (t.closest('#modalClose') || t === modal) closeModal();
 });

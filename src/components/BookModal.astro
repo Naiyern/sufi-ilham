@@ -1,19 +1,10 @@
 ---
-import { books, coverUrl, pdfUrl } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-/* One shared store instead of repeating the full record in every
-   data-book attribute (that duplication cost ~89KB on the home page). */
-const store = Object.fromEntries(
-  books.map((b) => [b.slug, {
-    ...b,
-    img: coverUrl(b.img, base),
-    ...(b.free && b.pdf ? { pdf: pdfUrl(b.pdf, base), read: `${base}/read/${b.slug}/` } : {}),
-  }]),
-);
+/* The modal's data is served as one cached JSON file (/book-store.json) and
+   fetched lazily by app.ts, instead of being inlined into every page. */
 ---
 
-<script type="application/json" id="bookStore" set:html={JSON.stringify(store)}></script>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" data-store={`${base}/book-store.json`}>
   <div class="modal-in" id="modalIn">
     <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
     <div><img id="mImg" src="" alt="" width="400" height="600" /></div>
