@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import { books, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
+import { books, site, seriesBooks, type Book, coverUrl, pdfUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
 
 export function getStaticPaths() {
   return books.map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
@@ -11,6 +11,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { book } = Astro.props as { book: Book };
 const img = coverUrl(book.img, base);
 const plain = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+const pdf = book.free && book.pdf ? pdfUrl(book.pdf, base) : '';
+const readUrl = book.free ? `${base}/read/${book.slug}/` : '';
 
 const stores: [string, string | undefined][] = [
   ['Amazon.com', book.us], ['Amazon.in', book.in], ['Amazon UK', book.uk],
@@ -49,25 +52,58 @@ const jsonld = [
       <div class="bp-grid" style="margin-top:2rem">
         <div class="reveal in">
           <img class="bp-cover" src={img} alt={`${book.title} cover`} width="400" height="600" />
-          <div class="buy-row">
-            {stores.filter(([, u]) => u).map(([l, u], i) => (
-              <a class={`btn${i === 0 ? ' pri' : ''}`} href={u} target="_blank" rel="noopener">{l}</a>
-            ))}
-          </div>
+          {book.free ? (
+            <>
+              <div class="buy-row">
+                <a class="btn pri" href="#reader">Read free online ↓</a>
+                {pdf && <a class="btn" href={pdf} download>Download PDF</a>}
+              </div>
+              <p class="free-note">100% free — no sign-up, no payment. Read it right here or download your own copy.</p>
+            </>
+          ) : (
+            <div class="buy-row">
+              {stores.filter(([, u]) => u).map(([l, u], i) => (
+                <a class={`btn${i === 0 ? ' pri' : ''}`} href={u} target="_blank" rel="noopener">{l}</a>
+              ))}
+            </div>
+          )}
         </div>
 
         <div class="reveal in">
-          {isNewRelease(book) && <span class="label mark">New release · {formatPublished(book.published)}</span>}
+          {book.free
+            ? <span class="label mark">Free to read · {formatPublished(book.published)}</span>
+            : isNewRelease(book) && <span class="label mark">New release · {formatPublished(book.published)}</span>}
           {book.kicker && <span class="label">{book.kicker}</span>}
-          <h1 style="font-size:clamp(2.1rem,5vw,3.6rem)">{book.title}</h1>
+          <h1 dir={book.dir ?? undefined} style="font-size:clamp(2.1rem,5vw,3.6rem)">{book.title}</h1>
           {book.sub && <p style="font-family:var(--display);font-style:italic;font-size:1.25rem;margin-top:.6rem;color:var(--ink-2)">{book.sub}</p>}
-          {book.quote && <p class="pull">{book.quote}</p>}
+          {book.quote && <p class="pull" dir={book.dir ?? undefined}>{book.quote}</p>}
           <ul class="specs" style="margin:1.6rem 0">
             {(book.spec ?? []).map((s) => <li>{s}</li>)}
           </ul>
           <div class="desc" set:html={book.desc} />
         </div>
       </div>
+
+      {book.free && pdf && (
+        <section id="reader" class="reader-block reveal">
+          <div class="reader-head">
+            <div>
+              <span class="label mark">Read free</span>
+              <h2 dir={book.dir ?? undefined} style="margin:.3rem 0 0">{book.title}</h2>
+            </div>
+            <div class="reader-actions">
+              <a class="btn" href={readUrl}>Full-screen reader ↗</a>
+              <a class="btn pri" href={pdf} download>Download PDF</a>
+            </div>
+          </div>
+          <iframe class="reader-frame" src={`${pdf}#view=FitH`} title={`${book.title} — read online`} loading="lazy"></iframe>
+          <p class="reader-fallback">
+            Can't see the book above?
+            <a href={pdf} target="_blank" rel="noopener">Open it in a new tab</a> or
+            <a href={pdf} download>download the PDF</a>.
+          </p>
+        </section>
+      )}
 
       {book.series && (
         <p style="margin-top:2.6rem">

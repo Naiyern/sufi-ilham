@@ -627,6 +627,23 @@ kbd { font: inherit; font-size: .6rem; padding: .1rem .34rem; border: 1px solid 
   .bp-cover { max-width: 240px; }
 }
 
+/* =============== FREE READER =============== */
+.free-note { margin-top: .9rem; font-size: .82rem; color: var(--ink-3); line-height: 1.5; }
+.reader-block { margin-top: 4rem; scroll-margin-top: 6rem; }
+.reader-head {
+  display: flex; flex-wrap: wrap; gap: 1rem 1.4rem;
+  align-items: flex-end; justify-content: space-between;
+  padding-bottom: 1.1rem; margin-bottom: 1.4rem; border-bottom: 1px solid var(--rule);
+}
+.reader-head h2 { font-size: clamp(1.3rem, 3vw, 1.9rem); }
+.reader-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.reader-frame {
+  width: 100%; height: min(85vh, 900px); border: 1px solid var(--rule);
+  border-radius: 6px; background: #1a1a1f; display: block;
+}
+.reader-fallback { margin-top: .9rem; font-size: .8rem; color: var(--ink-3); }
+.reader-fallback a { text-decoration: underline; margin: 0 .25rem; }
+
 /* =============== LEGAL =============== */
 .legal { max-width: 800px; }
 .legal h1 { font-size: clamp(2.6rem, 7vw, 4.4rem); }

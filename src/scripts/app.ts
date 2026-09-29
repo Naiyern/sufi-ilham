@@ -171,6 +171,7 @@ if (grid) {
 type Book = {
   title: string; sub?: string; kicker?: string; quote?: string; desc?: string; img: string;
   spec?: string[]; us?: string; in?: string; uk?: string; ca?: string; au?: string; paperback?: string;
+  free?: boolean; pdf?: string; read?: string; dir?: 'rtl' | 'ltr';
 };
 const modal = $('#modal');
 let lastFocus: HTMLElement | null = null;
@@ -188,19 +189,30 @@ const openModal = (b: Book) => {
   img.src = b.img;
   img.alt = `${b.title} cover`;
   $('#mKicker')!.textContent = b.kicker || '';
-  $('#mTitle')!.textContent = b.title;
+  const titleEl = $('#mTitle')!;
+  titleEl.textContent = b.title;
+  if (b.dir) titleEl.setAttribute('dir', b.dir); else titleEl.removeAttribute('dir');
   $('#mSub')!.textContent = b.sub || '';
-  $('#mQuote')!.textContent = b.quote || '';
+  const quoteEl = $('#mQuote')!;
+  quoteEl.textContent = b.quote || '';
+  if (b.dir) quoteEl.setAttribute('dir', b.dir); else quoteEl.removeAttribute('dir');
   $('#mDesc')!.innerHTML = b.desc || '';
   $('#mSpec')!.innerHTML = (b.spec || []).map((s) => `<li>${s}</li>`).join('');
-  const stores: [string, string | undefined][] = [
-    ['Amazon.com', b.us], ['Amazon.in', b.in], ['UK', b.uk], ['Canada', b.ca], ['Australia', b.au],
-    ['Paperback', b.paperback],
-  ];
-  $('#mBuy')!.innerHTML = stores
-    .filter(([, u]) => u)
-    .map(([l, u], i) => `<a class="btn${i === 0 ? ' pri' : ''}" href="${u}" target="_blank" rel="noopener">${l}</a>`)
-    .join('');
+  if (b.free && b.pdf) {
+    const read = b.read || b.pdf;
+    $('#mBuy')!.innerHTML =
+      `<a class="btn pri" href="${read}">Read free online →</a>` +
+      `<a class="btn" href="${b.pdf}" download>Download PDF</a>`;
+  } else {
+    const stores: [string, string | undefined][] = [
+      ['Amazon.com', b.us], ['Amazon.in', b.in], ['UK', b.uk], ['Canada', b.ca], ['Australia', b.au],
+      ['Paperback', b.paperback],
+    ];
+    $('#mBuy')!.innerHTML = stores
+      .filter(([, u]) => u)
+      .map(([l, u], i) => `<a class="btn${i === 0 ? ' pri' : ''}" href="${u}" target="_blank" rel="noopener">${l}</a>`)
+      .join('');
+  }
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
   $('#modalClose')?.focus();

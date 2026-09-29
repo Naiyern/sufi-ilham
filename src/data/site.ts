@@ -25,7 +25,21 @@ export type Book = {
   blurb?: string;
   /** ISO date (YYYY-MM-DD) or month (YYYY-MM) when the day is not verified. */
   published?: string;
+  /** Free titles are read/downloaded on-site instead of sold on Amazon. */
+  free?: boolean;
+  /** Repo-relative path to the downloadable/readable PDF (e.g. reads/foo.pdf). */
+  pdf?: string;
+  /** Text direction for the title/description, e.g. 'rtl' for Urdu/Arabic. */
+  dir?: 'rtl' | 'ltr';
+  /** Optional romanised/alternate title for search and English UI. */
+  altTitle?: string;
 };
+
+/** Resolve a free book's PDF to a usable URL (same rules as coverUrl). */
+export function pdfUrl(pdf: string, base = import.meta.env.BASE_URL): string {
+  if (/^(https?:|data:)/.test(pdf)) return pdf;
+  return `${base.replace(/\/$/, '')}/${pdf.replace(/^\//, '')}`;
+}
 
 export const books = booksRaw as Book[];
 

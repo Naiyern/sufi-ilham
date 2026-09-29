@@ -1,0 +1,71 @@
+---
+import { books, type Book, pdfUrl } from '../../data/site';
+
+// Only free titles that ship a PDF get a full-screen reader.
+export function getStaticPaths() {
+  return books
+    .filter((b) => b.free && b.pdf)
+    .map((b) => ({ params: { slug: b.slug }, props: { book: b } }));
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { book } = Astro.props as { book: Book };
+const pdf = pdfUrl(book.pdf!, base);
+const backUrl = `${base}/books/${book.slug}/`;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{book.title} — Read free · Sufi Ilham</title>
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" href={`${base}/favicon.ico`} sizes="any" />
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { height: 100%; }
+      body {
+        display: flex; flex-direction: column; height: 100vh;
+        background: #07070a; color: #e9e6df;
+        font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      }
+      .rbar {
+        display: flex; align-items: center; gap: .8rem;
+        padding: .6rem .9rem; border-bottom: 1px solid #23232b;
+        background: #0c0c11; flex: 0 0 auto;
+      }
+      .rbar .ttl {
+        font-weight: 600; font-size: 1rem; margin-right: auto;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .rbar .ttl small { display: block; font-weight: 400; font-size: .72rem; color: #9a968c; }
+      .rbtn {
+        display: inline-flex; align-items: center; gap: .35rem;
+        padding: .5rem .85rem; border: 1px solid #35353f; border-radius: 6px;
+        color: #e9e6df; text-decoration: none; font-size: .82rem; white-space: nowrap;
+        transition: border-color .15s, background .15s;
+      }
+      .rbtn:hover { border-color: #d9b45e; }
+      .rbtn.pri { background: #d9b45e; color: #12100a; border-color: #d9b45e; font-weight: 600; }
+      .rframe { flex: 1 1 auto; width: 100%; border: 0; background: #1a1a1f; }
+      @media (max-width: 640px) {
+        .rbar .ttl small { display: none; }
+        .rbtn { padding: .5rem .7rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rbar">
+      <a class="rbtn" href={backUrl} aria-label="Back to book page">← Back</a>
+      <span class="ttl" dir={book.dir ?? undefined}>
+        {book.title}
+        {book.altTitle && <small>{book.altTitle} · free to read</small>}
+      </span>
+      <a class="rbtn" href={pdf} target="_blank" rel="noopener">Open in tab ↗</a>
+      <a class="rbtn pri" href={pdf} download>Download PDF</a>
+    </div>
+    <iframe class="rframe" src={`${pdf}#view=FitH`} title={`${book.title} — read online`}></iframe>
+  </body>
+</html>
