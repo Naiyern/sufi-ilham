@@ -208,7 +208,20 @@ const jsonld = [
             <article class="spine" data-slug={b.slug}>
               <div class="spine-img js-open">
                 {isNewRelease(b) && <span class="ribbon">New</span>}
-                <Cover src={src} title={b.title} />
+                {b.coverArt ? (
+                  <AnimatedCover
+                    art={coverUrl(b.coverArt, base)}
+                    title={b.title}
+                    roman={b.altTitle}
+                    tagline="A Part of the River"
+                    author="صوفی الہام"
+                    authorRoman="Sufi Ilham"
+                    note="Free Urdu Novella"
+                    dir={b.dir ?? 'rtl'}
+                  />
+                ) : (
+                  <Cover src={src} title={b.title} />
+                )}
               </div>
               <h3 class="js-open">{b.title}</h3>
               <span class="label">

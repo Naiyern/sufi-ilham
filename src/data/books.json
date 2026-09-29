@@ -25,6 +25,32 @@
   "blurb": "A free Urdu novella by Sufi Ilham — read the whole book online, completely free."
  },
  {
+  "img": "https://m.media-amazon.com/images/I/71C58DyMC2L._SL500_.jpg",
+  "title": "नसरुद्दीन की टेढ़ी तराज़ू",
+  "altTitle": "Nasruddin Ki Tedhi Tarazu",
+  "sub": "Nasruddin Ki Tedhi Tarazu · A Historical-Folkloric Novel",
+  "kicker": "Hindi Historical Fiction",
+  "quote": "\"जहाँ हर मज़ाक के पीछे एक सवाल है, और हर सवाल के पीछे इंसान।\"",
+  "desc": "<p lang=\"hi\">तेरहवीं सदी के अनातोलिया की धूल भरी राहों, बाज़ारों और मस्जिदों के बीच एक ऐसा आदमी चलता है जिसकी सबसे बड़ी ताक़त उसकी बुद्धि नहीं, बल्कि दुनिया की बेवकूफ़ियों को देखने की उसकी क्षमता है।</p><p lang=\"hi\"><b>मुल्ला नसरुद्दीन।</b></p><p lang=\"hi\">कभी वह हँसाता है, कभी उलझाता है, और कभी एक साधारण-सी बात के भीतर ऐसा सवाल रख देता है जिससे सामने वाला देर तक बच नहीं पाता।</p><p lang=\"hi\">गरीबी की कठोर ज़मीन, सुल्तानों की राजनीति, व्यापारियों की चालाकी और लोककथाओं की नसों के बीच यह कहानी उस आदमी की यात्रा है जो हर असमान तराज़ू में केवल वजन नहीं, बल्कि इंसान की नीयत देखता है।</p><p lang=\"hi\">इंसाफ़, धर्म, सत्ता, धन और इंसान की असली कीमत क्या है?</p><p lang=\"hi\">हँसी और व्यंग्य के पीछे छिपी यह ऐतिहासिक-लोककथात्मक कथा केवल अतीत की कहानी नहीं है। यह उन सवालों की कहानी है जो सदियों बाद भी हमारे सामने वैसे ही खड़े हैं।</p><p lang=\"hi\">“नसरुद्दीन की टेढ़ी तराज़ू” — जहाँ हर मज़ाक के पीछे एक सवाल है, और हर सवाल के पीछे इंसान।</p>",
+  "spec": [
+   "Kindle Unlimited",
+   "Kindle ₹199",
+   "Language: Hindi",
+   "Published 29 Sept 2026",
+   "Kindle ASIN B0HLFWT9TJ"
+  ],
+  "slug": "nasruddin-ki-tedhi-tarazu",
+  "published": "2026-09-29",
+  "genre": "fiction",
+  "ku": true,
+  "us": "https://www.amazon.com/dp/B0HLFWT9TJ",
+  "in": "https://www.amazon.in/dp/B0HLFWT9TJ",
+  "uk": "https://www.amazon.co.uk/dp/B0HLFWT9TJ",
+  "ca": "https://www.amazon.ca/dp/B0HLFWT9TJ",
+  "au": "https://www.amazon.com.au/dp/B0HLFWT9TJ",
+  "blurb": "In 13th-century Anatolia, Mullah Nasruddin weighs more than goods on his crooked scale — he weighs conscience. A witty historical-folkloric novel about justice, power, faith, and what a person is truly worth."
+ },
+ {
   "img": "https://m.media-amazon.com/images/I/71x+qs3EpiL._SL500_.jpg",
   "title": "The Quiet Tenancy",
   "sub": "A Psychological Thriller",
