@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="ur" dir="rtl" data-rtheme="sepia" data-pw="normal"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>دریا کا ایک حصہ — Read free · Sufi Ilham</title><meta name="description" content="Read دریا کا ایک حصہ by Sufi Ilham free online."><link rel="icon" href="/sufi-ilham/favicon.ico" sizes="any"><style>
+      :root { --rf: 1.25rem; --rlh: 2.15; --rmw: 44rem; --pw: 760px; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { min-height: 100vh; transition: background .25s, color .25s; }
+      html[data-rtheme="light"] body { background: #f7f5ef; color: #1c1a15; --rbg: #f7f5ef; }
+      html[data-rtheme="sepia"] body { background: #ece3d0; color: #40372a; --rbg: #ece3d0; }
+      html[data-rtheme="dark"]  body { background: #14140f; color: #d8d2c4; --rbg: #14140f; }
+      html[data-pw="narrow"] { --pw: 560px; --rmw: 36rem; }
+      html[data-pw="normal"] { --pw: 760px; --rmw: 44rem; }
+      html[data-pw="wide"]   { --pw: 960px; --rmw: 52rem; }
+
+      .rprogress { position: fixed; inset: 0 auto auto 0; height: 3px; width: 100%;
+        transform: scaleX(var(--p,0)); transform-origin: left; background: #c99a3f; z-index: 50; }
+      html[dir="rtl"] .rprogress { transform-origin: right; }
+
+      .rtop { position: sticky; top: 0; z-index: 40; display: flex; align-items: center;
+        gap: .5rem; padding: .55rem clamp(.6rem, 3vw, 1.2rem);
+        backdrop-filter: blur(8px); border-bottom: 1px solid rgba(120,110,90,.25); }
+      html[data-rtheme="light"] .rtop { background: rgba(247,245,239,.9); }
+      html[data-rtheme="sepia"] .rtop { background: rgba(236,227,208,.9); }
+      html[data-rtheme="dark"]  .rtop { background: rgba(20,20,15,.9); }
+      .rtop .sp { margin-inline-start: auto; }
+      .rttl { font: 600 .95rem/1.2 var(--display, Georgia, serif); white-space: nowrap;
+        overflow: hidden; text-overflow: ellipsis; max-width: 34vw; }
+      .rpageind { font: 500 .8rem/1 system-ui; opacity: .75; white-space: nowrap;
+        font-variant-numeric: tabular-nums; }
+
+      .ricon { display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
+        min-width: 2.1rem; height: 2.1rem; padding: 0 .6rem; cursor: pointer;
+        border: 1px solid rgba(120,110,90,.35); border-radius: 7px; background: transparent;
+        color: inherit; font: 500 .8rem/1 system-ui, sans-serif; text-decoration: none; }
+      .ricon:hover { border-color: #c99a3f; }
+      .ricon.pri { background: #c99a3f; border-color: #c99a3f; color: #241c08; font-weight: 700; }
+
+      .rpanel { position: fixed; z-index: 45; top: 3.4rem;
+        border: 1px solid rgba(120,110,90,.35); border-radius: 10px; padding: .9rem;
+        box-shadow: 0 18px 50px rgba(0,0,0,.35); display: none; min-width: 250px; }
+      html[data-rtheme="light"] .rpanel { background: #fffdf7; }
+      html[data-rtheme="sepia"] .rpanel { background: #f3ecdd; }
+      html[data-rtheme="dark"]  .rpanel { background: #1e1e17; }
+      .rpanel.open { display: block; }
+      #rsettings { inset-inline-end: clamp(.6rem, 3vw, 1.2rem); }
+      .rrow { display: flex; align-items: center; gap: .5rem; margin: .35rem 0 .8rem; }
+      .rrow > span { font: 600 .7rem/1 system-ui; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+      .rseg { display: flex; gap: .3rem; flex-wrap: wrap; }
+      .rseg button { flex: 1 1 auto; padding: .45rem .5rem; border: 1px solid rgba(120,110,90,.35);
+        border-radius: 6px; background: transparent; color: inherit; cursor: pointer; font: 500 .8rem/1 system-ui; }
+      .rseg button[aria-pressed="true"] { background: #c99a3f; border-color: #c99a3f; color: #241c08; font-weight: 700; }
+      .rjump { display: flex; align-items: center; gap: .5rem; }
+      .rjump input[type="range"] { flex: 1; accent-color: #c99a3f; }
+      .rjump .rgo { width: 4.5rem; }
+      .rjump input[type="number"] { width: 4.2rem; padding: .35rem; border-radius: 6px;
+        border: 1px solid rgba(120,110,90,.4); background: transparent; color: inherit; }
+
+      .rhero { position: relative; width: 100%; max-width: 1100px; margin: 0 auto;
+        aspect-ratio: 21 / 9; overflow: hidden; }
+      .rhero img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.96); }
+      .rhero::after { content: ""; position: absolute; inset: 0;
+        background: linear-gradient(to bottom, transparent 40%, var(--rbg, #ece3d0) 100%); }
+
+      .rhead { text-align: center; margin: -3rem auto 2.4rem; position: relative; z-index: 2; }
+      .rhead h1 { font: 700 clamp(2rem, 6vw, 3rem)/1.6 "Noto Nastaliq Urdu", var(--display, serif); margin: 0; }
+      .rhead .rauthor { margin-top: .8rem; font-size: 1.1rem; opacity: .85; }
+      .ornament { display: block; margin: 1.2rem auto 0; width: 132px; height: auto; color: #c99a3f; opacity: .9; }
+
+      /* ---- PDF page mode ---- */
+      main.rbook { padding: 0 clamp(.6rem, 3vw, 1.4rem) 24vh; }
+      .rbanner { max-width: var(--pw); margin: 1.4rem auto 0; padding: .7rem .9rem; border-radius: 8px;
+        font-size: .82rem; border: 1px dashed #c99a3f; background: rgba(201,154,63,.12); }
+      .rpages { display: flex; flex-direction: column; align-items: center; gap: clamp(.7rem, 2vw, 1.3rem); }
+      .rpage { position: relative; width: 100%; max-width: var(--pw); aspect-ratio: var(--par, 0.6667);
+        background: #fff; border-radius: 4px; overflow: hidden;
+        box-shadow: 0 10px 34px rgba(0,0,0,.28); }
+      .rpage canvas { width: 100%; height: 100%; display: block; }
+      .rpage .ph { position: absolute; inset: 0; display: grid; place-items: center;
+        color: #b3a488; font: 500 .8rem system-ui; }
+      .rpage .pn { position: absolute; inset-block-end: .4rem; inset-inline-end: .6rem;
+        font: 500 .68rem system-ui; color: rgba(70,60,40,.5); }
+
+      /* ---- text mode ---- */
+      .rtext { max-width: var(--rmw); margin: 0 auto; }
+      .rchap { margin: 0 0 3.5rem; scroll-margin-top: 4rem; }
+      .rchap .plate { margin: 0 0 2rem; border-radius: 10px; overflow: hidden; box-shadow: 0 14px 40px rgba(0,0,0,.28); }
+      .rchap .plate img { width: 100%; height: auto; display: block; }
+      .rchap h2 { font: 700 clamp(1.4rem, 4vw, 2rem)/1.7 "Noto Nastaliq Urdu", var(--display, serif);
+        text-align: center; margin: 0 0 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(120,110,90,.25); }
+      .rchap p { font-size: var(--rf); line-height: var(--rlh); margin: 0 0 1.3rem; text-align: justify; }
+      html[lang="ur"] .rchap p, html[dir="rtl"] .rchap p { font-family: "Noto Nastaliq Urdu", serif; text-align: right; }
+      .rempty { text-align: center; opacity: .8; padding: 4rem 0; }
+      .rempty a { color: #c99a3f; }
+
+      @media (max-width: 640px) { .rttl { max-width: 26vw; } .ricon span.lbl { display: none; } .rpageind { display: none; } }
+      @media print { .rtop, .rprogress, .rpanel, .rhero { display: none !important; } }
+    </style><style>@font-face{font-family:Noto Nastaliq Urdu;font-style:normal;font-display:swap;font-weight:400;src:url(/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-400-normal.BVDOj1dq.woff2) format("woff2"),url(/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-400-normal.Df9iHKj9.woff) format("woff");unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}@font-face{font-family:Noto Nastaliq Urdu;font-style:normal;font-display:swap;font-weight:400;src:url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-ext-400-normal.ULxojL9g.woff2) format("woff2"),url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-ext-400-normal.BwovpPbk.woff) format("woff");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:Noto Nastaliq Urdu;font-style:normal;font-display:swap;font-weight:400;src:url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-400-normal.uocoWRvS.woff2) format("woff2"),url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-400-normal.BlOzo2Ia.woff) format("woff");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:Noto Nastaliq Urdu;font-style:normal;font-display:swap;font-weight:700;src:url(/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-700-normal.CV4fHIsl.woff2) format("woff2"),url(/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-700-normal.DLTMJhMG.woff) format("woff");unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}@font-face{font-family:Noto Nastaliq Urdu;font-style:normal;font-display:swap;font-weight:700;src:url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-ext-700-normal.C3YvDW3y.woff2) format("woff2"),url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-ext-700-normal.BBxErJIn.woff) format("woff");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:Noto Nastaliq Urdu;font-style:normal;font-display:swap;font-weight:700;src:url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-700-normal.rBmT3leA.woff2) format("woff2"),url(/sufi-ilham/_astro/noto-nastaliq-urdu-latin-700-normal.dXX0GMKS.woff) format("woff");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style></head> <body> <div class="rprogress" id="rprogress"></div> <header class="rtop"> <a class="ricon" href="/sufi-ilham/books/darya-ka-aik-hissa/" aria-label="Back to book page">←<span class="lbl"> Back</span></a> <span class="rttl" dir="rtl">دریا کا ایک حصہ</span> <span class="rpageind" id="rpageind">—</span> <button class="ricon sp" id="rsetBtn" aria-haspopup="true" aria-expanded="false">Aa</button> </header> <div class="rpanel" id="rsettings" aria-label="Reading settings"> <div class="rrow"><span>Theme</span></div> <div class="rseg" data-set="theme"> <button data-val="light">Light</button> <button data-val="sepia">Sepia</button> <button data-val="dark">Night</button> </div> <div class="rrow"><span>Page width</span></div> <div class="rseg" data-set="pw"> <button data-val="narrow">Narrow</button> <button data-val="normal">Normal</button> <button data-val="wide">Wide</button> </div>   <div class="rrow"><span>Go to page</span></div> <div class="rjump"> <input type="range" id="rjumpRange" min="1" max="252" value="1" aria-label="Page slider"> <input type="number" id="rjumpNum" min="1" max="252" value="1" aria-label="Page number"> </div>  </div> <div class="rhero"> <img src="/sufi-ilham/images/darya/hero.webp" alt="" width="1100" height="471" fetchpriority="high"> </div> <div class="rhead"> <h1 dir="rtl">دریا کا ایک حصہ</h1> <p class="rauthor" dir="rtl">صوفی الہام</p> <svg class="ornament" viewBox="0 0 240 24" fill="none" aria-hidden="true"> <path d="M12 12h72" stroke="currentColor" stroke-width="1.2"></path> <path d="M156 12h72" stroke="currentColor" stroke-width="1.2"></path> <path d="M96 12c6-7 12-7 12 0 0-7 6-7 12 0 6 7 12 7 12 0 0 7 6 7 12 0" stroke="currentColor" stroke-width="1.4"></path> <circle cx="120" cy="12" r="2.4" fill="currentColor"></circle> </svg> </div> <main class="rbook" id="rbook">  <div class="rpages" id="rpages" data-pdf="/sufi-ilham/reads/darya-ka-aik-hissa.pdf?v=2" data-lib="/sufi-ilham/vendor/pdfjs/pdf.min.js" data-worker="/sufi-ilham/vendor/pdfjs/pdf.worker.min.js" data-count="252" data-ratio="0.6667"> <noscript> <p style="text-align:center">Please enable JavaScript to read this book online.</p> </noscript> </div>   </main> <script>(function(){const slug = "darya-ka-aik-hissa";
+const mode = "pdf";
+
+      (function () {
+        var html = document.documentElement;
+        var K = 'reader:' + slug;
+        var KG = 'reader:prefs';
+        var prefs = { theme: 'sepia', pw: 'normal', font: 1.25 };
+        try { Object.assign(prefs, JSON.parse(localStorage.getItem(KG) || '{}')); } catch (e) {}
+
+        function apply() {
+          html.setAttribute('data-rtheme', prefs.theme);
+          html.setAttribute('data-pw', prefs.pw);
+          html.style.setProperty('--rf', prefs.font + 'rem');
+          setPressed('theme', prefs.theme);
+          setPressed('pw', prefs.pw);
+          try { localStorage.setItem(KG, JSON.stringify(prefs)); } catch (e) {}
+        }
+        function setPressed(group, val) {
+          document.querySelectorAll('[data-set="' + group + '"] button').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.val === val));
+          });
+        }
+        apply();
+
+        // Settings panel.
+        var setBtn = document.getElementById('rsetBtn');
+        var setPanel = document.getElementById('rsettings');
+        setBtn && setBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var open = setPanel.classList.toggle('open');
+          setBtn.setAttribute('aria-expanded', String(open));
+        });
+        document.addEventListener('click', function (e) {
+          if (!e.target.closest('.rpanel') && !e.target.closest('.ricon')) setPanel && setPanel.classList.remove('open');
+        });
+        var themeSeg = document.querySelector('[data-set="theme"]');
+        themeSeg && themeSeg.addEventListener('click', function (e) { var v = e.target.dataset.val; if (v) { prefs.theme = v; apply(); } });
+        var pwSeg = document.querySelector('[data-set="pw"]');
+        pwSeg && pwSeg.addEventListener('click', function (e) { var v = e.target.dataset.val; if (v) { prefs.pw = v; apply(); reflowPdf(); } });
+        var fontSeg = document.querySelector('[data-set="font"]');
+        fontSeg && fontSeg.addEventListener('click', function (e) {
+          var v = e.target.dataset.val; if (!v) return;
+          if (v === 'up') prefs.font = Math.min(2.1, prefs.font + 0.08);
+          else if (v === 'down') prefs.font = Math.max(0.95, prefs.font - 0.08);
+          else prefs.font = 1.25;
+          apply();
+        });
+
+        // Progress + saved position.
+        var bar = document.getElementById('rprogress');
+        var ticking = false;
+        function onScroll() {
+          var h = document.documentElement.scrollHeight - window.innerHeight;
+          var p = h > 0 ? window.scrollY / h : 0;
+          bar.style.setProperty('--p', p);
+          try { localStorage.setItem(K, String(window.scrollY)); } catch (e) {}
+          updateInd();
+          ticking = false;
+        }
+        addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+
+        addEventListener('keydown', function (e) {
+          if (e.target.matches('input,textarea')) return;
+          if (e.key === 'j' || e.key === 'ArrowDown') scrollBy({ top: innerHeight * 0.9, behavior: 'smooth' });
+          else if (e.key === 'k' || e.key === 'ArrowUp') scrollBy({ top: -innerHeight * 0.9, behavior: 'smooth' });
+        });
+
+        var reflowPdf = function () {};
+        var updateInd = function () {};
+
+        if (mode === 'pdf') {
+          var wrap = document.getElementById('rpages');
+          var url = wrap.getAttribute('data-pdf');
+          var count = parseInt(wrap.getAttribute('data-count') || '0', 10);
+          var ratio = parseFloat(wrap.getAttribute('data-ratio') || '0.6667');
+          var ind = document.getElementById('rpageind');
+          var range = document.getElementById('rjumpRange');
+          var num = document.getElementById('rjumpNum');
+          var pdfDoc = null, shells = [], rendered = {}, current = 1;
+
+          (async function () {
+            try {
+              var lib = await import(wrap.getAttribute('data-lib'));
+              lib.GlobalWorkerOptions.workerSrc = wrap.getAttribute('data-worker');
+              pdfDoc = await lib.getDocument({ url: url }).promise;
+              count = pdfDoc.numPages;
+              if (range) range.max = num.max = count;
+              // page 1 real ratio
+              var p1 = await pdfDoc.getPage(1);
+              var vp = p1.getViewport({ scale: 1 });
+              ratio = vp.width / vp.height;
+              buildShells();
+              observe();
+              updateInd();
+              // restore position
+              try { var y = parseInt(localStorage.getItem(K) || '0', 10); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); }); } catch (e) {}
+            } catch (err) {
+              wrap.innerHTML = '<p style="text-align:center;opacity:.8">Could not open the book. Please refresh the page to try again.</p>';
+            }
+          })();
+
+          function buildShells() {
+            var frag = document.createDocumentFragment();
+            for (var i = 1; i <= count; i++) {
+              var d = document.createElement('div');
+              d.className = 'rpage';
+              d.style.setProperty('--par', ratio);
+              d.dataset.page = i;
+              d.innerHTML = '<span class="ph">…</span><span class="pn">' + i + ' / ' + count + '</span>';
+              frag.appendChild(d);
+              shells.push(d);
+            }
+            wrap.appendChild(frag);
+          }
+
+          async function renderPage(i) {
+            if (rendered[i]) return;
+            rendered[i] = true;
+            var shell = shells[i - 1];
+            try {
+              var page = await pdfDoc.getPage(i);
+              var dpr = Math.min(window.devicePixelRatio || 1, 2);
+              var cssW = shell.clientWidth || 700;
+              var vp1 = page.getViewport({ scale: 1 });
+              var scale = (cssW / vp1.width) * dpr;
+              var vp = page.getViewport({ scale: scale });
+              var canvas = document.createElement('canvas');
+              canvas.width = vp.width; canvas.height = vp.height;
+              await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+              var ph = shell.querySelector('.ph'); if (ph) ph.remove();
+              canvas.className = 'pg';
+              shell.insertBefore(canvas, shell.firstChild);
+            } catch (e) { rendered[i] = false; }
+          }
+          function unloadPage(i) {
+            var shell = shells[i - 1]; if (!shell) return;
+            var c = shell.querySelector('canvas'); if (c) { c.remove(); rendered[i] = false;
+              if (!shell.querySelector('.ph')) { var s = document.createElement('span'); s.className = 'ph'; s.textContent = '…'; shell.insertBefore(s, shell.firstChild); } }
+          }
+          function observe() {
+            var io = new IntersectionObserver(function (entries) {
+              entries.forEach(function (e) {
+                var i = parseInt(e.target.dataset.page, 10);
+                if (e.isIntersecting) { renderPage(i); renderPage(i + 1); renderPage(i - 1); }
+              });
+            }, { root: null, rootMargin: '900px 0px' });
+            shells.forEach(function (s) { io.observe(s); });
+            // Memory cap: unload pages far from viewport.
+            setInterval(function () {
+              for (var k in rendered) { if (rendered[k] && Math.abs(k - current) > 6) unloadPage(parseInt(k, 10)); }
+            }, 2500);
+          }
+
+          updateInd = function () {
+            if (!shells.length) return;
+            var mid = window.scrollY + window.innerHeight / 2;
+            var best = 1, bestD = Infinity;
+            for (var i = 0; i < shells.length; i++) {
+              var r = shells[i].getBoundingClientRect();
+              var top = r.top + window.scrollY, c = top + r.height / 2;
+              var d = Math.abs(c - mid);
+              if (d < bestD) { bestD = d; best = i + 1; }
+              if (top > mid + window.innerHeight) break;
+            }
+            current = best;
+            if (ind) ind.textContent = best + ' / ' + count;
+            if (range && document.activeElement !== range) range.value = best;
+            if (num && document.activeElement !== num) num.value = best;
+          };
+
+          function goTo(p) {
+            p = Math.max(1, Math.min(count, p | 0));
+            var shell = shells[p - 1]; if (shell) shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          range && range.addEventListener('input', function () { if (ind) ind.textContent = range.value + ' / ' + count; });
+          range && range.addEventListener('change', function () { goTo(parseInt(range.value, 10)); });
+          num && num.addEventListener('change', function () { goTo(parseInt(num.value, 10)); });
+
+          reflowPdf = function () {
+            // width changed → re-render visible pages at new size.
+            rendered = {};
+            shells.forEach(function (s) { var c = s.querySelector('canvas'); if (c) c.remove(); });
+            var mid = window.scrollY + window.innerHeight / 2;
+            for (var i = 0; i < shells.length; i++) {
+              var r = shells[i].getBoundingClientRect();
+              if (r.bottom > -900 && r.top < window.innerHeight + 900) { renderPage(i + 1); }
+            }
+          };
+
+          onScroll();
+        } else {
+          // text / empty modes
+          try { var y = parseInt(localStorage.getItem(K) || '0', 10); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); }); } catch (e) {}
+          onScroll();
+        }
+      })();
+    })();</script> </body> </html>
