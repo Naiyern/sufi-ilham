@@ -164,7 +164,6 @@ const plate = (i: number) =>
       <span class="rttl" dir={dir}>{book.title}</span>
       {mode === 'pdf' && <span class="rpageind" id="rpageind">—</span>}
       <button class="ricon sp" id="rsetBtn" aria-haspopup="true" aria-expanded="false">Aa</button>
-      {pdf && <a class="ricon pri" href={pdf} download>Download<span class="lbl"> PDF</span></a>}
     </header>
 
     <div class="rpanel" id="rsettings" aria-label="Reading settings">
@@ -234,7 +233,7 @@ const plate = (i: number) =>
           data-ratio={pageRatio}
         >
           <noscript>
-            <p style="text-align:center">Enable JavaScript to read here, or <a href={pdf} download>download the PDF</a>.</p>
+            <p style="text-align:center">Please enable JavaScript to read this book online.</p>
           </noscript>
         </div>
       )}
@@ -254,7 +253,7 @@ const plate = (i: number) =>
       {mode === 'empty' && (
         <div class="rempty">
           <p>The reading text for this book hasn’t been added yet.</p>
-          {pdf && <p>You can <a href={pdf} download>download the PDF</a> or <a href={pdf} target="_blank" rel="noopener">open it in a new tab</a>.</p>}
+
         </div>
       )}
     </main>
@@ -355,7 +354,7 @@ const plate = (i: number) =>
               // restore position
               try { var y = parseInt(localStorage.getItem(K) || '0', 10); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); }); } catch (e) {}
             } catch (err) {
-              wrap.innerHTML = '<p style="text-align:center;opacity:.8">Could not open the book. <a style="color:#c99a3f" href="' + url + '" download>Download the PDF</a> instead.</p>';
+              wrap.innerHTML = '<p style="text-align:center;opacity:.8">Could not open the book. Please refresh the page to try again.</p>';
             }
           })();
 

@@ -201,8 +201,7 @@ const openModal = (b: Book) => {
   if (b.free && b.pdf) {
     const read = b.read || b.pdf;
     $('#mBuy')!.innerHTML =
-      `<a class="btn pri" href="${read}">Read free online →</a>` +
-      `<a class="btn" href="${b.pdf}" download>Download PDF</a>`;
+      `<a class="btn pri" href="${read}">Read free online →</a>`;
   } else {
     const stores: [string, string | undefined][] = [
       ['Amazon.com', b.us], ['Amazon.in', b.in], ['UK', b.uk], ['Canada', b.ca], ['Australia', b.au],

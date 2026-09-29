@@ -128,7 +128,7 @@ const jsonld = [
       <p class="lede reveal" style="margin-bottom:2rem">
         {newReleases.length === 1
           ? (newReleases[0].free
-              ? `Free to read since ${formatPublished(latestPublished)} — read it online or download the PDF, no payment.`
+              ? `Free to read since ${formatPublished(latestPublished)} — read the whole book online, no payment.`
               : `Live on Amazon since ${formatPublished(latestPublished)} — not last season’s catalogue.`)
           : newReleases.length === 2
             ? `Two books went live on ${formatPublished(latestPublished)}${newReleases.every((b) => b.ku) ? ' — both free on Kindle Unlimited' : ''}.`
@@ -159,7 +159,6 @@ const jsonld = [
                   {b.free && b.pdf ? (
                     <>
                       <a class="btn solid" href={`${base}/read/${b.slug}/`}>Read free →</a>
-                      <a class="btn" href={pdfUrl(b.pdf, base)} download>Download PDF</a>
                       <a class="btn" href={`${base}/books/${b.slug}/`}>Book page</a>
                     </>
                   ) : (

@@ -63,9 +63,8 @@ const jsonld = [
             <>
               <div class="buy-row">
                 <a class="btn pri" href={readUrl}>Read free online →</a>
-                {pdf && <a class="btn" href={pdf} download>Download PDF</a>}
               </div>
-              <p class="free-note">100% free — no sign-up, no payment. Read the full book in your browser (original Nastaliq pages, night mode, page-jump) or download your own copy.</p>
+              <p class="free-note">100% free — no sign-up, no payment. Read the full book right in your browser with the original Nastaliq pages, night mode and page-jump.</p>
             </>
           ) : (
             <div class="buy-row">
@@ -100,10 +99,9 @@ const jsonld = [
             </div>
             <div class="reader-actions">
               <a class="btn pri" href={readUrl}>Start reading →</a>
-              {pdf && <a class="btn" href={pdf} download>Download PDF</a>}
             </div>
           </div>
-          <p style="color:var(--ink-2);max-width:52ch">Read the complete book right in your browser — the original pages with their beautiful Nastaliq typography, with light, sepia and night modes, adjustable page width, page-jump and a saved reading position. Or download the PDF to keep.</p>
+          <p style="color:var(--ink-2);max-width:52ch">Read the complete book right in your browser — the original pages with their beautiful Nastaliq typography, with light, sepia and night modes, adjustable page width, page-jump and a saved reading position.</p>
           {chapters.length > 0 && (
             <ol class="chap-list">
               {chapters.map((c, i) => (

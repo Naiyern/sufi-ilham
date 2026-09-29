@@ -6,10 +6,10 @@
   "sub": "Darya Ka Aik Hissa · A Part of the River — a free Urdu novella",
   "kicker": "Urdu Fiction · Free to Read",
   "quote": "\"دریا کسی ایک کنارے کا نہیں ہوتا؛ ہم سب اُس کے ایک حصے کی طرح بہتے رہتے ہیں۔\"",
-  "desc": "<p dir=\"rtl\" lang=\"ur\">یہ ناولٹ اُس انسان کی کہانی ہے جو دریا کے کنارے بیٹھ کر اپنے اندر کے بہاؤ کو سنتا ہے — محبت، جدائی، اور خود کو دوبارہ پانے کا سفر۔</p><p><b>Darya Ka Aik Hissa</b> (\"A Part of the River\") is a free Urdu novella by Sufi Ilham. It is offered to every reader at no cost — read it online right here on the page, or download the full PDF to keep.</p><p><i>This description is a starting point — edit it in <code>src/data/books.json</code> with your own words whenever you like.</i></p>",
+  "desc": "<p dir=\"rtl\" lang=\"ur\">یہ ناولٹ اُس انسان کی کہانی ہے جو دریا کے کنارے بیٹھ کر اپنے اندر کے بہاؤ کو سنتا ہے — محبت، جدائی، اور خود کو دوبارہ پانے کا سفر۔</p><p><b>Darya Ka Aik Hissa</b> (\"A Part of the River\") is a free Urdu novella by Sufi Ilham. It is offered to every reader at no cost — read the whole book online, right here on the page.</p><p><i>This description is a starting point — edit it in <code>src/data/books.json</code> with your own words whenever you like.</i></p>",
   "spec": [
    "Free to read — no purchase needed",
-   "Read online or download the PDF",
+   "Read the full book online in your browser",
    "Language: Urdu",
    "By Sufi Ilham",
    "Published Sept 2026"
@@ -21,7 +21,7 @@
   "free": true,
   "pdf": "reads/darya-ka-aik-hissa.pdf",
   "pages": null,
-  "blurb": "A free Urdu novella by Sufi Ilham — read it online or download the PDF, completely free."
+  "blurb": "A free Urdu novella by Sufi Ilham — read the whole book online, completely free."
  },
  {
   "img": "https://m.media-amazon.com/images/I/71x+qs3EpiL._SL500_.jpg",
