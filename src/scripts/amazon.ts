@@ -16,27 +16,45 @@ export function initGo() {
   let timer: number | null = null;
   let target: string | null = null;
   let popup: Window | null = null;
+  let returnFocus: HTMLElement | null = null;
 
-  const close = () => {
-    if (timer) clearTimeout(timer);
-    timer = null;
+  const hide = () => {
     ov.classList.remove('open');
     ov.setAttribute('aria-hidden', 'true');
+  };
+  const restoreFocus = () => {
+    returnFocus?.focus({ preventScroll: true });
+    returnFocus = null;
+  };
+  const close = () => {
+    if (timer !== null) clearTimeout(timer);
+    timer = null;
+    hide();
     if (popup && !popup.closed) { try { popup.close(); } catch { /* ignore */ } }
     popup = null;
+    restoreFocus();
   };
 
-  const show = (url: string, cover: string, name: string, win: Window | null) => {
+  const show = (url: string, cover: string, name: string, win: Window | null, trigger: HTMLElement) => {
+    if (timer !== null) clearTimeout(timer);
     target = url;
     popup = win;
+    returnFocus = trigger;
     (window as any).plausible?.('Amazon Click', { props: { book: name || url, url } });
 
     titleEl.textContent = name || 'Opening Amazon';
     subEl.textContent = 'Taking you to the secure Amazon store…';
-    bookEl.innerHTML = cover ? `<img src="${cover}" alt="">` : '';
+    bookEl.replaceChildren();
+    if (cover) {
+      const image = document.createElement('img');
+      image.src = cover;
+      image.alt = '';
+      bookEl.append(image);
+    }
     cancel.textContent = 'Cancel';
     ov.classList.add('open');
     ov.setAttribute('aria-hidden', 'false');
+    cancel.focus({ preventScroll: true });
 
     timer = window.setTimeout(() => {
       if (popup && !popup.closed) {
@@ -46,14 +64,20 @@ export function initGo() {
       } else {
         location.href = target!;
       }
-      ov.classList.remove('open');
-      ov.setAttribute('aria-hidden', 'true');
+      popup = null;
+      timer = null;
+      hide();
+      restoreFocus();
     }, RM ? 200 : 1500);
   };
 
   cancel.addEventListener('click', close);
   ov.addEventListener('click', (e) => { if (e.target === ov) close(); });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && ov.classList.contains('open')) close(); });
+  addEventListener('keydown', (e) => {
+    if (!ov.classList.contains('open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key === 'Tab') { e.preventDefault(); cancel.focus({ preventScroll: true }); }
+  });
 
   document.addEventListener('click', (e) => {
     const me = e as MouseEvent;
@@ -87,6 +111,6 @@ export function initGo() {
       cover = mim.src;
       nm = nm || document.getElementById('mTitle')?.textContent || '';
     }
-    show(a.href, cover, nm, win);
+    show(a.href, cover, nm, win, a);
   }, true);
 }

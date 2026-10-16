@@ -1,90 +1,76 @@
 # Sufi Ilham — Official Author Website
 
-An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam),
-author of 27 titles on Amazon — ten works of philosophy, spirituality and self-discovery, the
-five-book **Maple Falls Romance** series, the three-book dark gothic romantasy trilogy
-**The Tithe Crown**, the standalone literary novel **The River's Portion**, the first three
-books of the seven-book **Cartographers of Lost Tomorrows** saga (Books 4–7 coming soon),
-the three-book mythic romance trilogy **The Song of the Unbroken Sky**, the standalone
-contemporary romance **The Spare Key Summer**, and the standalone psychological thriller
-**The Quiet Tenancy**. Every line of
-design, copy, code and music here was made for this site — no templates, no stock, no copied
-marketing text.
+An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam).
+The live catalogue in `src/data/books.json` contains **29 published titles** — 28 with Amazon
+store links and one free Urdu novella to read online — plus **four forthcoming titles**. The
+catalogue spans non-fiction, literary fiction, romance, fantasy, thrillers, and Urdu- and
+Hindi-language works. Catalogue data feeds the homepage, search, book pages, series pages and
+structured data. Every line of design, copy, code and music here was made for this site — no
+templates, no stock, no copied marketing text.
 
 ## What's in this folder
 
-| File | Description |
+| Path | Description |
 |---|---|
-| `index.html` | Homepage — hero, new-releases feature (dated from the catalogue, not hardcoded), recently-published shelf, full index with live filters, series spreads, about, themes, contact strip |
-| `contact.html` | Contact page — phone, WhatsApp, message form, 5-item FAQ |
-| `privacy.html` | Privacy Policy — 16 sections with sticky table of contents |
-| `terms.html` | Terms of Use — 15 sections, governing law: Bihar, India |
-| `404.html` | Styled not-found page (GitHub Pages serves it automatically) |
-| `assets/site.css` | **Shared stylesheet for every page** — downloaded once, then cached |
-| `assets/site.js` | **Shared script** — engine, four-language system, Amazon interstitial, soundtrack |
-| `assets/icon*.png`, `favicon.ico` | Favicon, Apple touch icon and PWA icons |
-| `site.webmanifest` | Web app manifest (installable, correct name and theme colour) |
-| `images/` | 3 author photos + 8 book covers |
-| `sama.mp3` | Original Sufi ambient soundtrack, 5:52 (3.4 MB) |
-| `robots.txt` / `sitemap-index.xml` / `sitemap-0.xml` | Search engine files |
-| `.nojekyll` | Tells GitHub Pages to publish the files as-is |
+| `src/pages/` | Astro routes for the homepage, book details, series, contact, legal pages, reader, RSS and sitemap |
+| `src/components/`, `src/layouts/` | Shared navigation, book cards/dialogs, command palette, footer and page shell |
+| `src/scripts/`, `src/styles/` | Progressive-enhancement interactions and the shared visual system |
+| `src/data/books.json` | Catalogue source data; published and upcoming books feed the homepage and detail pages |
+| `public/` | Static covers, author photography, the optional soundtrack, reader PDF, icons and crawler files |
+| `design-system/sufi-ilham/` | Master design guide and homepage, book-detail and series page overrides |
+| `.agents/skills/ui-ux-pro-max/` | Project-local UI/UX Pro Max skill, reference notes and search data |
+| `scripts/verify-build.mjs` | Checks routes, redirect stubs, internal links/fragments, unique IDs, one h1 per page and image alt attributes |
+| Root `index.html`, route folders and `_astro/` | Generated GitHub Pages output; edit `src/`, then regenerate with `npm run deploy` |
 
-The CSS and JavaScript used to be pasted inline into all four pages. They now live in
-`assets/`, so the browser fetches them once and every page after the first is close to
-instant. Page-specific rules (the contact form, for instance) stay inline in that page.
+## How to build and publish
 
-## How to publish it
-
-The site is 100% static — no server code, no database, no build step.
-
-**Netlify (easiest, free):** go to https://app.netlify.com/drop and drag this whole
-folder onto the page. It goes live in about 20 seconds.
-
-**Vercel:** https://vercel.com/new → import or drag the folder.
-
-**GitHub Pages (this repo):** live at <https://naiyern.github.io/sufi-ilham/>. Pages serves
-the **repository root** of `main` (branch source, `build_type: legacy`), so the built site is
-committed to the root:
+This is a static Astro site. Use **Node.js 22.12 or newer** to develop and generate the files
+(Astro 7 requirement); GitHub Pages serves the generated output without an application server or
+database.
 
 ```bash
 npm ci
-npm run build      # astro build + scripts/verify-build.mjs
-npm run deploy     # copies dist/ over the root and re-verifies there
-git add -A && git commit -m "Rebuild site" && git push
+SITE_BASE=/ npm run dev -- --host 0.0.0.0  # local preview
+npm run build                              # generate dist/ and verify it
+npm test                                   # build, then run catalogue interaction regressions
+npm run deploy                             # test, sync and verify GitHub Pages output in the repo root
 ```
 
-Pages has no build step of its own here, so a plain `git push` of root files is what goes live.
+This repository's GitHub Pages site is <https://naiyern.github.io/sufi-ilham/>. Pages serves the
+**repository root** of `main` (`build_type: legacy`), so `npm run deploy` copies Astro's `dist/`
+output to the root. The deploy script also clears stale hashed `_astro/` bundles before copying.
+Running it only prepares files locally; publishing still requires those generated files to reach
+the configured Pages branch.
 
-**Trailing slashes matter.** `<base>/<page>/` is the real URL and `<base>/<page>` only redirects
-to it. Never commit `privacy.html`, `terms.html` or `contact.html` to the root or to `public/`:
-Pages serves that file for the extensionless URL too, so a stub that redirects to `/privacy`
-redirects to itself and the page hangs on "Redirecting…". `npm run build` fails if any such
-stub reappears, or if any internal link stops resolving.
+**Trailing slashes matter.** `<base>/<page>/` is the real URL and `<base>/<page>` redirects to it.
+Do not add `privacy.html`, `terms.html` or `contact.html` redirect stubs to the root or `public/`:
+GitHub Pages can serve such a stub for the extensionless URL too, causing a self-redirect loop.
+The build verifier rejects redirect stubs and broken internal links.
 
-**Any web host / cPanel:** upload the contents of this folder to `public_html`.
-
-Keep all files together in the same folder so `sama.mp3` and the page links resolve.
+For another static host, publish the generated `dist/` output (or the synchronized repository root),
+not the Astro source tree alone.
 
 ## Signature features
 
-- **Four languages** — English, हिन्दी, اردو and Hinglish. Urdu switches the entire layout
-  to right-to-left. Your choice follows you across every page.
-- **Cinematic Amazon routing** — clicking any store link opens an interstitial showing the
-  book cover and a progress bar, then delivers the reader to the correct Amazon store in a
-  new tab. All 52 links (26 books × amazon.com and amazon.in) are wired the same way.
-- **Series shelves** — the Maple Falls Romance section has its own maple-warm palette, a
-  reading-order strip, five numbered cards and a gentle layered snowfall over the section.
-  The Tithe Crown section mirrors it with a dark gothic palette, its own reading-order strip
-  and three numbered cards. The Cartographers saga, Unbroken Sky trilogy and Spare Key
-  Summer spotlight reuse the same unified charcoal/cream/gold card system. The homepage
-  counters are computed from the catalogue — currently 27 published titles, 5,344 pages, and every Kindle Unlimited title counted live. The new-release feature follows the newest `published` date (21 September 2026: *The Quiet Tenancy* and *The Spare Key Summer*), so it cannot stay stuck on an older book.
-- **Motion design** — custom cursor, drifting dust canvas, Maple Falls snowfall (paused
-  off-screen), scroll progress bar, staggered
-  reveals, preloader, and a full reduced-motion mode for visitors who prefer less animation.
+- **Author-led editorial homepage** — real portrait, latest-release card, live catalogue proof
+  points, recently published books and a visible search field for the full index.
+- **Catalogue discovery** — multi-field search across titles, summaries, series and availability;
+  genre/series filters; newest, alphabetical and page-count sorting; live result counts and reset
+  recovery; keyboard-operable controls; dedicated book and series routes.
+- **Amazon handoff** — store links show a brief, cancellable book interstitial before opening the
+  selected Amazon destination in a new tab.
+- **Accessible interactions** — responsive navigation, command palette (`/` or `Cmd/Ctrl+K`),
+  dialog focus handling, visible keyboard focus, large mobile targets and reduced-motion support.
+- **Preferences that respect visitors** — warm paper/ink/vermilion styling, optional dark theme,
+  and an ambient soundtrack that starts only after an explicit opt-in. The choice is remembered.
+- **Static-site essentials** — generated metadata and structured data, RSS, sitemap, a styled 404,
+  web manifest, and content that remains readable when JavaScript is unavailable.
+- **Honest release requests** — the optional form opens a pre-filled WhatsApp message; it does not
+  subscribe the visitor to an automated email list.
 
 ## The soundtrack
 
-`sama.mp3` is an original ambient piece written for this site — nothing sampled,
+`public/sama.mp3` is an original ambient piece written for this site — nothing sampled,
 every sound synthesised from scratch. It is built on **Maqam Hijaz** (the mode with
 the augmented second that gives Sufi and Middle-Eastern music its devotional colour),
 played in free rhythm with no fixed beat:
@@ -95,41 +81,57 @@ played in free rhythm with no fixed beat:
 - a daf frame-drum heartbeat on a 4.5-second breath cycle, very soft
 - a distant wordless "hu" pad through the middle section
 
-It runs 5 minutes 52 seconds and loops seamlessly. It starts on its own at low
-volume and fades in over four seconds; browsers that block autoplay start it on the
-visitor's first tap or scroll. The speaker button in the navigation turns it off,
-and that choice is remembered across pages and visits.
+It runs 5 minutes 52 seconds and loops seamlessly. New visitors start in silence;
+playback is an explicit opt-in, the audio is not preloaded, and the preference is
+remembered across pages and visits.
 
-## Recent polish
+## Recent improvements
 
-- **Shared assets.** The stylesheet and script were lifted out of all four pages into
-  `assets/site.css` and `assets/site.js`. `index.html` went from 198 KB to 63 KB and the three
-  sub-pages from ~93 KB to ~14 KB each; after the first page the browser reuses the cache.
-- **The soundtrack no longer pre-downloads.** `sama.mp3` was set to `preload="auto"`, so every
-  visit pulled 3.4 MB before the page was usable. It is now `preload="none"` and fetched only
-  when the music actually starts.
-- **Privacy Policy rewritten to match reality** — it previously claimed there were no analytics
-  and no newsletter, while the site runs cookie-free Plausible analytics and a Buttondown
-  subscribe box. It now documents both, plus the two local-storage preference keys, a
-  sub-processor table, retention periods and DPDP/GDPR/CCPA rights.
-- **Terms of Use** gained a newsletter clause and a privacy clause, lists all nineteen titles
-  (it stopped at eight), and reserves rights against AI training and bulk scraping.
-- Real favicon, Apple touch icon, PWA manifest and a styled `404.html`.
-- `preconnect` hints for the analytics and Amazon image origins; the hero portrait is
-  preloaded as the LCP image, and sub-pages finally have Open Graph / Twitter cards.
-- Fixed a `prefers-reduced-motion` block that was nested inside a phone-only media query so it
-  never applied on desktop, and a stray `}` that truncated the contact page's CSS.
-- Palette lifted out of near-black to a warm charcoal so the site stays legible on
-  phone screens and in daylight; body text, borders and gold accents all brightened.
-- Added a two-photo gallery under the author portrait: the flute portrait ("The flute ·
-  today") and the childhood photograph ("Where it began"), warm-toned to match.
-- Mobile: larger body text, 44px minimum tap targets, softer vignette, no overflow at 390px.
+- Installed UI/UX Pro Max and created the project-specific editorial design guide while keeping
+  the existing warm palette and self-hosted type.
+- Rebuilt the homepage opening as a dark ink-cover with a legible floating masthead, vivid author
+  portrait, warm-paper release slip and stronger featured-book cards; the archive below stays on
+  the established paper palette.
+- Expanded the cinematic language across the whole homepage: an eight-scene chapter rail that becomes a touch-scrollable sticky strip on smaller screens, a latest-cover-lit release stage, tactile archive contact sheet, accent-graded series worlds, documentary author chapter and closing intertitle. Series cover art stays in the mobile scene; page transitions and motion honor reduced-motion settings, while sound stays opt-in.
+- Removed the blocking first-visit welcome screen so visitors reach the author and books immediately.
+- Turned the full index into a responsive, cover-led catalogue; search covers titles, transliterations
+  and related metadata, while each tile remains a real book link when JavaScript is off.
+- Rebuilt book and series detail pages around their actual covers, reading order, editions and related
+  titles; series accents now come from the catalogue data. Shared route transitions, correspondence
+  framing, legal title cards and the ink colophon carry the same cinematic finish beyond the homepage.
+- Kept the latest-release feature and catalogue metrics data-driven, with search and filters visible
+  beside the full book index.
+- Expanded catalogue search to summaries and language metadata; added series filtering, three sort
+  orders, live counts and no-results recovery, with forthcoming books kept at the end of every sort.
+- Clarified Kindle Unlimited as subscription inclusion rather than “free,” and removed the
+  unsupported “Most Talked About” popularity claim.
+- Added `npm test` for generated-catalogue DOM regressions across combined filters, sorting,
+  reset/no-results recovery, focus handling and responsive control rules.
+- Improved keyboard and mobile behavior for navigation, command search, book details and forms;
+  retained no-JavaScript content and reduced-motion handling.
+- Updated the Privacy Policy and Terms to describe the WhatsApp request flow accurately: WhatsApp
+  receives the pre-filled link when opened; the author receives the message only if the visitor
+  sends it.
+- Made `npm run deploy` replace old hashed `_astro/` bundles before copying the fresh static
+  output, avoiding stale generated assets in the Pages root.
+- Upgraded Astro to 7.3.8 for the current security fixes, updated vulnerable transitive packages,
+  and moved the optional photo workflow to Node 22; `npm audit` now reports zero vulnerabilities.
+
+## Design direction and UI skill
+
+The **UI/UX Pro Max** skill is installed project-locally at `.agents/skills/ui-ux-pro-max/`
+for universal agent support. The skill is MIT-licensed; its source is
+<https://github.com/nextlevelbuilder/ui-ux-pro-max-skill>. The working design guide is
+`design-system/sufi-ilham/MASTER.md` plus page overrides for homepage, book detail and series detail:
+a warm editorial archive that keeps the existing self-hosted type and paper/ink/vermilion palette
+intact. If the skill files need refreshing, run
+`npx ui-ux-pro-max-cli@latest init --ai universal` from the project root.
 
 ## The Maple Falls Romance series
 
-Five small-town romances set in Maple Falls, Vermont. All five are $2.99 on Kindle and
-free on Kindle Unlimited. They live in their own section on the homepage (`#maple`),
-with a reading-order strip, per-book "Read More" modals and the usual Amazon interstitial.
+Five small-town romances set in Maple Falls, Vermont. All five are available through Kindle
+and Kindle Unlimited. The homepage features the series in its editorial spreads; the dedicated
+series route is `/series/maple/`, with individual book-detail pages and a reading order.
 
 | # | Title | ASIN | Pages | Published |
 |---|---|---|---|---|
@@ -144,10 +146,9 @@ Amazon series page: <https://www.amazon.com/dp/B0H7Q6GQPV>
 ## The Tithe Crown
 
 A complete dark gothic romantasy trilogy. The Crown cuts magic from any soul that will not
-declare it — and sends its own collectors after every shadow that hides. All three are $4.85–
-$4.87 on Kindle and free on Kindle Unlimited. They live in their own section on the homepage
-(`#tithe`), with a reading-order strip, per-book "Read More" modals and the usual Amazon
-interstitial.
+declare it — and sends its own collectors after every shadow that hides. The homepage features
+the series in its editorial spreads; the dedicated route is `/series/tithe/`, with a reading
+order and individual book-detail pages.
 
 | # | Title | ASIN | Pages | Published |
 |---|---|---|---|---|
@@ -160,26 +161,23 @@ Amazon series page: <https://www.amazon.com/dp/B0HGBX47WJ>
 ## The River's Portion
 
 A standalone literary novel of tawbah, debt, and the rights of the living, set in the fictional
-town of Nahrabad. Free on Kindle Unlimited; also available in paperback.
+town of Nahrabad. Included in Kindle Unlimited and also available in paperback.
 
 | Title | Kindle ASIN | Paperback ASIN | Pages | Published |
 |---|---|---|---|---|
 | The River's Portion | B0HG5S4DG2 | B0HG787946 | 243 | 22 Aug 2026 (Kindle) / 23 Aug 2026 (paperback) |
 
-**One note on the covers.** The eight older covers and the three author photos are real files
-in `images/`. The five Maple Falls covers, the three Tithe Crown covers, The River's Portion
-cover, and the two newer love books (Moh Tera Prem, PREM) are loaded straight from Amazon's
-image CDN (`https://m.media-amazon.com/images/I/<id>._SL500_.jpg` or similar Amazon thumbnail
-URLs), which is always the live cover Amazon is showing. If a cover ever fails to load,
-`mfCover()` / `phCover()` / `tcCover()` / `cgCover()` / `sgCover()` / `skCover()` in
-`index.html` swap in a styled placeholder so the layout never breaks.
+**One note on the covers.** Local cover artwork and author photos live in `src/assets/` and
+`public/images/`; many newer covers are served from Amazon's image CDN. The shared `Cover.astro`
+component falls back to a typographic placeholder if a remote cover is slow or unavailable, so a
+failed image does not break the layout.
 
 ## The Cartographers of Lost Tomorrows
 
 A seven-book slow-burn romance and impossible-mystery saga. “Seven books. One harbor. Two
-hundred years of kept promises — and every one of them is coming due.” Books 1–3 are live
-($5.99 Kindle, paperback $14.99, free on Kindle Unlimited); Books 4–7 are shown as
-“Coming Soon” cards with dashed gold styling and no buy buttons. Section: `#cartographers`.
+hundred years of kept promises — and every one of them is coming due.” Books 1–3 are published;
+Books 4–7 are marked as forthcoming in the catalogue. The dedicated series route is
+`/series/carto/`.
 
 | # | Title | ASIN | Pages | Published |
 |---|---|---|---|---|
@@ -196,7 +194,8 @@ Amazon series page: <https://www.amazon.com/dp/B0HJHF6Y1P>
 ## The Song of the Unbroken Sky
 
 A complete mythic-romance trilogy of Valen and Elora — devotion, destiny, and the melody
-that awakens the living earth. All three are free on Kindle Unlimited. Section: `#song`.
+that awakens the living earth. The dedicated series route is `/series/song/`, with all three
+books linked in reading order.
 
 | # | Title | ASIN | Pages | Published |
 |---|---|---|---|---|
@@ -210,8 +209,9 @@ Amazon series page: <https://www.amazon.com/dp/B0HHWGYSPL>
 
 A standalone psychological thriller. Cassie Adler is paid to live ninety days in a Brooklyn
 Heights brownstone and notice everything — then the house starts keeping a schedule of its own.
-Free on Kindle Unlimited; Kindle and paperback. It shares its publication day with *The Spare Key
-Summer*, and both are the site’s current new releases.
+Available on Kindle and in paperback, with Kindle Unlimited. It shares its publication day with
+*The Spare Key Summer* (21 Sept 2026); the catalogue’s latest entries are Darya and the Hindi
+Nasruddin title, published 29 Sept 2026.
 
 | Title | Kindle ASIN | Paperback ASIN | Pages | Published |
 |---|---|---|---|---|
@@ -220,45 +220,55 @@ Summer*, and both are the site’s current new releases.
 ## The Spare Key Summer
 
 A standalone contemporary romance novel (not a series): Nora Sullivan returns to Milwaukee
-for one summer and meets Eli Mercer. Free on Kindle Unlimited; Kindle and paperback.
-Section: `#spare-key` (feature-style spotlight with both ASINs shown).
+for one summer and meets Eli Mercer. It is available in Kindle and paperback editions and remains
+listed in the searchable catalogue alongside the other recently published books.
 
 | Title | Kindle ASIN | Paperback ASIN | Pages | Published |
 |---|---|---|---|---|
 | The Spare Key Summer | B0HKHL8D6Q | B0HKKCX4H9 | 234 | 21 Sept 2026 |
 
-## The books
+## Published catalogue: 29 titles
 
-1. The Human Operating Manual — 383 pp · most popular
-2. Moh Tera Prem: Where Attachment Ends and Love Begins — 211 pp
-3. PREM: The Ancient Path of Selfless, Unconditional Love — 285 pp
-4. Laozi: The Man Who Disappeared into the Dao — 318 pp
-5. The Wall Was a Gesture — 334 pp
-6. The Map Is Finished — 320 pp
-7. NeuroFocus Protocol — 362 pp
-8. Fractured Time — 56 pp · most talked about
-9. Belief Unveiled — 66 pp
-10. The Infinite Classroom — 76 pp
-11. The Bookshop at the End of Maple Street — 123 pp · Maple Falls #1
-12. A Recipe for Maple Falls — 76 pp · Maple Falls #2
-13. The Christmas Letters of Maple Falls — 78 pp · Maple Falls #3
-14. A Second Chance in Maple Falls — 68 pp · Maple Falls #4
-15. A Wedding at the End of Maple Street — 76 pp · Maple Falls #5
-16. The Shadow Tithe: A Dark Gothic Romantasy — 222 pp · Tithe Crown #1
-17. The Sea Tithe: A Dark Gothic Romantasy — 247 pp · Tithe Crown #2
-18. The Crown Always Owns: A Dark Gothic Romantasy — 260 pp · Tithe Crown #3
-19. The River's Portion — 243 pp · standalone literary fiction
-20. The Map of Tomorrow — 272 pp · Cartographers #1 · new
-21. The Tide of Unmade Days — 219 pp · Cartographers #2 · new
-22. The Compass of the Dead — 268 pp · Cartographers #3 · new
-23. The Eden of Sunspire — 96 pp · Unbroken Sky #1 · new
-24. The Citadel of Sapphire Seas — 93 pp · Unbroken Sky #2 · new
-25. The Chariot of Peace — 80 pp · Unbroken Sky #3 · new
-26. The Spare Key Summer — 234 pp · standalone contemporary romance · new
-27. The Quiet Tenancy — 278 pp · standalone psychological thriller · new
+The catalogue currently contains **28 Amazon-linked titles and one free online Urdu novella**.
+Page counts and edition details below follow `src/data/books.json`; the full live record is the
+source of truth when a retail listing changes.
 
-Plus four forthcoming Cartographers titles (not yet counted): The Library of Drowned Days,
-The Seven Unwritten Days, The Last Cartographer, The Future We Buried.
+1. **Darya Ka Aik Hissa** (دریا کا ایک حصہ) — Urdu novella · free to read online
+2. **Nasruddin Ki Tedhi Tarazu** (नसरुद्दीन की टेढ़ी तराज़ू) — Hindi historical-folkloric novel · Kindle
+3. **The Quiet Tenancy** — 278 pp · psychological thriller · Kindle and paperback
+4. **The Human Operating Manual** — 383 pp
+5. **Moh Tera Prem: Where Attachment Ends and Love Begins** — 211 pp
+6. **PREM: The Ancient Path of Selfless, Unconditional Love** — 285 pp
+7. **Laozi: The Man Who Disappeared into the Dao** — 318 pp
+8. **The Wall Was a Gesture** — 334 pp
+9. **The Map Is Finished** — 320 pp
+10. **NeuroFocus Protocol** — 362 pp
+11. **Fractured Time** — 56 pp
+12. **Belief Unveiled** — 66 pp
+13. **The Infinite Classroom** — 76 pp
+14. **The River's Portion** — 243 pp · paperback edition also listed
+15. **The Bookshop at the End of Maple Street** — 123 pp · Maple Falls #1
+16. **A Recipe for Maple Falls** — 76 pp · Maple Falls #2
+17. **The Christmas Letters of Maple Falls** — 78 pp · Maple Falls #3
+18. **A Second Chance in Maple Falls** — 68 pp · Maple Falls #4
+19. **A Wedding at the End of Maple Street** — 76 pp · Maple Falls #5
+20. **The Shadow Tithe** — 222 pp · Tithe Crown #1
+21. **The Sea Tithe** — 247 pp · Tithe Crown #2
+22. **The Crown Always Owns** — 260 pp · Tithe Crown #3
+23. **The Map of Tomorrow** — 272 pp · Cartographers #1
+24. **The Tide of Unmade Days** — 219 pp · Cartographers #2
+25. **The Compass of the Dead** — 268 pp · Cartographers #3
+26. **The Eden of Sunspire** — 96 pp · Unbroken Sky #1
+27. **The Citadel of Sapphire Seas** — 93 pp · Unbroken Sky #2
+28. **The Chariot of Peace** — 80 pp · Unbroken Sky #3
+29. **The Spare Key Summer** — 234 pp · standalone contemporary romance
+
+### Forthcoming (not included in the 29 published titles)
+
+- *The Library of Drowned Days*
+- *The Seven Unwritten Days*
+- *The Last Cartographer*
+- *The Future We Buried*
 
 ## Contact
 
@@ -267,11 +277,13 @@ Instagram: **@Sufiilham07** (author) · **@naiyer_fx** (personal)
 
 ## Main portrait — exact image workflow
 
-The main photo (`public/images/sufi-ilham-portrait.png` / `.jpg` / `.webp`) is always used
-**byte-for-byte as uploaded** — never cropped, resized or AI-processed. It renders full-frame
-at its native ratio on every device.
+The build-time resolver selects the most recently modified file named
+`public/images/sufi-ilham-portrait.{png,jpg,jpeg,webp}`. The source bytes are not processed during
+build; CSS may crop the portrait to fit the hero or gallery frame on screen.
 
-- Local replace: `node scripts/replace-portrait.mjs /path/to/photo.png` then `npm run build && npm run deploy`
-- GitHub-only replace: copy `docs/rebuild-on-photo-upload.yml` to `.github/workflows/` once
-  (needs repo admin rights); afterwards, uploading a new portrait into `public/images/`
-  rebuilds and deploys the site automatically.
+- Replace locally with `node scripts/replace-portrait.mjs /path/to/photo.png`, then run
+  `npm run deploy`. The script copies the original bytes into the source, public and legacy image
+  locations and removes stale portrait variants.
+- Optional GitHub automation: copy `docs/rebuild-on-photo-upload.yml` to
+  `.github/workflows/` to rebuild and commit the generated site when a portrait changes. Review
+  the workflow's write permission and branch behavior before enabling it.

@@ -6,14 +6,10 @@
  *   node scripts/verify-build.mjs          # checks dist/
  *   node scripts/verify-build.mjs --root   # also re-checks the deployed root copy
  *
- * It fails the build on the two problems that put a "Redirecting…" loop on
- * /privacy and /terms:
- *
- *   1. An HTML redirect stub (privacy.html, terms.html, contact.html) that
- *      points at the extensionless URL GitHub Pages serves that same file
- *      from — a meta refresh onto itself.
- *   2. An internal link that does not resolve to a real file, which would be
- *      a 404 (or, with one wrong hop, another loop).
+ * It catches redirect stubs, broken internal links and fragment targets,
+ * duplicate IDs, missing image alt attributes, default-GET forms that can leak
+ * field values into URLs, and pages without exactly one h1. These are checked
+ * against generated HTML, not source templates.
  *
  * Run automatically at the end of `npm run build`.
  */
@@ -104,12 +100,25 @@ else {
   if (base === '/') base = '';
 }
 
+function sitePath(urlPath) {
+  const normalized = normalize(urlPath);
+  if (!base) return normalized;
+  if (normalized === base) return '/';
+  return normalized.startsWith(`${base}/`) ? normalized.slice(base.length) : normalized;
+}
+
+function fileForPath(urlPath) {
+  const target = normalize(sitePath(urlPath));
+  if (target === '/') return path.join(siteDir, 'index.html');
+  const p = path.join(siteDir, target.replace(/^\/+/, ''));
+  if (exists(p) && fs.statSync(p).isDirectory()) return path.join(p, 'index.html');
+  if (exists(p) && fs.statSync(p).isFile()) return p;
+  return path.join(p, 'index.html');
+}
+
 function resolves(urlPath) {
-  const target = normalize(urlPath.replace(base, '') || '/');
-  if (target === '/') return exists(path.join(siteDir, 'index.html'));
-  const p = path.join(siteDir, target);
-  if (exists(p) && fs.statSync(p).isFile()) return true;
-  return exists(path.join(p, 'index.html'));
+  const file = fileForPath(urlPath);
+  return exists(file) && fs.statSync(file).isFile();
 }
 
 for (const file of htmlFiles) {
@@ -153,7 +162,77 @@ if (indexFile) {
   }
 }
 
-/* ----------------------------------------------------------- 5. report out */
+/* ------------------------------------------- 5. semantic and fragment audit */
+
+const pageAudits = htmlFiles.map((file) => {
+  const markup = read(file).replace(/<script\b[\s\S]*?<\/script>/gi, '');
+  const ids = new Set();
+  const duplicateIds = new Set();
+  for (const match of markup.matchAll(/\bid\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
+    const id = (match[1] ?? match[2] ?? '').trim();
+    if (!id) continue;
+    if (ids.has(id)) duplicateIds.add(id);
+    ids.add(id);
+  }
+  return { file, markup, ids, duplicateIds };
+});
+const auditsByFile = new Map(pageAudits.map((audit) => [path.resolve(audit.file), audit]));
+
+for (const audit of pageAudits) {
+  const page = rel(audit.file);
+  for (const id of audit.duplicateIds) errors.push(`${page} repeats id="${id}"`);
+
+  const h1Count = [...audit.markup.matchAll(/<h1\b/gi)].length;
+  if (h1Count !== 1) errors.push(`${page} has ${h1Count} <h1> elements; expected exactly one`);
+
+  for (const match of audit.markup.matchAll(/<form\b([^>]*)>/gi)) {
+    const method = match[1].match(/\bmethod\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    const value = (method?.[1] ?? method?.[2] ?? method?.[3] ?? 'get').toLowerCase();
+    if (value === 'get') errors.push(`${page} contains a default-GET form; form values can leak into the URL without JavaScript`);
+  }
+
+  for (const match of audit.markup.matchAll(/<img\b[^>]*>/gi)) {
+    if (!/\balt\s*=\s*(?:"[^"]*"|'[^']*')/i.test(match[0])) {
+      errors.push(`${page} contains an <img> without an alt attribute`);
+    }
+  }
+
+  for (const match of audit.markup.matchAll(/<a\b[^>]*>/gi)) {
+    const hrefMatch = match[0].match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+    if (!hrefMatch) continue;
+    const href = (hrefMatch[1] ?? hrefMatch[2] ?? '').trim();
+    if (!href) {
+      errors.push(`${page} contains an anchor with a blank href`);
+      continue;
+    }
+    if (href === '#') {
+      errors.push(`${page} contains an empty fragment link (href="#")`);
+      continue;
+    }
+
+    let url;
+    try { url = new URL(href, `https://verify.invalid${servedPath(audit.file, siteDir)}`); }
+    catch { continue; }
+    if (url.origin !== 'https://verify.invalid' || !url.hash) continue;
+
+    let target;
+    try { target = fileForPath(url.pathname); }
+    catch { continue; }
+    if (!exists(target)) {
+      errors.push(`${page} links to fragment ${href}, but ${rel(target)} does not exist`);
+      continue;
+    }
+    let fragment;
+    try { fragment = decodeURIComponent(url.hash.slice(1)); }
+    catch { fragment = url.hash.slice(1); }
+    const targetAudit = auditsByFile.get(path.resolve(target));
+    if (targetAudit && !targetAudit.ids.has(fragment)) {
+      errors.push(`${page} links to missing fragment ${href} in ${rel(target)}`);
+    }
+  }
+}
+
+/* ----------------------------------------------------------- 6. report out */
 
 const checked = htmlFiles.length;
 if (errors.length) {
@@ -166,5 +245,6 @@ if (errors.length) {
 for (const n of notes) console.log(`  ✓ ${n}`);
 console.log(`  ✓ no self-redirecting stubs, all internal links resolve (${checked} pages checked, base "${base || '/'}")`);
 if (base !== '/sufi-ilham') console.log(`  ! built with base "${base || '/'}" — the Pages deploy expects "/sufi-ilham"`);
+console.log('  ✓ unique IDs, one h1 per page, image alt attributes, safe form methods, and fragment targets checked');
 console.log('  ✓ cover-top clean, footer Explore links trailing-slashed');
 console.log('\nverify-build passed — safe to deploy dist/ to the repo root.\n');

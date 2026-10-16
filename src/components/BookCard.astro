@@ -8,12 +8,20 @@ const { book, delay = 0 } = Astro.props;
 const src = coverUrl(book.img, base);
 ---
 
-<article class="spine reveal" style={`--d:${delay}ms`} data-slug={book.slug}>
-  <div class="spine-img js-open">
+<a
+  class="spine reveal"
+  style={`--d:${delay}ms`}
+  href={`${base}/books/${book.slug}/`}
+  data-slug={book.slug}
+  aria-haspopup="dialog"
+  aria-controls="modal"
+  aria-label={`Open details for ${book.altTitle || book.title}`}
+>
+  <span class="spine-img">
     <Cover src={src} title={book.title} />
-  </div>
-  <h3 class="js-open">{book.title}</h3>
+  </span>
+  <h3 lang={book.language ?? 'en'} dir={book.dir ?? undefined}>{book.title}</h3>
   <span class="label">
     {book.comingSoon ? 'Forthcoming' : `${book.pages ? `${book.pages} pp` : ''}${book.ku ? ' · KU' : ''}`}
   </span>
-</article>
+</a>

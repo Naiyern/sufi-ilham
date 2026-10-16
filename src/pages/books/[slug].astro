@@ -2,7 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
 import AnimatedCover from '../../components/AnimatedCover.astro';
-import { books, site, seriesBooks, type Book, coverUrl, pdfUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
+import Cover from '../../components/Cover.astro';
+import { books, series, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
 
 type Reader = { slug: string; chapters: { id: string; title: string }[]; source?: string };
 const readerFiles = import.meta.glob<Reader>('../../data/reader/*.json', { eager: true, import: 'default' });
@@ -17,21 +18,26 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { book } = Astro.props as { book: Book };
 const img = coverUrl(book.img, base);
 const coverArt = book.coverArt ? coverUrl(book.coverArt, base) : '';
+const socialImage = book.coverArt
+  ? coverUrl(book.coverArt, site.url)
+  : book.img.startsWith('data:') ? undefined : coverUrl(book.img, site.url);
 const plain = (book.desc ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-
-const pdf = book.free && book.pdf ? pdfUrl(book.pdf, base) : '';
 const readUrl = book.free ? `${base}/read/${book.slug}/` : '';
 const reader = book.free ? readers[book.slug] : undefined;
 const chapters = reader?.chapters ?? [];
+const seriesInfo = book.series ? series.find((item) => item.id === book.series) : undefined;
+const bookAccent = seriesInfo?.accent ?? '#df6348';
+const bookHeroStyle = `--accent:${bookAccent};${/^(https?:|data:)/i.test(book.img) ? '' : `--cinema-still:url("${img}")`}`;
 
 const stores: [string, string | undefined][] = [
   ['Amazon.com', book.us], ['Amazon.in', book.in], ['Amazon UK', book.uk],
   ['Amazon CA', book.ca], ['Amazon AU', book.au], ['Paperback', book.paperback],
 ];
-
+const availableStores = stores.filter(([, url]) => Boolean(url));
 const sameShelf = (book.series ? seriesBooks(book.series) : books.filter((b) => b.genre === book.genre))
   .filter((b) => b.slug !== book.slug && !b.comingSoon);
 const related = (sameShelf.length ? sameShelf : byNewest.filter((b) => b.slug !== book.slug)).slice(0, 4);
+const status = book.comingSoon ? 'Forthcoming' : book.free ? 'Read free online' : isNewRelease(book) ? 'New release' : 'Available now';
 
 const jsonld = [
   {
@@ -42,112 +48,149 @@ const jsonld = [
     description: plain.slice(0, 400),
     numberOfPages: book.pages ?? undefined,
     ...(book.published && book.published.length > 7 ? { datePublished: book.published } : {}),
-    inLanguage: 'en',
-    // structured data wants a fetchable URL, so inline data: placeholders are omitted
-    ...(book.img.startsWith('data:') ? {} : { image: coverUrl(book.img, site.url) }),
-    url: book.us,
+    inLanguage: book.language ?? 'en',
+    ...(socialImage ? { image: socialImage } : {}),
+    url: `${site.url}/books/${book.slug}/`,
   },
 ];
 ---
 
-<Base title={`${book.title} — Sufi Ilham`} description={plain.slice(0, 180)} type="book" jsonld={jsonld}>
+<Base title={`${book.title} — Sufi Ilham`} description={plain.slice(0, 180)} image={socialImage} type="book" jsonld={jsonld}>
   <div class="bp-bar" id="bpBar"></div>
-  <section style="padding-top:9rem" id="bookBody">
-    <div class="wrap">
-      <p class="crumb">
-        <a href={`${base}/`}>Home</a> · <a href={`${base}/#index`}>Books</a> · {book.title}
-      </p>
+  <div id="bookBody">
+    <header class="book-hero" style={bookHeroStyle}>
+      <div class="wrap">
+        <p class="crumb book-crumb">
+          <a href={`${base}/`}>Home</a><span aria-hidden="true">/</span>
+          <a href={`${base}/#index`}>The archive</a><span aria-hidden="true">/</span>
+          <span aria-current="page">{book.altTitle || book.title}</span>
+        </p>
 
-      <div class="bp-grid" style="margin-top:2rem">
-        <div class="reveal in">
-          {coverArt ? (
-            <AnimatedCover
-              art={coverArt}
-              title={book.title}
-              roman={book.altTitle}
-              tagline="A Part of the River"
-              author="صوفی الہام"
-              authorRoman="Sufi Ilham"
-              note="Free Urdu Novella"
-              dir={book.dir ?? 'rtl'}
-              cls="bp-cover"
-            />
-          ) : (
-            <img class="bp-cover" src={img} alt={`${book.title} cover`} width="400" height="600" />
-          )}
-          {book.free ? (
-            <>
-              <div class="buy-row">
-                <a class="btn pri" href={readUrl}>Read free online →</a>
-              </div>
-              <p class="free-note">100% free — no sign-up, no payment. Read the full book right in your browser with the original Nastaliq pages, night mode and page-jump.</p>
-            </>
-          ) : (
-            <div class="buy-row">
-              {stores.filter(([, u]) => u).map(([l, u], i) => (
-                <a class={`btn${i === 0 ? ' pri' : ''}`} href={u} target="_blank" rel="noopener">{l}</a>
-              ))}
+        <div class="book-hero-grid">
+          <figure class="book-hero-art">
+            <div class="book-cover-mat">
+              {coverArt ? (
+                <AnimatedCover
+                  art={coverArt}
+                  title={book.title}
+                  roman={book.altTitle}
+                  tagline="A Part of the River"
+                  author="صوفی الہام"
+                  authorRoman="Sufi Ilham"
+                  note="Free Urdu Novella"
+                  dir={book.dir ?? 'rtl'}
+                  cls="book-cover-live"
+                />
+              ) : (
+                <Cover src={img} title={book.title} eager cls="book-cover-static" />
+              )}
             </div>
-          )}
-        </div>
+            <figcaption>
+              <span>{book.altTitle || book.title}</span>
+              <span>{book.pages ? `${book.pages} pages` : 'The archive'}</span>
+            </figcaption>
+          </figure>
 
-        <div class="reveal in">
-          {book.free
-            ? <span class="label mark">Free to read · {formatPublished(book.published)}</span>
-            : isNewRelease(book) && <span class="label mark">New release · {formatPublished(book.published)}</span>}
-          {book.kicker && <span class="label">{book.kicker}</span>}
-          <h1 dir={book.dir ?? undefined} style="font-size:clamp(2.1rem,5vw,3.6rem)">{book.title}</h1>
-          {book.sub && <p style="font-family:var(--display);font-style:italic;font-size:1.25rem;margin-top:.6rem;color:var(--ink-2)">{book.sub}</p>}
-          {book.quote && <p class="pull" dir={book.dir ?? undefined}>{book.quote}</p>}
-          <ul class="specs" style="margin:1.6rem 0">
-            {(book.spec ?? []).map((s) => <li>{s}</li>)}
-          </ul>
-          <div class="desc" set:html={book.desc} />
+          <div class="book-hero-copy">
+            <div class="book-status-line">
+              <span class="book-status-dot" aria-hidden="true"></span>
+              <span>{status}</span>
+              {book.published && <span class="book-published">{formatPublished(book.published)}</span>}
+            </div>
+            {book.series && seriesInfo && (
+              <a class="book-series-link" href={`${base}/series/${book.series}/`}>{seriesInfo.name}<span aria-hidden="true">↗</span></a>
+            )}
+            {book.kicker && <p class="book-kicker">{book.kicker}</p>}
+            <h1 lang={book.language ?? 'en'} dir={book.dir ?? undefined}>{book.title}</h1>
+            {book.altTitle && <p class="book-alt-title">{book.altTitle}</p>}
+            {book.sub && <p class="book-subtitle" lang={book.language ?? 'en'} dir={book.dir ?? undefined}>{book.sub}</p>}
+            {book.quote && <blockquote class="book-quote" lang={book.language ?? 'en'} dir={book.dir ?? undefined}>{book.quote}</blockquote>}
+
+            <div class="book-hero-facts" aria-label="Book details">
+              {book.pages && <div><strong>{book.pages}</strong><span>Pages</span></div>}
+              {book.ku && <div><strong>KU</strong><span>Included</span></div>}
+              {book.free && <div><strong>Free</strong><span>To read</span></div>}
+              {book.comingSoon && <div><strong>Next</strong><span>Forthcoming</span></div>}
+            </div>
+
+            <div class="book-hero-actions">
+              {book.free && <a class="btn solid" href={readUrl}>Read free online <span aria-hidden="true">→</span></a>}
+              {book.us && <a class={`btn${book.free ? '' : ' solid'}`} href={book.us} target="_blank" rel="noopener">Amazon.com <span aria-hidden="true">↗</span></a>}
+              {book.in && <a class="btn" href={book.in} target="_blank" rel="noopener">Amazon.in <span aria-hidden="true">↗</span></a>}
+              <a class="book-scroll-link" href="#about">About this book <span aria-hidden="true">↓</span></a>
+            </div>
+            {book.free && <p class="book-reader-note">No payment or sign-up required to read online.</p>}
+            {book.comingSoon && !book.us && <p class="book-reader-note">This title is listed as forthcoming; availability will be added when published.</p>}
+          </div>
         </div>
       </div>
+    </header>
 
-      {book.free && (
-        <section id="reader" class="reader-block reveal">
-          <div class="reader-head">
-            <div>
-              <span class="label mark">Read free online</span>
-              <h2 dir={book.dir ?? undefined} style="margin:.3rem 0 0">{book.title}</h2>
-            </div>
-            <div class="reader-actions">
-              <a class="btn pri" href={readUrl}>Start reading →</a>
-            </div>
-          </div>
-          <p style="color:var(--ink-2);max-width:52ch">Read the complete book right in your browser — the original pages with their beautiful Nastaliq typography, with light, sepia and night modes, adjustable page width, page-jump and a saved reading position.</p>
-          {chapters.length > 0 && (
-            <ol class="chap-list">
-              {chapters.map((c, i) => (
-                <li>
-                  <a href={`${readUrl}#${c.id}`}>
-                    <span class="chap-n">{String(i + 1).padStart(2, '0')}</span>
-                    <span class="chap-t" dir={book.dir ?? undefined}>{c.title}</span>
-                  </a>
-                </li>
-              ))}
-            </ol>
-          )}
-        </section>
-      )}
-
-      {book.series && (
-        <p style="margin-top:2.6rem">
-          <a class="btn" href={`${base}/series/${book.series}/`}>View the full series →</a>
-        </p>
-      )}
-
-      {related.length > 0 && (
-        <div style="margin-top:6rem">
-          <span class="label mark">Keep reading</span>
-          <h2>{book.series ? 'More in this series' : 'You may also like'}</h2>
-          <div class="shelf-scroll" style="margin-top:1.6rem">
-            {related.map((b, i) => <BookCard book={b} delay={i * 70} />)}
-          </div>
+    <section class="book-content" id="about">
+      <div class="wrap">
+        <div class="book-description-grid">
+          <aside class="book-brief">
+            <span class="label mark">Inside the book</span>
+            <h2>The story</h2>
+            <ul class="specs">{(book.spec ?? []).map((item) => <li>{item}</li>)}</ul>
+            {book.series && <a class="btn book-series-button" href={`${base}/series/${book.series}/`}>Explore the series <span aria-hidden="true">→</span></a>}
+          </aside>
+          <article class="desc book-description reveal in" set:html={book.desc} />
         </div>
-      )}
-    </div>
-  </section>
+
+        {book.free && (
+          <section id="reader" class="reader-block book-reader">
+            <div class="reader-head">
+              <div>
+                <span class="label mark">Read free online</span>
+                <h2 dir={book.dir ?? undefined} style="margin:.3rem 0 0">{book.title}</h2>
+              </div>
+              <div class="reader-actions"><a class="btn solid" href={readUrl}>Start reading <span aria-hidden="true">→</span></a></div>
+            </div>
+            <p class="reader-intro">Read the complete book in your browser, with its original page design, reading preferences and saved position.</p>
+            {chapters.length > 0 && (
+              <ol class="chap-list">
+                {chapters.map((chapter, index) => (
+                  <li>
+                    <a href={`${readUrl}#${chapter.id}`}>
+                      <span class="chap-n">{String(index + 1).padStart(2, '0')}</span>
+                      <span class="chap-t" dir={book.dir ?? undefined}>{chapter.title}</span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
+        )}
+
+        {availableStores.length > 0 && (
+          <section class="edition-section" id="editions" aria-labelledby="edition-title">
+            <div class="edition-heading">
+              <div><span class="label mark">Find your edition</span><h2 id="edition-title">Choose a store</h2></div>
+              <p>Store availability and pricing are shown by the retailer.</p>
+            </div>
+            <div class="edition-links">
+              {availableStores.map(([label, url]) => (
+                <a class="edition-link" href={url} target="_blank" rel="noopener">
+                  <span>{label}</span><span aria-hidden="true">↗</span>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {related.length > 0 && (
+          <section class="related-section" aria-labelledby="related-title">
+            <div class="folio">
+              <h2 id="related-title">{book.series ? 'Continue the series' : 'More from the archive'}</h2>
+              <span class="label">Keep reading →</span>
+            </div>
+            <div class="shelf-scroll">
+              {related.map((relatedBook, index) => <BookCard book={relatedBook} delay={index * 70} />)}
+            </div>
+          </section>
+        )}
+      </div>
+    </section>
+  </div>
 </Base>

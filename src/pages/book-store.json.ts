@@ -15,6 +15,9 @@ const store = Object.fromEntries(
     b.slug,
     {
       title: b.title,
+      altTitle: b.altTitle,
+      language: b.language,
+      comingSoon: b.comingSoon,
       kicker: b.kicker,
       sub: b.sub,
       quote: b.quote,

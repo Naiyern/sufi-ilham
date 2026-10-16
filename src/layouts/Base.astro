@@ -4,7 +4,6 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BookModal from '../components/BookModal.astro';
 import CommandPalette from '../components/CommandPalette.astro';
-import Intro from '../components/Intro.astro';
 import { site } from '../data/site';
 import { resolvePortrait } from '../data/portrait';
 
@@ -28,6 +27,10 @@ const canonical = /\.[a-z0-9]+$/i.test(canonicalUrl.pathname)
   : canonicalUrl.href.replace(/\/?$/, '/');
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isHome = path === (base || '/') || path === '/';
+const isContact = path.endsWith('/contact');
+const isLegal = path.endsWith('/privacy') || path.endsWith('/terms');
+const pageClass = isHome ? 'home-page' : path.includes('/books/') ? 'book-page' : path.includes('/series/') ? 'series-page' : isContact ? 'contact-page' : isLegal ? 'legal-page' : '';
+const hasInkHero = pageClass !== '';
 ---
 
 <!doctype html>
@@ -38,7 +41,7 @@ const isHome = path === (base || '/') || path === '/';
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
-    <meta name="theme-color" content="#f3f0e9" />
+    <meta name="theme-color" content={hasInkHero ? '#191713' : '#f3f0e9'} />
     {isNotFound ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <meta property="og:type" content={type} />
@@ -58,28 +61,42 @@ const isHome = path === (base || '/') || path === '/';
     <link rel="manifest" href={`${base}/site.webmanifest`} />
     <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
     <link rel="dns-prefetch" href="https://m.media-amazon.com" />
-    <script defer data-domain="naiyern.github.io" src="https://plausible.io/js/script.outbound-links.js"></script>
-
     {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
 
     <script is:inline>
       (() => {
-        const t = localStorage.getItem('theme');
-        if (t) document.documentElement.dataset.theme = t;
-        else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-          document.documentElement.dataset.theme = 'dark';
+        const root = document.documentElement;
+        root.classList.add('js');
         try {
-          if (sessionStorage.getItem('si_intro') === '1')
-            document.documentElement.classList.add('intro-done');
-        } catch { /* private mode */ }
+          const theme = localStorage.getItem('theme');
+          if (theme) root.dataset.theme = theme;
+          else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+            root.dataset.theme = 'dark';
+        } catch {
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+            root.dataset.theme = 'dark';
+        }
+
+        const optOut = [navigator.doNotTrack, window.doNotTrack, navigator.msDoNotTrack]
+          .some((value) => ['1', 'yes'].includes(String(value).toLowerCase()))
+          || navigator.globalPrivacyControl === true;
+        if (!optOut) {
+          window.plausible = window.plausible || function () {
+            (window.plausible.q = window.plausible.q || []).push(arguments);
+          };
+          const analytics = document.createElement('script');
+          analytics.defer = true;
+          analytics.dataset.domain = 'naiyern.github.io';
+          analytics.src = 'https://plausible.io/js/script.outbound-links.js';
+          document.head.appendChild(analytics);
+        }
       })();
     </script>
     <noscript>
-      <style>html { overflow: auto } #intro { display: none !important }</style>
+      <style>html { overflow: auto }</style>
     </noscript>
   </head>
-  <body>
-    {isHome && <Intro />}
+  <body class={pageClass || undefined}>
     <div class="progress" id="progress"></div>
     <div class="grain" aria-hidden="true"></div>
     <a class="skip" href="#main">Skip to content</a>
@@ -94,11 +111,11 @@ const isHome = path === (base || '/') || path === '/';
     <audio id="bgm" loop preload="none" playsinline src={`${base}/sama.mp3`}></audio>
 
     <!-- cinematic Amazon hand-off -->
-    <div class="go-ov" id="goOv" aria-hidden="true" role="dialog" aria-live="polite">
+    <div class="go-ov" id="goOv" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="goTitle" aria-describedby="goSub" tabindex="-1">
       <div class="go-in">
-        <div class="go-book"></div>
-        <div class="go-title">Opening Amazon</div>
-        <div class="go-sub">Taking you to the secure Amazon store…</div>
+        <div class="go-book" aria-hidden="true"></div>
+        <div class="go-title" id="goTitle">Opening Amazon</div>
+        <div class="go-sub" id="goSub">Taking you to the secure Amazon store…</div>
         <div class="go-bar"><i></i></div>
         <button class="go-cancel" type="button">Cancel</button>
       </div>

@@ -10,13 +10,17 @@ const index = [
     u: `${base}/#new`,
     k: 'Page',
     img: newReleases[0] ? coverUrl(newReleases[0].img, base) : '',
+    lang: 'en',
+    dir: 'ltr',
   },
   ...ordered.map((b) => ({
     t: b.title,
-    s: b.kicker ?? '',
+    s: [b.altTitle, b.kicker].filter(Boolean).join(' · '),
     u: `${base}/books/${b.slug}/`,
     k: 'Book',
     img: coverUrl(b.img, base),
+    lang: b.language ?? 'en',
+    dir: b.dir ?? 'ltr',
   })),
   ...series.map((s) => ({ t: s.name, s: s.tagline, u: `${base}/series/${s.id}/`, k: 'Series', img: '' })),
   { t: 'About the Author', s: 'A fearless pursuit of truth', u: `${base}/#essay`, k: 'Page', img: '' },
@@ -26,16 +30,16 @@ const index = [
 ];
 ---
 
-<div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-label="Search">
+<div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Search books, series, and pages">
   <div class="cmdk-box">
     <div class="cmdk-top">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="cmdk-ic">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="cmdk-ic">
         <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
       </svg>
-      <input id="cmdkInput" type="text" placeholder="Search books, series, pages…" autocomplete="off" spellcheck="false" />
+      <input id="cmdkInput" type="search" aria-label="Search books, series, and pages" aria-controls="cmdkList" placeholder="Search books, series, pages…" autocomplete="off" spellcheck="false" />
       <kbd>ESC</kbd>
     </div>
-    <div class="cmdk-list" id="cmdkList"></div>
+    <div class="cmdk-list" id="cmdkList" aria-live="polite"></div>
     <div class="cmdk-foot">
       <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
       <span><kbd>↵</kbd> open</span>

@@ -1,5 +1,5 @@
-/* "Sama'" ambient soundtrack. Plays by itself, no gate. Falls back to the
-   first interaction when the browser blocks autoplay, and always fades. */
+/* "Sama'" ambient soundtrack. Silent until the visitor opts in; a remembered
+   preference waits for a user gesture when the browser requires one. Fades in/out. */
 export function initAudio() {
   const a = document.getElementById('bgm') as HTMLAudioElement | null;
   if (!a) return;
@@ -10,14 +10,16 @@ export function initAudio() {
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let fadeT: number | null = null;
-  let wanted = localStorage.getItem(KEY) !== 'off';
+  let wanted = false;
+  try { wanted = localStorage.getItem(KEY) === 'on'; } catch { /* private mode */ }
 
   a.volume = 0;
   a.loop = true;
 
   const paint = () => {
     btn?.classList.toggle('on', wanted && !a.paused);
-    btn?.setAttribute('aria-pressed', String(wanted && !a.paused));
+    btn?.setAttribute('aria-pressed', String(wanted));
+    btn?.setAttribute('aria-label', wanted ? 'Turn ambient soundtrack off' : 'Turn ambient soundtrack on');
   };
 
   const fade = (to: number, ms: number, done?: () => void) => {
@@ -55,7 +57,7 @@ export function initAudio() {
 
   btn?.addEventListener('click', () => {
     wanted = !wanted;
-    localStorage.setItem(KEY, wanted ? 'on' : 'off');
+    try { localStorage.setItem(KEY, wanted ? 'on' : 'off'); } catch { /* private mode */ }
     if (wanted) start(); else stop();
     paint();
   });
@@ -73,5 +75,6 @@ export function initAudio() {
 
   /* Do not fetch the 3.4 MB soundtrack until a gesture — play() on load
      was the main reason the homepage felt heavy even with preload="none". */
-  if (wanted) arm(); else paint();
+  paint();
+  if (wanted) arm();
 }
