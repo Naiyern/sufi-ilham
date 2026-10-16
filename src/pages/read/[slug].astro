@@ -1,7 +1,7 @@
 ---
 import '@fontsource/noto-nastaliq-urdu/400.css';
 import '@fontsource/noto-nastaliq-urdu/700.css';
-import { books, type Book, pdfUrl } from '../../data/site';
+import { books, type Book, pdfUrl, site } from '../../data/site';
 
 type Reader = {
   slug: string; title: string; author?: string; sub?: string;
@@ -23,8 +23,9 @@ const { book } = Astro.props as { book: Book };
 const reader = readers[book.slug];
 const pdf = book.pdf ? pdfUrl(book.pdf, base) : '';
 const backUrl = `${base}/books/${book.slug}/`;
+const canonical = `${site.url}/books/${book.slug}/`;
 const dir = reader?.dir ?? book.dir ?? 'ltr';
-const lang = reader?.lang ?? (dir === 'rtl' ? 'ur' : 'en');
+const lang = reader?.lang ?? book.language ?? (dir === 'rtl' ? 'ur' : 'en');
 const chapters = reader?.chapters ?? [];
 const isPlaceholder = reader?.source === 'placeholder-sample';
 
@@ -59,6 +60,13 @@ const plate = (i: number) =>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{book.title} — Read free · Sufi Ilham</title>
     <meta name="description" content={`Read ${book.title} by Sufi Ilham free online.`} />
+    <meta name="theme-color" content="#ece3d0" />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="noindex,follow" />
+    <meta property="og:type" content="book" />
+    <meta property="og:title" content={`${book.title} — Read free · Sufi Ilham`} />
+    <meta property="og:description" content={`Read ${book.title} by Sufi Ilham free online.`} />
+    <meta property="og:url" content={canonical} />
     <link rel="icon" href={`${base}/favicon.ico`} sizes="any" />
     <style is:inline>
       :root { --rf: 1.25rem; --rlh: 2.15; --rmw: 44rem; --pw: 760px; }
@@ -130,6 +138,9 @@ const plate = (i: number) =>
       main.rbook { padding: 0 clamp(.6rem, 3vw, 1.4rem) 24vh; }
       .rbanner { max-width: var(--pw); margin: 1.4rem auto 0; padding: .7rem .9rem; border-radius: 8px;
         font-size: .82rem; border: 1px dashed #c99a3f; background: rgba(201,154,63,.12); }
+      .rbanner a, .pdfjs-fallback a { color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+      .pdfjs-fallback { width: min(100%, var(--pw)); margin: 1.4rem auto; padding: 1.4rem; border: 1px dashed #c99a3f; border-radius: 8px; text-align: center; background: rgba(201,154,63,.12); }
+      .pdfjs-fallback p { margin: 0 0 .5rem; font-size: .9rem; }
       .rpages { display: flex; flex-direction: column; align-items: center; gap: clamp(.7rem, 2vw, 1.3rem); }
       .rpage { position: relative; width: 100%; max-width: var(--pw); aspect-ratio: var(--par, 0.6667);
         background: #fff; border-radius: 4px; overflow: hidden;
@@ -163,10 +174,11 @@ const plate = (i: number) =>
       <a class="ricon" href={backUrl} aria-label="Back to book page">←<span class="lbl"> Back</span></a>
       <span class="rttl" dir={dir}>{book.title}</span>
       {mode === 'pdf' && <span class="rpageind" id="rpageind">—</span>}
-      <button class="ricon sp" id="rsetBtn" aria-haspopup="true" aria-expanded="false">Aa</button>
+      {mode === 'pdf' && <a class="ricon" href={pdf} target="_blank" rel="noopener" aria-label="Open the original PDF in a new tab">PDF</a>}
+      <button class="ricon sp" id="rsetBtn" aria-label="Reading settings" aria-controls="rsettings" aria-expanded="false">Aa</button>
     </header>
 
-    <div class="rpanel" id="rsettings" aria-label="Reading settings">
+    <div class="rpanel" id="rsettings" role="group" aria-label="Reading settings">
       <div class="rrow"><span>Theme</span></div>
       <div class="rseg" data-set="theme">
         <button data-val="light">Light</button>
@@ -233,7 +245,7 @@ const plate = (i: number) =>
           data-ratio={pageRatio}
         >
           <noscript>
-            <p style="text-align:center">Please enable JavaScript to read this book online.</p>
+            <p class="rbanner">JavaScript is off, so the page viewer is unavailable. <a href={pdf} target="_blank" rel="noopener">Open the original PDF directly</a>.</p>
           </noscript>
         </div>
       )}
@@ -284,13 +296,19 @@ const plate = (i: number) =>
         // Settings panel.
         var setBtn = document.getElementById('rsetBtn');
         var setPanel = document.getElementById('rsettings');
+        function closeSettings(restoreFocus) {
+          if (!setPanel) return;
+          setPanel.classList.remove('open');
+          setBtn && setBtn.setAttribute('aria-expanded', 'false');
+          if (restoreFocus && setBtn) setBtn.focus({ preventScroll: true });
+        }
         setBtn && setBtn.addEventListener('click', function (e) {
           e.stopPropagation();
-          var open = setPanel.classList.toggle('open');
+          var open = setPanel ? setPanel.classList.toggle('open') : false;
           setBtn.setAttribute('aria-expanded', String(open));
         });
         document.addEventListener('click', function (e) {
-          if (!e.target.closest('.rpanel') && !e.target.closest('.ricon')) setPanel && setPanel.classList.remove('open');
+          if (!e.target.closest('.rpanel') && !e.target.closest('.ricon')) closeSettings(false);
         });
         var themeSeg = document.querySelector('[data-set="theme"]');
         themeSeg && themeSeg.addEventListener('click', function (e) { var v = e.target.dataset.val; if (v) { prefs.theme = v; apply(); } });
@@ -319,9 +337,14 @@ const plate = (i: number) =>
         addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
 
         addEventListener('keydown', function (e) {
-          if (e.target.matches('input,textarea')) return;
-          if (e.key === 'j' || e.key === 'ArrowDown') scrollBy({ top: innerHeight * 0.9, behavior: 'smooth' });
-          else if (e.key === 'k' || e.key === 'ArrowUp') scrollBy({ top: -innerHeight * 0.9, behavior: 'smooth' });
+          if (e.key === 'Escape' && setPanel && setPanel.classList.contains('open')) {
+            e.preventDefault();
+            closeSettings(true);
+            return;
+          }
+          if (e.target.closest && e.target.closest('input,textarea,select,button,a,[contenteditable="true"]')) return;
+          if (e.key === 'j') scrollBy({ top: innerHeight * 0.9, behavior: 'smooth' });
+          else if (e.key === 'k') scrollBy({ top: -innerHeight * 0.9, behavior: 'smooth' });
         });
 
         var reflowPdf = function () {};
@@ -354,7 +377,17 @@ const plate = (i: number) =>
               // restore position
               try { var y = parseInt(localStorage.getItem(K) || '0', 10); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); }); } catch (e) {}
             } catch (err) {
-              wrap.innerHTML = '<p style="text-align:center;opacity:.8">Could not open the book. Please refresh the page to try again.</p>';
+              var fallback = document.createElement('div');
+              fallback.className = 'pdfjs-fallback';
+              var message = document.createElement('p');
+              message.textContent = 'The in-page viewer could not open this book.';
+              var direct = document.createElement('a');
+              direct.href = url;
+              direct.target = '_blank';
+              direct.rel = 'noopener';
+              direct.textContent = 'Open the original PDF directly';
+              fallback.append(message, direct);
+              wrap.replaceChildren(fallback);
             }
           })();
 
@@ -388,6 +421,8 @@ const plate = (i: number) =>
               await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
               var ph = shell.querySelector('.ph'); if (ph) ph.remove();
               canvas.className = 'pg';
+              canvas.setAttribute('role', 'img');
+              canvas.setAttribute('aria-label', 'Page ' + i + ' of ' + count + '. Use the original PDF link for selectable text.');
               shell.insertBefore(canvas, shell.firstChild);
             } catch (e) { rendered[i] = false; }
           }

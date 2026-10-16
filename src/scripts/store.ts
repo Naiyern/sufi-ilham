@@ -3,9 +3,9 @@
    modal (app.ts) and the Amazon interstitial (amazon.ts) read it from here so
    it is fetched at most once per visit and never bloats the HTML. */
 export type Book = {
-  title: string; sub?: string; kicker?: string; quote?: string; desc?: string; img: string;
+  title: string; altTitle?: string; language?: string; sub?: string; kicker?: string; quote?: string; desc?: string; img: string;
   spec?: string[]; us?: string; in?: string; uk?: string; ca?: string; au?: string; paperback?: string;
-  free?: boolean; pdf?: string; read?: string; dir?: 'rtl' | 'ltr';
+  free?: boolean; comingSoon?: boolean; pdf?: string; read?: string; dir?: 'rtl' | 'ltr';
 };
 
 let BOOKS: Record<string, Book> | null = null;

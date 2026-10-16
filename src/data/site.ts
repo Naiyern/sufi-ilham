@@ -33,6 +33,8 @@ export type Book = {
   coverArt?: string;
   /** Text direction for the title/description, e.g. 'rtl' for Urdu/Arabic. */
   dir?: 'rtl' | 'ltr';
+  /** BCP-47 language code for structured data and reader metadata. */
+  language?: string;
   /** Optional romanised/alternate title for search and English UI. */
   altTitle?: string;
 };
@@ -80,7 +82,7 @@ export const series: Series[] = [
       'Welcome to Maple Falls, Vermont — a small town at the end of a maple-lined street, where the bookshop keeps its lights on, the bakery keeps its ovens warm, and every love story gets the happily-ever-after it deserves.',
     accent: '#c9713f',
     note:
-      'Grumpy sunshine. Enemies to lovers. Second chances. Snowdrifts. Fireworks. One town where everyone gets their ending — and all five books are free to read on Kindle Unlimited.',
+      'Grumpy sunshine. Enemies to lovers. Second chances. Snowdrifts. Fireworks. One town where everyone gets their ending — all five books are included in Kindle Unlimited.',
   },
   {
     id: 'tithe',
@@ -90,7 +92,7 @@ export const series: Series[] = [
       'A completed adult gothic dark romantasy trilogy. The Crown cuts magic out of a soul that will not declare it — and sends its collectors to hunt down every shadow that hides.',
     accent: '#8d6bd6',
     note:
-      'Enemies to lovers. Forced proximity. A morally grey collector who falls first. Obsessive devotion. Touch-her-and-die stakes. A slow burn that turns open-door only after it costs them something — and all three books are free to read on Kindle Unlimited.',
+      'Enemies to lovers. Forced proximity. A morally grey collector who falls first. Obsessive devotion. Touch-her-and-die stakes. A slow burn that turns open-door only after it costs them something — all three books are included in Kindle Unlimited.',
   },
   {
     id: 'carto',
@@ -100,7 +102,7 @@ export const series: Series[] = [
       'A slow-burn romance and impossible mystery in a fog-bound harbor city that files its secrets under water. Chart-restorer Cassia Merel finds a map that predicts her own death — and the name of Elias Rooke, a man officially dead for twenty-seven years.',
     accent: '#3f9fc9',
     note:
-      'Impossible cartography. Debts that outlive their debtors. A guild that trades in tomorrows. Books 1–3 are available now and free on Kindle Unlimited — Books 4–7 are coming soon.',
+      'Impossible cartography. Debts that outlive their debtors. A guild that trades in tomorrows. Books 1–3 are available now and included in Kindle Unlimited — Books 4–7 are coming soon.',
   },
   {
     id: 'song',
@@ -110,7 +112,7 @@ export const series: Series[] = [
       'A luminous mythic romance of Valen and Elora — devotion, destiny, and the melody that awakens the living earth. From the pastoral valley of Sunspire to the wall-less citadel of Aethelgard and the fate of thirty nations on the Plain of Sundered Vows.',
     accent: '#d8b45e',
     note:
-      'No grim darkness — light, music, philosophy and a love that proves the mind cannot contain the infinite. All three books are complete and free to read on Kindle Unlimited.',
+      'No grim darkness — light, music, philosophy and a love that proves the mind cannot contain the infinite. All three books are complete and included in Kindle Unlimited.',
   },
 ];
 
@@ -174,8 +176,8 @@ export const pageCount = published.reduce((a, b) => a + (b.pages ?? 0), 0);
 
 export const stats = [
   { n: published.length, label: 'Published Titles', key: 'stat.titles' },
-  { n: pageCount, label: 'Pages in Print', key: 'stat.pages' },
-  { n: published.filter((b) => b.ku).length, label: 'Free on Kindle Unlimited', key: 'stat.ku' },
+  { n: pageCount, label: 'Pages across titles', key: 'stat.pages' },
+  { n: published.filter((b) => b.ku).length, label: 'In Kindle Unlimited', key: 'stat.ku' },
   { n: 5, label: 'Amazon Marketplaces', key: 'stat.markets' },
 ];
 
@@ -215,7 +217,7 @@ export const journey = [
   {
     date: 'Nov 2024',
     title: 'Fractured Time',
-    text: "The most talked-about title. What if time isn't real, but a beautiful lie?",
+    text: 'An exploration of time, memory, anticipation and the pull of the present moment.',
   },
   {
     date: 'Feb 2025',
@@ -233,9 +235,9 @@ export const journey = [
     text: 'Five small-town romances, a finished gothic trilogy, and a standalone novel of debt and tawbah.',
   },
   {
-    date: '21 Sept 2026',
-    title: 'The Quiet Tenancy & The Spare Key Summer',
-    text: 'The current new releases: a Brooklyn psychological thriller, and a standalone Milwaukee romance. Both are free on Kindle Unlimited.',
+    date: '29 Sept 2026',
+    title: 'Darya Ka Aik Hissa & Nasruddin Ki Tedhi Tarazu',
+    text: 'A free Urdu novella to read online, and a Hindi historical-folkloric novel included in Kindle Unlimited.',
   },
 ];
 

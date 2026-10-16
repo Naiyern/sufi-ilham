@@ -71,7 +71,7 @@ const heroImg = hero && !hero.img.startsWith('data:') ? coverUrl(hero.img, site.
           <li class={b.comingSoon ? 'soon-step' : ''}>
             <span class="s-num">{b.order}</span>
             <div class="s-step">
-              <a href={`${base}/books/${b.slug}`}><h3>{b.title}</h3></a>
+              <a href={`${base}/books/${b.slug}/`}><h3>{b.title}</h3></a>
               <p>{b.blurb}</p>
               <div class="s-meta">
                 {b.comingSoon

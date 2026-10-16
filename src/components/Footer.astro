@@ -1,51 +1,57 @@
 ---
-import { site, series, byNewest } from '../data/site';
+import { site, series, books, published, byNewest } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const latest = byNewest.slice(0, 6);
 ---
 
 <footer class="colophon">
   <div class="wrap">
-    <div class="colo-grid">
-      <div class="colo">
-        <a class="logo" href={`${base}/`} style="margin-bottom:1rem">
-          <b>Sufi Ilham</b><span class="est">MD Naiyer Alam</span>
+    <div class="colophon-head">
+      <div class="colophon-signature">
+        <span class="label mark">The author’s colophon · {new Date().getFullYear()}</span>
+        <a class="colophon-wordmark" href={`${base}/`} aria-label="Sufi Ilham home">
+          Sufi Ilham<span aria-hidden="true">.</span>
         </a>
-        <p style="font-size:.9rem;max-width:36ch">
-          Books on belief, love, myth and suspense — philosophy, romance, thriller and dark romantasy.
-          Available worldwide on Amazon in Kindle and paperback.
-        </p>
-        <p class="note" style="margin-top:1.2rem">
-          <a href={`tel:+${site.phoneRaw}`}>{site.phone}</a><br />
-          <a href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">WhatsApp</a> ·
-          <a href={site.instagram} target="_blank" rel="noopener">@Sufiilham07</a><br />
-          {site.location}
-        </p>
+        <p class="colophon-credit">{site.altName} · {site.location}</p>
       </div>
-
-      <div class="colo">
-        <h4>Latest titles</h4>
-        <ul>{latest.map((b) => <li><a href={`${base}/books/${b.slug}/`}>{b.title}</a></li>)}</ul>
+      <div class="colophon-note">
+        <p>An author’s archive of books on belief, love, myth and suspense. Find a title, follow a series, or begin with the latest release.</p>
+        <p class="colophon-count"><strong>{published.length}</strong> published <span aria-hidden="true">·</span> <strong>{books.length - published.length}</strong> forthcoming</p>
       </div>
+    </div>
 
+    <div class="colophon-grid">
       <div class="colo">
-        <h4>Series</h4>
+        <h4>Correspondence</h4>
         <ul>
-          {series.map((s) => <li><a href={`${base}/series/${s.id}/`}>{s.name}</a></li>)}
+          <li><a href={`${base}/contact/`}>Send an enquiry <span aria-hidden="true">↗</span></a></li>
+          <li><a href={`tel:+${site.phoneRaw}`}>{site.phone}</a></li>
+          <li><a href={`https://wa.me/${site.phoneRaw}`} target="_blank" rel="noopener">WhatsApp <span aria-hidden="true">↗</span></a></li>
+          <li><a href={site.instagram} target="_blank" rel="noopener">@Sufiilham07 <span aria-hidden="true">↗</span></a></li>
         </ul>
       </div>
 
-      <div class="colo">
+      <nav class="colo" aria-label="Latest titles">
+        <h4>Latest titles</h4>
+        <ul>{latest.map((b) => <li><a href={`${base}/books/${b.slug}/`}>{b.title}</a></li>)}</ul>
+      </nav>
+
+      <nav class="colo" aria-label="Book series">
+        <h4>Series</h4>
+        <ul>{series.map((s) => <li><a href={`${base}/series/${s.id}/`}>{s.name}</a></li>)}</ul>
+      </nav>
+
+      <nav class="colo" aria-label="Explore the site">
         <h4>Explore</h4>
         <ul>
           <li><a href={`${base}/#index`}>All books</a></li>
           <li><a href={`${base}/#essay`}>The author</a></li>
           <li><a href={`${base}/contact/`}>Enquiries</a></li>
-          <li><a href={site.amazonUS} target="_blank" rel="noopener">Amazon store</a></li>
+          <li><a href={site.amazonUS} target="_blank" rel="noopener">Amazon author page <span aria-hidden="true">↗</span></a></li>
           <li><a href={`${base}/privacy/`}>Privacy</a></li>
           <li><a href={`${base}/terms/`}>Terms</a></li>
         </ul>
-      </div>
+      </nav>
     </div>
 
     <div class="colo-bot">

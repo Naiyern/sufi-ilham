@@ -1,4 +1,4 @@
-type Item = { t: string; s: string; u: string; k: string; img: string };
+type Item = { t: string; s: string; u: string; k: string; img: string; lang?: string; dir?: 'rtl' | 'ltr' };
 
 export function initCmdk() {
   const root = document.getElementById('cmdk');
@@ -29,17 +29,50 @@ export function initCmdk() {
 
   const render = () => {
     if (!results.length) {
-      list.innerHTML = `<div class="cmdk-empty">No matches. Try “time”, “romance” or “Maple”.</div>`;
+      const empty = document.createElement('div');
+      empty.className = 'cmdk-empty';
+      empty.textContent = 'No matches. Try “time”, “romance” or “Maple”.';
+      list.replaceChildren(empty);
       return;
     }
-    list.innerHTML = results
-      .map((r, i) => `
-        <a class="cmdk-row${i === active ? ' on' : ''}" href="${r.u}" data-i="${i}">
-          ${r.img ? `<img src="${r.img}" alt="" loading="lazy">` : `<span class="cmdk-dot">${r.k[0]}</span>`}
-          <span class="cmdk-tx"><b>${r.t}</b><small>${r.s}</small></span>
-          <span class="cmdk-kind">${r.k}</span>
-        </a>`)
-      .join('');
+
+    const rows = results.map((item, i) => {
+      const row = document.createElement('a');
+      row.className = `cmdk-row${i === active ? ' on' : ''}`;
+      row.href = item.u;
+      row.dataset.i = String(i);
+
+      if (item.img) {
+        const img = document.createElement('img');
+        img.src = item.img;
+        img.alt = '';
+        img.loading = 'lazy';
+        row.append(img);
+      } else {
+        const dot = document.createElement('span');
+        dot.className = 'cmdk-dot';
+        dot.textContent = item.k.charAt(0);
+        row.append(dot);
+      }
+
+      const text = document.createElement('span');
+      text.className = 'cmdk-tx';
+      const title = document.createElement('b');
+      title.lang = item.lang || 'en';
+      title.dir = item.dir || 'ltr';
+      title.textContent = item.t;
+      const subtitle = document.createElement('small');
+      subtitle.lang = 'en';
+      subtitle.textContent = item.s;
+      text.append(title, subtitle);
+
+      const kind = document.createElement('span');
+      kind.className = 'cmdk-kind';
+      kind.textContent = item.k;
+      row.append(text, kind);
+      return row;
+    });
+    list.replaceChildren(...rows);
     list.querySelector('.cmdk-row.on')?.scrollIntoView({ block: 'nearest' });
   };
 
@@ -57,8 +90,13 @@ export function initCmdk() {
     render();
   };
 
+  let lastFocus: HTMLElement | null = null;
+  const anotherDialogOpen = () => Boolean(document.querySelector('.modal.open, .go-ov.open'));
   const open = () => {
+    if (anotherDialogOpen()) return;
+    lastFocus = document.activeElement as HTMLElement | null;
     root.classList.add('open');
+    root.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     input.value = '';
     search('');
@@ -66,26 +104,49 @@ export function initCmdk() {
   };
   const close = () => {
     root.classList.remove('open');
+    root.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    lastFocus?.focus();
+    lastFocus = null;
   };
 
   addEventListener('keydown', (e) => {
+    if (!root.classList.contains('open') && anotherDialogOpen()) return;
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
       root.classList.contains('open') ? close() : open();
       return;
     }
-    if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test((e.target as HTMLElement)?.tagName)) {
+    const target = e.target as HTMLElement | null;
+    const editing = Boolean(target?.closest?.('input, textarea, select, [contenteditable="true"]'));
+    if (e.key === '/' && !editing) {
       e.preventDefault(); open(); return;
     }
     if (!root.classList.contains('open')) return;
     if (e.key === 'Escape') { e.preventDefault(); close(); }
+    if (e.key === 'Tab') {
+      const focusable = Array.from(root.querySelectorAll<HTMLElement>('input:not([disabled]), a[href], button:not([disabled])'));
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+    }
     if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, results.length - 1); render(); }
     if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, 0); render(); }
-    if (e.key === 'Enter' && results[active]) { e.preventDefault(); location.href = results[active].u; }
+    if (e.key === 'Enter' && results[active]) {
+      e.preventDefault();
+      const destination = results[active].u;
+      close();
+      location.href = destination;
+    }
   });
 
   input.addEventListener('input', () => search(input.value));
+  list.addEventListener('click', (e) => {
+    const mouse = e as MouseEvent;
+    if (mouse.metaKey || mouse.ctrlKey || mouse.shiftKey || mouse.button !== 0) return;
+    if ((e.target as HTMLElement).closest('.cmdk-row')) close();
+  });
   list.addEventListener('mousemove', (e) => {
     const row = (e.target as HTMLElement).closest('.cmdk-row') as HTMLElement | null;
     if (row) { const i = Number(row.dataset.i); if (i !== active) { active = i; render(); } }

@@ -23,29 +23,29 @@ const links = [
 
     <div class="mast-act">
       <button class="seek" data-cmdk-open aria-label="Search (press / or Cmd+K)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
         </svg>
         <span>Search</span><kbd>/</kbd>
       </button>
 
 
-      <button class="mini" id="sndBtn" aria-label="Toggle ambient soundtrack" aria-pressed="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <button class="mini" id="sndBtn" aria-label="Turn ambient soundtrack on" aria-pressed="false">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M11 5 6 9H3v6h3l5 4V5z" />
           <path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7" />
           <path class="wave" d="M18.5 5.5a9 9 0 0 1 0 13" />
         </svg>
       </button>
 
-      <button class="mini" id="themeBtn" aria-label="Toggle colour theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <button class="mini" id="themeBtn" aria-label="Toggle colour theme" aria-pressed="false">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
         </svg>
       </button>
 
-      <button class="mini burger" id="burger" aria-label="Menu" aria-expanded="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+      <button class="mini burger" id="burger" aria-label="Open navigation menu" aria-controls="menu" aria-expanded="false">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
       </button>
     </div>
   </div>

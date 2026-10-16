@@ -1,0 +1,81 @@
+---
+import { coverUrl, formatPublished, isNewRelease } from '../data/site';
+import type { Book } from '../data/site';
+import Cover from './Cover.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+interface Props { book: Book; n: number }
+const { book, n } = Astro.props;
+const src = coverUrl(book.img, base);
+const fresh = isNewRelease(book);
+const kindMap: Record<string, string> = {
+  'self-help': 'Self-help', philosophy: 'Philosophy', fiction: 'Fiction',
+  romance: 'Romance', romantasy: 'Romantasy', thriller: 'Thriller',
+};
+const seriesNames: Record<string, string> = {
+  maple: 'The Maple Falls Romance Series',
+  tithe: 'The Tithe Crown Trilogy',
+  carto: 'The Cartographers of Lost Tomorrows',
+  song: 'The Song of the Unbroken Sky',
+};
+const languageNames: Record<string, string> = { ur: 'Urdu', hi: 'Hindi', en: 'English' };
+const tags = [book.genre, book.ku ? 'ku' : '', book.free ? 'free' : '', book.series ?? '', fresh ? 'new' : ''].filter(Boolean).join(' ');
+const searchText = [
+  book.title,
+  book.altTitle,
+  book.sub,
+  book.kicker,
+  kindMap[book.genre ?? ''],
+  book.genre,
+  seriesNames[book.series ?? ''],
+  book.series ? 'series' : 'standalone',
+  book.blurb,
+  (book.spec ?? []).join(' '),
+  book.language,
+  languageNames[book.language ?? 'en'],
+  book.ku ? 'Kindle Unlimited KU included subscription' : '',
+  book.free ? 'free online read download PDF no purchase' : '',
+  book.pdf ? 'online browser read' : '',
+  book.comingSoon ? 'forthcoming upcoming soon' : '',
+].filter(Boolean).join(' ').toLowerCase();
+const sortTitle = (book.altTitle || book.title).normalize('NFKD').toLowerCase();
+---
+
+<a
+  class={`book-tile${book.comingSoon ? ' soon' : ''}`}
+  href={`${base}/books/${book.slug}/`}
+  data-tags={tags}
+  data-search={searchText}
+  data-slug={book.slug}
+  data-order={n - 1}
+  data-sort-title={sortTitle}
+  data-pages={book.pages ?? ''}
+  data-series={book.series ?? 'standalone'}
+  data-coming-soon={book.comingSoon ? 'true' : 'false'}
+  aria-haspopup="dialog"
+  aria-controls="modal"
+  aria-label={`Open details for ${book.altTitle || book.title}`}
+>
+  <div class="book-tile-cover">
+    <Cover src={src} title={book.title} />
+    {fresh && <span class="ribbon">New</span>}
+    {book.comingSoon && <span class="tile-status">Forthcoming</span>}
+  </div>
+  <div class="book-tile-copy">
+    <div class="book-tile-kicker">
+      <span>{book.kicker || kindMap[book.genre ?? ''] || 'Book'}</span>
+      <span class="book-tile-number">{String(n).padStart(2, '0')}</span>
+    </div>
+    <h3 lang={book.language ?? 'en'} dir={book.dir ?? undefined}>{book.title}</h3>
+    {book.sub && <p class="book-tile-sub" lang={book.language ?? 'en'} dir={book.dir ?? undefined}>{book.sub}</p>}
+    <div class="book-tile-meta">
+      {book.comingSoon
+        ? <span>Coming soon</span>
+        : <>
+            {book.published && <span>{formatPublished(book.published)}</span>}
+            {book.pages && <span>{book.pages} pp</span>}
+            {book.ku && <span>Kindle Unlimited</span>}
+          </>}
+    </div>
+    <span class="book-tile-open">{book.comingSoon ? 'View details' : 'Open book'} <b aria-hidden="true">↗</b></span>
+  </div>
+</a>

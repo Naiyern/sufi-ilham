@@ -17,7 +17,7 @@ export default defineConfig({
     server: {
       host: true,
       allowedHosts: ['.e2b.app', '.arena.site', 'localhost'],
-      hmr: { clientPort: 443, protocol: 'wss' },
+      ws: { clientPort: 443, protocol: 'wss' },
     },
   },
 });
