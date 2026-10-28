@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://naiyern.github.io/sufi-ilham/sitemap-index.xml
+Sitemap: https://sufiilham.co.uk/sitemap-index.xml
