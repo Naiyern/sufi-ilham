@@ -2,10 +2,11 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://naiyern.github.io',
-  // GitHub Pages serves the site from /sufi-ilham. SITE_BASE lets the sandbox
-  // preview build at the root instead, where there is no subpath.
-  base: process.env.SITE_BASE ?? (process.env.NODE_ENV === 'production' ? '/sufi-ilham' : '/'),
+  site: 'https://sufiilham.co.uk',
+  // With a custom domain, GitHub Pages serves the site from the root.
+  // SITE_BASE still lets the sandbox preview or an alternate subpath
+  // deploy override this at build time if needed.
+  base: process.env.SITE_BASE ?? '/',
   // 'always' matches how GitHub Pages serves the site: /privacy/ is the page,
   // /privacy only redirects to it. With 'ignore' Astro also emitted a stub
   // privacy.html that meta-refreshed to /privacy — which GitHub Pages then

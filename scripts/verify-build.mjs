@@ -88,8 +88,8 @@ if (redirects.length === 0) notes.push(`no HTML redirect stubs anywhere in ${rel
 
 /* ------------------------------------------- 3. every internal link resolves */
 
-// Base path is read from the homepage canonical so this works for both the
-// /sufi-ilham Pages build and a sandbox build at the root.
+// Base path is read from the homepage canonical so this works for the
+// custom-domain Pages root build and a sandbox/alt deploy at any subpath.
 let base = '';
 const homeFile = path.join(siteDir, 'index.html');
 if (!exists(homeFile)) errors.push(`${rel(homeFile)} missing`);
@@ -244,7 +244,7 @@ if (errors.length) {
 
 for (const n of notes) console.log(`  ✓ ${n}`);
 console.log(`  ✓ no self-redirecting stubs, all internal links resolve (${checked} pages checked, base "${base || '/'}")`);
-if (base !== '/sufi-ilham') console.log(`  ! built with base "${base || '/'}" — the Pages deploy expects "/sufi-ilham"`);
+if (base !== '/') console.log(`  ! built with base "${base || '/'}" — the custom-domain Pages deploy expects "/"`);
 console.log('  ✓ unique IDs, one h1 per page, image alt attributes, safe form methods, and fragment targets checked');
 console.log('  ✓ cover-top clean, footer Explore links trailing-slashed');
 console.log('\nverify-build passed — safe to deploy dist/ to the repo root.\n');
