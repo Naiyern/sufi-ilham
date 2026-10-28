@@ -3,7 +3,7 @@ import { byNewest, newReleases } from '../data/site';
 
 export function GET(context: { site?: URL }) {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-  const origin = (context.site?.origin ?? 'https://naiyern.github.io') + base;
+  const origin = (context.site?.origin ?? 'https://sufiilham.co.uk') + base;
   return rss({
     title: 'Sufi Ilham — Books',
     description: `New releases from Sufi Ilham (MD Naiyer Alam). Latest: ${newReleases.map((b) => b.title).join(' · ')}.`,

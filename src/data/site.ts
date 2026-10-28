@@ -119,7 +119,7 @@ export const series: Series[] = [
 export const site = {
   name: 'Sufi Ilham',
   altName: 'MD Naiyer Alam',
-  url: 'https://naiyern.github.io/sufi-ilham',
+  url: 'https://sufiilham.co.uk',
   phone: '+91 62017 57330',
   phoneRaw: '916201757330',
   instagram: 'https://instagram.com/Sufiilham07',
