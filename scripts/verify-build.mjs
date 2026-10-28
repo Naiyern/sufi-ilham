@@ -51,6 +51,14 @@ function servedPath(file, siteDir) {
 const normalize = (p) =>
   decodeURIComponent(p.split(/[?#]/)[0]).replace(/\/+$/, '') || '/';
 
+/** Google Search Console verification stubs (google<hash>.html) are not
+ *  pages — they hold a single token line and must stay byte-identical, so
+ *  they are exempt from the page audits below. */
+function isVerificationStub(file) {
+  if (!/^google[0-9a-f]+\.html$/i.test(path.basename(file))) return false;
+  return read(file).trimStart().startsWith('google-site-verification:');
+}
+
 /* ------------------------------------------------------- 1. no stub files */
 
 if (!exists(dist)) {
@@ -68,7 +76,7 @@ for (const name of stubNames) {
 /* ------------------------------------------------- 2. no self-redirecting HTML */
 
 const siteDir = checkRoot ? root : dist;
-const htmlFiles = walk(siteDir, (p) => p.endsWith('.html'));
+const htmlFiles = walk(siteDir, (p) => p.endsWith('.html') && !isVerificationStub(p));
 if (htmlFiles.length === 0) errors.push(`no HTML found in ${rel(siteDir)} — did the build/copy run?`);
 const redirects = [];
 for (const file of htmlFiles) {
@@ -244,7 +252,7 @@ if (errors.length) {
 
 for (const n of notes) console.log(`  ✓ ${n}`);
 console.log(`  ✓ no self-redirecting stubs, all internal links resolve (${checked} pages checked, base "${base || '/'}")`);
-if (base !== '/') console.log(`  ! built with base "${base || '/'}" — the custom-domain Pages deploy expects "/"`);
+if (base) console.log(`  ! built with base "${base}" — the custom-domain Pages deploy expects "/"`);
 console.log('  ✓ unique IDs, one h1 per page, image alt attributes, safe form methods, and fragment targets checked');
 console.log('  ✓ cover-top clean, footer Explore links trailing-slashed');
 console.log('\nverify-build passed — safe to deploy dist/ to the repo root.\n');
