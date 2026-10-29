@@ -1,7 +1,7 @@
 # Sufi Ilham — Official Author Website
 
 An original, cinematic multi-page website for **Sufi Ilham** (pen name of MD Naiyer Alam).
-The live catalogue in `src/data/books.json` contains **29 published titles** — 28 with Amazon
+The live catalogue in `src/data/books.json` contains **32 published titles** — 31 with Amazon
 store links and one free Urdu novella to read online — plus **four forthcoming titles**. The
 catalogue spans non-fiction, literary fiction, romance, fantasy, thrillers, and Urdu- and
 Hindi-language works. Catalogue data feeds the homepage, search, book pages, series pages and
@@ -24,8 +24,8 @@ templates, no stock, no copied marketing text.
 
 ## How to build and publish
 
-This is a static Astro site. Use **Node.js 22.12 or newer** to develop and generate the files
-(Astro 7 requirement); GitHub Pages serves the generated output without an application server or
+This is a static Astro site. Use **Node.js 22.19 or newer** to develop and generate the files
+(required by the current dependency versions); GitHub Pages serves the generated output without an application server or
 database.
 
 ```bash
@@ -54,9 +54,11 @@ not the Astro source tree alone.
 
 - **Author-led editorial homepage** — real portrait, latest-release card, live catalogue proof
   points, recently published books and a visible search field for the full index.
+- **Reader’s guide** — a cover-led “Start here” page with four curated reading paths and direct routes into the archive.
 - **Catalogue discovery** — multi-field search across titles, summaries, series and availability;
   genre/series filters; newest, alphabetical and page-count sorting; live result counts and reset
   recovery; keyboard-operable controls; dedicated book and series routes.
+- **Series reading order** — previous and next book navigation on individual series titles.
 - **Amazon handoff** — store links show a brief, cancellable book interstitial before opening the
   selected Amazon destination in a new tab.
 - **Accessible interactions** — responsive navigation, command palette (`/` or `Cmd/Ctrl+K`),
@@ -262,8 +264,11 @@ source of truth when a retail listing changes.
 27. **The Citadel of Sapphire Seas** — 93 pp · Unbroken Sky #2
 28. **The Chariot of Peace** — 80 pp · Unbroken Sky #3
 29. **The Spare Key Summer** — 234 pp · standalone contemporary romance
+30. **First Person Singular: The Science and Mystery of Being You** — 200 pp · consciousness and philosophy
+31. **The Caregiving Launch Plan: Your First 90 Days** — 224 pp · caregiving guide
+32. **The Ninth Bell** — 303 pp · The Nine Hours #1
 
-### Forthcoming (not included in the 29 published titles)
+### Forthcoming (not included in the 32 published titles)
 
 - *The Library of Drowned Days*
 - *The Seven Unwritten Days*

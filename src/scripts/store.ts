@@ -20,9 +20,15 @@ export function loadBooks(): Promise<Record<string, Book>> {
   const url = storeUrl();
   if (!url) return Promise.resolve((BOOKS = {}));
   pending = fetch(url)
-    .then((r) => (r.ok ? r.json() : {}))
+    .then((r) => {
+      if (!r.ok) throw new Error(`Catalogue request failed: ${r.status}`);
+      return r.json();
+    })
     .then((d: Record<string, Book>) => (BOOKS = d))
-    .catch(() => (BOOKS = {}));
+    // Do not cache a temporary failure: later interactions can retry, while
+    // the caller still falls back to the ordinary book-page link.
+    .catch(() => ({}))
+    .finally(() => { pending = null; });
   return pending;
 }
 

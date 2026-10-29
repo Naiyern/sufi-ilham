@@ -23,6 +23,7 @@ const index = [
     dir: b.dir ?? 'ltr',
   })),
   ...series.map((s) => ({ t: s.name, s: s.tagline, u: `${base}/series/${s.id}/`, k: 'Series', img: '' })),
+  { t: 'Start Here', s: 'Reading paths and book recommendations', u: `${base}/discover/`, k: 'Page', img: '' },
   { t: 'About the Author', s: 'A fearless pursuit of truth', u: `${base}/#essay`, k: 'Page', img: '' },
   { t: 'Themes', s: 'Belief · Time · Attention · Seeing', u: `${base}/#figures`, k: 'Page', img: '' },
   { t: 'Contact', s: 'Interviews, rights, reader mail', u: `${base}/contact/`, k: 'Page', img: '' },

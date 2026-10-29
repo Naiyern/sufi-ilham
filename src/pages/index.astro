@@ -3,8 +3,7 @@ import Base from '../layouts/Base.astro';
 import BookTile from '../components/BookTile.astro';
 import Cover from '../components/Cover.astro';
 import AnimatedCover from '../components/AnimatedCover.astro';
-import { books, published, series, seriesBooks, site, themes, journey, coverUrl, pdfUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished } from '../data/site';
-import seriesLd from '../data/series-jsonld.json';
+import { books, published, series, seriesBooks, site, themes, journey, coverUrl, pdfUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished, seriesStructuredData } from '../data/site';
 import { publicImageSize } from '../data/image-size';
 import { resolvePortrait } from '../data/portrait';
 
@@ -54,17 +53,17 @@ const ticker = [
   `New · ${newReleases.map((b) => b.title).join(' · ')}`,
   'Philosophy · Romance · Thriller · Myth',
   `${published.filter((b) => b.ku).length} included in Kindle Unlimited`,
-  'Kindle & paperback worldwide',
+  'Discover books and series',
 ];
 
 const jsonld = [
-  ...Object.values(seriesLd as Record<string, unknown>),
+  ...series.map((s) => seriesStructuredData(s, site.url)),
   {
     '@context': 'https://schema.org', '@type': 'Person',
     name: site.name, alternateName: site.altName, jobTitle: 'Author',
     description: 'Author, deep thinker and seeker of truth exploring belief, consciousness, identity and self-discovery.',
     telephone: '+91-6201757330', url: site.url,
-    image: `${site.url}/${portrait.rel}`,
+    image: `${site.url}/${portrait.rel}?v=${portrait.version}`,
     sameAs: [site.instagram, site.instagram2, site.amazonUS, site.amazonIN],
   },
   {
@@ -107,22 +106,22 @@ const jsonld = [
         <div class="hero-copy">
           <p class="hero-eyebrow label mark">
             <span class="hero-eyebrow-rule" aria-hidden="true"></span>
-            A fearless pursuit of truth
+            Stories for a more examined life
           </p>
           <h1 id="author-name">
             <span class="ln"><span style="--d:.05s">Sufi</span></span>
             <span class="ln"><span style="--d:.15s" class="thin">Ilham</span></span>
           </h1>
-          <p class="hero-intro">Books for the questions that stay with us.</p>
+          <p class="hero-intro">For the stories we live.<br />And the questions we carry.</p>
           <p class="lede hero-lede">
             {published.length} books on belief, love, myth and suspense — written by Sufi Ilham, the pen name of MD Naiyer Alam.
           </p>
           <div class="cover-cta hero-actions">
             <a class="btn solid" href="#new">
-              Discover the latest
+              Meet the latest book
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h15M13 5l7 7-7 7" /></svg>
             </a>
-            <a class="btn" href="#index">Browse all {published.length} books</a>
+            <a class="btn" href={`${base}/discover/`}>Find your next read</a>
           </div>
           <p class="hero-location"><span class="label">Based in</span> {site.location}<span aria-hidden="true"> · </span>Available worldwide</p>
           <nav class="scene-nav reveal" aria-label="Explore the archive chapters">
@@ -137,7 +136,7 @@ const jsonld = [
           <figure class="hero-portrait">
             <div class="hero-image-wrap">
               <img
-                src={`${base}/${portrait.rel}`}
+                src={`${base}/${portrait.rel}?v=${portrait.version}`}
                 alt="Portrait of Sufi Ilham, also known as MD Naiyer Alam"
                 width={portraitW}
                 height={portraitH}
@@ -324,11 +323,18 @@ const jsonld = [
     </div>
   </section>
 
+  <section class="home-discovery" aria-labelledby="home-discovery-title">
+    <div class="wrap home-discovery-grid">
+      <div><span class="discover-overline">YOUR NEXT CHAPTER / START HERE</span><h2 id="home-discovery-title">Not sure where<br /><em>to begin?</em></h2></div>
+      <div><p>Come for a question. Stay for a story. Find your way through the archive with reading paths for curious minds, open hearts and new worlds.</p><div class="home-paths"><a href={`${base}/discover/#path-01`}>Ideas &amp; meaning <span>↗</span></a><a href={`${base}/discover/#path-02`}>Love &amp; connection <span>↗</span></a><a href={`${base}/discover/#path-03`}>Fiction &amp; fantasy <span>↗</span></a><a href={`${base}/discover/#path-04`}>Life &amp; growth <span>↗</span></a></div><a class="home-discovery-link" href={`${base}/discover/`}>Explore the reader’s guide <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </section>
+
   <!-- ================= THE INDEX (catalogue) ================= -->
   <section id="index" class="archive-chapter">
     <div class="wrap">
       <div class="folio reveal">
-        <h2>The index</h2>
+        <h2>Find your next book.</h2>
         <span class="label">{published.length} live · {books.length - published.length} forthcoming</span>
       </div>
       <p class="lede reveal" style="margin-bottom:2rem">
@@ -438,7 +444,7 @@ const jsonld = [
         <div class="reveal">
           <figure class="plate author-main" style="margin:0">
             <img
-              src={`${base}/${portrait.rel}`}
+              src={`${base}/${portrait.rel}?v=${portrait.version}`}
               alt="Portrait of Sufi Ilham"
               width={portraitW}
               height={portraitH}
@@ -542,13 +548,16 @@ const jsonld = [
   </section>
 
   <!-- ================= COLOPHON QUOTE ================= -->
-  <section id="ending" class="closing-quote" style="text-align:center">
-    <div class="wrap reveal">
+  <section id="ending" class="closing-quote" aria-labelledby="closing-quote-text">
+    <div class="wrap quote-stage">
       <span class="quote-glyph" aria-hidden="true">“</span>
-      <p class="label mark">— The Map Is Finished</p>
-      <h2 style="max-width:18ch;margin:1rem auto 0;font-style:italic">
-        “The map is not the country. Walk until you know the difference.”
+      <span class="quote-prelude" aria-hidden="true"><span></span> A MOMENT TO REFLECT <span></span></span>
+      <h2 id="closing-quote-text" class="quote-text">
+        <span class="quote-line">“A journey of a</span>{' '}
+        <span class="quote-line quote-line-emphasis">thousand miles</span>{' '}
+        <span class="quote-line">begins with a single step.”</span>
       </h2>
+      <p class="quote-credit">— Lao Tzu <span aria-hidden="true">·</span> Tao Te Ching, Chapter 64</p>
     </div>
   </section>
 

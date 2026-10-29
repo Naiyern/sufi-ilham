@@ -27,7 +27,9 @@ const reader = book.free ? readers[book.slug] : undefined;
 const chapters = reader?.chapters ?? [];
 const seriesInfo = book.series ? series.find((item) => item.id === book.series) : undefined;
 const bookAccent = seriesInfo?.accent ?? '#df6348';
-const bookHeroStyle = `--accent:${bookAccent};${/^(https?:|data:)/i.test(book.img) ? '' : `--cinema-still:url("${img}")`}`;
+// Covers in the catalogue are trusted, and the same image is already used in
+// the foreground. Reuse it as a subdued atmospheric backdrop on every book.
+const bookHeroStyle = `--accent:${bookAccent};--cinema-still:url("${img.replace(/["\\]/g, '')}")`;
 
 const stores: [string, string | undefined][] = [
   ['Amazon.com', book.us], ['Amazon.in', book.in], ['Amazon UK', book.uk],
@@ -37,6 +39,10 @@ const availableStores = stores.filter(([, url]) => Boolean(url));
 const sameShelf = (book.series ? seriesBooks(book.series) : books.filter((b) => b.genre === book.genre))
   .filter((b) => b.slug !== book.slug && !b.comingSoon);
 const related = (sameShelf.length ? sameShelf : byNewest.filter((b) => b.slug !== book.slug)).slice(0, 4);
+const orderList = book.series ? seriesBooks(book.series) : [];
+const orderIndex = orderList.findIndex((item) => item.slug === book.slug);
+const previousBook = orderIndex > 0 ? orderList[orderIndex - 1] : undefined;
+const nextBook = orderIndex >= 0 ? orderList[orderIndex + 1] : undefined;
 const status = book.comingSoon ? 'Forthcoming' : book.free ? 'Read free online' : isNewRelease(book) ? 'New release' : 'Available now';
 
 const jsonld = [
@@ -130,8 +136,8 @@ const jsonld = [
       <div class="wrap">
         <div class="book-description-grid">
           <aside class="book-brief">
-            <span class="label mark">Inside the book</span>
-            <h2>The story</h2>
+            <span class="label mark">A closer look</span>
+            <h2>{book.genre === 'self-help' || book.genre === 'philosophy' ? 'Inside the book' : 'The story'}</h2>
             <ul class="specs">{(book.spec ?? []).map((item) => <li>{item}</li>)}</ul>
             {book.series && <a class="btn book-series-button" href={`${base}/series/${book.series}/`}>Explore the series <span aria-hidden="true">→</span></a>}
           </aside>
@@ -179,10 +185,20 @@ const jsonld = [
           </section>
         )}
 
+        {(previousBook || nextBook) && (
+          <nav class="book-order-nav" aria-label="Series reading order">
+            <div><span class="label mark">Reading order</span><h2>Continue the journey.</h2></div>
+            <div class="book-order-links">
+              {previousBook && <a href={`${base}/books/${previousBook.slug}/`}><span>← Previous book</span><strong>{previousBook.title}</strong></a>}
+              {nextBook && <a href={`${base}/books/${nextBook.slug}/`}><span>Next book →</span><strong>{nextBook.title}{nextBook.comingSoon ? ' · Forthcoming' : ''}</strong></a>}
+            </div>
+          </nav>
+        )}
+
         {related.length > 0 && (
           <section class="related-section" aria-labelledby="related-title">
             <div class="folio">
-              <h2 id="related-title">{book.series ? 'Continue the series' : 'More from the archive'}</h2>
+              <h2 id="related-title">{book.series && sameShelf.length ? 'Continue the series' : 'More from the archive'}</h2>
               <span class="label">Keep reading →</span>
             </div>
             <div class="shelf-scroll">

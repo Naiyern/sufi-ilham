@@ -1,9 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import { series, seriesBooks, site, type Series } from '../../data/site';
+import { series, seriesBooks, site, seriesStructuredData, type Series } from '../../data/site';
 import { coverUrl } from '../../data/site';
-import seriesLd from '../../data/series-jsonld.json';
 
 export function getStaticPaths() {
   return series.map((s) => ({ params: { id: s.id }, props: { s } }));
@@ -15,7 +14,7 @@ const list = seriesBooks(s.id);
 const out = list.filter((b) => !b.comingSoon);
 const soon = list.filter((b) => b.comingSoon);
 const pages = out.reduce((a, b) => a + (b.pages ?? 0), 0);
-const ld = (seriesLd as Record<string, unknown>)[s.id];
+const ld = seriesStructuredData(s, site.url);
 const hero = out[0];
 // og:image must be an absolute URL, so resolve local covers against site.url
 // (not the path-only base) and fall back to the layout default when absent.
@@ -40,8 +39,9 @@ const heroImg = hero && !hero.img.startsWith('data:') ? coverUrl(hero.img, site.
 
     <div class="wrap s-hero-in">
       <p class="crumb"><a href={`${base}/`}>Home</a> · <a href={`${base}/#series`}>Series</a></p>
-      <span class="label mark">{list.length}-Book Series</span>
-      <h1>{s.tagline}</h1>
+      <span class="label mark">{list.length === 1 ? 'Series · Book 1 available' : `${list.length}-Book Series`}</span>
+      <h1>{s.name}</h1>
+      <p class="series-hero-tagline">{s.tagline}</p>
       <p class="lede" style="margin-top:1rem">{s.lede}</p>
 
       <div class="s-facts">

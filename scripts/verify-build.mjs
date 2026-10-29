@@ -159,7 +159,7 @@ if (indexFile) {
   if (!explore) errors.push('index.html has no footer Explore list');
   else {
     const links = [...explore[1].matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
-    if (links.length !== 6) errors.push(`footer Explore has ${links.length} links, expected 6`);
+    if (links.length !== 7) errors.push(`footer Explore has ${links.length} links, expected 7`);
     for (const href of links) {
       if (!href.startsWith('/') && !href.startsWith('https://')) {
         errors.push(`footer Explore link ${href} is neither internal nor absolute`);
