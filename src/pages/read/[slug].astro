@@ -97,7 +97,7 @@ const plate = (i: number) =>
         font-variant-numeric: tabular-nums; }
 
       .ricon { display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
-        min-width: 2.1rem; height: 2.1rem; padding: 0 .6rem; cursor: pointer;
+        min-width: 44px; height: 44px; padding: 0 .6rem; cursor: pointer;
         border: 1px solid rgba(120,110,90,.35); border-radius: 7px; background: transparent;
         color: inherit; font: 500 .8rem/1 system-ui, sans-serif; text-decoration: none; }
       .ricon:hover { border-color: #c99a3f; }
@@ -114,7 +114,7 @@ const plate = (i: number) =>
       .rrow { display: flex; align-items: center; gap: .5rem; margin: .35rem 0 .8rem; }
       .rrow > span { font: 600 .7rem/1 system-ui; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
       .rseg { display: flex; gap: .3rem; flex-wrap: wrap; }
-      .rseg button { flex: 1 1 auto; padding: .45rem .5rem; border: 1px solid rgba(120,110,90,.35);
+      .rseg button { flex: 1 1 auto; min-height: 44px; padding: .45rem .5rem; border: 1px solid rgba(120,110,90,.35);
         border-radius: 6px; background: transparent; color: inherit; cursor: pointer; font: 500 .8rem/1 system-ui; }
       .rseg button[aria-pressed="true"] { background: #c99a3f; border-color: #c99a3f; color: #241c08; font-weight: 700; }
       .rjump { display: flex; align-items: center; gap: .5rem; }
@@ -164,6 +164,8 @@ const plate = (i: number) =>
       .rempty a { color: #c99a3f; }
 
       @media (max-width: 640px) { .rttl { max-width: 26vw; } .ricon span.lbl { display: none; } .rpageind { display: none; } }
+      .ricon:focus-visible, .rseg button:focus-visible, .rjump input:focus-visible { outline: 3px solid #bd7c20; outline-offset: 2px; }
+      @media (prefers-reduced-motion: reduce) { body { transition: none; } }
       @media print { .rtop, .rprogress, .rpanel, .rhero { display: none !important; } }
     </style>
   </head>

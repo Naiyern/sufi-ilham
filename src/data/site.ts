@@ -17,7 +17,7 @@ export type Book = {
   paperback?: string;
   seriesUrl?: string;
   comingSoon?: boolean;
-  series?: 'maple' | 'tithe' | 'carto' | 'song';
+  series?: 'maple' | 'tithe' | 'carto' | 'song' | 'nine-hours';
   order?: number;
   genre?: string;
   ku?: boolean;
@@ -74,6 +74,14 @@ export type Series = {
 
 export const series: Series[] = [
   {
+    id: 'nine-hours',
+    name: 'The Nine Hours',
+    tagline: 'A story of love, grief and the courage to be found.',
+    lede: 'On the island of Santa Luzia, a letter writer and a bell restorer meet amid grief, unanswered words and the sound of bells above the sea.',
+    accent: '#8199b8',
+    note: 'Begin with The Ninth Bell, book one of The Nine Hours. The edition includes the companion story The First Letter.',
+  },
+  {
     id: 'maple',
     name: 'The Maple Falls Romance Series',
     tagline: 'Five love stories. One town that never lets go.',
@@ -115,6 +123,25 @@ export const series: Series[] = [
       'No grim darkness — light, music, philosophy and a love that proves the mind cannot contain the infinite. All three books are complete and included in Kindle Unlimited.',
   },
 ];
+
+/** Structured series metadata derived from the same catalogue as the pages. */
+export function seriesStructuredData(s: Series, origin: string) {
+  const titles = seriesBooks(s.id);
+  return {
+    '@context': 'https://schema.org', '@type': 'BookSeries',
+    name: s.name, description: s.lede,
+    url: `${origin}/series/${s.id}/`,
+    author: { '@type': 'Person', name: 'Sufi Ilham' },
+    numberOfItems: titles.length,
+    hasPart: titles.map((book) => ({
+      '@type': 'Book', name: book.title, position: book.order,
+      url: `${origin}/books/${book.slug}/`,
+      ...(book.pages ? { numberOfPages: book.pages } : {}),
+      ...(book.published && book.published.length > 7 ? { datePublished: book.published } : {}),
+      inLanguage: book.language ?? 'en',
+    })),
+  };
+}
 
 export const site = {
   name: 'Sufi Ilham',

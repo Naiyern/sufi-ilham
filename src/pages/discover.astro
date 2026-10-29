@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import Cover from '../components/Cover.astro';
+import { bookBySlug, coverUrl, published, series } from '../data/site';
+import { readingPaths } from '../data/reading-paths';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title="Find your next read — Sufi Ilham" description="Find your way into the books of Sufi Ilham. Explore reading paths for curious minds, love stories, imaginary worlds and real life.">
+  <section class="discover-hero">
+    <div class="wrap discover-hero-grid">
+      <div>
+        <p class="discover-kicker">THE READER'S GUIDE <span> / </span> SUFI ILHAM</p>
+        <h1>Every good book<br /><em>begins somewhere.</em></h1>
+        <p class="discover-intro">Whether you came looking for a question, a story, or a little clarity, there is a place for you here.</p>
+        <div class="discover-actions"><a class="discover-button" href="#paths">Find your way in <span aria-hidden="true">↓</span></a><a class="discover-text-link" href={`${base}/#index`}>Explore the full archive <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <div class="discover-hero-aside" aria-label="The archive at a glance">
+        <span class="discover-aside-label">A NOTE TO THE READER</span>
+        <p>“There is no single way to begin. Follow what calls to you.”</p>
+        <div class="discover-aside-facts"><span><b>{published.length}</b> published books</span><span><b>{series.length}</b> story worlds</span></div>
+      </div>
+    </div>
+    <div class="discover-hero-bottom wrap"><span>AN OPEN INVITATION</span><span>SCROLL TO EXPLORE ↓</span></div>
+  </section>
+
+  <section class="discover-paths" id="paths">
+    <div class="wrap">
+      <div class="discover-section-head"><div><span class="discover-overline">A PLACE TO BEGIN / 01</span><h2>What are you<br /><em>looking for?</em></h2></div><p>Four doors into the archive. Choose the one that feels like yours—or wander between them.</p></div>
+      <div class="path-list">
+        {readingPaths.map((path) => {
+          const picks = path.slugs.map(bookBySlug).filter((book) => book && !book.comingSoon);
+          return <article id={`path-${path.number}`} class={`path-card path-${path.accent}`}>
+            <div class="path-copy"><div class="path-top"><span>{path.number} / READING PATH</span><span aria-hidden="true">✳</span></div><p class="path-eyebrow">{path.eyebrow}</p><h3>{path.title}</h3><p class="path-description">{path.description}</p><span class="path-count">{picks.length} BOOKS TO BEGIN WITH <span aria-hidden="true">→</span></span></div>
+            <div class="path-books">{picks.map((book) => book && <a class="path-book" href={`${base}/books/${book.slug}/`}><Cover src={coverUrl(book.img, base)} title={book.title} /><span>{book.title}<span aria-hidden="true"> ↗</span></span></a>)}</div>
+          </article>;
+        })}
+      </div>
+    </div>
+  </section>
+  <section class="discover-finale"><div class="wrap discover-finale-inner"><span class="discover-overline">THE STORY CONTINUES / 02</span><h2>There is more<br /><em>to discover.</em></h2><p>Explore every title, find a series to follow, or read the Urdu novella online for free.</p><div class="discover-actions"><a class="discover-button" href={`${base}/#index`}>Browse all books <span aria-hidden="true">↗</span></a><a class="discover-text-link" href={`${base}/read/darya-ka-aik-hissa/`}>Read the free novella <span aria-hidden="true">↗</span></a></div></div></section>
+</Base>

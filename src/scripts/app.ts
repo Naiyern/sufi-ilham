@@ -1,6 +1,7 @@
 import { initGo } from './amazon';
 import { initAudio } from './audio';
 import { initCatalogue } from './catalogue.js';
+import { initTheme } from './theme.js';
 import { initCmdk } from './cmdk';
 import { loadBooks, prefetchBooks, type Book } from './store';
 
@@ -117,18 +118,25 @@ const initChapterRail = () => {
 };
 initChapterRail();
 
+/* Reveal the closing words once, only when motion and observation are available.
+   Without either, the quote stays readable immediately. */
+const initQuoteScene = () => {
+  const scene = document.querySelector<HTMLElement>('.closing-quote');
+  if (!scene || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  scene.classList.add('quote-ready');
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      scene.classList.add('quote-entered');
+      observer.disconnect();
+    }
+  }, { threshold: 0.2 });
+  observer.observe(scene);
+};
+initQuoteScene();
+
 /* ---------- theme ---------- */
-const themeBtn = $('#themeBtn');
-const paintThemeButton = () =>
-  themeBtn?.setAttribute('aria-pressed', String(document.documentElement.dataset.theme === 'dark'));
-paintThemeButton();
-themeBtn?.addEventListener('click', () => {
-  const root = document.documentElement;
-  const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-  root.dataset.theme = next;
-  paintThemeButton();
-  try { localStorage.setItem('theme', next); } catch { /* private mode */ }
-});
+// Pass storage inside a guarded block: browsers may deny access in private mode.
+try { initTheme(document, localStorage); } catch { initTheme(document, { setItem() {} }); }
 
 /* ---------- nav ---------- */
 const nav = $('#nav');
@@ -196,7 +204,7 @@ addEventListener(
   { passive: true },
 );
 onScroll();
-toTop?.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+toTop?.addEventListener('click', () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
 
 /* ---------- reveal + animated counters ---------- */
 if ('IntersectionObserver' in window) {
