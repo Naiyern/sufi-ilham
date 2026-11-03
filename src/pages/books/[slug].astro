@@ -4,7 +4,7 @@ import BookCard from '../../components/BookCard.astro';
 import AnimatedCover from '../../components/AnimatedCover.astro';
 import Cover from '../../components/Cover.astro';
 import Book3D from '../../components/Book3D.astro';
-import { books, series, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
+import { books, series, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished, metaDescription } from '../../data/site';
 
 type Reader = { slug: string; chapters: { id: string; title: string }[]; source?: string };
 const readerFiles = import.meta.glob<Reader>('../../data/reader/*.json', { eager: true, import: 'default' });
@@ -62,7 +62,7 @@ const jsonld = [
 ];
 ---
 
-<Base title={`${book.title} — Sufi Ilham`} description={plain.slice(0, 180)} image={socialImage} type="book" jsonld={jsonld}>
+<Base title={`${book.title} — Sufi Ilham`} description={metaDescription(plain)} image={socialImage} type="book" jsonld={jsonld}>
   <div class="bp-bar" id="bpBar"></div>
   <div id="bookBody">
     <header class="book-hero" style={bookHeroStyle}>

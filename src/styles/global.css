@@ -460,7 +460,7 @@ body.menu-open::before {
 .colophon-count { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem; margin: 1rem 0 0; color: var(--ink-3); font: .58rem/1.5 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
 .colophon-count strong { color: var(--mark); font-size: .78rem; font-weight: 500; }
 .colophon-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, .9fr); gap: clamp(1.3rem, 3vw, 2.6rem); margin-top: 2.3rem; }
-.colo h4 { font-family: var(--mono); font-size: .64rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 1rem; font-weight: 500; }
+.colo h2 { font-family: var(--mono); font-size: .64rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 1rem; font-weight: 500; }
 .colo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .48rem; }
 .colo a { font-size: .9rem; color: var(--ink-2); transition: color .3s; }
 .colo a:hover { color: var(--mark); }
@@ -3555,3 +3555,162 @@ section[id], div[id] { scroll-margin-top: 96px; }
 }
 .book-tile:hover::before,
 .book-tile:focus-visible::before { transform: scaleX(1); }
+
+/* =========================================================
+   CROSS-ANGLE PASS — the defects that only show when the site
+   is looked at from the other side: a button's fill painted
+   behind its own background, a focus ring that disappears on
+   paper, native chrome that ignores the theme, Windows high
+   contrast, the printed page, a phone held sideways, and a
+   display wider than the measure was designed for.
+   ========================================================= */
+
+/* ---- 1. the hover sweep was painted behind the button ----
+   .btn::after sits at z-index:-1 so the label stays on top. Without a
+   stacking context on .btn that fill also paints behind the button's own
+   background, which is opaque on every .solid CTA (hero, book, series,
+   contact) — so the vermilion sweep never appeared there. isolation:isolate
+   makes .btn its own stacking context: the background paints first, the
+   negative child above it, the label above both. */
+.btn { isolation: isolate; }
+
+/* ---- 2. one focus ring that reads on paper AND on ink ----
+   A fixed salmon (#d47c60) measured 2.7:1 on paper — below the 3:1 floor for
+   a focus indicator — while the token ink (#8c2f1d) is 1.4:1 on the ink hero.
+   currentColor follows the element's own text colour, which is already
+   legible on whatever surface it sits on. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* ---- 3. native widgets follow the theme ----
+   Without color-scheme, dark mode still gets light <select> menus, light
+   search-field affordances and a light scrollbar track, and the browser's
+   own canvas stays white behind the paper. */
+:root { color-scheme: light; }
+:root[data-theme='dark'] { color-scheme: dark; }
+
+/* a reserved gutter means opening a dialog (which locks body scroll) no
+   longer shifts the whole page sideways as the scrollbar disappears */
+html { scrollbar-gutter: stable; }
+/* dialogs and the off-canvas menu own their scroll: no chaining to the page */
+.modal-in, .cmdk-list, .mast nav, .legal-toc { overscroll-behavior: contain; }
+
+/* ---- 4. small gold text on paper ----
+   Antique gold is a rule colour, not an ink: at 3.8:1 it carries borders and
+   large numerals but not 10px uppercase. --mark-deep is the same hue taken
+   down until it clears 4.5:1 on paper, and light again inside a dark jacket. */
+:root { --mark-deep: #7d5c14; }
+:root[data-theme='dark'] { --mark-deep: #d9b45e; }
+.legal-toc h2 { color: var(--mark-deep); }
+.scene-index { font-size: .6rem; }
+
+/* ---- 5. touch: no sticky hover, and a press that answers ---- */
+@media (hover: none), (pointer: coarse) {
+  .btn:hover { transform: none; }
+  .btn:hover span[aria-hidden='true'] { transform: none; }
+  .book-tile:hover { transform: none; }
+}
+.btn:active { transform: translateY(0) scale(.99); }
+.book-tile:active { transform: translateY(-1px); }
+
+/* ---- 6. Windows high contrast / forced colours ----
+   Gradients, shadows and translucent washes vanish here; the structure has
+   to be redrawn in system colours or the page loses its edges. */
+@media (forced-colors: active) {
+  body::before,
+  .grain,
+  .cinema-light-leak,
+  .b3d-shadow,
+  .b3d-sheen,
+  .hero-visual::before,
+  .plate::before,
+  .plate::after { display: none !important; }
+  .btn,
+  .mini,
+  .seek,
+  .fbtn,
+  .book-tile,
+  .edition-link,
+  .catalog-select,
+  .sub-form input,
+  .form input,
+  .form select,
+  .form textarea { border: 1px solid ButtonText !important; }
+  .btn::after { display: none; }
+  .btn.solid,
+  .fbtn[aria-pressed='true'] { background: Highlight; color: HighlightText; border-color: Highlight; }
+  .b3d-front,
+  .b3d-spine,
+  .b3d-fore,
+  .b3d-head,
+  .b3d-tail { border: 1px solid ButtonText; }
+  :focus-visible { outline: 2px solid Highlight; outline-offset: 3px; }
+}
+
+/* ---- 7. the printed page ----
+   Screen spacing is not paper spacing: give the sheet a margin, keep a
+   paragraph from breaking after its first line, and keep a cover whole. */
+@page { margin: 15mm 14mm; }
+@media print {
+  p, .desc, .legal-content { orphans: 3; widows: 3; }
+  .book-tile,
+  .release,
+  .edition-link,
+  .spine,
+  figure,
+  blockquote { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  a[href^='http'] { text-decoration: underline; }
+  .grain, body::before, .cinema-light-leak { display: none !important; }
+  /* content-visibility skips off-screen painting on screen; on paper every
+     tile must be laid out, or the printed catalogue comes out in patches */
+  .book-tile { content-visibility: visible !important; }
+}
+
+/* ---- 8. a phone held sideways ----
+   Landscape phones are ~360px tall: the 5rem+ hero top padding and the
+   6rem masthead leave the copy below the fold. Tighten the vertical rhythm
+   only; nothing is hidden. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .mast { padding: .3rem 0; }
+  .editorial-hero.cover { padding-top: 4.2rem; padding-bottom: .8rem; }
+  .editorial-hero h1 { font-size: clamp(3.2rem, 9vw, 4.6rem); }
+  .hero-layout { padding-top: 1rem; padding-bottom: 1rem; gap: 1.6rem; }
+  .hero-intro { font-size: 1.5rem; margin-top: .9rem; }
+  .hero-lede { font-size: 1rem; }
+  section { padding-block: 2.2rem; }
+  .cover { padding-top: 4.4rem; }
+}
+
+/* ---- 9. a display wider than the measure ----
+   At 1700px+ the 1300px column reads as a stripe in the middle of the
+   screen. Widen the measure and lift the type a notch so the page keeps
+   its density instead of drifting apart. */
+@media (min-width: 1700px) {
+  :root { --wrap: 1420px; }
+  body { font-size: 19px; }
+  .hero-layout { grid-template-columns: minmax(0, 1.15fr) minmax(320px, .72fr); }
+}
+
+/* ---- 10. the back-to-top control before it is needed ----
+   It fades in after 700px of scroll, but a transparent button is still a
+   tab stop: visibility (unlike opacity) takes it out of the tab order until
+   it is actually on screen. */
+.to-top {
+  visibility: hidden;
+  transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease),
+              visibility 0s linear var(--dur-3);
+}
+.to-top.show {
+  visibility: visible;
+  transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease),
+              visibility 0s;
+}

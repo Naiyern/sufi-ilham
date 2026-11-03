@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
 import { initCatalogue } from '../src/scripts/catalogue.js';
 import { initTheme } from '../src/scripts/theme.js';
+import { setDialogOpen } from '../src/scripts/dialog.ts';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const builtHtml = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
@@ -517,4 +518,159 @@ test('premium detail: tokens, text rendering, scroll state and system preference
 
   // the 36-tile catalogue skips off-screen painting without shifting layout
   assert.match(stylesheet, /\.book-tile \{[^}]*content-visibility: auto[^}]*contain-intrinsic-size: auto 240px/s);
+});
+
+/* ------------------------------------------------------------------ *
+ * Cross-angle pass: outline, focus traps, theme chrome, the printed
+ * sheet, landscape phones and wide displays.
+ * ------------------------------------------------------------------ */
+
+function builtPages() {
+  const out = [];
+  const walk = (dir) => {
+    for (const name of readdirSync(dir)) {
+      const file = join(dir, name);
+      if (statSync(file).isDirectory()) walk(file);
+      else if (name.endsWith('.html')) out.push(file);
+    }
+  };
+  walk(join(projectRoot, 'dist'));
+  return out;
+}
+
+test('every page ships one h1, a clean outline and no hidden tab stops', () => {
+  const pages = builtPages();
+  assert.ok(pages.length > 40, `expected the whole archive, found ${pages.length} pages`);
+  for (const file of pages) {
+    const dom = new JSDOM(readFileSync(file, 'utf8'));
+    const d = dom.window.document;
+    const page = file.replace(join(projectRoot, 'dist'), '');
+
+    // one h1, and never a jump of more than one level (the footer's column
+    // headings used to be h4 under an h2 on all 48 pages)
+    const heads = [...d.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+    assert.equal(heads.filter((h) => h.tagName === 'H1').length, 1, `${page}: h1 count`);
+    let previous = 0;
+    for (const h of heads) {
+      const level = Number(h.tagName[1]);
+      assert.ok(level <= previous + 1, `${page}: ${previous} -> ${level} heading jump`);
+      previous = level;
+    }
+
+    // a closed dialog must be inert, or its buttons stay in the tab order
+    const dialogs = [...d.querySelectorAll('[role="dialog"]')];
+    // the reading page is its own document and has no overlays; every other
+    // page ships the book sheet, the palette and the Amazon hand-off
+    if (page !== '/read/darya-ka-aik-hissa/index.html') {
+      assert.ok(dialogs.length >= 3, `${page}: expected the three overlays`);
+    }
+    for (const dialog of dialogs) {
+      if (dialog.getAttribute('aria-hidden') === 'true') {
+        assert.ok(dialog.hasAttribute('inert'), `${page}: closed dialog is not inert`);
+      }
+    }
+
+    // nothing focusable may hide inside aria-hidden without being inert
+    for (const hidden of d.querySelectorAll('[aria-hidden="true"]')) {
+      if (hidden.closest('[inert]')) continue;
+      const stray = hidden.querySelector('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])');
+      if (!stray || stray.closest('[inert]')) continue;
+      assert.fail(`${page}: focusable ${stray.tagName} inside aria-hidden`);
+    }
+  }
+});
+
+test('closing a dialog removes it from the tab order and the a11y tree', () => {
+  const dom = new JSDOM('<div id="sheet" class="modal" role="dialog" aria-hidden="true" inert><button>Close</button></div>');
+  const el = dom.window.document.getElementById('sheet');
+
+  setDialogOpen(el, true);
+  assert.equal(el.classList.contains('open'), true);
+  assert.equal(el.getAttribute('aria-hidden'), 'false');
+  assert.equal(el.hasAttribute('inert'), false);
+
+  setDialogOpen(el, false);
+  assert.equal(el.classList.contains('open'), false);
+  assert.equal(el.getAttribute('aria-hidden'), 'true');
+  assert.equal(el.hasAttribute('inert'), true);
+});
+
+test('the browser chrome follows the theme, and ink jackets stay dark', () => {
+  const build = (chrome, theme) => {
+    const dom = new JSDOM(
+      '<html><head><meta name="theme-color" id="themeColor" content="#f3f0e9"></head>' +
+        `<body data-chrome="${chrome}"><button id="themeBtn"></button></body></html>`,
+    );
+    if (theme) dom.window.document.documentElement.dataset.theme = theme;
+    return dom;
+  };
+
+  // a paper page follows the visitor: light chrome, then dark
+  const paper = build('paper');
+  const store = { setItem() {} };
+  initTheme(paper.window.document, store);
+  const paperMeta = paper.window.document.getElementById('themeColor');
+  assert.equal(paperMeta.content, '#f3f0e9');
+  paper.window.document.getElementById('themeBtn').click();
+  assert.equal(paperMeta.content, '#191713');
+
+  // an ink jacket is dark at the top even in light mode, so its chrome is too
+  const ink = build('ink', 'light');
+  initTheme(ink.window.document, store);
+  assert.equal(ink.window.document.getElementById('themeColor').content, '#191713');
+});
+
+test('cross-angle detail: button stacking, focus, native chrome, forced colours, print, landscape, wide', () => {
+  // the solid CTA's sweep paints above its own opaque background
+  assert.match(stylesheet, /\.btn \{ isolation: isolate; \}/);
+
+  // the focus ring is currentColor, which is legible on paper and on ink
+  assert.match(stylesheet, /a:focus-visible,[\s\S]{0,260}outline: 2px solid currentColor/);
+
+  // native widgets and the scrollbar gutter follow the theme
+  assert.match(stylesheet, /:root \{ color-scheme: light; \}/);
+  assert.match(stylesheet, /:root\[data-theme='dark'\] \{ color-scheme: dark; \}/);
+  assert.match(stylesheet, /html \{ scrollbar-gutter: stable; \}/);
+
+  // small gold text has an ink-weight variant
+  assert.match(stylesheet, /--mark-deep: #7d5c14/);
+  assert.match(stylesheet, /\.legal-toc h2 \{ color: var\(--mark-deep\); \}/);
+
+  // Windows high contrast keeps the structure
+  assert.match(stylesheet, /@media \(forced-colors: active\)[\s\S]{0,400}border: 1px solid ButtonText/);
+  assert.match(stylesheet, /\.btn\.solid,[\s\S]{0,120}background: Highlight; color: HighlightText/);
+
+  // the printed sheet
+  assert.match(stylesheet, /@page \{ margin: 15mm 14mm; \}/);
+  assert.match(stylesheet, /p, \.desc, \.legal-content \{ orphans: 3; widows: 3; \}/);
+  assert.match(stylesheet, /\.book-tile,[\s\S]{0,200}break-inside: avoid/);
+
+  // a phone held sideways keeps its vertical rhythm
+  assert.match(stylesheet, /@media \(orientation: landscape\) and \(max-height: 520px\)/);
+
+  // a display wider than the measure
+  assert.match(stylesheet, /@media \(min-width: 1700px\) \{[\s\S]{0,120}--wrap: 1420px/);
+});
+
+test('the preloaded fonts are the files the stylesheet actually asks for', () => {
+  const html = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
+  const preloads = [...html.matchAll(/<link rel="preload" href="([^"]+)" as="font"/g)].map((m) => m[1]);
+  assert.equal(preloads.length, 2, `expected two font preloads, found ${preloads.length}`);
+
+  const cssFiles = readdirSync(join(projectRoot, 'dist/_astro')).filter((f) => f.endsWith('.css'));
+  const css = cssFiles.map((f) => readFileSync(join(projectRoot, 'dist/_astro', f), 'utf8')).join('\n');
+  for (const href of preloads) {
+    const file = href.split('/').pop();
+    assert.ok(css.includes(file), `preloaded ${file} is not referenced by any stylesheet`);
+  }
+});
+
+test('meta descriptions fit a search result', () => {
+  for (const file of builtPages()) {
+    const dom = new JSDOM(readFileSync(file, 'utf8'));
+    const content = dom.window.document.querySelector('meta[name="description"]')?.content ?? '';
+    const page = file.replace(join(projectRoot, 'dist'), '');
+    assert.ok(content.length >= 50, `${page}: description is only ${content.length} chars`);
+    assert.ok(content.length <= 160, `${page}: description is ${content.length} chars`);
+  }
 });

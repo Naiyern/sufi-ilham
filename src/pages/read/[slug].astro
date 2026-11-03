@@ -1,6 +1,10 @@
 ---
 import '@fontsource/noto-nastaliq-urdu/400.css';
 import '@fontsource/noto-nastaliq-urdu/700.css';
+/* A long chapter set in Nastaliq is a long wait for a swap: fetch the two
+   weights the reader actually sets before the first line is laid out. */
+import urdu400 from '@fontsource/noto-nastaliq-urdu/files/noto-nastaliq-urdu-arabic-400-normal.woff2?url';
+import urdu700 from '@fontsource/noto-nastaliq-urdu/files/noto-nastaliq-urdu-arabic-700-normal.woff2?url';
 import { books, type Book, pdfUrl, site } from '../../data/site';
 
 type Reader = {
@@ -54,12 +58,12 @@ const plate = (i: number) =>
 ---
 
 <!doctype html>
-<html lang={lang} dir={dir} data-rtheme="sepia" data-pw="normal">
+<html lang="en" dir={dir} data-rtheme="sepia" data-pw="normal">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{book.title} — Read free · Sufi Ilham</title>
-    <meta name="description" content={`Read ${book.title} by Sufi Ilham free online.`} />
+    <meta name="description" content={`Read ${book.title} by Sufi Ilham free online — the complete text in a reader you can resize, re-theme and set to your own pace.`} />
     <meta name="theme-color" content="#ece3d0" />
     <link rel="canonical" href={canonical} />
     <meta name="robots" content="noindex,follow" />
@@ -67,6 +71,8 @@ const plate = (i: number) =>
     <meta property="og:title" content={`${book.title} — Read free · Sufi Ilham`} />
     <meta property="og:description" content={`Read ${book.title} by Sufi Ilham free online.`} />
     <meta property="og:url" content={canonical} />
+    <link rel="preload" href={urdu400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={urdu700} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href={`${base}/favicon.ico`} sizes="any" />
     <style is:inline>
       :root { --rf: 1.25rem; --rlh: 2.15; --rmw: 44rem; --pw: 760px; }
@@ -159,7 +165,7 @@ const plate = (i: number) =>
       .rchap h2 { font: 700 clamp(1.4rem, 4vw, 2rem)/1.7 "Noto Nastaliq Urdu", var(--display, serif);
         text-align: center; margin: 0 0 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(120,110,90,.25); }
       .rchap p { font-size: var(--rf); line-height: var(--rlh); margin: 0 0 1.3rem; text-align: justify; }
-      html[lang="ur"] .rchap p, html[dir="rtl"] .rchap p { font-family: "Noto Nastaliq Urdu", serif; text-align: right; }
+      .rbook[lang="ur"] .rchap p, html[dir="rtl"] .rchap p { font-family: "Noto Nastaliq Urdu", serif; text-align: right; }
       .rempty { text-align: center; opacity: .8; padding: 4rem 0; }
       .rempty a { color: #c99a3f; }
 
@@ -221,8 +227,8 @@ const plate = (i: number) =>
     )}
 
     <div class="rhead">
-      <h1 dir={dir}>{book.title}</h1>
-      {reader?.author && <p class="rauthor" dir={dir}>{reader.author}</p>}
+      <h1 dir={dir} lang={lang}>{book.title}</h1>
+      {reader?.author && <p class="rauthor" dir={dir} lang={lang}>{reader.author}</p>}
       <svg class="ornament" viewBox="0 0 240 24" fill="none" aria-hidden="true">
         <path d="M12 12h72" stroke="currentColor" stroke-width="1.2"/>
         <path d="M156 12h72" stroke="currentColor" stroke-width="1.2"/>
@@ -231,7 +237,7 @@ const plate = (i: number) =>
       </svg>
     </div>
 
-    <main class="rbook" id="rbook">
+    <main class="rbook" id="rbook" lang={lang}>
       {isPlaceholder && (
         <p class="rbanner">Sample preview — placeholder text. Add the real manuscript PDF to replace it.</p>
       )}

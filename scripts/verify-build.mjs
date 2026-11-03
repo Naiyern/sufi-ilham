@@ -155,7 +155,9 @@ if (indexFile) {
   if (!coverTop) errors.push('index.html has no .cover-top block');
   else if (/Bihar/i.test(coverTop[1])) errors.push('index.html cover-top mentions Bihar (place names belong in the footer only)');
 
-  const explore = html.match(/<h4>Explore<\/h4>\s*<ul>([\s\S]*?)<\/ul>/);
+  // The footer column headings are h2: an h4 under a page's h2 skipped two
+  // levels of the outline on all 48 pages.
+  const explore = html.match(/<h2>Explore<\/h2>\s*<ul>([\s\S]*?)<\/ul>/);
   if (!explore) errors.push('index.html has no footer Explore list');
   else {
     const links = [...explore[1].matchAll(/href="([^"]+)"/g)].map((m) => m[1]);

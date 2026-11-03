@@ -7,6 +7,12 @@ import CommandPalette from '../components/CommandPalette.astro';
 import NextChapter from '../components/NextChapter.astro';
 import { site } from '../data/site';
 import { resolvePortrait } from '../data/portrait';
+/* The two faces that paint first: the display serif of the masthead/hero and
+   the reading serif of every paragraph. Preloading them lets the browser fetch
+   the woff2 while it is still parsing CSS, so the first text paint is already
+   in the right typeface instead of swapping into it. */
+import displayFont from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
+import textFont from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -43,7 +49,7 @@ const hasInkHero = pageClass !== '';
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
-    <meta name="theme-color" content={hasInkHero ? '#191713' : '#f3f0e9'} />
+    <meta name="theme-color" id="themeColor" content={hasInkHero ? '#191713' : '#f3f0e9'} />
     {isNotFound ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <meta property="og:type" content={type} />
@@ -61,6 +67,8 @@ const hasInkHero = pageClass !== '';
     <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
     <link rel="alternate" type="application/rss+xml" title="Sufi Ilham — Books" href={`${base}/rss.xml`} />
     <link rel="manifest" href={`${base}/site.webmanifest`} />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={textFont} as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
     <link rel="dns-prefetch" href="https://m.media-amazon.com" />
     {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
@@ -98,7 +106,7 @@ const hasInkHero = pageClass !== '';
       <style>html { overflow: auto }</style>
     </noscript>
   </head>
-  <body class={pageClass || undefined}>
+  <body class={pageClass || undefined} data-chrome={hasInkHero ? 'ink' : 'paper'}>
     <div class="progress" id="progress"></div>
     <div class="grain" aria-hidden="true"></div>
     <a class="skip" href="#main">Skip to content</a>
@@ -114,7 +122,7 @@ const hasInkHero = pageClass !== '';
     <audio id="bgm" loop preload="none" playsinline src={`${base}/sama.mp3`}></audio>
 
     <!-- cinematic Amazon hand-off -->
-    <div class="go-ov" id="goOv" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="goTitle" aria-describedby="goSub" tabindex="-1">
+    <div class="go-ov" id="goOv" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="goTitle" aria-describedby="goSub" tabindex="-1" inert>
       <div class="go-in">
         <div class="go-book" aria-hidden="true"></div>
         <div class="go-title" id="goTitle">Opening Amazon</div>

@@ -40,7 +40,9 @@ const {
 
   <div class="acover-txt">
     <div class="acover-head">
-      <h3 class="acover-title" dir={dir} lang="ur">{title}</h3>
+      <!-- role="img" makes the plate presentational, so this is lettering, not a
+         heading: an h3 here used to precede the page h1 in the outline. -->
+      <p class="acover-title" dir={dir} lang="ur">{title}</p>
       {roman && <p class="acover-roman">{roman}</p>}
       {tagline && (
         <>

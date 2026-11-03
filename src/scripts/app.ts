@@ -5,6 +5,7 @@ import { initTheme } from './theme.js';
 import { initCmdk } from './cmdk';
 import { initBook3D } from './books3d';
 import { loadBooks, prefetchBooks, type Book } from './store';
+import { setDialogOpen } from './dialog';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -276,15 +277,13 @@ const openModal = (b: Book, slug: string, trigger?: HTMLElement | null) => {
   pageLink.href = `${modal.getAttribute('data-base') || ''}/books/${encodeURIComponent(slug)}/`;
   pageLink.textContent = 'Open full book page →';
 
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
+  setDialogOpen(modal, true);
   document.body.style.overflow = 'hidden';
   $('#modalClose')?.focus();
 };
 
 const closeModal = () => {
-  modal?.classList.remove('open');
-  modal?.setAttribute('aria-hidden', 'true');
+  setDialogOpen(modal, false);
   document.body.style.overflow = '';
   lastFocus?.focus({ preventScroll: true });
 };
