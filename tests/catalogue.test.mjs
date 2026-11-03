@@ -457,3 +457,28 @@ test('the books hold up on dark stages, in print, and in the palette', () => {
   assert.ok(current, 'the primary nav should mark the current page');
   assert.match(current.getAttribute('href'), /\/discover\/$/);
 });
+
+test('the page block is a calculated slab with a measured bleed', () => {
+  // a 300-page trade paperback is 15-18% of its trim width thick; drawn any
+  // thinner and the paper edge does not exist
+  assert.match(stylesheet, /--th: clamp\(9px, 13cqw, 52px\)/);
+  assert.match(stylesheet, /--b3d-bleed: clamp\(\.5px, \.3cqw, 2\.4px\)/);
+
+  // the paper stands proud of the boards at the three cut edges
+  assert.match(stylesheet, /\.b3d-head \{[^}]*top: calc\(-1 \* var\(--b3d-bleed\)\)/s);
+  assert.match(stylesheet, /\.b3d-tail \{[^}]*bottom: calc\(-1 \* var\(--b3d-bleed\)\)/s);
+  assert.match(stylesheet, /\.b3d-fore \{[^}]*right: calc\(1\.2% - var\(--b3d-bleed\)\)/s);
+
+  // each surface is a layer stack: cut edge, board shadow, three sheet
+  // periods, spine compression, paper
+  const headRule = stylesheet.match(/\.b3d-head,\n\.b3d-tail \{[^}]*\}/s)[0];
+  const foreRule = stylesheet.match(/\.b3d-fore \{[^}]*\}/s)[0];
+  for (const [label, rule] of [['head/tail', headRule], ['fore', foreRule]]) {
+    const gradients = (rule.match(/gradient\(/g) || []).length;
+    assert.ok(gradients >= 6, `${label} should be a layer stack, found ${gradients} gradients`);
+    assert.match(rule, /rgba\(52, 40, 26/, `the board must shadow the paper on ${label}`);
+  }
+
+  // thumbnails stay slim instead of turning into bricks
+  assert.match(stylesheet, /@container \(max-width: 118px\) \{[^}]*--th: clamp\(6px, 8\.5cqw, 10px\)/s);
+});
