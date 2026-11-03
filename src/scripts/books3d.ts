@@ -14,7 +14,7 @@
  */
 
 const REST_Y = 22;
-const REST_X = -5;
+const REST_X = -6;
 const REACH_Y = 9;
 const REACH_X = 7;
 

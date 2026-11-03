@@ -2937,9 +2937,12 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 
 .b3d {
   --th: 12px;
-  --th: clamp(7px, 9.6cqw, 34px);
+  --th: clamp(9px, 13cqw, 52px);
+  /* how far the paper stands proud of the board, in the same unit as --th:
+     a real block is a shade wider than its cover long before it is bound */
+  --b3d-bleed: clamp(.5px, .3cqw, 2.4px);
   --b3d-ry: 22deg;
-  --b3d-rx: -5deg;
+  --b3d-rx: -6deg;
   --gx: 26%;
   --gy: 8%;
   --b3d-board: #241f17;
@@ -3108,17 +3111,33 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 }
 
 /* ---- page block ---- */
+/* ---- the text block -------------------------------------------------------
+   Three faces carry the paper: head, tail and fore-edge. Each is a slab of
+   --th thickness sitting inside the boards, and each bleeds outward by
+   --b3d-bleed so the paper stands a hair proud of the cover — the lip that
+   makes a closed book read as a block rather than a box.
+
+   The surface is built from four layers, in this order:
+     1. a lit cut edge, so the top of the block catches the light;
+     2. fibre compression toward the spine, where the block is glued;
+     3. the sheet striations themselves (two periods, so they never repeat
+        visibly at either 100px or 400px);
+     4. the paper base.
+   ------------------------------------------------------------------------- */
 .b3d-fore {
-  right: 1.2%;
+  right: calc(1.2% - var(--b3d-bleed));
   left: auto;
   width: var(--th);
   height: 100%;
   transform: translateX(calc(var(--th) / 2)) rotateY(90deg);
   background:
-    repeating-linear-gradient(90deg,
-      var(--b3d-page) 0 .5px,
-      var(--b3d-page-2) .5px 1.5px),
-    var(--b3d-page);
+    /* on the fore-edge the board overhangs on the front side, i.e. the right */
+    linear-gradient(270deg, rgba(255, 255, 255, .6) 0 .5px, transparent .5px),
+    linear-gradient(270deg, rgba(52, 40, 26, .4) 0, rgba(52, 40, 26, .12) 24%, transparent 58%),
+    repeating-linear-gradient(90deg, rgba(120, 102, 74, .22) 0 .4px, transparent .4px 1.7px),
+    repeating-linear-gradient(90deg, rgba(120, 102, 74, .13) 0 .4px, transparent .4px 6.1px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .45) 0 .3px, transparent .3px 11.3px),
+    linear-gradient(180deg, #fcf8ee, #f1ebda);
   box-shadow: inset 0 0 5px rgba(86, 74, 54, .4);
 }
 .b3d-head,
@@ -3127,16 +3146,30 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   width: 97.6%;
   height: var(--th);
   background:
-    repeating-linear-gradient(0deg,
-      var(--b3d-page) 0 .5px,
-      var(--b3d-page-2) .5px 1.5px),
-    var(--b3d-page);
-  box-shadow: inset 0 0 6px rgba(86, 74, 54, .35);
+    /* the board's edge catches the light ... */
+    linear-gradient(180deg, rgba(255, 255, 255, .75) 0 .5px, transparent .5px),
+    /* ... and then throws its shadow across the pages it overhangs: this is
+       the cue that separates a paper block from a painted stripe */
+    linear-gradient(180deg, rgba(52, 40, 26, .42) 0, rgba(52, 40, 26, .13) 26%, transparent 62%),
+    /* three sheet periods: 1.7 / 6.1 / 11.3 never line up, so the block never
+       reads as corduroy at any size */
+    repeating-linear-gradient(0deg, rgba(120, 102, 74, .22) 0 .4px, transparent .4px 1.7px),
+    repeating-linear-gradient(0deg, rgba(120, 102, 74, .13) 0 .4px, transparent .4px 6.1px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .45) 0 .3px, transparent .3px 11.3px),
+    /* glued at the spine: narrow, soft compression, gone by 9% */
+    linear-gradient(90deg, rgba(96, 80, 56, .26), transparent 9%),
+    linear-gradient(180deg, #fcf8ee, #f1ebda);
+  box-shadow:
+    inset 0 0 0 .5px rgba(255, 252, 243, .55),
+    inset 0 0 6px rgba(86, 74, 54, .32);
 }
-.b3d-head { transform: translateY(calc(var(--th) / -2)) rotateX(-90deg); }
+.b3d-head {
+  top: calc(-1 * var(--b3d-bleed));
+  transform: translateY(calc(var(--th) / -2)) rotateX(-90deg);
+}
 .b3d-tail {
   top: auto;
-  bottom: 0;
+  bottom: calc(-1 * var(--b3d-bleed));
   transform: translateY(calc(var(--th) / 2)) rotateX(-90deg);
 }
 
@@ -3186,7 +3219,8 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 
 /* small thumbnails: keep the object, drop the unreadable spine type */
 @container (max-width: 118px) {
-  .b3d-obj { --th: 5px; }
+  /* thumbnails keep a slimmer block: a 100px cover should not become a brick */
+  .b3d-obj { --th: clamp(6px, 8.5cqw, 10px); }
   .b3d-spine-title,
   .b3d-spine-mark { display: none; }
   .b3d-spine::before,
@@ -3222,7 +3256,7 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   transform: none !important;
 }
 #new .release .plate::after { display: none; }
-#new .release .plate .b3d { max-width: 420px; margin-inline: auto; --b3d-ry: 24deg; --b3d-rx: -6deg; }
+#new .release .plate .b3d { max-width: 420px; margin-inline: auto; --b3d-ry: 24deg; --b3d-rx: -7deg; }
 
 /* cinematic arrival: the book settles onto the page instead of popping in */
 @media (prefers-reduced-motion: no-preference) {
@@ -3251,7 +3285,7 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   filter: blur(16px);
   pointer-events: none;
 }
-.book-hero-art .b3d { --b3d-ry: 25deg; --b3d-rx: -7deg; }
+.book-hero-art .b3d { --b3d-ry: 25deg; --b3d-rx: -8deg; }
 .book-hero-art::after {
   content: '';
   position: absolute;
