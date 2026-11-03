@@ -30,10 +30,10 @@ database.
 
 ```bash
 npm ci
-SITE_BASE=/ npm run dev -- --host 0.0.0.0  # local preview
-npm run build                              # generate dist/ and verify it
-npm test                                   # build, then run catalogue interaction regressions
-npm run deploy                             # test, sync and verify GitHub Pages output in the repo root
+npm run dev -- --host 0.0.0.0   # local preview at http://localhost:4321/sufi-ilham/
+npm run build                   # generate dist/ and verify it
+npm test                        # build, then run catalogue interaction regressions
+npm run deploy                  # test, sync and verify GitHub Pages output in the repo root
 ```
 
 This repository's GitHub Pages site is <https://naiyern.github.io/sufi-ilham/>. Pages serves the
@@ -41,6 +41,27 @@ This repository's GitHub Pages site is <https://naiyern.github.io/sufi-ilham/>. 
 output to the root. The deploy script also clears stale hashed `_astro/` bundles before copying.
 Running it only prepares files locally; publishing still requires those generated files to reach
 the configured Pages branch.
+
+**The base path is part of the address.** A GitHub Pages *project* site is served from
+`/<repository>/`, not from the domain root, so `astro.config.mjs` defaults to
+`site: 'https://naiyern.github.io'` with `base: '/sufi-ilham/'`. Because of that, every link,
+stylesheet, font, image, canonical, sitemap and RSS URL Astro emits carries the `/sufi-ilham/`
+prefix. Building with the wrong base produces a page that loads with no styling and navigation
+that 404s, so do not hand-edit generated HTML to "fix" paths — change the config and rebuild.
+
+`robots.txt` and `site.webmanifest` are generated routes (`src/pages/robots.txt.ts`,
+`src/pages/site.webmanifest.ts`) for the same reason: a static copy in `public/` froze the old
+custom-domain URLs and a root-scoped manifest.
+
+To move to an apex/custom domain later (e.g. `sufiilham.co.uk`), add the domain both in the
+repository's Pages settings and as `public/CNAME`, then build with:
+
+```bash
+SITE_ORIGIN=https://sufiilham.co.uk SITE_BASE=/ npm run deploy
+```
+
+`SITE_ORIGIN` and `SITE_BASE` always override the defaults, so the same source can be published to
+a custom domain or a repository subpath without editing files.
 
 **Trailing slashes matter.** `<base>/<page>/` is the real URL and `<base>/<page>` redirects to it.
 Do not add `privacy.html`, `terms.html` or `contact.html` redirect stubs to the root or `public/`:

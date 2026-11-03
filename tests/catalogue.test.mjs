@@ -9,6 +9,10 @@ import { initTheme } from '../src/scripts/theme.js';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const builtHtml = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
+// The site is served from a subpath (GitHub Pages project site), so internal
+// links must carry the deploy base. Read it from the built canonical instead of
+// hardcoding it, so the tests follow astro.config's SITE_BASE.
+const BASE = new URL(builtHtml.match(/<link rel="canonical" href="([^"]+)"/)[1]).pathname.replace(/\/$/, '');
 const stylesheet = readFileSync(join(projectRoot, 'src/styles/global.css'), 'utf8');
 
 function setupCatalogue() {
@@ -251,10 +255,10 @@ test('reader guide presents four accessible paths with valid book links', () => 
   assert.equal(document.querySelectorAll('.path-card').length, 4);
   const bookLinks = [...document.querySelectorAll('.path-book')];
   assert.equal(bookLinks.length, 12);
-  assert.ok(bookLinks.every((link) => link.getAttribute('href').startsWith('/books/')));
+  assert.ok(bookLinks.every((link) => link.getAttribute('href').startsWith(`${BASE}/books/`)));
   assert.ok(bookLinks.every((link) => link.querySelector('img[alt]')));
-  assert.ok(document.querySelector('a[href="/read/darya-ka-aik-hissa/"]'));
-  assert.ok(new JSDOM(builtHtml).window.document.querySelector('a[href="/discover/"]'));
+  assert.ok(document.querySelector(`a[href="${BASE}/read/darya-ka-aik-hissa/"]`));
+  assert.ok(new JSDOM(builtHtml).window.document.querySelector(`a[href="${BASE}/discover/"]`));
   close(dom);
 });
 
@@ -262,8 +266,8 @@ test('series books link to adjacent titles in reading order', () => {
   const page = readFileSync(join(projectRoot, 'dist/books/the-sea-tithe/index.html'), 'utf8');
   const dom = new JSDOM(page);
   const nav = dom.window.document.querySelector('nav[aria-label="Series reading order"]');
-  assert.ok(nav.querySelector('a[href="/books/the-shadow-tithe/"]'));
-  assert.ok(nav.querySelector('a[href="/books/the-crown-always-owns/"]'));
+  assert.ok(nav.querySelector(`a[href="${BASE}/books/the-shadow-tithe/"]`));
+  assert.ok(nav.querySelector(`a[href="${BASE}/books/the-crown-always-owns/"]`));
   close(dom);
 });
 
@@ -363,8 +367,8 @@ test('book and series scenes have useful next steps and book cover backdrops', (
     const dom = new JSDOM(readFileSync(join(projectRoot, 'dist', route, 'index.html'), 'utf8'));
     const next = dom.window.document.querySelector('.next-chapter');
     assert.ok(next, `missing next chapter on ${route}`);
-    assert.ok(next.querySelector('a[href="/discover/"]'));
-    assert.ok(next.querySelector('a[href="/#index"]'));
+    assert.ok(next.querySelector(`a[href="${BASE}/discover/"]`));
+    assert.ok(next.querySelector(`a[href="${BASE}/#index"]`));
     close(dom);
   }
   const book = new JSDOM(readFileSync(join(projectRoot, 'dist/books/the-ninth-bell/index.html'), 'utf8'));

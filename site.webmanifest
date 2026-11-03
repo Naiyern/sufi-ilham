@@ -2,16 +2,35 @@
   "name": "Sufi Ilham — Author",
   "short_name": "Sufi Ilham",
   "description": "Official website of Sufi Ilham (MD Naiyer Alam), author of 32 books — the Cartographers saga, the Song of the Unbroken Sky trilogy, The Spare Key Summer, and works on philosophy, romance and self-discovery.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/sufi-ilham/",
+  "scope": "/sufi-ilham/",
   "display": "standalone",
   "background_color": "#08080a",
   "theme_color": "#08080a",
   "lang": "en",
-  "categories": ["books", "education", "lifestyle"],
+  "categories": [
+    "books",
+    "education",
+    "lifestyle"
+  ],
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/sufi-ilham/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/sufi-ilham/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/sufi-ilham/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

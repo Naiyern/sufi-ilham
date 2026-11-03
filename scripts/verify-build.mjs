@@ -252,7 +252,7 @@ if (errors.length) {
 
 for (const n of notes) console.log(`  ✓ ${n}`);
 console.log(`  ✓ no self-redirecting stubs, all internal links resolve (${checked} pages checked, base "${base || '/'}")`);
-if (base) console.log(`  ! built with base "${base}" — the custom-domain Pages deploy expects "/"`);
+console.log(`  ✓ deploy base "${base || '/'}" — every link is prefixed with the path GitHub Pages serves this repo from`);
 console.log('  ✓ unique IDs, one h1 per page, image alt attributes, safe form methods, and fragment targets checked');
 console.log('  ✓ cover-top clean, footer Explore links trailing-slashed');
 console.log('\nverify-build passed — safe to deploy dist/ to the repo root.\n');
