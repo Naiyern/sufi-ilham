@@ -183,6 +183,17 @@ test('homepage chapter rail sits between the opening and release scene with vali
   assert.match(rail.getAttribute('aria-label'), /chapters/i);
   assert.match(stylesheet, /\.chapter-rail a\.active/);
   assert.match(stylesheet, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+
+  // the rail is a fore-edge index, not a panel: it carries no plate of its own
+  const railRule = stylesheet.match(/\.chapter-rail \{[^}]*\}/)[0];
+  assert.match(railRule, /background:\s*none/);
+  assert.match(railRule, /border:\s*0/);
+  // the light-page treatment belongs to the mobile strip only, otherwise the
+  // desktop rail turns into a cream slab over the page
+  assert.doesNotMatch(stylesheet, /(?<!@media \(max-width: 1180px\) \{)\n\.chapter-rail \{[^}]*#f1e8dc/);
+  assert.match(stylesheet, /@media \(max-width: 1180px\) \{\s*\.chapter-rail \{[^}]*#f1e8dc/);
+  // a collapsed label has to beat flex min-content or it never collapses
+  assert.match(stylesheet, /\.chapter-name \{[^}]*min-width:\s*0[^}]*max-width:\s*0/s);
   assert.doesNotMatch(stylesheet, /\.soon-step[^{}]*\{[^}]*\bopacity\s*:/s);
   close(dom);
 });
