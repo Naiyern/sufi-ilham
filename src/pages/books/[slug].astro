@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
 import AnimatedCover from '../../components/AnimatedCover.astro';
 import Cover from '../../components/Cover.astro';
+import Book3D from '../../components/Book3D.astro';
 import { books, series, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished } from '../../data/site';
 
 type Reader = { slug: string; chapters: { id: string; title: string }[]; source?: string };
@@ -75,7 +76,8 @@ const jsonld = [
         <div class="book-hero-grid">
           <figure class="book-hero-art">
             <div class="book-cover-mat">
-              {coverArt ? (
+              <Book3D title={book.altTitle || book.title} mark={book.order ? String(book.order).padStart(2, '0') : 'SI'}>
+                {coverArt ? (
                 <AnimatedCover
                   art={coverArt}
                   title={book.title}
@@ -89,7 +91,8 @@ const jsonld = [
                 />
               ) : (
                 <Cover src={img} title={book.title} eager cls="book-cover-static" />
-              )}
+                )}
+              </Book3D>
             </div>
             <figcaption>
               <span>{book.altTitle || book.title}</span>

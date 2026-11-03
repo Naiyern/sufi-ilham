@@ -2,6 +2,7 @@
 import { coverUrl } from '../data/site';
 import type { Book } from '../data/site';
 import Cover from './Cover.astro';
+import Book3D from './Book3D.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 interface Props { book: Book; delay?: number }
 const { book, delay = 0 } = Astro.props;
@@ -17,9 +18,11 @@ const src = coverUrl(book.img, base);
   aria-controls="modal"
   aria-label={`Open details for ${book.altTitle || book.title}`}
 >
-  <span class="spine-img">
-    <Cover src={src} title={book.title} />
-  </span>
+  <div class="spine-img">
+    <Book3D title={book.altTitle || book.title} mark={book.order ? String(book.order).padStart(2, '0') : 'SI'}>
+      <Cover src={src} title={book.title} />
+    </Book3D>
+  </div>
   <h3 lang={book.language ?? 'en'} dir={book.dir ?? undefined}>{book.title}</h3>
   <span class="label">
     {book.comingSoon ? 'Forthcoming' : `${book.pages ? `${book.pages} pp` : ''}${book.ku ? ' · KU' : ''}`}

@@ -73,6 +73,12 @@ not the Astro source tree alone.
 
 ## Signature features
 
+- **Every cover is a physical book** — the original artwork is the front board of a real 3D
+  object (cloth spine with the title set vertically, foil rules, page block, back board and a
+  contact shadow). Thickness scales with the cover through container query units, so a 100px
+  thumbnail and the 400px hero use the same component. Pointer movement turns the board a few
+  degrees and drags the light with it; keyboard focus tilts the book too. Everything decorative
+  is hidden from assistive technology, and `prefers-reduced-motion` renders a flat cover.
 - **Author-led editorial homepage** — real portrait, latest-release card, live catalogue proof
   points, recently published books and a visible search field for the full index.
 - **Reader’s guide** — a cover-led “Start here” page with four curated reading paths and direct routes into the archive.

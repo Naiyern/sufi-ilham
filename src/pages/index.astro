@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import BookTile from '../components/BookTile.astro';
 import Cover from '../components/Cover.astro';
+import Book3D from '../components/Book3D.astro';
 import AnimatedCover from '../components/AnimatedCover.astro';
 import { books, published, series, seriesBooks, site, themes, journey, coverUrl, pdfUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished, seriesStructuredData } from '../data/site';
 import { publicImageSize } from '../data/image-size';
@@ -223,22 +224,24 @@ const jsonld = [
                 aria-label={`Open details for ${b.altTitle || b.title}`}
               >
                 <figure class="plate" style="margin:0">
-                  <span class="ribbon">New</span>
-                  <span class="release-sequence" aria-hidden="true">{String(i + 1).padStart(2, '0')} / {String(newReleases.length).padStart(2, '0')}</span>
-                  {art ? (
-                    <AnimatedCover
-                      art={art}
-                      title={b.title}
-                      roman={b.altTitle}
-                      tagline="A Part of the River"
-                      author="صوفی الہام"
-                      authorRoman="Sufi Ilham"
-                      note="Free Urdu Novella"
-                      dir={b.dir ?? 'rtl'}
-                    />
-                  ) : (
-                    <Cover src={src} title={b.title} eager={i === 0} />
-                  )}
+                  <Book3D title={b.altTitle || b.title} mark={String(i + 1).padStart(2, '0')}>
+                    {art ? (
+                      <AnimatedCover
+                        art={art}
+                        title={b.title}
+                        roman={b.altTitle}
+                        tagline="A Part of the River"
+                        author="صوفی الہام"
+                        authorRoman="Sufi Ilham"
+                        note="Free Urdu Novella"
+                        dir={b.dir ?? 'rtl'}
+                      />
+                    ) : (
+                      <Cover src={src} title={b.title} eager={i === 0} />
+                    )}
+                    <span class="ribbon">New</span>
+                    <span class="release-sequence" aria-hidden="true">{String(i + 1).padStart(2, '0')} / {String(newReleases.length).padStart(2, '0')}</span>
+                  </Book3D>
                   <figcaption>
                     <span>{b.kicker}</span>
                     <span>{formatPublished(b.published)}</span>
@@ -295,23 +298,25 @@ const jsonld = [
               aria-controls="modal"
               aria-label={`Open details for ${b.altTitle || b.title}`}
             >
-              <span class="spine-img">
-                {isNewRelease(b) && <span class="ribbon">New</span>}
-                {b.coverArt ? (
-                  <AnimatedCover
-                    art={coverUrl(b.coverArt, base)}
-                    title={b.title}
-                    roman={b.altTitle}
-                    tagline="A Part of the River"
-                    author="صوفی الہام"
-                    authorRoman="Sufi Ilham"
-                    note="Free Urdu Novella"
-                    dir={b.dir ?? 'rtl'}
-                  />
-                ) : (
-                  <Cover src={src} title={b.title} />
-                )}
-              </span>
+              <div class="spine-img">
+                <Book3D title={b.altTitle || b.title}>
+                  {b.coverArt ? (
+                    <AnimatedCover
+                      art={coverUrl(b.coverArt, base)}
+                      title={b.title}
+                      roman={b.altTitle}
+                      tagline="A Part of the River"
+                      author="صوفی الہام"
+                      authorRoman="Sufi Ilham"
+                      note="Free Urdu Novella"
+                      dir={b.dir ?? 'rtl'}
+                    />
+                  ) : (
+                    <Cover src={src} title={b.title} />
+                  )}
+                  {isNewRelease(b) && <span class="ribbon">New</span>}
+                </Book3D>
+              </div>
               <h3 lang={b.language ?? 'en'} dir={b.dir ?? undefined}>{b.title}</h3>
               <span class="label">
                 {formatPublished(b.published)}{b.pages ? ` · ${b.pages} pp` : ''}{b.ku ? ' · KU' : ''}
