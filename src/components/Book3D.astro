@@ -22,9 +22,11 @@ const { title, mark = 'SI', cls = '' } = Astro.props;
 ---
 
 <div class={`b3d ${cls}`} data-book3d>
+  <div class="b3d-frame">
   <div class="b3d-obj">
     <div class="b3d-face b3d-back" aria-hidden="true"></div>
     <div class="b3d-face b3d-head" aria-hidden="true"></div>
+    <div class="b3d-face b3d-tail" aria-hidden="true"></div>
     <div class="b3d-face b3d-fore" aria-hidden="true"></div>
     <div class="b3d-face b3d-spine" aria-hidden="true">
       <i class="b3d-spine-title">{title}</i>
@@ -35,6 +37,7 @@ const { title, mark = 'SI', cls = '' } = Astro.props;
       <span class="b3d-sheen" aria-hidden="true"></span>
       <span class="b3d-hinge" aria-hidden="true"></span>
     </div>
+  </div>
   </div>
   <div class="b3d-shadow" aria-hidden="true"></div>
 </div>

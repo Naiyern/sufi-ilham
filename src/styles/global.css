@@ -287,7 +287,7 @@ body.menu-open::before {
 .shelf-scroll {
   display: flex; gap: clamp(1rem, 2vw, 1.8rem);
   overflow-x: auto; scroll-snap-type: x mandatory;
-  padding-bottom: 1.4rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
+  padding-block: .55rem 1.6rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
   scrollbar-width: thin;
 }
 .shelf-scroll::-webkit-scrollbar { height: 3px; }
@@ -542,7 +542,7 @@ body.menu-open::before {
 .cmdk-top { display: flex; align-items: center; gap: .8rem; padding: .95rem 1.1rem; border-bottom: 1px solid var(--fg); }
 .cmdk-ic { width: 17px; height: 17px; color: var(--ink-3); flex: none; }
 .cmdk-top input { flex: 1; border: 0; background: transparent; color: var(--fg); font: inherit; font-size: 1rem; outline: none; }
-.cmdk-list { max-height: min(52vh, 420px); overflow-y: auto; }
+.cmdk-list { max-height: min(52vh, 420px); overflow-y: auto; padding-block: .15rem; }
 .cmdk-row { display: flex; align-items: center; gap: .9rem; padding: .62rem 1.1rem; border-bottom: 1px solid var(--rule); transition: background .18s; }
 .cmdk-row.on { background: var(--field); }
 .cmdk-row img { width: 32px; height: 47px; object-fit: cover; border: 1px solid var(--rule); flex: none; }
@@ -3076,23 +3076,30 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 
 .b3d {
   --th: 12px;
-  --th: clamp(6px, 7.4cqw, 30px);
-  --b3d-ry: 15deg;
-  --b3d-rx: 2deg;
+  --th: clamp(7px, 9.6cqw, 34px);
+  --b3d-ry: 22deg;
+  --b3d-rx: -5deg;
   --gx: 26%;
   --gy: 8%;
   --b3d-board: #241f17;
   --b3d-board-2: #3a3122;
   --b3d-foil: #d8b45e;
-  --b3d-page: #efe7d5;
-  --b3d-page-2: #cfc4ac;
+  --b3d-page: #f7f1e1;
+  --b3d-page-2: #d9cfba;
   position: relative;
   display: block;
   container-type: inline-size;
-  /* scales with the cover, so a 100px thumbnail still reads as an object */
-  perspective: clamp(520px, 340cqw, 1500px);
-  perspective-origin: 58% 40%;
   isolation: isolate;
+}
+
+/* Perspective sits one level down on purpose: an element cannot query itself,
+   so `340cqw` on .b3d would resolve against an ancestor (or the viewport). On
+   the frame it resolves against .b3d, keeping the lens proportional to the
+   book — a 100px thumbnail and a 400px hero feel equally solid. */
+.b3d-frame {
+  display: block;
+  perspective: clamp(900px, 380cqw, 1700px);
+  perspective-origin: 58% 40%;
 }
 
 .b3d-obj {
@@ -3121,6 +3128,33 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 .b3d-front > .acover { border-radius: 2px; max-width: none; }
 
 /* the round of the spine seen against the board */
+.b3d-front::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent 34%,
+    rgba(255, 248, 225, .20) 46%,
+    rgba(255, 248, 225, .07) 53%,
+    transparent 64%);
+  transform: translateX(-125%);
+  transition: transform .9s var(--ease);
+  pointer-events: none;
+}
+
+.b3d-front::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(6, 4, 3, .55),
+    inset 0 0 2px rgba(0, 0, 0, .5),
+    inset 0 0 26px rgba(0, 0, 0, .26);
+  pointer-events: none;
+}
+
 .b3d-hinge {
   position: absolute;
   z-index: 3;
@@ -3157,11 +3191,12 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   padding: 10% 0;
   overflow: hidden;
   background: linear-gradient(90deg,
-    #0d0b07 0%,
-    #241e14 26%,
-    #3a3121 48%,
-    #2a2318 70%,
-    #0e0b07 100%);
+    #151009 0%,
+    #33281a 22%,
+    #6b5537 46%,
+    #8a6f45 62%,
+    #3a2e1e 86%,
+    #171109 100%);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .55);
 }
 .b3d-spine::before {
@@ -3190,10 +3225,10 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   max-height: 100%;
   overflow: hidden;
   font-family: var(--display);
-  font-size: max(6px, 2.7cqw);
+  font-size: max(6.5px, 2.95cqw);
   line-height: 1;
-  letter-spacing: .1em;
-  color: color-mix(in srgb, #f6efdf 84%, var(--b3d-foil));
+  letter-spacing: .08em;
+  color: color-mix(in srgb, #fbf5e7 88%, var(--b3d-foil));
   text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -3213,7 +3248,7 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 
 /* ---- page block ---- */
 .b3d-fore {
-  right: 0;
+  right: 1.2%;
   left: auto;
   width: var(--th);
   height: 100%;
@@ -3225,17 +3260,23 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
     var(--b3d-page);
   box-shadow: inset 0 0 5px rgba(86, 74, 54, .4);
 }
-.b3d-head {
-  left: 0;
-  width: 100%;
+.b3d-head,
+.b3d-tail {
+  left: 1.2%;
+  width: 97.6%;
   height: var(--th);
-  transform: translateY(calc(var(--th) / -2)) rotateX(-90deg);
   background:
     repeating-linear-gradient(0deg,
       var(--b3d-page) 0 .5px,
       var(--b3d-page-2) .5px 1.5px),
     var(--b3d-page);
   box-shadow: inset 0 0 6px rgba(86, 74, 54, .35);
+}
+.b3d-head { transform: translateY(calc(var(--th) / -2)) rotateX(-90deg); }
+.b3d-tail {
+  top: auto;
+  bottom: 0;
+  transform: translateY(calc(var(--th) / 2)) rotateX(-90deg);
 }
 
 /* ---- back board ---- */
@@ -3252,16 +3293,17 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 .b3d-shadow {
   position: absolute;
   z-index: -1;
-  left: 7%;
+  left: 5%;
   right: 1%;
-  bottom: -5%;
-  height: 11%;
-  background: radial-gradient(ellipse at 52% 50%,
-    rgba(14, 11, 7, .46),
-    rgba(14, 11, 7, .18) 46%,
-    transparent 74%);
-  filter: blur(6px);
+  bottom: -4%;
+  height: 13%;
+  background: radial-gradient(ellipse at 56% 46%,
+    rgba(12, 9, 6, .40),
+    rgba(12, 9, 6, .15) 48%,
+    transparent 76%);
+  filter: blur(9px);
   pointer-events: none;
+  transform-origin: 50% 100%;
   transition: opacity .5s var(--ease);
 }
 
@@ -3269,8 +3311,16 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   a:hover .b3d .b3d-obj,
   a:focus-visible .b3d .b3d-obj,
-  .b3d:hover .b3d-obj { --b3d-ry: 19deg; --b3d-rx: 3.5deg; will-change: transform; }
+  .b3d:hover .b3d-obj { --b3d-ry: 27deg; --b3d-rx: -8deg; will-change: transform; }
   .b3d:hover .b3d-sheen { opacity: 1; }
+  a:hover .b3d,
+  a:focus-visible .b3d { transform: translateY(-5px); }
+  a:hover .b3d-shadow,
+  a:focus-visible .b3d-shadow { transform: scaleX(1.06) translateY(3px); }
+  a:hover .b3d-front::before,
+  a:focus-visible .b3d-front::before { transform: translateX(125%); }
+  .b3d { transition: transform .5s var(--ease); }
+  .b3d-shadow { transition: opacity .5s var(--ease), transform .5s var(--ease); }
 }
 
 /* small thumbnails: keep the object, drop the unreadable spine type */
@@ -3291,7 +3341,7 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 }
 
 @media (max-width: 640px) {
-  .b3d { --b3d-ry: 10deg; --b3d-rx: 1.5deg; }
+  .b3d { --b3d-ry: 14deg; --b3d-rx: -4deg; }
 }
 
 /* ---- stages: let the object break out of the old flat frames ---- */
@@ -3302,6 +3352,7 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   padding-right: .15rem;
 }
 .book-tile-cover .ribbon { top: .3rem; left: .3rem; z-index: 4; }
+/* smaller stages get a shorter lens, so the object still reads as solid */
 .archive-chapter .book-tile-cover { border: 0; }
 
 #new .release .plate {
@@ -3313,7 +3364,51 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   transform: none !important;
 }
 #new .release .plate::after { display: none; }
-#new .release .plate .b3d { max-width: 420px; margin-inline: auto; }
+#new .release .plate .b3d { max-width: 420px; margin-inline: auto; --b3d-ry: 24deg; --b3d-rx: -6deg; }
+
+/* cinematic arrival: the book settles onto the page instead of popping in */
+@media (prefers-reduced-motion: no-preference) {
+  .book-hero-art .b3d,
+  #new .release .b3d { animation: b3d-arrive 1s cubic-bezier(.2, .8, .2, 1) both; }
+}
+@keyframes b3d-arrive {
+  from { opacity: 0; transform: translateY(22px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* dark stages get a warm spotlight behind the book and a soft floor mirror */
+.book-hero-art { position: relative; }
+.book-hero-art::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -18%;
+  right: -18%;
+  top: 2%;
+  bottom: 10%;
+  background: radial-gradient(ellipse at 52% 46%,
+    rgba(216, 180, 94, .30),
+    rgba(216, 180, 94, .10) 42%,
+    transparent 72%);
+  filter: blur(16px);
+  pointer-events: none;
+}
+.book-hero-art .b3d { --b3d-ry: 25deg; --b3d-rx: -7deg; }
+.book-hero-art::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 6%;
+  right: 6%;
+  bottom: 4.5rem;
+  height: 9%;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(216, 180, 94, .22),
+    rgba(216, 180, 94, .07) 46%,
+    transparent 72%);
+  filter: blur(10px);
+  pointer-events: none;
+}
 
 .book-hero-art {
   padding: 0;
@@ -3339,7 +3434,19 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 
 .path-book .cv { box-shadow: none; }
 .path-book:hover .cv { transform: none; }
-.path-book .b3d { --b3d-ry: 12deg; }
+.path-book .b3d { --b3d-ry: 17deg; --b3d-rx: -4deg; }
+
+/* a shelf is never perfectly aligned: tiny per-book variation */
+.shelf-scroll > :nth-child(3n) .b3d { --b3d-ry: 20deg; }
+.shelf-scroll > :nth-child(3n + 1) .b3d { --b3d-ry: 24deg; }
+.shelf-scroll > :nth-child(4n) .b3d { --b3d-ry: 21.5deg; --b3d-rx: -4deg; }
+
+/* the shelf reads as a lit ledge rather than a bare row */
+.shelf-scroll {
+  background:
+    radial-gradient(ellipse at 50% 118%, rgba(216, 180, 94, .16), transparent 62%);
+  border-radius: 2px;
+}
 
 /* palette rows: the thumbnails are little books too */
 .cmdk-row img {

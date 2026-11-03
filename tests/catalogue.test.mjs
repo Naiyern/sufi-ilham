@@ -398,7 +398,7 @@ test('every catalogue cover is a physical 3D book with an accessible front', () 
     assert.ok(front, 'missing front board');
     assert.ok(front.querySelector('img[alt]'), 'the cover image inside the front board needs alt text');
     assert.ok(book.querySelector('.b3d-spine-title').textContent.trim(), 'spine needs a title');
-    for (const face of book.querySelectorAll('.b3d-spine, .b3d-fore, .b3d-head, .b3d-back, .b3d-shadow')) {
+    for (const face of book.querySelectorAll('.b3d-spine, .b3d-fore, .b3d-head, .b3d-tail, .b3d-back, .b3d-shadow')) {
       assert.equal(face.getAttribute('aria-hidden'), 'true', 'decorative book parts must be hidden from AT');
     }
   }
@@ -413,4 +413,9 @@ test('3D books appear everywhere a cover does, and flatten for reduced motion', 
   assert.match(stylesheet, /\.b3d-obj \{[^}]*transform-style: preserve-3d/);
   assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{\s*\.b3d-obj \{ transform: none !important/);
   assert.match(stylesheet, /\.cmdk-row img \{[^}]*rotateY/);
+  // perspective must not be declared with container-query units on the
+  // container itself: an element cannot query itself, so it would silently
+  // fall back to the viewport and flatten the book.
+  assert.doesNotMatch(stylesheet, /\.b3d \{[^}]*perspective:[^;}]*cqw/);
+  assert.match(stylesheet, /\.b3d-frame \{[^}]*perspective: clamp\([^)]*cqw/);
 });
