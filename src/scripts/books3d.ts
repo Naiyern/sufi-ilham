@@ -13,10 +13,10 @@
  *  - keyboard focus tilts the book on the wrapping link, then resets on blur.
  */
 
-const REST_Y = 15;
-const REST_X = 2;
-const REACH_Y = 8;
-const REACH_X = 6;
+const REST_Y = 22;
+const REST_X = -5;
+const REACH_Y = 9;
+const REACH_X = 7;
 
 export function initBook3D(): void {
   const books = document.querySelectorAll<HTMLElement>('[data-book3d]');
