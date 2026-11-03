@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import { series, seriesBooks, site, seriesStructuredData, type Series } from '../../data/site';
+import { series, seriesBooks, site, seriesStructuredData, metaDescription, type Series } from '../../data/site';
 import { coverUrl } from '../../data/site';
 
 export function getStaticPaths() {
@@ -23,7 +23,7 @@ const heroImg = hero && !hero.img.startsWith('data:') ? coverUrl(hero.img, site.
 
 <Base
   title={`${s.name} — Sufi Ilham`}
-  description={s.lede.slice(0, 180)}
+  description={metaDescription(s.lede)}
   image={heroImg}
   jsonld={ld ? [ld] : []}
 >

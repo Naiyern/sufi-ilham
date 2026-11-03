@@ -205,6 +205,18 @@ export function isNewRelease(book: Book): boolean {
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
+/* A search result truncates the description near 155–160 characters. Cutting
+   on a word boundary (and behind a dash) keeps a blurb from ending mid-word,
+   which is what the raw 180-character slice used to do. */
+export function metaDescription(text: string, max = 155): string {
+  const flat = String(text).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (flat.length <= max) return flat;
+  const cut = flat.slice(0, max - 1);
+  const space = cut.lastIndexOf(' ');
+  const head = (space > max * 0.55 ? cut.slice(0, space) : cut).replace(/[\s,;:.\u2013\u2014-]+$/, '');
+  return `${head}…`;
+}
+
 export function formatPublished(iso?: string): string {
   if (!iso) return '';
   const [y, m, d] = iso.split('-').map(Number);

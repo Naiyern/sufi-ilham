@@ -1,3 +1,5 @@
+import { setDialogOpen } from './dialog';
+
 type Item = { t: string; s: string; u: string; k: string; img: string; lang?: string; dir?: 'rtl' | 'ltr' };
 
 export function initCmdk() {
@@ -95,16 +97,14 @@ export function initCmdk() {
   const open = () => {
     if (anotherDialogOpen()) return;
     lastFocus = document.activeElement as HTMLElement | null;
-    root.classList.add('open');
-    root.setAttribute('aria-hidden', 'false');
+    setDialogOpen(root, true);
     document.body.style.overflow = 'hidden';
     input.value = '';
     search('');
     setTimeout(() => input.focus(), 40);
   };
   const close = () => {
-    root.classList.remove('open');
-    root.setAttribute('aria-hidden', 'true');
+    setDialogOpen(root, false);
     document.body.style.overflow = '';
     lastFocus?.focus();
     lastFocus = null;

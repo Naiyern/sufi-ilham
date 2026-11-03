@@ -1,4 +1,5 @@
 import { booksNow } from './store';
+import { setDialogOpen } from './dialog';
 
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -18,10 +19,7 @@ export function initGo() {
   let popup: Window | null = null;
   let returnFocus: HTMLElement | null = null;
 
-  const hide = () => {
-    ov.classList.remove('open');
-    ov.setAttribute('aria-hidden', 'true');
-  };
+  const hide = () => setDialogOpen(ov, false);
   const restoreFocus = () => {
     returnFocus?.focus({ preventScroll: true });
     returnFocus = null;
@@ -52,8 +50,7 @@ export function initGo() {
       bookEl.append(image);
     }
     cancel.textContent = 'Cancel';
-    ov.classList.add('open');
-    ov.setAttribute('aria-hidden', 'false');
+    setDialogOpen(ov, true);
     cancel.focus({ preventScroll: true });
 
     timer = window.setTimeout(() => {
