@@ -143,10 +143,24 @@ export function seriesStructuredData(s: Series, origin: string) {
   };
 }
 
+/**
+ * Absolute public URL of the site, *including* the deploy base path.
+ *
+ * GitHub Pages serves this repository at https://naiyern.github.io/sufi-ilham/,
+ * so absolute URLs must keep the /sufi-ilham/ prefix: `${site.url}/books/x/`
+ * has to point at .../sufi-ilham/books/x/, not the domain root (where GitHub
+ * Pages knows nothing about this repository).
+ */
+const SITE_ORIGIN = (
+  import.meta.env.PUBLIC_SITE_ORIGIN ?? 'https://naiyern.github.io'
+).replace(/\/+$/, '');
+const SITE_BASE = import.meta.env.BASE_URL.replace(/\/+$/, '');
+export const siteUrl = `${SITE_ORIGIN}${SITE_BASE}`;
+
 export const site = {
   name: 'Sufi Ilham',
   altName: 'MD Naiyer Alam',
-  url: 'https://sufiilham.co.uk',
+  url: siteUrl,
   phone: '+91 62017 57330',
   phoneRaw: '916201757330',
   instagram: 'https://instagram.com/Sufiilham07',
