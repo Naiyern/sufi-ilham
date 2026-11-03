@@ -1,5 +1,7 @@
 ---
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname;
+const onDiscover = path === `${base}/discover` || path.startsWith(`${base}/discover/`);
 const links = [
   { href: `${base}/discover/`, label: 'Start here', key: 'nav.discover' },
   { href: `${base}/#new`, label: 'New', key: 'nav.new' },
@@ -19,7 +21,16 @@ const links = [
     </a>
 
     <nav id="menu" aria-label="Primary">
-      <ul>{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              aria-current={onDiscover && l.href === `${base}/discover/` ? 'page' : undefined}
+            >{l.label}</a>
+          </li>
+        ))}
+      </ul>
     </nav>
 
     <div class="mast-act">

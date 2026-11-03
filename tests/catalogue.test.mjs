@@ -419,3 +419,40 @@ test('3D books appear everywhere a cover does, and flatten for reduced motion', 
   assert.doesNotMatch(stylesheet, /\.b3d \{[^}]*perspective:[^;}]*cqw/);
   assert.match(stylesheet, /\.b3d-frame \{[^}]*perspective: clamp\([^)]*cqw/);
 });
+
+test('the books hold up on dark stages, in print, and in the palette', () => {
+  // dark stages: a black shadow on near-black loses the object, so the theme
+  // deepens the shadow and swaps the dark board rim for a warm one
+  assert.match(stylesheet, /:root\[data-theme='dark'\] \.b3d-shadow \{[^}]*background: radial-gradient/);
+  assert.match(stylesheet, /:root\[data-theme='dark'\] \.b3d-front::after \{[^}]*inset 0 0 0 1px rgba\(255, 246, 228/);
+
+  // print: a turned object should come out as a flat jacket
+  const print = stylesheet.match(/@media print \{[\s\S]*?\n\}/);
+  assert.ok(print, 'missing print rules for the book object');
+  assert.match(print[0], /\.b3d-face:not\(\.b3d-front\),[\s\S]*?display: none !important/);
+  assert.match(print[0], /\.b3d-obj,?[\s\S]*?transform: none !important/);
+
+  // the palette thumbnails must lean the same way as every other board
+  assert.match(stylesheet, /\.cmdk-row img \{[^}]*rotateY\(11deg\)/);
+  assert.doesNotMatch(stylesheet, /\.cmdk-row img \{[^}]*rotateY\(-/);
+
+  // meta text has to clear AA on the tinted surfaces it sits on
+  const ink3 = stylesheet.match(/--ink-3: (#[0-9a-f]{6})/i)?.[1];
+  assert.ok(ink3, 'missing --ink-3 token');
+  const rgb = [1, 3, 5].map((i) => parseInt(ink3.slice(i, i + 2), 16));
+  const lum = ([r, g, b]) => {
+    const f = (v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  };
+  for (const surface of ['#eae6dc', '#f3f0e9']) {
+    const s = [1, 3, 5].map((i) => parseInt(surface.slice(i, i + 2), 16));
+    const [hi, lo] = [lum(rgb), lum(s)].sort((a, b) => b - a);
+    assert.ok((hi + 0.05) / (lo + 0.05) >= 4.5, `--ink-3 fails AA on ${surface}`);
+  }
+
+  // the reader guide is a primary destination, so its nav item says so
+  const discover = new JSDOM(readFileSync(join(projectRoot, 'dist/discover/index.html'), 'utf8')).window.document;
+  const current = discover.querySelector('.mast nav a[aria-current="page"]');
+  assert.ok(current, 'the primary nav should mark the current page');
+  assert.match(current.getAttribute('href'), /\/discover\/$/);
+});
