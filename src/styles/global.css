@@ -2006,55 +2006,80 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
    EPIC CINEMA — one visual language across every chapter
    Real stills, high-contrast scene changes, guided-but-free scrolling.
    ========================================================= */
+/* The chapter rail is a fore-edge index, not a panel. The gold numerals sit in
+   the gutter on their own, so the rail reads the same over ink and over paper.
+   The chapter you are in wears a small dark mark; hovering or focusing any
+   numeral opens it into a labelled chip. */
 .chapter-rail {
   position: fixed;
   z-index: 150;
   top: 50%;
-  right: clamp(.65rem, 1.7vw, 1.5rem);
+  right: clamp(.4rem, 1.1vw, 1.1rem);
   display: grid;
-  max-height: calc(100svh - 2rem);
-  gap: .25rem;
+  justify-items: end;
+  max-height: calc(100svh - 2.5rem);
+  gap: .18rem;
+  padding: .4rem 0;
   overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: none;
-  padding: .4rem;
-  border: 1px solid rgba(243, 238, 229, .14);
-  background: rgba(25, 23, 19, .94);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, .24);
+  border: 0;
+  background: none;
+  box-shadow: none;
   transform: translateY(-50%);
 }
+.chapter-rail::-webkit-scrollbar { display: none; }
 .chapter-rail a {
-  display: grid;
-  grid-template-columns: 24px 0fr;
+  display: flex;
+  flex-direction: row-reverse;   /* number pinned right, label opens left */
   align-items: center;
+  justify-content: flex-start;
   gap: 0;
-  width: 42px;
-  min-height: 44px;
-  padding: 0 .52rem;
+  width: 2.15rem;
+  min-height: 1.95rem;
+  padding: .28rem .38rem;
   overflow: hidden;
-  border-left: 1px solid rgba(243, 238, 229, .2);
-  color: #aaa18f;
-  font: .55rem/1.25 var(--mono);
-  letter-spacing: .12em;
+  border: 0;
+  border-radius: 2px;
+  color: rgba(243, 238, 229, .85);
+  font: .58rem/1.2 var(--mono);
+  letter-spacing: .1em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: width .3s var(--ease), border-color .3s, background .3s, color .3s;
+  transition: width .34s var(--ease), gap .34s var(--ease),
+              background .28s, color .28s, box-shadow .28s;
 }
-.chapter-index { color: #d9b45e; font-variant-numeric: tabular-nums; }
-.chapter-name { min-width: 0; opacity: 0; transform: translateX(-5px); transition: opacity .2s, transform .25s var(--ease); white-space: nowrap; }
-.chapter-rail a:hover,
-.chapter-rail a:focus-visible,
+/* only the chapter you are in, or the one under the pointer, carries a chip */
+.chapter-index { flex: 0 0 auto; color: #d9b45e; font-variant-numeric: tabular-nums; }
+.chapter-name {
+  min-width: 0;   /* without this, flex min-content keeps the label open */
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width .34s var(--ease), opacity .2s;
+}
 .chapter-rail a.active {
-  grid-template-columns: 24px 1fr;
+  background: rgba(20, 17, 14, .9);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .28), inset 0 0 0 1px rgba(217, 180, 94, .5),
+              inset 2px 0 0 #d9b45e;
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+.chapter-rail a.active .chapter-index { color: #efcd86; }
+.chapter-rail a:hover,
+.chapter-rail a:focus-visible {
   gap: .55rem;
-  width: 134px;
-  border-left-color: #d9b45e;
-  background: #27251f;
-  color: #f3eee5;
+  width: 9.6rem;
+  background: rgba(20, 17, 14, .9);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .32);
+  color: #f6f1e6;
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
 }
 .chapter-rail a:hover .chapter-name,
-.chapter-rail a:focus-visible .chapter-name,
-.chapter-rail a.active .chapter-name { opacity: 1; transform: none; }
-.chapter-rail a:focus-visible { outline-offset: 2px; }
+.chapter-rail a:focus-visible .chapter-name { max-width: 6.9rem; opacity: 1; }
+.chapter-rail a:focus-visible { outline: 2px solid #d7a34a; outline-offset: 3px; }
 @media (max-width: 1180px) { .chapter-rail { display: none; } }
 
 /* A true spotlight scene: the latest cover art becomes the set behind the books. */
@@ -2607,6 +2632,7 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
   .chapter-rail a.active {
     display: inline-flex;
     flex: 0 0 auto;
+    flex-direction: row;
     grid-template-columns: none;
     align-items: center;
     gap: .48rem;
@@ -2839,9 +2865,11 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
 .hero-stat strong { font-size: clamp(1.8rem, 2.9vw, 2.65rem); color: #ead9c1; }
 .hero-stat span { letter-spacing: .1em; }
 .hero-stat-link { color: #e5b3a0; }
-.chapter-rail { background: #f1e8dc; border-bottom: 1px solid #d9cbbb; color: #514a40; }
-.chapter-rail a { color: #514a40; }
-.chapter-rail a.active { color: #943f31; }
+@media (max-width: 1180px) {
+  .chapter-rail { background: #f1e8dc; border-bottom: 1px solid #d9cbbb; color: #514a40; }
+  .chapter-rail a { color: #514a40; }
+  .chapter-rail a.active { color: #943f31; }
+}
 .home-discovery { background: #e8d8c9; color: #342720; }
 .home-discovery-grid { grid-template-columns: .95fr 1fr; gap: clamp(3rem, 8vw, 8rem); align-items: start; }
 .home-discovery h2 { font-size: clamp(4rem, 7vw, 7rem); }
