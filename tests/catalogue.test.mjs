@@ -428,7 +428,7 @@ test('the books hold up on dark stages, in print, and in the palette', () => {
   assert.match(stylesheet, /:root\[data-theme='dark'\] \.b3d-front::after \{[^}]*inset 0 0 0 1px rgba\(255, 246, 228/);
 
   // print: a turned object should come out as a flat jacket
-  const print = stylesheet.match(/@media print \{[\s\S]*?\n\}/);
+  const print = stylesheet.match(/@media print \{[\s\S]*?\.mast, #toTop[\s\S]*?\n\}/);
   assert.ok(print, 'missing print rules for the book object');
   assert.match(print[0], /\.b3d-face:not\(\.b3d-front\),[\s\S]*?display: none !important/);
   assert.match(print[0], /\.b3d-obj,?[\s\S]*?transform: none !important/);
@@ -481,4 +481,40 @@ test('the page block is a calculated slab with a measured bleed', () => {
 
   // thumbnails stay slim instead of turning into bricks
   assert.match(stylesheet, /@container \(max-width: 118px\) \{[^}]*--th: clamp\(6px, 8\.5cqw, 10px\)/s);
+});
+
+test('premium detail: tokens, text rendering, scroll state and system preferences', () => {
+  // one motion vocabulary
+  for (const token of ['--ease-out', '--ease-in-out', '--dur-1', '--dur-2', '--dur-3', '--dur-4', '--dur-5']) {
+    assert.ok(stylesheet.includes(token + ':'), `missing motion token ${token}`);
+  }
+  assert.match(stylesheet, /\.b3d-obj[\s\S]{0,400}?transition: transform var\(--dur-4\) var\(--ease-out\)/);
+
+  // text rendering
+  assert.match(stylesheet, /body \{[^}]*font-kerning: normal/);
+  assert.match(stylesheet, /body \{[^}]*font-optical-sizing: auto/);
+  assert.match(stylesheet, /text-wrap: pretty/);
+
+  // scroll progress costs no JavaScript and survives reduced motion
+  const progress = stylesheet.slice(stylesheet.indexOf('.mast::after'));
+  assert.match(progress, /@supports \(animation-timeline: scroll\(\)\)/);
+  assert.match(progress, /animation-timeline: scroll\(root block\)/);
+  assert.match(progress, /@media \(prefers-reduced-motion: reduce\)[\s\S]{0,200}\.mast::after \{ animation-duration: auto !important/);
+
+  // the soundtrack control states that it is playing
+  assert.match(stylesheet, /#sndBtn\[aria-pressed='true'\] \{/);
+  assert.match(stylesheet, /#sndBtn\[aria-pressed='true'\]::after/);
+
+  // system preferences
+  assert.match(stylesheet, /@media \(prefers-contrast: more\)/);
+  assert.match(stylesheet, /@media \(prefers-reduced-transparency: reduce\)/);
+
+  // print: chrome goes, the jacket stays
+  const print = stylesheet.match(/@media print \{[\s\S]*?\.mast, #toTop[\s\S]*?\n\}/);
+  assert.ok(print, 'missing print rules');
+  assert.match(print[0], /\.mast, #toTop, \.cmdk, \.modal, \.colophon/);
+  assert.match(print[0], /\.book-hero, \.colophon, \.editorial-hero \{ background: #fff !important/);
+
+  // the 36-tile catalogue skips off-screen painting without shifting layout
+  assert.match(stylesheet, /\.book-tile \{[^}]*content-visibility: auto[^}]*contain-intrinsic-size: auto 240px/s);
 });

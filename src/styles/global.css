@@ -31,7 +31,15 @@
 
   --wrap: 1300px;
   --gutter: clamp(1.1rem, 3.5vw, 2.6rem);
+  /* motion: one curve family and four durations, so nothing feels off-tempo */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 0.84, 0.24, 1);
+  --ease-in-out: cubic-bezier(0.66, 0.02, 0.24, 1);
+  --dur-1: .18s;
+  --dur-2: .3s;
+  --dur-3: .45s;
+  --dur-4: .62s;
+  --dur-5: .8s;
 
   --bg: var(--paper);
   --fg: var(--ink);
@@ -151,7 +159,7 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
 .btn.solid:hover { color: #fff; border-color: var(--mark); }
 
 /* reveal ------------------------------------------------- */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: var(--d, 0ms); }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity var(--dur-5) var(--ease-out), transform var(--dur-5) var(--ease-out); transition-delay: var(--d, 0ms); }
 .reveal.in { opacity: 1; transform: none; }
 
 /* =============== MASTHEAD =============== */
@@ -183,6 +191,7 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
   color: var(--ink-2); padding-bottom: 2px; border-bottom: 1px solid transparent; transition: color .3s, border-color .3s;
 }
 .mast nav a:hover { color: var(--fg); border-bottom-color: var(--mark); }
+.mast nav a { transition: color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease); }
 .mast-act { display: flex; align-items: center; gap: .5rem; }
 
 .mini {
@@ -2693,6 +2702,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 body.home-page .mast::before, body.book-page .mast::before, body.series-page .mast::before,
 body.discover-page .mast::before, body.contact-page .mast::before, body.legal-page .mast::before { background: rgba(34, 29, 27, .94); }
 .btn { min-height: 48px; justify-content: center; letter-spacing: .1em; transition: color .25s, border-color .25s, transform .25s; }
+.btn { transition: color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
+        background var(--dur-2) var(--ease), transform var(--dur-2) var(--ease-out); }
 .btn:hover { transform: translateY(-2px); }
 .editorial-hero.cover { --bg: #29221f; background: #29221f; padding-top: clamp(7rem, 9vw, 8rem); }
 .editorial-hero.cover::before { opacity: .13; }
@@ -2971,7 +2982,7 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   display: block;
   transform-style: preserve-3d;
   transform: rotateX(var(--b3d-rx)) rotateY(var(--b3d-ry));
-  transition: transform .62s cubic-bezier(.2, .8, .2, 1);
+  transition: transform var(--dur-4) var(--ease-out);
 }
 
 .b3d-face { position: absolute; top: 0; left: 0; display: block; backface-visibility: hidden; }
@@ -3402,3 +3413,145 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
 @media (prefers-reduced-motion: reduce) {
   .cmdk-row img { transform: none; }
 }
+
+/* =========================================================
+   PREMIUM DETAIL — the last five percent.
+   Text rendering, live scroll state, system preferences and
+   print. Nothing in here changes layout or the reading order.
+   ========================================================= */
+
+/* ---- 1. text: kerning, optical sizing, no orphans ---- */
+html { -webkit-tap-highlight-color: transparent; }
+body {
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures contextual;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+p, li, dd, blockquote, figcaption,
+.lede, .book-description, .hero-lede, .not-found-intro { text-wrap: pretty; }
+h1, h2, h3 { hanging-punctuation: first last; }
+[data-count], .hero-stat strong, time, .book-hero-facts strong,
+.book-tile-meta, .book-spec { font-variant-numeric: tabular-nums; }
+ul li::marker, ol li::marker { color: var(--mark); }
+
+/* ---- 2. selection, caret, form chrome ---- */
+::selection { background: color-mix(in srgb, var(--mark) 88%, #000); color: #fffaf2; }
+:root[data-theme='dark'] ::selection { background: color-mix(in srgb, var(--mark) 74%, #000); color: #17130f; }
+input, select, textarea { caret-color: var(--mark); accent-color: var(--mark); }
+
+/* ---- 3. scroll progress: a two-pixel rule under the mast.
+   Scroll-driven, so it costs no JavaScript and cannot drift from the page. ---- */
+.mast::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--mark-2), var(--mark));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .mast::after {
+    opacity: 1;
+    animation-name: mast-progress;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-duration: auto;
+    animation-timeline: scroll(root block);
+  }
+}
+@keyframes mast-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---- 4. the soundtrack button shows that it is playing ---- */
+#sndBtn { position: relative; }
+#sndBtn[aria-pressed='true'] {
+  color: var(--mark);
+  border-color: color-mix(in srgb, var(--mark) 52%, transparent);
+}
+#sndBtn[aria-pressed='true']::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1px solid currentColor;
+  opacity: .45;
+  pointer-events: none;
+  animation: snd-ring 2.6s var(--ease-in-out) infinite;
+}
+@keyframes snd-ring {
+  0%, 100% { transform: scale(1); opacity: .45; }
+  50% { transform: scale(1.14); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* the progress rule is tied to scroll, not to time: keep it */
+  .mast::after { animation-duration: auto !important; }
+  #sndBtn[aria-pressed='true']::after { animation: none; opacity: .3; }
+}
+
+/* ---- 5. system preferences ---- */
+@media (prefers-contrast: more) {
+  :root { --ink-3: #4b463a; --rule: rgba(22, 21, 15, .44); --rule-2: rgba(22, 21, 15, .64); }
+  .mast::before { background: var(--bg); }
+  .b3d-front::after { box-shadow: inset 0 0 0 1.5px rgba(0, 0, 0, .85), inset 0 0 22px rgba(0, 0, 0, .14); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .mast::before, .cmdk, .cmdk-box {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--bg) !important;
+  }
+  .b3d-front::after { box-shadow: inset 0 0 0 1px rgba(6, 4, 3, .6); }
+}
+
+/* ---- 6. print: a book page should leave the printer as a jacket ---- */
+@media print {
+  .mast, #toTop, .cmdk, .modal, .colophon, .next-chapter,
+  .book-hero-actions, .book-order-nav, .catalog-controls { display: none !important; }
+  body { background: #fff; color: #000; }
+  .book-hero, .colophon, .editorial-hero { background: #fff !important; color: #000 !important; }
+  .book-hero::before, .book-hero::after, .book-hero-art::before, .book-hero-art::after { display: none !important; }
+  .book-hero-copy h1 { font-size: 2.4rem; max-width: none; }
+  .book-hero-grid { display: block; }
+  .book-hero-art { max-width: 240px; margin: 0 0 1.5rem; }
+  .book-hero-art figcaption { color: #444; border-color: #ccc; }
+  .book-hero-facts div { border-color: #ccc; }
+  .book-hero-facts strong { color: #000; }
+  a[href] { color: #000; text-decoration: underline; }
+  .book-hero-copy a[href^='http']::after { content: ' — ' attr(href); font-size: .72em; word-break: break-all; }
+}
+
+/* ---- 7. chrome ---- */
+html { scrollbar-color: color-mix(in srgb, var(--mark-2) 70%, transparent) transparent; }
+section[id], div[id] { scroll-margin-top: 96px; }
+
+/* ---- 8. the catalogue is 36 tiles: let the browser skip the ones off screen ---- */
+.book-tile {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 240px;
+}
+
+/* ---- 9. micro-interactions: the arrow leans, the card gains a gold rule ---- */
+.btn span[aria-hidden='true'] {
+  display: inline-block;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+.btn:hover span[aria-hidden='true'],
+.btn:focus-visible span[aria-hidden='true'] { transform: translate(2px, -2px); }
+
+.book-tile { position: relative; }
+.book-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--mark-2), var(--mark));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-3) var(--ease-out);
+  pointer-events: none;
+}
+.book-tile:hover::before,
+.book-tile:focus-visible::before { transform: scaleX(1); }
