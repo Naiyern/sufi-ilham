@@ -1,0 +1,40 @@
+---
+/**
+ * Book3D — the existing cover artwork, wrapped in a physical book.
+ *
+ * The artwork is unchanged: it becomes the front board of a real object with a
+ * cloth spine, a foil rule, a page block (fore-edge and head), a back board and
+ * a contact shadow. Thickness scales with the cover width through container
+ * query units, so one component works for a 90px thumbnail and a 400px hero.
+ *
+ * Everything except the front board is decorative and hidden from assistive
+ * technology; the cover image inside the slot keeps its own alt text.
+ * With `prefers-reduced-motion` the object renders flat — no tilt, no shadow.
+ */
+interface Props {
+  /** Text set vertically on the spine. */
+  title: string;
+  /** Optional monogram stamped at the foot of the spine. */
+  mark?: string;
+  cls?: string;
+}
+const { title, mark = 'SI', cls = '' } = Astro.props;
+---
+
+<div class={`b3d ${cls}`} data-book3d>
+  <div class="b3d-obj">
+    <div class="b3d-face b3d-back" aria-hidden="true"></div>
+    <div class="b3d-face b3d-head" aria-hidden="true"></div>
+    <div class="b3d-face b3d-fore" aria-hidden="true"></div>
+    <div class="b3d-face b3d-spine" aria-hidden="true">
+      <i class="b3d-spine-title">{title}</i>
+      {mark && <b class="b3d-spine-mark">{mark}</b>}
+    </div>
+    <div class="b3d-face b3d-front">
+      <slot />
+      <span class="b3d-sheen" aria-hidden="true"></span>
+      <span class="b3d-hinge" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="b3d-shadow" aria-hidden="true"></div>
+</div>

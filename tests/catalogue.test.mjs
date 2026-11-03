@@ -387,3 +387,30 @@ test('cinematic quote keeps readable text and a reduced-motion fallback', () => 
   assert.match(stylesheet, /prefers-reduced-motion: reduce[\s\S]*?\.closing-quote \.quote-line/);
   close(dom);
 });
+
+test('every catalogue cover is a physical 3D book with an accessible front', () => {
+  const dom = new JSDOM(builtHtml);
+  const { document } = dom.window;
+  const books = [...document.querySelectorAll('#bookGrid .book-tile [data-book3d]')];
+  assert.equal(books.length, 36, 'each tile should carry one book object');
+  for (const book of books) {
+    const front = book.querySelector('.b3d-front');
+    assert.ok(front, 'missing front board');
+    assert.ok(front.querySelector('img[alt]'), 'the cover image inside the front board needs alt text');
+    assert.ok(book.querySelector('.b3d-spine-title').textContent.trim(), 'spine needs a title');
+    for (const face of book.querySelectorAll('.b3d-spine, .b3d-fore, .b3d-head, .b3d-back, .b3d-shadow')) {
+      assert.equal(face.getAttribute('aria-hidden'), 'true', 'decorative book parts must be hidden from AT');
+    }
+  }
+  close(dom);
+});
+
+test('3D books appear everywhere a cover does, and flatten for reduced motion', () => {
+  for (const route of ['', 'discover', 'series/song', 'books/the-ninth-bell']) {
+    const doc = new JSDOM(readFileSync(join(projectRoot, 'dist', route, 'index.html'), 'utf8')).window.document;
+    assert.ok(doc.querySelector('[data-book3d]'), `no 3D book on /${route}`);
+  }
+  assert.match(stylesheet, /\.b3d-obj \{[^}]*transform-style: preserve-3d/);
+  assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{\s*\.b3d-obj \{ transform: none !important/);
+  assert.match(stylesheet, /\.cmdk-row img \{[^}]*rotateY/);
+});

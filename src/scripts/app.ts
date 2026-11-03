@@ -3,6 +3,7 @@ import { initAudio } from './audio';
 import { initCatalogue } from './catalogue.js';
 import { initTheme } from './theme.js';
 import { initCmdk } from './cmdk';
+import { initBook3D } from './books3d';
 import { loadBooks, prefetchBooks, type Book } from './store';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
@@ -441,21 +442,8 @@ initGo();
 initAudio();
 initCmdk();
 
-/* ---------- 3D tilt on book covers ---------- */
-if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(hover:hover)').matches) {
-  $$('.spine').forEach((c) => {
-    const el = c as HTMLElement;
-    el.addEventListener('pointermove', (e) => {
-      const r = el.getBoundingClientRect();
-      const px = (e as PointerEvent).clientX - r.left;
-      const py = (e as PointerEvent).clientY - r.top;
-      const rx = ((py / r.height) - 0.5) * -7;
-      const ry = ((px / r.width) - 0.5) * 7;
-      el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-    });
-    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
-  });
-}
+/* ---------- physical books: pointer depth on every cover ---------- */
+initBook3D();
 
 /* ---------- per-article reading progress ---------- */
 const bp = $('#bpBar');

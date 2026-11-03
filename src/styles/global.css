@@ -3065,3 +3065,293 @@ html[data-theme='dark'] .next-chapter-actions a { color: #f3e7d9; }
   .quote-prelude { font-size: .55rem; gap: .65rem; }
   .quote-credit { max-width: 22rem; font-size: .6rem; }
 }
+
+/* =========================================================
+   THE PHYSICAL BOOK — every cover becomes a real object.
+   Front board = the original artwork; around it a cloth spine,
+   foil rules, a page block, a back board and a contact shadow.
+   Thickness/typography scale with the container, so the same
+   component works from a 90px thumbnail to the 400px hero.
+   ========================================================= */
+
+.b3d {
+  --th: 12px;
+  --th: clamp(6px, 7.4cqw, 30px);
+  --b3d-ry: 15deg;
+  --b3d-rx: 2deg;
+  --gx: 26%;
+  --gy: 8%;
+  --b3d-board: #241f17;
+  --b3d-board-2: #3a3122;
+  --b3d-foil: #d8b45e;
+  --b3d-page: #efe7d5;
+  --b3d-page-2: #cfc4ac;
+  position: relative;
+  display: block;
+  container-type: inline-size;
+  /* scales with the cover, so a 100px thumbnail still reads as an object */
+  perspective: clamp(520px, 340cqw, 1500px);
+  perspective-origin: 58% 40%;
+  isolation: isolate;
+}
+
+.b3d-obj {
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--b3d-rx)) rotateY(var(--b3d-ry));
+  transition: transform .62s cubic-bezier(.2, .8, .2, 1);
+}
+
+.b3d-face { position: absolute; top: 0; left: 0; display: block; backface-visibility: hidden; }
+
+/* ---- front board: the original cover, lifted half a spine forward ---- */
+.b3d-front {
+  position: relative;
+  display: block;
+  transform: translateZ(calc(var(--th) / 2));
+  background: var(--b3d-board);
+  box-shadow: inset 0 0 0 1px rgba(255, 247, 230, .07);
+  overflow: hidden;
+  border-radius: 1px;
+}
+.b3d-front > .cv,
+.b3d-front > .acover { display: block; width: 100%; }
+.b3d-front > .cv { box-shadow: none; }
+.b3d-front > .acover { border-radius: 2px; max-width: none; }
+
+/* the round of the spine seen against the board */
+.b3d-hinge {
+  position: absolute;
+  z-index: 3;
+  inset: 0 auto 0 0;
+  width: 6%;
+  background: linear-gradient(90deg, rgba(8, 6, 4, .55), rgba(8, 6, 4, .16) 46%, transparent);
+  pointer-events: none;
+}
+
+/* travelling light: follows the pointer through --gx / --gy */
+.b3d-sheen {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: radial-gradient(120% 92% at var(--gx) var(--gy),
+    rgba(255, 249, 232, .26),
+    rgba(255, 249, 232, .07) 38%,
+    transparent 66%);
+  mix-blend-mode: screen;
+  opacity: .85;
+  pointer-events: none;
+  transition: opacity .4s var(--ease);
+}
+
+/* ---- spine: cloth, foil rules, vertical title ---- */
+.b3d-spine {
+  width: var(--th);
+  height: 100%;
+  transform: translateX(calc(var(--th) / -2)) rotateY(-90deg);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-items: center;
+  padding: 10% 0;
+  overflow: hidden;
+  background: linear-gradient(90deg,
+    #0d0b07 0%,
+    #241e14 26%,
+    #3a3121 48%,
+    #2a2318 70%,
+    #0e0b07 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .55);
+}
+.b3d-spine::before {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 5%;
+  border-top: 1px solid color-mix(in srgb, var(--b3d-foil) 62%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--b3d-foil) 28%, transparent);
+  height: 3px;
+}
+.b3d-spine::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 5%;
+  border-top: 1px solid color-mix(in srgb, var(--b3d-foil) 62%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--b3d-foil) 28%, transparent);
+  height: 3px;
+}
+.b3d-spine-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  max-height: 100%;
+  overflow: hidden;
+  font-family: var(--display);
+  font-size: max(6px, 2.7cqw);
+  line-height: 1;
+  letter-spacing: .1em;
+  color: color-mix(in srgb, #f6efdf 84%, var(--b3d-foil));
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  justify-self: center;
+  align-self: center;
+}
+.b3d-spine-mark {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--mono);
+  font-size: max(4px, 1.5cqw);
+  letter-spacing: -.04em;
+  color: color-mix(in srgb, var(--b3d-foil) 78%, transparent);
+  line-height: 1;
+  margin-bottom: 8%;
+}
+
+/* ---- page block ---- */
+.b3d-fore {
+  right: 0;
+  left: auto;
+  width: var(--th);
+  height: 100%;
+  transform: translateX(calc(var(--th) / 2)) rotateY(90deg);
+  background:
+    repeating-linear-gradient(90deg,
+      var(--b3d-page) 0 .5px,
+      var(--b3d-page-2) .5px 1.5px),
+    var(--b3d-page);
+  box-shadow: inset 0 0 5px rgba(86, 74, 54, .4);
+}
+.b3d-head {
+  left: 0;
+  width: 100%;
+  height: var(--th);
+  transform: translateY(calc(var(--th) / -2)) rotateX(-90deg);
+  background:
+    repeating-linear-gradient(0deg,
+      var(--b3d-page) 0 .5px,
+      var(--b3d-page-2) .5px 1.5px),
+    var(--b3d-page);
+  box-shadow: inset 0 0 6px rgba(86, 74, 54, .35);
+}
+
+/* ---- back board ---- */
+.b3d-back {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(calc(var(--th) / -2)) rotateY(180deg);
+  background: linear-gradient(155deg, var(--b3d-board-2), var(--b3d-board) 60%, #14110c);
+  box-shadow: inset 0 0 0 1px rgba(216, 180, 94, .14);
+}
+
+/* ---- contact shadow ---- */
+.b3d-shadow {
+  position: absolute;
+  z-index: -1;
+  left: 7%;
+  right: 1%;
+  bottom: -5%;
+  height: 11%;
+  background: radial-gradient(ellipse at 52% 50%,
+    rgba(14, 11, 7, .46),
+    rgba(14, 11, 7, .18) 46%,
+    transparent 74%);
+  filter: blur(6px);
+  pointer-events: none;
+  transition: opacity .5s var(--ease);
+}
+
+/* ---- lift on hover / keyboard focus ---- */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  a:hover .b3d .b3d-obj,
+  a:focus-visible .b3d .b3d-obj,
+  .b3d:hover .b3d-obj { --b3d-ry: 19deg; --b3d-rx: 3.5deg; will-change: transform; }
+  .b3d:hover .b3d-sheen { opacity: 1; }
+}
+
+/* small thumbnails: keep the object, drop the unreadable spine type */
+@container (max-width: 118px) {
+  .b3d-obj { --th: 5px; }
+  .b3d-spine-title,
+  .b3d-spine-mark { display: none; }
+  .b3d-spine::before,
+  .b3d-spine::after { display: none; }
+}
+
+/* a cover that failed to load keeps a typographic plate, still as an object */
+.b3d .cv.failed { background: linear-gradient(150deg, var(--paper-3), var(--paper-2)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .b3d-obj { transform: none !important; transition: none; }
+  .b3d-shadow { display: none; }
+}
+
+@media (max-width: 640px) {
+  .b3d { --b3d-ry: 10deg; --b3d-rx: 1.5deg; }
+}
+
+/* ---- stages: let the object break out of the old flat frames ---- */
+.book-tile-cover {
+  overflow: visible;
+  background: none;
+  box-shadow: none;
+  padding-right: .15rem;
+}
+.book-tile-cover .ribbon { top: .3rem; left: .3rem; z-index: 4; }
+.archive-chapter .book-tile-cover { border: 0; }
+
+#new .release .plate {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  transform: none !important;
+}
+#new .release .plate::after { display: none; }
+#new .release .plate .b3d { max-width: 420px; margin-inline: auto; }
+
+.book-hero-art {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.book-cover-mat {
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+.book-hero-art .b3d { max-width: 340px; margin-inline: auto; }
+
+.spine-img {
+  overflow: visible;
+  background: transparent;
+  aspect-ratio: auto;
+}
+.spine-img img { transform: none !important; }
+.spine-img::after { display: none; }
+.contact-sheet .spine-img { box-shadow: none; }
+
+.path-book .cv { box-shadow: none; }
+.path-book:hover .cv { transform: none; }
+.path-book .b3d { --b3d-ry: 12deg; }
+
+/* palette rows: the thumbnails are little books too */
+.cmdk-row img {
+  border: 0;
+  transform: perspective(300px) rotateY(-11deg) rotateX(2deg);
+  box-shadow: 3px 5px 9px rgba(10, 8, 5, .3);
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.cmdk-row.on img {
+  transform: perspective(300px) rotateY(-4deg) rotateX(1deg);
+  box-shadow: 2px 3px 6px rgba(10, 8, 5, .24);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdk-row img { transform: none; }
+}
