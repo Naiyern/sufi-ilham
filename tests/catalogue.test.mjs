@@ -167,33 +167,25 @@ test('controls have accessible names, a single contextual status, and a mobile r
   close(dom);
 });
 
-test('homepage chapter rail sits between the opening and release scene with valid anchors', () => {
+test('homepage keeps every chapter anchor and no longer carries a rail', () => {
   const dom = new JSDOM(builtHtml);
-  const { document, Node } = dom.window;
-  const hero = document.querySelector('#top');
-  const rail = document.querySelector('#chapterRail');
-  const release = document.querySelector('#new');
-  const links = [...rail.querySelectorAll('[data-chapter]')];
+  const { document } = dom.window;
 
-  assert.equal(links.length, 8);
-  assert.equal(links[0].getAttribute('aria-current'), 'location');
-  assert.ok(hero.compareDocumentPosition(rail) & Node.DOCUMENT_POSITION_FOLLOWING);
-  assert.ok(rail.compareDocumentPosition(release) & Node.DOCUMENT_POSITION_FOLLOWING);
-  for (const link of links) assert.ok(document.querySelector(link.hash), `missing chapter target ${link.hash}`);
-  assert.match(rail.getAttribute('aria-label'), /chapters/i);
-  assert.match(stylesheet, /\.chapter-rail a\.active/);
+  // the eight chapters are ordinary sections; the header nav reaches them
+  for (const id of ['top', 'new', 'index', 'series', 'essay', 'figures', 'ending', 'enquiries']) {
+    assert.ok(document.getElementById(id), `missing chapter section #${id}`);
+  }
+  const navHrefs = [...document.querySelectorAll('.mast nav a')].map((a) => a.getAttribute('href'));
+  assert.ok(navHrefs.some((href) => href.endsWith('/discover/')), 'header nav should still reach the reader guide');
+
+  // the floating rail was removed on request: markup, styles and script all go
+  assert.equal(document.querySelector('#chapterRail'), null);
+  assert.equal(document.querySelector('[data-chapter]'), null);
+  assert.doesNotMatch(stylesheet, /chapter-rail|chapterRail|chapter-name/);
+  const appSource = readFileSync(join(projectRoot, 'src/scripts/app.ts'), 'utf8');
+  assert.doesNotMatch(appSource, /chapterRail|data-chapter|initChapterRail/);
+
   assert.match(stylesheet, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
-
-  // the rail is a fore-edge index, not a panel: it carries no plate of its own
-  const railRule = stylesheet.match(/\.chapter-rail \{[^}]*\}/)[0];
-  assert.match(railRule, /background:\s*none/);
-  assert.match(railRule, /border:\s*0/);
-  // the light-page treatment belongs to the mobile strip only, otherwise the
-  // desktop rail turns into a cream slab over the page
-  assert.doesNotMatch(stylesheet, /(?<!@media \(max-width: 1180px\) \{)\n\.chapter-rail \{[^}]*#f1e8dc/);
-  assert.match(stylesheet, /@media \(max-width: 1180px\) \{\s*\.chapter-rail \{[^}]*#f1e8dc/);
-  // a collapsed label has to beat flex min-content or it never collapses
-  assert.match(stylesheet, /\.chapter-name \{[^}]*min-width:\s*0[^}]*max-width:\s*0/s);
   assert.doesNotMatch(stylesheet, /\.soon-step[^{}]*\{[^}]*\bopacity\s*:/s);
   close(dom);
 });
@@ -203,9 +195,7 @@ test('mobile keeps cinematic navigation and series artwork in the experience', (
   assert.notEqual(mobileStart, -1);
   const mobileStyles = stylesheet.slice(mobileStart);
 
-  assert.match(mobileStyles, /\.chapter-rail\s*\{[^}]*position:\s*sticky;[^}]*display:\s*flex;[^}]*overflow-x:\s*auto;/s);
   assert.match(mobileStyles, /\.s-hero-bg\s*\{[^}]*display:\s*flex;/s);
-  assert.match(mobileStyles, /scroll-snap-type:\s*x\s+proximity/);
   assert.match(mobileStyles, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
 });
 

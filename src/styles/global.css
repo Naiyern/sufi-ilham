@@ -2001,86 +2001,10 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
   #new .release .plate { transform: none !important; }
 }
 
-
 /* =========================================================
    EPIC CINEMA — one visual language across every chapter
    Real stills, high-contrast scene changes, guided-but-free scrolling.
    ========================================================= */
-/* The chapter rail is a fore-edge index, not a panel. The gold numerals sit in
-   the gutter on their own, so the rail reads the same over ink and over paper.
-   The chapter you are in wears a small dark mark; hovering or focusing any
-   numeral opens it into a labelled chip. */
-.chapter-rail {
-  position: fixed;
-  z-index: 150;
-  top: 50%;
-  right: clamp(.4rem, 1.1vw, 1.1rem);
-  display: grid;
-  justify-items: end;
-  max-height: calc(100svh - 2.5rem);
-  gap: .18rem;
-  padding: .4rem 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  border: 0;
-  background: none;
-  box-shadow: none;
-  transform: translateY(-50%);
-}
-.chapter-rail::-webkit-scrollbar { display: none; }
-.chapter-rail a {
-  display: flex;
-  flex-direction: row-reverse;   /* number pinned right, label opens left */
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0;
-  width: 2.15rem;
-  min-height: 1.95rem;
-  padding: .28rem .38rem;
-  overflow: hidden;
-  border: 0;
-  border-radius: 2px;
-  color: rgba(243, 238, 229, .85);
-  font: .58rem/1.2 var(--mono);
-  letter-spacing: .1em;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: width .34s var(--ease), gap .34s var(--ease),
-              background .28s, color .28s, box-shadow .28s;
-}
-/* only the chapter you are in, or the one under the pointer, carries a chip */
-.chapter-index { flex: 0 0 auto; color: #d9b45e; font-variant-numeric: tabular-nums; }
-.chapter-name {
-  min-width: 0;   /* without this, flex min-content keeps the label open */
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: max-width .34s var(--ease), opacity .2s;
-}
-.chapter-rail a.active {
-  background: rgba(20, 17, 14, .9);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .28), inset 0 0 0 1px rgba(217, 180, 94, .5),
-              inset 2px 0 0 #d9b45e;
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-}
-.chapter-rail a.active .chapter-index { color: #efcd86; }
-.chapter-rail a:hover,
-.chapter-rail a:focus-visible {
-  gap: .55rem;
-  width: 9.6rem;
-  background: rgba(20, 17, 14, .9);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, .32);
-  color: #f6f1e6;
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-}
-.chapter-rail a:hover .chapter-name,
-.chapter-rail a:focus-visible .chapter-name { max-width: 6.9rem; opacity: 1; }
-.chapter-rail a:focus-visible { outline: 2px solid #d7a34a; outline-offset: 3px; }
-@media (max-width: 1180px) { .chapter-rail { display: none; } }
 
 /* A true spotlight scene: the latest cover art becomes the set behind the books. */
 .cinema-reel {
@@ -2404,9 +2328,7 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
 @keyframes cinema-page-out { to { opacity: 0; transform: translateY(-5px); } }
 @keyframes cinema-page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .chapter-rail a,
-  .chapter-name,
-  .contact-sheet .spine,
+
   .archive-chapter .book-tile,
   .author-chapter .plate img,
   .colophon-wordmark { transition: none; }
@@ -2421,8 +2343,6 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
   .closing-quote { min-height: 420px; }
   .quote-glyph { top: -5.5rem; }
   .closing-quote h2 { font-size: clamp(2.1rem, 10vw, 3.6rem); }
-  .author-chapter .essay-grid { align-items: start; }
-  .chapter-rail { display: none; }
 }
 @media (prefers-reduced-motion: reduce) and (max-width: 880px) {
   .author-chapter .essay-grid > div:first-child { position: static; }
@@ -2594,73 +2514,9 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
 
 /* =========================================================
    MOBILE CINEMA — keep the scale, the navigation and the art on small screens
-   The rail scrolls sideways; destinations remain ordinary native page anchors.
    ========================================================= */
 @media (max-width: 1180px) {
-  html { scroll-padding-top: 7.5rem; }
-  .chapter-rail {
-    position: sticky;
-    z-index: 180;
-    top: 3.75rem;
-    display: flex;
-    width: 100%;
-    max-height: none;
-    gap: .25rem;
-    margin: 0;
-    padding: .32rem max(var(--gutter), calc((100vw - var(--wrap)) / 2));
-    overflow-x: auto;
-    overflow-y: hidden;
-    border: 0;
-    border-block: 1px solid rgba(243, 238, 229, .16);
-    background: rgba(25, 23, 19, .96);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
-    transform: none;
-    scroll-padding-inline: var(--gutter);
-    scroll-snap-type: x proximity;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(217, 180, 94, .72) rgba(243, 238, 229, .08);
-    -webkit-overflow-scrolling: touch;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-  .chapter-rail::-webkit-scrollbar { height: 2px; }
-  .chapter-rail::-webkit-scrollbar-track { background: rgba(243, 238, 229, .08); }
-  .chapter-rail::-webkit-scrollbar-thumb { background: #d9b45e; }
-  .chapter-rail a,
-  .chapter-rail a:hover,
-  .chapter-rail a:focus-visible,
-  .chapter-rail a.active {
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: row;
-    grid-template-columns: none;
-    align-items: center;
-    gap: .48rem;
-    width: auto;
-    min-height: 44px;
-    padding: .35rem .72rem;
-    border: 0;
-    border-bottom: 1px solid transparent;
-    background: transparent;
-    color: #bdb5a5;
-    scroll-snap-align: start;
-  }
-  .chapter-rail a:hover,
-  .chapter-rail a:focus-visible { color: #f3eee5; }
-  .chapter-rail a.active {
-    border-bottom-color: #d9b45e;
-    background: rgba(217, 180, 94, .095);
-    color: #f3eee5;
-  }
-  .chapter-index { font-size: .58rem; }
-  .chapter-name {
-    max-width: none;
-    overflow: visible;
-    opacity: 1;
-    transform: none;
-    font-size: .52rem;
-    letter-spacing: .1em;
-  }
+  html { scroll-padding-top: 5.5rem; }
 }
 
 @media (max-width: 680px) {
@@ -2712,12 +2568,6 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
 }
 
 @media (max-width: 420px) {
-  .chapter-rail { top: 3.55rem; }
-  .chapter-rail a,
-  .chapter-rail a:hover,
-  .chapter-rail a:focus-visible,
-  .chapter-rail a.active { gap: .38rem; padding-inline: .58rem; }
-  .chapter-name { font-size: .48rem; letter-spacing: .08em; }
   .s-hero-bg { height: clamp(180px, 48vw, 225px); }
   .s-hero-bg img { width: clamp(88px, 29vw, 118px); margin-inline: -.48rem; }
   .hero-visual { padding-inline: .35rem; }
@@ -2725,9 +2575,6 @@ html[data-theme="dark"] #order { --mark: var(--accent); --mark-2: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chapter-rail { scroll-behavior: auto; }
-  .chapter-rail a,
-  .chapter-name { transition: none; }
   .series-spread .spread-fan img,
   .series-spread .spread-fan img:hover,
   .s-hero-bg img { transform: none; }
@@ -2865,11 +2712,6 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
 .hero-stat strong { font-size: clamp(1.8rem, 2.9vw, 2.65rem); color: #ead9c1; }
 .hero-stat span { letter-spacing: .1em; }
 .hero-stat-link { color: #e5b3a0; }
-@media (max-width: 1180px) {
-  .chapter-rail { background: #f1e8dc; border-bottom: 1px solid #d9cbbb; color: #514a40; }
-  .chapter-rail a { color: #514a40; }
-  .chapter-rail a.active { color: #943f31; }
-}
 .home-discovery { background: #e8d8c9; color: #342720; }
 .home-discovery-grid { grid-template-columns: .95fr 1fr; gap: clamp(3rem, 8vw, 8rem); align-items: start; }
 .home-discovery h2 { font-size: clamp(4rem, 7vw, 7rem); }
@@ -2940,12 +2782,8 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   .home-paths { grid-template-columns: 1fr; }
   .hero-actions .btn { width: 100%; }
 }
-.chapter-rail a:hover, .chapter-rail a:focus-visible, .chapter-rail a.active { background: #493b32; color: #fff6e9; }
 @media (max-width: 760px) {
   .hero-layout { grid-template-columns: 1fr; }
-  .chapter-rail { background: #29221f; border-color: rgba(243,238,229,.2); }
-  .chapter-rail a { color: #eee1d1; }
-  .chapter-rail a:hover, .chapter-rail a:focus-visible, .chapter-rail a.active { color: #fff6e9; }
 }
 /* Reading and recovery pages keep the same editorial rhythm as the archive. */
 .not-found { min-height: 78svh; display: grid; align-items: center; padding: 9rem 0 6rem; background: #29221f; color: #f7f2e9; }
@@ -2991,9 +2829,6 @@ html[data-theme='dark'] .path-eyebrow, html[data-theme='dark'] .path-book > span
 html[data-theme='dark'] .path-description { color: #e0d5c7; }
 html[data-theme='dark'] .path-book { color: #fff4e7; }
 html[data-theme='dark'] .discover-finale { background: #713d31; }
-html[data-theme='dark'] .chapter-rail { background: #29221f; border-color: #69564a; }
-html[data-theme='dark'] .chapter-rail a { color: #eadbca; }
-html[data-theme='dark'] .chapter-rail a.active, html[data-theme='dark'] .chapter-rail a:hover, html[data-theme='dark'] .chapter-rail a:focus-visible { color: #fff6e9; }
 
 /* A single gentle light pass gives the opening portrait a cinematic quality.
    It runs once, does not cover text or block interaction, and has a still

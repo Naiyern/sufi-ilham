@@ -78,47 +78,6 @@ const initCinematicParallax = () => {
 };
 initCinematicParallax();
 
-/* The chapter rail follows the scene passing through the viewport center. */
-const initChapterRail = () => {
-  const rail = $('#chapterRail');
-  if (!rail || !('IntersectionObserver' in window)) return;
-  const links = $$<HTMLAnchorElement>('[data-chapter]', rail);
-  const targets = links
-    .map((link) => $(link.hash))
-    .filter((target): target is HTMLElement => target instanceof HTMLElement);
-  if (!targets.length) return;
-
-  const centerInset = Math.round(innerHeight * 0.42);
-  const observer = new IntersectionObserver((entries) => {
-    const scene = entries
-      .filter((entry) => entry.isIntersecting)
-      .sort((a, b) =>
-        Math.abs(a.boundingClientRect.top + a.boundingClientRect.height / 2 - innerHeight / 2)
-        - Math.abs(b.boundingClientRect.top + b.boundingClientRect.height / 2 - innerHeight / 2),
-      )[0];
-    if (!scene) return;
-    const id = (scene.target as HTMLElement).id;
-    links.forEach((link) => {
-      const active = link.hash === `#${id}`;
-      const changed = link.classList.contains('active') !== active;
-      link.classList.toggle('active', active);
-      if (active) {
-        link.setAttribute('aria-current', 'location');
-        if (changed && matchMedia('(max-width: 1180px)').matches) {
-          link.scrollIntoView({
-            behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-            block: 'nearest',
-            inline: 'nearest',
-          });
-        }
-      } else link.removeAttribute('aria-current');
-    });
-  }, { rootMargin: `-${centerInset}px 0px -${centerInset}px 0px`, threshold: 0 });
-
-  targets.forEach((target) => observer.observe(target));
-};
-initChapterRail();
-
 /* Reveal the closing words once, only when motion and observation are available.
    Without either, the quote stays readable immediately. */
 const initQuoteScene = () => {
