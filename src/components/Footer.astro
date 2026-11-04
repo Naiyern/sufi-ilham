@@ -1,7 +1,13 @@
 ---
-import { site, series, books, published, byNewest } from '../data/site';
+import { site, series, books, published, byNewest, MARKETS } from '../data/site';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const latest = byNewest.slice(0, 6);
+/* One marketplace link per store, each pointing at the newest title that is
+   actually listed there — no dead links, no invented ASINs. */
+const marketLinks = MARKETS.map((market) => {
+  const book = byNewest.find((b) => b[market.id]);
+  return book ? { ...market, url: book[market.id]!, title: book.title } : null;
+}).filter((m): m is NonNullable<typeof m> => Boolean(m));
 ---
 
 <footer class="colophon">
@@ -54,6 +60,19 @@ const latest = byNewest.slice(0, 6);
         </ul>
       </nav>
     </div>
+
+    <nav class="colo-markets" aria-label="Amazon marketplaces">
+      <span class="label">Find the books on</span>
+      <ul>
+        {marketLinks.map((market) => (
+          <li>
+            <a href={market.url} target="_blank" rel="noopener" title={`${market.title} on ${market.label}`}>
+              {market.label} <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
 
     <div class="colo-bot">
       <span>© {new Date().getFullYear()} Sufi Ilham · All rights reserved</span>

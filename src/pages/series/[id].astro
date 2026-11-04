@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import { series, seriesBooks, site, seriesStructuredData, metaDescription, type Series } from '../../data/site';
+import { series, seriesBooks, site, seriesStructuredData, metaDescription, bookStores, type Series } from '../../data/site';
 import { coverUrl } from '../../data/site';
 
 export function getStaticPaths() {
@@ -79,7 +79,19 @@ const heroImg = hero && !hero.img.startsWith('data:') ? coverUrl(hero.img, site.
                   : <>
                       {b.ku && <span>Kindle Unlimited</span>}
                       {b.pages && <span>{b.pages} pages</span>}
-                      {b.us && <a href={b.us} target="_blank" rel="noopener">Amazon ↗</a>}
+                      {bookStores(b).length > 0 && (
+                        <a
+                          href={bookStores(b)[0].url}
+                          target="_blank"
+                          rel="noopener"
+                          data-buy
+                          data-us={b.us}
+                          data-uk={b.uk}
+                          data-in={b.in}
+                          data-ca={b.ca}
+                          data-au={b.au}
+                        >Amazon <span aria-hidden="true">↗</span></a>
+                      )}
                     </>}
               </div>
             </div>

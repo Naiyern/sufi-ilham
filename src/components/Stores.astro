@@ -1,0 +1,29 @@
+---
+/* Every store a book is sold in. The list is server-rendered in marketplace
+   order; market.ts moves the visitor's own store to the front and badges it. */
+import { bookStores } from '../data/site';
+import type { Book } from '../data/site';
+
+interface Props {
+  book: Book;
+}
+const { book } = Astro.props;
+const stores = bookStores(book);
+---
+
+{stores.length > 0 && (
+  <ul class="edition-links store-grid" data-stores>
+    {stores.map((store) => (
+      <li class="edition-link store-link" data-market={store.id}>
+        <a class="store-anchor" href={store.url} target="_blank" rel="noopener">
+          <span class="store-name">{store.label}</span>
+          <span class="store-meta">
+            <span class="store-domain">{store.domain}</span>
+            <span class="store-local" data-local-badge hidden>Your store</span>
+          </span>
+          <span class="store-go" aria-hidden="true">↗</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
