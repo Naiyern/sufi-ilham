@@ -1401,3 +1401,41 @@ test('a reveal cue cannot hide something taller than the screen', async () => {
   assert.match(source, /\{ threshold: 0, rootMargin: '0px 0px -8% 0px' \}/);
   assert.ok(!/threshold: 0\.12/.test(source), 'no reveal may be keyed to a fraction of its own height');
 });
+
+/* ---------- the details a phone showed ---------- */
+
+test('nothing a reader has to read is smaller than 9.6px on a phone', () => {
+  // the catalogue tiles used to set their own captions at .43rem — 6.9px
+  assert.match(stylesheet, /@media \(max-width: 560px\) \{[\s\S]{0,2400}?\.book-tile-meta \{[\s\S]{0,200}?font-size: \.58rem;/);
+  assert.match(stylesheet, /@media \(max-width: 560px\) \{[\s\S]{0,2400}?\.book-tile-kicker \{ font-size: \.58rem;/);
+  // and one floor under the remaining mono labels, which each sized their own
+  assert.match(stylesheet, /@media \(max-width: 560px\) \{[\s\S]{0,700}?figcaption,[\s\S]{0,700}?font-size: \.6rem !important;/);
+});
+
+test('a thumb gets 24px of hit area on every text link', () => {
+  // WCAG 2.5.8 — colophon, marketplace and breadcrumb links were 12–17px tall
+  assert.match(stylesheet, /@media \(hover: none\), \(pointer: coarse\) \{[\s\S]{0,2000}?\.colo a, \.colo-bot a, \.colo-markets a/);
+  assert.match(stylesheet, /padding-block: 5px;/);
+  assert.match(stylesheet, /\.crumb a, \.book-crumb a, \.book-series-link \{ min-height: 28px;/);
+  // padding, not a flex box: a long title still has to wrap inside its column
+  assert.match(stylesheet, /\.colo a, \.colo-bot a[\s\S]{0,600}?display: inline-block;/);
+});
+
+test('small type keeps its colour when it sits on ink', () => {
+  // series accents are read off cover art; two of them fell under 4.5:1 at 9.6px
+  assert.match(stylesheet, /\.s-hero \.label\.mark,[\s\S]{0,400}?color: color-mix\(in srgb, var\(--mark\) 84%, #f6efe2\);/);
+  // and the clay on the discovery panel was 4.03:1
+  assert.match(stylesheet, /\.discover-overline \{ color: #844f38;/);
+  assert.match(stylesheet, /\.path-eyebrow \{ font-style: italic; color: #6b4d3f;/);
+});
+
+test('the first screen stays light', () => {
+  // the portrait is the only eager image on the page: it was 158KB, then 104KB
+  const portrait = statSync(join(projectRoot, 'public/images/sufi-ilham-portrait.jpg')).size;
+  assert.ok(portrait < 112 * 1024, `portrait should stay under 112KB, is ${Math.round(portrait / 1024)}KB`);
+  // the page keeps its own dimensions, so nothing shifts while it decodes
+  const page = new JSDOM(readFileSync(join(projectRoot, 'dist/index.html'), 'utf8')).window.document;
+  const hero = page.querySelector('.hero-visual img, .author-main img');
+  assert.equal(hero.getAttribute('width'), '1000');
+  assert.equal(hero.getAttribute('height'), '1250');
+});

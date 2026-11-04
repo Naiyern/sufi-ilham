@@ -32,7 +32,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           const picks = path.slugs.map(bookBySlug).filter((book) => book && !book.comingSoon);
           return <article id={`path-${path.number}`} class={`path-card path-${path.accent}`}>
             <div class="path-copy"><div class="path-top"><span>{path.number} / READING PATH</span><span aria-hidden="true">✳</span></div><p class="path-eyebrow">{path.eyebrow}</p><h3>{path.title}</h3><p class="path-description">{path.description}</p><span class="path-count">{picks.length} BOOKS TO BEGIN WITH <span aria-hidden="true">→</span></span></div>
-            <div class="path-books">{picks.map((book) => book && <a class="path-book" href={`${base}/books/${book.slug}/`}><Book3D title={book.altTitle || book.title} pages={book.pages}><Cover src={coverUrl(book.img, base)} title={book.title} /></Book3D><span>{book.title}<span aria-hidden="true"> ↗</span></span></a>)}</div>
+            <div class="path-books">{picks.map((book) => book && <a class="path-book" href={`${base}/books/${book.slug}/`}><Book3D title={book.altTitle || book.title} pages={book.pages}><Cover src={coverUrl(book.img, base)} title={book.title} /></Book3D><span>{book.title}<span aria-hidden="true">&nbsp;↗</span></span></a>)}</div>
           </article>;
         })}
       </div>
