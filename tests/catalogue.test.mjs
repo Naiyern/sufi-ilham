@@ -368,11 +368,14 @@ test('book and series scenes have useful next steps and book cover backdrops', (
 
 test('cinematic quote keeps readable text and a reduced-motion fallback', () => {
   const dom = new JSDOM(builtHtml);
-  const heading = dom.window.document.querySelector('#closing-quote-text');
-  assert.match(heading.textContent.replace(/\s+/g, ' ').trim(), /A journey of a thousand miles begins with a single step/);
-  assert.equal(heading.querySelectorAll('.quote-line').length, 3);
-  assert.match(dom.window.document.querySelector('.quote-credit').textContent, /Lao Tzu/);
-  assert.match(stylesheet, /prefers-reduced-motion: reduce[\s\S]*?\.closing-quote \.quote-line/);
+  const heading = dom.window.document.querySelector('#ending-heading');
+  assert.ok(heading, 'the intertitle needs its heading');
+  assert.ok(heading.textContent.replace(/\s+/g, ' ').trim().length > 8, 'the intertitle should carry a real line');
+  assert.match(heading.getAttribute('data-len'), /^(short|medium|long)$/, 'the line needs a size for its type');
+  const credit = dom.window.document.querySelector('.quote-credit');
+  assert.match(credit.textContent, /—/, 'the credit opens with a dash');
+  assert.ok(credit.querySelector('cite'), 'the credit names the work it comes from');
+  assert.match(stylesheet, /prefers-reduced-motion: reduce[\s\S]{0,400}\.closing-quote \.quote-line/);
   close(dom);
 });
 
@@ -993,4 +996,107 @@ test('nothing on the site is a card sitting on a page', () => {
     stylesheet,
     /\.home-discovery,\s*\.next-chapter \{[\s\S]{0,200}?linear-gradient\(180deg,\s*var\(--paper\) 0,\s*#dccaa8 11%,\s*#dccaa8 89%,\s*var\(--paper\) 100%\)/,
   );
+});
+
+/* ---------- the reading room's wall ---------- */
+
+test('the wall is sourced, unique and deterministic', async () => {
+  const { QUOTES, quoteFor, sizeFor, seedFrom, QUOTE_COUNT } = await import('../src/data/quotes.ts');
+
+  assert.ok(QUOTE_COUNT >= 350, `the wall holds ${QUOTE_COUNT} lines`);
+  assert.equal(QUOTES.length, QUOTE_COUNT);
+
+  const normalised = new Set();
+  for (const quote of QUOTES) {
+    assert.ok(quote.text.trim().length > 8, `too short: ${quote.text}`);
+    assert.ok(quote.author.trim().length > 2, `no author: ${quote.text}`);
+    assert.ok(quote.source.trim().length > 2, `no source: ${quote.text}`);
+    // the interface sets the opening mark; a line may still quote someone within
+    assert.doesNotMatch(quote.text, /^[“"']/, `opens with its own quote mark: ${quote.text}`);
+    assert.doesNotMatch(quote.text, /\s{2,}/, `double space: ${quote.text}`);
+    const key = quote.text.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+    assert.ok(!normalised.has(key), `duplicate line: ${quote.text}`);
+    normalised.add(key);
+  }
+
+  // a translation names its translator, so a line can be traced to a page
+  const translated = QUOTES.filter((item) => /trans\./.test(item.source));
+  assert.ok(translated.length > 40, `only ${translated.length} translated sources name a translator`);
+
+  // one page, one line — stable across builds, and not the same everywhere
+  assert.equal(quoteFor('/').text, quoteFor('/').text);
+  assert.equal(seedFrom('/'), seedFrom('/'));
+  const routes = ['/', '/books/a-recipe-for-maple-falls', '/discover', '/privacy', '/contact', '/series/carto'];
+  const picked = new Set(routes.map((route) => quoteFor(route).text));
+  assert.ok(picked.size >= 4, 'routes should not all open on the same line');
+
+  // type size follows length
+  assert.equal(sizeFor('short line'), 'short');
+  assert.equal(sizeFor('x'.repeat(120)), 'medium');
+  assert.equal(sizeFor('x'.repeat(200)), 'long');
+});
+
+test('every page carries a line, and the deck is served as one file', async () => {
+  const { quoteFor, QUOTE_COUNT } = await import('../src/data/quotes.ts');
+  const deck = JSON.parse(readFileSync(join(projectRoot, 'dist/quotes.json'), 'utf8'));
+  assert.equal(deck.length, QUOTE_COUNT);
+  for (const item of deck.slice(0, 20)) {
+    assert.deepEqual(Object.keys(item).sort(), ['author', 'source', 'text']);
+  }
+
+  // the intertitle on the home page is a stage, with its own line in the HTML
+  const home = new JSDOM(builtHtml).window.document;
+  const stage = home.querySelector('[data-quote-stage].closing-quote');
+  assert.ok(stage, 'missing the intertitle stage');
+  assert.equal(stage.dataset.quoteFeed, `${BASE}/quotes.json`);
+  assert.equal(stage.querySelector('[data-quote-text]').textContent.trim(), quoteFor('/ending').text);
+  assert.match(stage.querySelector('[data-quote-credit]').textContent, /—\s/);
+  assert.ok(stage.querySelector('[data-quote-credit] cite'), 'the credit must name its source');
+  assert.ok(stage.querySelector('[data-quote-next]'), 'the stage needs a deliberate turn');
+
+  // and every page carries the quiet copy in the colophon
+  for (const file of builtPages()) {
+    const page = file.replace(join(projectRoot, 'dist'), '');
+    if (page.startsWith('/read/')) continue; // the reader is its own document
+    const doc = new JSDOM(readFileSync(file, 'utf8')).window.document;
+    const quiet = doc.querySelectorAll('footer [data-quote-stage]');
+    assert.equal(quiet.length, 1, `${page}: expected one footer line, found ${quiet.length}`);
+    assert.ok(quiet[0].querySelector('[data-quote-text]').textContent.trim().length > 8, `${page}: empty line`);
+  }
+});
+
+test('the wall turns on its own, and on request', async () => {
+  const { initQuotes } = await import('../src/scripts/quotes.ts');
+  const { QUOTES } = await import('../src/data/quotes.ts');
+
+  const dom = new JSDOM(builtHtml, { url: 'https://sufi-ilham.test/sufi-ilham/', pretendToBeVisual: true });
+  const d = dom.window.document;
+
+  // instant swaps, no pending transitions in a headless document
+  dom.window.matchMedia = () => ({ matches: true, addEventListener: () => {}, removeEventListener: () => {}, addListener: () => {} });
+  let served = 0;
+  dom.window.fetch = async () => {
+    served += 1;
+    return { ok: true, json: async () => QUOTES };
+  };
+
+  const stage = d.querySelector('[data-quote-stage].closing-quote');
+  const before = stage.querySelector('[data-quote-text]').textContent.trim();
+
+  const stop = initQuotes(d);
+  await new Promise((resolve) => setTimeout(resolve, 50));
+
+  const text = stage.querySelector('[data-quote-text]');
+  assert.equal(served, 1, 'the deck should be fetched once');
+  assert.notEqual(text.textContent.trim(), before, 'the page should open on a line of its own');
+  assert.ok(['short', 'medium', 'long'].includes(text.dataset.len), 'the stage needs a length for its type');
+  assert.match(stage.querySelector('[data-quote-credit] cite').textContent, /\S/);
+
+  // the deliberate turn
+  const turned = text.textContent.trim();
+  stage.querySelector('[data-quote-next]').dispatchEvent(new dom.window.Event('click', { bubbles: true }));
+  assert.notEqual(text.textContent.trim(), turned, 'the button should deal another line');
+
+  // and it can be put back to sleep without leaving a timer behind
+  stop();
 });

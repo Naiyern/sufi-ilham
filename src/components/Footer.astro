@@ -1,5 +1,6 @@
 ---
 import { site, series, books, published, byNewest, MARKETS } from '../data/site';
+import QuoteStage from './QuoteStage.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const latest = byNewest.slice(0, 6);
 /* One marketplace link per store, each pointing at the newest title that is
@@ -25,6 +26,8 @@ const marketLinks = MARKETS.map((market) => {
         <p class="colophon-count"><strong>{published.length}</strong> published <span aria-hidden="true">·</span> <strong>{books.length - published.length}</strong> forthcoming</p>
       </div>
     </div>
+
+    <QuoteStage variant="quiet" />
 
     <div class="colophon-grid">
       <div class="colo">
