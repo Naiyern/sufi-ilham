@@ -442,9 +442,9 @@ test('the books hold up in print and in the palette', () => {
 });
 
 test('the page block is a calculated slab with a measured bleed', () => {
-  // a 300-page trade paperback is 15-18% of its trim width thick; drawn any
-  // thinner and the paper edge does not exist
-  assert.match(stylesheet, /--th: clamp\(9px, 13cqw, 52px\)/);
+  // a 300-page trade paperback is 15-18% of its trim width thick; the ratio is
+  // carried from the page count, the length resolves against the stage
+  assert.match(stylesheet, /--th: clamp\(9px, calc\(var\(--b3d-ratio, \.13\) \* 100cqw\), 64px\)/);
   assert.match(stylesheet, /--b3d-bleed: clamp\(\.5px, \.3cqw, 2\.4px\)/);
 
   // the paper stands proud of the boards at the three cut edges
@@ -1321,4 +1321,58 @@ test('the author frames are graded as one film, and the seam is drawn in gold', 
   assert.match(stylesheet, /@media \(max-width: 560px\) \{\s*\.plate--seam \.seam-frame \{ aspect-ratio: 4 \/ 3; \}/);
   // and nothing may push the portrait for a reader who asked for stillness
   assert.match(stylesheet, /@media \(prefers-reduced-motion: no-preference\) \{\s*\.author-main \.plate-img img \{\s*animation: author-push/);
+});
+
+/* ---------- the object ---------- */
+
+test('every book is as thick as it is long, and equally thick everywhere', async () => {
+  const { bookRatio } = await import('../src/scripts/books3d.ts');
+
+  // a slim essay and a doorstop must not share a spine
+  assert.ok(bookRatio(76) < bookRatio(303), 'more pages must mean more bulk');
+  assert.ok(bookRatio(303) < bookRatio(700));
+  assert.ok(bookRatio(76) >= 0.07, 'nothing collapses to a wafer');
+  assert.ok(bookRatio(2000) <= 0.22, 'nothing becomes a brick');
+  assert.equal(bookRatio(), bookRatio(280), 'an unknown length gets a middling spine');
+  assert.equal(bookRatio(null), bookRatio(280), 'a forthcoming book is not a wafer');
+  assert.equal(bookRatio(0), bookRatio(280));
+
+  const page = new JSDOM(readFileSync(join(projectRoot, 'dist/index.html'), 'utf8')).window.document;
+  const books = Array.from(page.querySelectorAll('[data-book3d]'));
+  assert.ok(books.length > 40, 'the home page is a room full of books');
+
+  const ratios = new Set();
+  for (const book of books) {
+    const ratio = Number(book.style.getPropertyValue('--b3d-ratio'));
+    assert.ok(ratio >= 0.07 && ratio <= 0.22, `${book.className}: ${ratio} is not a book thickness`);
+    ratios.add(ratio);
+    const pages = Number(book.getAttribute('data-pages'));
+    assert.ok(Math.abs(ratio - bookRatio(pages)) < 0.0005, 'the spine must match the page count it carries');
+  }
+  assert.ok(ratios.size > 8, 'the shelf is not one uniform block: ' + ratios.size + ' thicknesses');
+
+  // the dialog shows the same object, not a flat photograph of one
+  const sheet = page.querySelector('.modal .b3d');
+  assert.ok(sheet, 'the details sheet holds a book');
+  assert.ok(sheet.querySelector('.b3d-front #mImg'), 'the cover image is the front board');
+  assert.ok(sheet.querySelector('.b3d-spine .b3d-spine-title'), 'and it has a spine to write on');
+});
+
+test('the object is lit like a bound book, not painted like a box', () => {
+  // thickness is a ratio of the cover's own width, resolved where it is used
+  assert.match(stylesheet, /--th: clamp\(9px, calc\(var\(--b3d-ratio, \.13\) \* 100cqw\), 64px\);/);
+  // the board bows: light gathers at the joint and the far corner falls away
+  assert.match(stylesheet, /\.b3d-front::after \{[\s\S]{0,900}?linear-gradient\(90deg,/);
+  assert.match(stylesheet, /\.b3d-front,\s*\.b3d-back \{ border-radius: clamp\(\.5px, \.42cqw, 3px\); \}/);
+  // sewn head-bands at the top and bottom of the joint
+  assert.match(stylesheet, /\.b3d-head::after,\s*\.b3d-tail::after \{/);
+  assert.match(stylesheet, /repeating-linear-gradient\(90deg,\s*color-mix\(in srgb, var\(--b3d-foil\) 82%, #4a3418\) 0 1px,/);
+  // a contact shadow and a room shadow, not one blur
+  assert.match(stylesheet, /radial-gradient\(ellipse 46% 34% at 54% 56%,/);
+  assert.match(stylesheet, /radial-gradient\(ellipse 78% 56% at 56% 54%,/);
+  // the cover lifts off the block at the joint, on a mouse only
+  assert.match(stylesheet, /transform: translateZ\(calc\(var\(--th\) \/ 2\)\) rotateY\(-5deg\);/);
+  assert.match(stylesheet, /\.b3d-front \{\s*transform-origin: left center;/);
+  // and the sheet's book settles in
+  assert.match(stylesheet, /\.modal\.open \.b3d \{ opacity: 1; transform: none; \}/);
 });
