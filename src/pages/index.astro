@@ -232,7 +232,7 @@ const jsonld = [
                 aria-label={`Open details for ${b.altTitle || b.title}`}
               >
                 <figure class="plate" style="margin:0">
-                  <Book3D title={b.altTitle || b.title} mark={String(i + 1).padStart(2, '0')}>
+                  <Book3D title={b.altTitle || b.title} mark={String(i + 1).padStart(2, '0')} pages={b.pages}>
                     {art ? (
                       <AnimatedCover
                         art={art}
@@ -307,7 +307,7 @@ const jsonld = [
               aria-label={`Open details for ${b.altTitle || b.title}`}
             >
               <div class="spine-img">
-                <Book3D title={b.altTitle || b.title}>
+                <Book3D title={b.altTitle || b.title} pages={b.pages}>
                   {b.coverArt ? (
                     <AnimatedCover
                       art={coverUrl(b.coverArt, base)}

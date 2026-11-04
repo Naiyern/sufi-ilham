@@ -19,7 +19,7 @@ const src = coverUrl(book.img, base);
   aria-label={`Open details for ${book.altTitle || book.title}`}
 >
   <div class="spine-img">
-    <Book3D title={book.altTitle || book.title} mark={book.order ? String(book.order).padStart(2, '0') : 'SI'}>
+    <Book3D title={book.altTitle || book.title} mark={book.order ? String(book.order).padStart(2, '0') : 'SI'} pages={book.pages}>
       <Cover src={src} title={book.title} />
     </Book3D>
   </div>

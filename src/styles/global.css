@@ -504,6 +504,9 @@ body.menu-open::before {
 }
 .modal.open .modal-in { transform: none; }
 .modal-in img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border: 1px solid var(--rule); background: var(--paper-3); }
+/* the sheet shows the same object as the shelf did, not a flat picture of it */
+.modal .b3d { --b3d-ry: 19deg; --b3d-rx: -5deg; max-width: 100%; }
+.modal .b3d-front > img { border: 0; aspect-ratio: 2 / 3; max-width: none; }
 .modal-status { margin: 0 0 .65rem; color: var(--mark); font: .62rem/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
 .modal h2 { font-size: clamp(1.6rem, 3.4vw, 2.6rem); }
 .modal-alt { margin: -.5rem 0 .6rem; color: var(--ink-3); font: italic 1rem/1.4 var(--display); }
@@ -518,7 +521,7 @@ body.menu-open::before {
 .specs { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 1.2rem 0; }
 .specs li { font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--rule); padding: .24rem .6rem; color: var(--ink-3); }
 .buy-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.2rem; }
-@media (max-width: 720px) { .modal-in { grid-template-columns: 1fr; } .modal-in img { max-width: 180px; } }
+@media (max-width: 720px) { .modal-in { grid-template-columns: 1fr; } .modal-in img { max-width: 180px; } .modal .b3d { max-width: 210px; margin-inline: auto; } }
 
 /* =============== COMMAND PALETTE =============== */
 .cmdk {
@@ -852,6 +855,8 @@ body { font-size: clamp(16px, 1.15vw + 0.6rem, 18px); }
   .modal { padding: .8rem; align-items: start; padding-top: 4vh; }
   .modal-in { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.2rem; max-height: 92svh; }
   .modal-in img { max-width: 200px; margin-inline: auto; display: block; }
+  .modal .b3d { max-width: 220px; }
+  .modal .b3d-front > img { max-width: none; }
   .modal h2 { font-size: 1.55rem; }
   .modal .q { font-size: 1rem; }
   .s-hero-bg { display: none; }
@@ -3058,7 +3063,9 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
 
 .b3d {
   --th: 12px;
-  --th: clamp(9px, 13cqw, 52px);
+  /* every book is as thick as it is long-winded: the ratio comes from its page
+     count, the length is resolved against the stage it is standing on */
+  --th: clamp(9px, calc(var(--b3d-ratio, .13) * 100cqw), 64px);
   /* how far the paper stands proud of the board, in the same unit as --th:
      a real block is a shade wider than its cover long before it is bound */
   --b3d-bleed: clamp(.5px, .3cqw, 2.4px);
@@ -3133,12 +3140,35 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   position: absolute;
   z-index: 3;
   inset: 0;
-  box-shadow:
-    inset 0 0 0 1px rgba(6, 4, 3, .55),
-    inset 0 0 2px rgba(0, 0, 0, .5),
-    inset 0 0 26px rgba(0, 0, 0, .26);
   pointer-events: none;
+  /* A board is not a sheet of glass. It bows away from the spine, so the light
+     gathers along the joint and the far corner falls off — the two gradients
+     that, more than anything else, stop a cover reading as a sticker. */
+  background:
+    linear-gradient(90deg,
+      rgba(255, 250, 236, .14) 0%,
+      rgba(255, 250, 236, .04) 3%,
+      rgba(0, 0, 0, .13) 6.5%,
+      rgba(0, 0, 0, .02) 12%,
+      transparent 18%),
+    linear-gradient(270deg,
+      rgba(0, 0, 0, .22) 0%,
+      rgba(0, 0, 0, .07) 3%,
+      transparent 7%),
+    linear-gradient(180deg,
+      rgba(255, 255, 255, .05) 0%,
+      transparent 9%,
+      transparent 91%,
+      rgba(0, 0, 0, .14) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(6, 4, 3, .5),
+    inset 0 0 2px rgba(0, 0, 0, .5),
+    inset 0 0 26px rgba(0, 0, 0, .24);
 }
+
+/* the board's own corners: a bound cover is cut with a die, never a razor */
+.b3d-front,
+.b3d-back { border-radius: clamp(.5px, .42cqw, 3px); }
 
 .b3d-hinge {
   position: absolute;
@@ -3253,6 +3283,7 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   transform: translateX(calc(var(--th) / 2)) rotateY(90deg);
   background:
     /* on the fore-edge the board overhangs on the front side, i.e. the right */
+    linear-gradient(180deg, rgba(255, 255, 255, .22) 0%, transparent 16%, transparent 84%, rgba(70, 58, 40, .24) 100%),
     linear-gradient(270deg, rgba(255, 255, 255, .6) 0 .5px, transparent .5px),
     linear-gradient(270deg, rgba(52, 40, 26, .4) 0, rgba(52, 40, 26, .12) 24%, transparent 58%),
     repeating-linear-gradient(90deg, rgba(120, 102, 74, .22) 0 .4px, transparent .4px 1.7px),
@@ -3284,6 +3315,28 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
     inset 0 0 0 .5px rgba(255, 252, 243, .55),
     inset 0 0 6px rgba(86, 74, 54, .32);
 }
+/* the head-band: a sewn stripe of cotton at the very top and bottom of the
+   joint, where the block is glued. Two pixels of detail that make the whole
+   object read as bound rather than printed. */
+.b3d-head::after,
+.b3d-tail::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: clamp(2px, 1.1%, 3.5px);
+  background: repeating-linear-gradient(90deg,
+    color-mix(in srgb, var(--b3d-foil) 82%, #4a3418) 0 1px,
+    #f8f2e2 1px 2px);
+  box-shadow: 1px 0 2px rgba(40, 30, 18, .35);
+  opacity: .85;
+}
+@container (max-width: 160px) {
+  .b3d-head::after,
+  .b3d-tail::after { display: none; }
+}
+
 .b3d-head {
   top: calc(-1 * var(--b3d-bleed));
   transform: translateY(calc(var(--th) / -2)) rotateX(-90deg);
@@ -3312,10 +3365,17 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   right: 1%;
   bottom: -4%;
   height: 13%;
-  background: radial-gradient(ellipse at 56% 46%,
-    rgba(12, 9, 6, .40),
-    rgba(12, 9, 6, .15) 48%,
-    transparent 76%);
+  /* contact first, then the room: a book standing on a surface casts a dense
+     little shadow where the boards meet it, and a wide soft one around */
+  background:
+    radial-gradient(ellipse 46% 34% at 54% 56%,
+      rgba(10, 8, 5, .46),
+      rgba(10, 8, 5, .16) 62%,
+      transparent 88%),
+    radial-gradient(ellipse 78% 56% at 56% 54%,
+      rgba(10, 8, 5, .26),
+      rgba(10, 8, 5, .08) 54%,
+      transparent 82%);
   filter: blur(9px);
   pointer-events: none;
   transform-origin: 50% 100%;
@@ -3338,6 +3398,24 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   .b3d-shadow { transition: opacity .5s var(--ease), transform .5s var(--ease); }
 }
 
+/* The one gesture that says "book" and not "box": on a mouse the cover lifts a
+   few degrees off the block, hinged where it is actually sewn. It only ever
+   happens to the object under the pointer. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .b3d-front {
+    transform-origin: left center;
+    transition: transform var(--dur-4) var(--ease-out), box-shadow .5s var(--ease);
+  }
+  a:hover .b3d .b3d-front,
+  a:focus-visible .b3d .b3d-front,
+  .b3d:hover .b3d-front {
+    transform: translateZ(calc(var(--th) / 2)) rotateY(-5deg);
+    box-shadow:
+      0 12px 28px rgba(8, 6, 4, .32),
+      inset 0 0 0 1px rgba(255, 247, 230, .1);
+  }
+}
+
 /* small thumbnails: keep the object, drop the unreadable spine type */
 @container (max-width: 118px) {
   /* thumbnails keep a slimmer block: a 100px cover should not become a brick */
@@ -3346,6 +3424,15 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   .b3d-spine-mark { display: none; }
   .b3d-spine::before,
   .b3d-spine::after { display: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .modal .b3d {
+    opacity: 0;
+    transform: translateY(12px) scale(.975);
+    transition: opacity .42s var(--ease), transform .55s cubic-bezier(.2, .8, .2, 1);
+  }
+  .modal.open .b3d { opacity: 1; transform: none; }
 }
 
 /* a cover that failed to load keeps a typographic plate, still as an object */

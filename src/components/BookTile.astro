@@ -58,7 +58,7 @@ const sortTitle = (book.altTitle || book.title).normalize('NFKD').toLowerCase();
   aria-label={`Open details for ${book.altTitle || book.title}`}
 >
   <div class="book-tile-cover">
-    <Book3D title={book.altTitle || book.title} mark={String(n).padStart(2, '0')}>
+    <Book3D title={book.altTitle || book.title} mark={String(n).padStart(2, '0')} pages={book.pages}>
       <Cover src={src} title={book.title} />
       {fresh && <span class="ribbon">New</span>}
       {book.comingSoon && <span class="tile-status">Forthcoming</span>}

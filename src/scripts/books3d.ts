@@ -13,6 +13,16 @@
  *  - keyboard focus tilts the book on the wrapping link, then resets on blur.
  */
 
+/** Bulk, measured in the book's own width the way a real one is: roughly a
+ *  sixth of its width at 300 pages, and clamped so nothing becomes a wafer or
+ *  a brick. Used by the component at build time and by the dialog at run time,
+ *  so a book is exactly as thick in both places. */
+export function bookRatio(pages?: number | null): number {
+  // a book whose length is not known yet gets a middling spine, never a wafer
+  const count = typeof pages === 'number' && Number.isFinite(pages) && pages > 0 ? pages : 280;
+  return Math.max(0.07, Math.min(0.22, 0.05 + count / 3000));
+}
+
 const REST_Y = 22;
 const REST_X = -6;
 const REACH_Y = 9;

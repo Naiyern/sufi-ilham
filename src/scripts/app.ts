@@ -2,7 +2,7 @@ import { initGo } from './amazon';
 import { initAudio } from './audio';
 import { initCatalogue } from './catalogue.js';
 import { initCmdk } from './cmdk';
-import { initBook3D } from './books3d';
+import { initBook3D, bookRatio } from './books3d';
 import { loadBooks, prefetchBooks, type Book } from './store';
 import { setDialogOpen } from './dialog';
 import { initMarkets } from './market';
@@ -256,6 +256,11 @@ const openModal = (b: Book, slug: string, trigger?: HTMLElement | null) => {
   const img = $<HTMLImageElement>('#mImg')!;
   img.src = b.img;
   img.alt = `${b.altTitle || b.title} cover`;
+  /* the sheet shows the same object as the shelf: same bulk, same spine */
+  const book = $<HTMLElement>('.modal .b3d');
+  book?.style.setProperty('--b3d-ratio', bookRatio(b.pages ?? 280).toFixed(3));
+  const spine = $('.modal .b3d-spine-title');
+  if (spine) spine.textContent = b.altTitle || b.title;
   $('#mKicker')!.textContent = b.kicker || '';
 
   const status = $<HTMLElement>('#mStatus')!;

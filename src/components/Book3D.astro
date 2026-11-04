@@ -11,17 +11,27 @@
  * technology; the cover image inside the slot keeps its own alt text.
  * With `prefers-reduced-motion` the object renders flat — no tilt, no shadow.
  */
+import { bookRatio } from '../scripts/books3d';
+
 interface Props {
   /** Text set vertically on the spine. */
   title: string;
   /** Optional monogram stamped at the foot of the spine. */
   mark?: string;
+  /** Page count. Bulk is the most physical fact a book has: a 200-page book
+      and a 600-page one must not share a thickness. */
+  pages?: number;
   cls?: string;
 }
-const { title, mark = 'SI', cls = '' } = Astro.props;
+const { title, mark = 'SI', pages, cls = '' } = Astro.props;
+
+/* The value is a token, not a length — the cqw inside resolves later, at the
+   point where the thickness is actually used, so the object stays proportional
+   at 90px and at 400px. */
+const ratio = bookRatio(pages).toFixed(3);
 ---
 
-<div class={`b3d ${cls}`} data-book3d>
+<div class={`b3d ${cls}`} data-book3d style={`--b3d-ratio: ${ratio}`} data-pages={pages ?? 280}>
   <div class="b3d-frame">
   <div class="b3d-obj">
     <div class="b3d-face b3d-back" aria-hidden="true"></div>

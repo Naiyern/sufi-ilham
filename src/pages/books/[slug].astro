@@ -76,7 +76,7 @@ const jsonld = [
         <div class="book-hero-grid">
           <figure class="book-hero-art">
             <div class="book-cover-mat">
-              <Book3D title={book.altTitle || book.title} mark={book.order ? String(book.order).padStart(2, '0') : 'SI'}>
+              <Book3D title={book.altTitle || book.title} mark={book.order ? String(book.order).padStart(2, '0') : 'SI'} pages={book.pages}>
                 {coverArt ? (
                 <AnimatedCover
                   art={coverArt}
