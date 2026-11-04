@@ -218,6 +218,26 @@ if ('IntersectionObserver' in window) {
   );
   $$('.reveal').forEach((el) => io.observe(el));
 
+  /* A hard flick of the thumb can carry a block past the observer between two
+     frames; that block would then sit at opacity 0 above the fold for ever.
+     Once scrolling settles — and not on every frame — anything already at or
+     above the fold is shown. */
+  const settle = () =>
+    $$('.reveal:not(.in)').forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+    });
+  let settleTimer: number | undefined;
+  addEventListener(
+    'scroll',
+    () => {
+      clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(settle, 180);
+    },
+    { passive: true },
+  );
+  addEventListener('scrollend', settle);
+  addEventListener('load', settle);
+
   const counters = new IntersectionObserver(
     (entries) =>
       entries.forEach((e) => {

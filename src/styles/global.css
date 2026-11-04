@@ -923,6 +923,27 @@ body { font-size: clamp(16px, 1.15vw + 0.6rem, 18px); }
   .spine-img::after { display: none; }
   .spread-fan img:hover { transform: none; }
   .rowlink:hover { padding-left: 0; background: transparent; }
+
+  /* WCAG 2.5.8: a thumb needs 24×24 CSS px of hit area. These are text links
+     set at 12–15px in the colophon; padding the box, not the type, keeps the
+     typography identical and the target big enough to hit. */
+  /* the wordmark is the way home from every page, so give the thumb more of it */
+  .mast .logo, .mast-in .logo, header .logo { padding-block: 6px; }
+
+  /* padding, not a flex box: a long title still has to wrap inside the column
+     instead of running off the edge of the phone */
+  .colo a, .colo-bot a, .colo-markets a, .colophon-credit a, .colophon-wordmark,
+  .foot a, .legal a, .annals a, .crumbs a,
+  .crumb a, .book-crumb a, .book-series-link, .buy-row a, .spine-facts a,
+  #order .s-step > a, .s-meta a {
+    display: inline-block;
+    padding-block: 5px;
+  }
+  /* the two crumb rows are flex rows of links, so the padding alone leaves them
+     shoulder to shoulder; a real hit box keeps thumbs off the neighbour */
+  .crumb a, .book-crumb a, .book-series-link { min-height: 28px; display: inline-flex; align-items: center; }
+  .colo a { max-width: 100%; }
+  .colo ul { gap: .1rem; }
 }
 
 /* ----- Ensure no horizontal overflow on any device ----- */
@@ -979,7 +1000,7 @@ img, video, iframe { max-width: 100%; }
   --ink-3: #aaa18f;
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   --field: rgba(243, 238, 229, .06);
   overflow: clip;
@@ -1001,7 +1022,7 @@ body.legal-page .mast {
   --ink-3: #aaa18f;
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   color: var(--fg);
 }
@@ -1478,7 +1499,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 }
 .book-tile-copy { display: flex; flex-direction: column; min-width: 0; }
 .book-tile-kicker { display: flex; justify-content: space-between; align-items: flex-start; gap: .4rem; color: var(--mark); font: .52rem/1.4 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
-.book-tile-kicker > span:first-child { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.book-tile-kicker > span:first-child { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; text-wrap: balance; }
 .book-tile-number { flex: none; color: var(--ink-3); }
 .book-tile h3 { margin: .5rem 0 .4rem; font-size: clamp(1.02rem, 1.4vw, 1.3rem); line-height: 1.08; letter-spacing: -.01em; text-wrap: balance; }
 .book-tile-sub { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; margin: 0; color: var(--ink-3); font-size: .78rem; line-height: 1.35; }
@@ -1622,7 +1643,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
   --ink-3: #aaa18f;
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   background: var(--bg);
   color: var(--fg);
@@ -2025,7 +2046,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
   --ink-3: #aaa18f;
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   --field: rgba(243, 238, 229, .06);
   position: relative;
@@ -2200,7 +2221,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
   --ink-3: #aaa18f;
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   position: relative;
   isolation: isolate;
@@ -2424,7 +2445,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
   --ink-3: #aaa18f;
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   position: relative;
   isolation: isolate;
@@ -2536,7 +2557,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
   --ink-3: #aaa18f;
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   --field: rgba(243, 238, 229, .06);
   position: relative;
@@ -2597,7 +2618,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
   --ink-3: #aaa18f;
   --rule: rgba(243, 238, 229, .16);
   --rule-2: rgba(243, 238, 229, .32);
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
   position: relative;
   isolation: isolate;
@@ -2781,7 +2802,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 .discover-hero-bottom { display: flex; justify-content: space-between; gap: 1rem; color: #b9a894; border-top: 1px solid rgba(255,255,255,.16); margin-top: clamp(5rem, 10vw, 9rem); padding-top: 1.3rem; }
 .discover-paths { padding: clamp(5rem, 9vw, 9rem) 0; background: transparent; color: var(--ink); }
 .discover-section-head { display: flex; align-items: end; justify-content: space-between; gap: 3rem; margin-bottom: 3.5rem; }
-.discover-overline { color: #8b563e; display: block; margin-bottom: 1.4rem; }
+.discover-overline { color: #844f38; display: block; margin-bottom: 1.4rem; }
 .discover-section-head h2, .home-discovery h2, .discover-finale h2 { font-size: clamp(3.5rem, 6.3vw, 6.5rem); }
 .discover-section-head > p { max-width: 24rem; color: #574c3c; margin: 0; font-size: 1.1rem; }
 .path-list { display: grid; gap: 1rem; }
@@ -2791,7 +2812,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 .path-copy { display: flex; flex-direction: column; align-items: start; }
 .path-top { display: flex; width: 100%; justify-content: space-between; color: #635845; border-bottom: 1px solid rgba(34,29,22,.24); padding-bottom: 1rem; }
 .path-top span:last-child { font-size: 1.2rem; line-height: .8; }
-.path-eyebrow { font-style: italic; color: #775747; margin: 2.2rem 0 .5rem; }
+.path-eyebrow { font-style: italic; color: #6b4d3f; margin: 2.2rem 0 .5rem; }
 .path-copy h3 { font: 400 clamp(2.3rem, 3.7vw, 4rem)/.98 var(--display); letter-spacing: -.025em; margin: 0; }
 .path-description { max-width: 24rem; line-height: 1.5; color: #4a4133; margin: 1.2rem 0 2rem; }
 .path-count { margin-top: auto; border-top: 1px solid rgba(34,29,22,.24); width: 100%; padding-top: 1rem; color: #4f4536; }
@@ -2800,7 +2821,8 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 .path-book .cv { display: block; width: 100%; box-shadow: 0 15px 24px rgba(34, 25, 16, .22); transition: transform .25s var(--ease); }
 .path-book:hover .cv { transform: translateY(-5px); }
 .path-book > span:last-child { display: block; margin-top: .8rem; }
-.path-book > span:last-child span { color: #8b563e; }
+.path-book > span:last-child span { color: #844f38; }
+.path-book > span:last-child { text-wrap: pretty; }
 .discover-finale { background: #b65a40; color: #fff5e7; padding: clamp(5rem, 9vw, 9rem) 0; }
 .discover-finale-inner { text-align: center; }.discover-finale .discover-overline { color: #f6d9c8; }
 .discover-finale p { margin: 1.7rem auto 2rem; max-width: 31rem; color: #f7e5d9; }
@@ -4054,7 +4076,7 @@ html { scrollbar-gutter: stable; }
   /* the button keeps its light-on-dark identity inside the dark bar */
   --fg: #f3eee5;
   --bg: #191713;
-  --mark: #df6348;
+  --mark: #e4704f; /* a touch lighter than the first vermilion: 9.6px labels now clear AA on ink */
   --mark-2: #d9b45e;
 }
 .buy-bar.show { transform: none; }
@@ -4180,11 +4202,16 @@ html { scrollbar-gutter: stable; }
   .book-tile .b3d { --b3d-ry: 10deg; --b3d-rx: -3deg; }
   .book-tile-copy { gap: 0; }
   .book-tile h3 { margin: .38rem 0 .3rem; font-size: .98rem; line-height: 1.12; }
-  .book-tile-kicker { font-size: .44rem; letter-spacing: .1em; }
-  .book-tile-kicker > span:first-child { -webkit-line-clamp: 1; }
+  /* a 140px tile still has to be readable: nothing that carries meaning goes
+     under ~9px on a phone, however small the tile gets */
+  .book-tile-kicker { font-size: .58rem; letter-spacing: .04em; }
+  .book-tile-kicker > span:first-child { -webkit-line-clamp: 2; }
   .book-tile-number, .book-tile-sub, .book-tile-open { display: none; }
-  .book-tile-meta { margin-top: .35rem; font-size: .43rem; letter-spacing: .06em; gap: .15rem .3rem; }
-  .book-tile-meta span + span::before { margin-right: .3rem; }
+  .book-tile-meta { margin-top: .4rem; font-size: .58rem; letter-spacing: .02em; gap: .18rem .34rem; line-height: 1.3; }
+  .book-tile-meta span + span::before { margin-right: .34rem; }
+  .book-tile-cover .ribbon, .tile-status { font-size: .52rem; letter-spacing: .04em; }
+  .release-sequence { font-size: .54rem; }
+  .logo .est { font-size: .6rem; }
   .book-tile:hover { transform: none; }
 }
 
@@ -4714,5 +4741,50 @@ html:not(.js) .veil { display: none; }
     transition-duration: 1ms !important;
     transition-delay: 0ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ---- 4b. accents carry text, so they have to carry contrast ----
+   Each series brings its own accent, read off its cover art. Two of them land a
+   hair under 4.5:1 as 9.6px labels on the ink field (copper 4.41, the Tithe red
+   4.44). A 15% lift toward the paper tone keeps the colour recognisable and
+   clears AA without touching the accent used on buttons and rules. */
+.s-hero .label.mark,
+.s-hero .s-meta a,
+.spread .label.mark,
+.series-spread .label.mark,
+.release .label.mark {
+  color: color-mix(in srgb, var(--mark) 84%, #f6efe2);
+}
+
+/* ---- 5. a floor for the smallest type ----
+   Mono labels were running down to 8px on phones because each block sized its
+   own caption. At arm's length that is squinting, not reading. Everything that
+   still carries meaning sits at 9.6px on a phone; the lettering printed on a
+   3-D book spine stays where it is, because it is décor, not text. */
+@media (max-width: 560px) {
+  .label,
+  .cover-top,
+  figcaption,
+  .cosmos-figures dt,
+  .cosmos-figures dd,
+  .catalog-select select,
+  .hero-note-label,
+  .hero-note-link,
+  .hero-stat span,
+  .hero-stat-link,
+  .annals dt,
+  .annals dd,
+  .cosmos-caption,
+  .scene-index,
+  .scene-title,
+  .quote-prelude,
+  .quote-credit,
+  .colophon-credit,
+  .colo-quote-credit,
+  .tile-status,
+  .book-tile-cover .ribbon,
+  .release-sequence {
+    font-size: .6rem !important;
   }
 }
