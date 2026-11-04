@@ -7,6 +7,7 @@ import { loadBooks, prefetchBooks, type Book } from './store';
 import { setDialogOpen } from './dialog';
 import { initMarkets } from './market';
 import { initShelf } from './shelf';
+import { initQuotes } from './quotes';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -99,6 +100,11 @@ initQuoteScene();
 /* ---------- marketplaces ---------- */
 // Promote the visitor's own Amazon store everywhere a buy link appears.
 initMarkets();
+
+/* ---------- the reading room's wall ---------- */
+// One line on the page, a different one on every visit, and a slow turn while
+// you read. Fetches the deck only if a stage is actually present.
+initQuotes();
 
 /* ---------- the shelf ---------- */
 // The site remembers which books you opened, on this device only.

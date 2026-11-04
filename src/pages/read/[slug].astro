@@ -78,7 +78,8 @@ const plate = (i: number) =>
       :root { --rf: 1.25rem; --rlh: 2.15; --rmw: 44rem; --pw: 760px; }
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
-      body { min-height: 100vh; transition: background .25s, color .25s; }
+      body { min-height: 100vh; transition: background .25s, color .25s; animation: reader-open .6s cubic-bezier(.2,.8,.2,1) both; }
+      @keyframes reader-open { from { opacity: 0; } to { opacity: 1; } }
       html[data-rtheme="light"] body { background: #f7f5ef; color: #1c1a15; --rbg: #f7f5ef; }
       html[data-rtheme="sepia"] body { background: #ece3d0; color: #40372a; --rbg: #ece3d0; }
       html[data-rtheme="dark"]  body { background: #14140f; color: #d8d2c4; --rbg: #14140f; }
@@ -183,7 +184,7 @@ const plate = (i: number) =>
 
       @media (max-width: 640px) { .rttl { max-width: 26vw; } .ricon span.lbl { display: none; } .rpageind { display: none; } }
       .ricon:focus-visible, .rseg button:focus-visible, .rjump input:focus-visible { outline: 3px solid #bd7c20; outline-offset: 2px; }
-      @media (prefers-reduced-motion: reduce) { body { transition: none; } }
+      @media (prefers-reduced-motion: reduce) { body { transition: none; animation: none; } }
       @media print { .rtop, .rprogress, .rpanel, .rhero { display: none !important; } }
     </style>
   </head>

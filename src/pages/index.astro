@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import BookTile from '../components/BookTile.astro';
 import Cover from '../components/Cover.astro';
+import QuoteStage from '../components/QuoteStage.astro';
 import Book3D from '../components/Book3D.astro';
 import AnimatedCover from '../components/AnimatedCover.astro';
 import { books, published, series, seriesBooks, site, themes, journey, coverUrl, pdfUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished, seriesStructuredData } from '../data/site';
@@ -555,19 +556,8 @@ const jsonld = [
     </div>
   </section>
 
-  <!-- ================= COLOPHON QUOTE ================= -->
-  <section id="ending" class="closing-quote" aria-labelledby="closing-quote-text">
-    <div class="wrap quote-stage">
-      <span class="quote-glyph" aria-hidden="true">“</span>
-      <span class="quote-prelude" aria-hidden="true"><span></span> A MOMENT TO REFLECT <span></span></span>
-      <h2 id="closing-quote-text" class="quote-text">
-        <span class="quote-line">“A journey of a</span>{' '}
-        <span class="quote-line quote-line-emphasis">thousand miles</span>{' '}
-        <span class="quote-line">begins with a single step.”</span>
-      </h2>
-      <p class="quote-credit">— Lao Tzu <span aria-hidden="true">·</span> Tao Te Ching, Chapter 64</p>
-    </div>
-  </section>
+  <!-- ================= INTERTITLE: a line that changes every visit ================= -->
+  <QuoteStage id="ending" seed="/ending" />
 
   <!-- ================= ENQUIRIES ================= -->
   <section id="enquiries" class="spread enquiry-chapter">

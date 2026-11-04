@@ -1,0 +1,52 @@
+---
+import { quoteFor, seedFrom, sizeFor, QUOTES } from '../data/quotes';
+
+interface Props {
+  /** 'stage' is the full intertitle; 'quiet' is the line kept in the footer. */
+  variant?: 'stage' | 'quiet';
+  /** Section id, for the pages that link to the intertitle. */
+  id?: string;
+  /** Which line this page opens on; the route by default. */
+  seed?: string;
+}
+
+const { variant = 'stage', id, seed } = Astro.props;
+// the footer's line is seeded by the route too, so touring the site does not
+// show the same sentence under every page
+const key = seed ?? (variant === 'quiet' ? `${Astro.url.pathname}#colophon` : Astro.url.pathname);
+const index = seedFrom(key) % QUOTES.length;
+const quote = quoteFor(key);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const feed = `${base}/quotes.json`;
+const headingId = variant === 'stage' ? `${id ?? 'quote'}-heading` : undefined;
+---
+
+{variant === 'stage' ? (
+  <section
+    id={id}
+    class="closing-quote"
+    data-quote-stage
+    data-quote-index={index}
+    data-quote-feed={feed}
+    aria-labelledby={headingId}
+  >
+    <div class="wrap quote-stage">
+      <span class="quote-glyph" aria-hidden="true">“</span>
+      <span class="quote-prelude" aria-hidden="true"><span></span> a moment to read <span></span></span>
+      <h2 id={headingId} class="quote-text" data-quote-text data-len={sizeFor(quote.text)}>{quote.text}</h2>
+      <p class="quote-credit" data-quote-credit>
+        <span aria-hidden="true">— </span>{quote.author} <span aria-hidden="true">·</span> <cite>{quote.source}</cite>
+      </p>
+      <button type="button" class="quote-next" data-quote-next>
+        Another line <span aria-hidden="true">↻</span>
+      </button>
+    </div>
+  </section>
+) : (
+  <figure class="colo-quote" data-quote-stage data-quote-index={index} data-quote-feed={feed}>
+    <blockquote class="colo-quote-text" data-quote-text data-len={sizeFor(quote.text)}>{quote.text}</blockquote>
+    <figcaption class="colo-quote-credit" data-quote-credit>
+      <span aria-hidden="true">— </span>{quote.author} <span aria-hidden="true">·</span> <cite>{quote.source}</cite>
+    </figcaption>
+  </figure>
+)}
