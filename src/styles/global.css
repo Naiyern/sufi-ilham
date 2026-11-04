@@ -2227,6 +2227,170 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
   .author-chapter .plate:hover img { filter: saturate(1) contrast(1.02); }
 }
 
+
+/* ---------- the author's two frames: film, and a seam you can move ----------
+
+   All three photographs are graded to one film: warm gold in the highlights,
+   ink in the shadows, the same grain, the same vignette. The portrait leans
+   towards the pointer and pushes in slowly as it is scrolled past; the seam
+   frame below is a single frame holding two photographs years apart, and the
+   line between them is the gesture — drag it, and the child gives way to the
+   flute player. On a keyboard it is a slider; with reduced motion nothing
+   drifts and nothing leans, but the seam still moves, because moving it is the
+   visitor's own hand, not an animation. */
+
+.author-main .plate-img {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper-3);
+  isolation: isolate;
+}
+.author-main .plate-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: translate3d(var(--look-x, 0px), var(--look-y, 0px), 0) scale(1.06);
+  transition: transform .55s var(--ease), filter .7s var(--ease);
+  will-change: transform;
+}
+/* a slow push-in, tied to the frame's own passage up the page */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .author-main .plate-img img {
+      animation: author-push linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 55%;
+    }
+  }
+}
+@keyframes author-push {
+  from { scale: 1; }
+  to { scale: 1.06; }
+}
+
+/* one grain and one vignette over every author plate, so nothing looks pasted in */
+.plate-img::after,
+.seam-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .9;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='.42'/%3E%3C/svg%3E"),
+    radial-gradient(118% 100% at 50% 38%, rgba(10, 8, 6, 0) 54%, rgba(10, 8, 6, .44) 100%);
+  background-size: 140px 140px, 100% 100%;
+}
+
+/* ---- the seam ---- */
+.plate--seam .seam-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  cursor: ew-resize;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.seam-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 32%;
+}
+/* the child is underneath; the flute player is laid over it and cut back to
+   whatever the seam leaves on the right */
+.seam-now { clip-path: inset(0 0 0 var(--seam, 50%)); }
+
+.seam-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--seam, 50%);
+  z-index: 3;
+  width: 1px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(217, 180, 94, 0) 0%, rgba(217, 180, 94, .9) 9%, rgba(217, 180, 94, .9) 91%, rgba(217, 180, 94, 0) 100%);
+  box-shadow: 0 0 18px rgba(217, 180, 94, .35);
+}
+.seam-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 180, 94, .9);
+  background: rgba(20, 17, 13, .52);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .45);
+}
+.seam-knob::before,
+.seam-knob::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -4px;
+  border-top: 1px solid #f6ecd8;
+  border-right: 1px solid #f6ecd8;
+}
+.seam-knob::before { left: 11px; transform: rotate(-135deg); }
+.seam-knob::after { right: 11px; transform: rotate(45deg); }
+
+.seam-tag {
+  position: absolute;
+  top: .55rem;
+  z-index: 3;
+  padding: .22rem .5rem;
+  font-family: var(--mono);
+  font-size: .56rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #f6ecd8;
+  background: rgba(20, 17, 13, .44);
+  border: 1px solid rgba(217, 180, 94, .34);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+.seam-tag--then { left: .55rem; }
+.seam-tag--now { right: .55rem; }
+
+/* the real control, invisible: the browser does the dragging, tapping and
+   arrow keys; the module only paints its value into --seam */
+.seam-range {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: ew-resize;
+}
+.seam-range::-webkit-slider-runnable-track { height: 100%; background: transparent; }
+.seam-range::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 46px; height: 100%; background: transparent; }
+.seam-range::-moz-range-track { height: 100%; background: transparent; }
+.seam-range::-moz-range-thumb { width: 46px; height: 100%; border: 0; background: transparent; }
+.seam-frame:focus-within { outline: 1px solid var(--mark-2); outline-offset: 4px; }
+
+@media (max-width: 560px) {
+  .plate--seam .seam-frame { aspect-ratio: 4 / 3; }
+  .seam-knob { width: 34px; height: 34px; margin: -17px 0 0 -17px; }
+}
+
 .threads-chapter {
   background: linear-gradient(180deg, var(--paper-2), var(--paper) 75%);
 }

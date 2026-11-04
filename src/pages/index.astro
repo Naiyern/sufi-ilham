@@ -456,47 +456,59 @@ const jsonld = [
       <div class="essay-grid">
         <div class="reveal">
           <figure class="plate author-main" style="margin:0">
-            <img
-              src={`${base}/${portrait.rel}?v=${portrait.version}`}
-              alt="Portrait of Sufi Ilham"
-              width={portraitW}
-              height={portraitH}
-              loading="lazy"
-              decoding="async"
-              style="width:100%;height:auto;display:block"
-            />
+            <div class="plate-img">
+              <img
+                src={`${base}/${portrait.rel}?v=${portrait.version}`}
+                alt="Portrait of Sufi Ilham"
+                width={portraitW}
+                height={portraitH}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <figcaption><span>Sufi Ilham</span><span>MD Naiyer Alam</span></figcaption>
           </figure>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:.9rem">
-            <figure class="plate" style="margin:0">
-              <div class="author-frame" style="aspect-ratio:1/1;overflow:hidden;background:var(--paper-3);border:1px solid var(--rule)">
-                <img
-                  src={`${base}/images/sufi-ilham-flute.webp`}
-                  alt="Sufi Ilham playing the bansuri"
-                  width={fluteW}
-                  height={fluteH}
-                  loading="lazy"
-                  decoding="async"
-                  style="width:100%;height:100%;object-fit:cover;object-position:center top"
-                />
-              </div>
-              <figcaption><span>The flute</span><span>Today</span></figcaption>
-            </figure>
-            <figure class="plate" style="margin:0">
-              <div class="author-frame" style="aspect-ratio:1/1;overflow:hidden;background:var(--paper-3);border:1px solid var(--rule)">
-                <img
-                  src={`${base}/images/sufi-ilham-childhood.webp`}
-                  alt="Sufi Ilham as a child"
-                  width={childW}
-                  height={childH}
-                  loading="lazy"
-                  decoding="async"
-                  style="width:100%;height:100%;object-fit:cover;object-position:center top"
-                />
-              </div>
-              <figcaption><span>Where it began</span><span>—</span></figcaption>
-            </figure>
-          </div>
+          <!-- Two photographs, one frame. The seam between them is the whole
+               gesture: drag it and the child gives way to the flute player, so
+               the distance between "where it began" and "today" can be moved
+               by hand. It is a range input underneath, which is why it also
+               answers to a keyboard and to a screen reader. -->
+          <figure class="plate plate--seam" data-seam style="margin:.9rem 0 0">
+            <div class="seam-frame" data-seam-frame>
+              <img
+                class="seam-img seam-then"
+                src={`${base}/images/sufi-ilham-childhood.webp`}
+                alt="Sufi Ilham as a child, in a photograph kept from his childhood"
+                width={childW}
+                height={childH}
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                class="seam-img seam-now"
+                src={`${base}/images/sufi-ilham-flute.webp`}
+                alt="Sufi Ilham playing the bansuri"
+                width={fluteW}
+                height={fluteH}
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="seam-line" aria-hidden="true"><i class="seam-knob"></i></span>
+              <span class="seam-tag seam-tag--then" aria-hidden="true">Then</span>
+              <span class="seam-tag seam-tag--now" aria-hidden="true">Now</span>
+              <input
+                class="seam-range"
+                type="range"
+                min="0"
+                max="100"
+                step="0.5"
+                value="50"
+                aria-label="Reveal the author: the childhood photograph on the left, the flute today on the right"
+                aria-valuetext="Half the frame shows the childhood photograph"
+              />
+            </div>
+            <figcaption><span>Where it began</span><span>The flute, today</span></figcaption>
+          </figure>
         </div>
 
         <div class="reveal" style="--d:100ms">
