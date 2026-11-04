@@ -210,7 +210,11 @@ if ('IntersectionObserver' in window) {
           io.unobserve(e.target);
         }
       }),
-    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+    /* A fraction of the element is the wrong measure: the catalogue grid is
+       taller than ten phone screens, so 12% of it can never be on screen at
+       once and the whole wall stayed invisible. Any intersection will do; the
+       bottom margin keeps the cue where it was. */
+    { threshold: 0, rootMargin: '0px 0px -8% 0px' },
   );
   $$('.reveal').forEach((el) => io.observe(el));
 

@@ -1376,3 +1376,28 @@ test('the object is lit like a bound book, not painted like a box', () => {
   // and the sheet's book settles in
   assert.match(stylesheet, /\.modal\.open \.b3d \{ opacity: 1; transform: none; \}/);
 });
+
+/* ---------- the faults a real browser showed ---------- */
+
+test('the shelf scrolls sideways and never cuts a book, nor paints one over its title', () => {
+  // it must not be part of the wrapping list: five books wrapped 4 + 1 and left a hole
+  assert.ok(!/\.shelf-scroll[^{}]*\{[^}]*flex-wrap/.test(stylesheet), 'the shelf must not wrap');
+  assert.match(stylesheet, /\.filters, \.cover-cta, \.buy-row, \.s-meta \{\s*flex-wrap: wrap;/);
+
+  // a turned book paints outside its box: the foot is reserved inside the object
+  assert.match(stylesheet, /\.b3d \{[\s\S]{0,900}?padding-bottom: 4\.5%;/);
+  assert.match(stylesheet, /\.shelf-scroll \{[\s\S]{0,400}?padding-block: 1\.15rem 1\.9rem;/);
+
+  // the stage is not a picture frame any more — it holds an object with its own shadow
+  assert.match(stylesheet, /\.contact-sheet \.spine-img \{[^}]*border: 0;[^}]*box-shadow: none;/);
+
+  // on a phone a clipped tile cut the spine off the cover
+  assert.match(stylesheet, /@media \(max-width: 560px\) \{[\s\S]{0,600}?\.book-tile \{[\s\S]{0,400}?overflow: visible;/);
+});
+
+test('a reveal cue cannot hide something taller than the screen', async () => {
+  const source = readFileSync(join(projectRoot, 'src/scripts/app.ts'), 'utf8');
+  // 12% of the 36-tile catalogue can never be on a phone screen at once
+  assert.match(source, /\{ threshold: 0, rootMargin: '0px 0px -8% 0px' \}/);
+  assert.ok(!/threshold: 0\.12/.test(source), 'no reveal may be keyed to a fraction of its own height');
+});
