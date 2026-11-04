@@ -3,8 +3,9 @@ import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
 import AnimatedCover from '../../components/AnimatedCover.astro';
 import Cover from '../../components/Cover.astro';
+import Stores from '../../components/Stores.astro';
 import Book3D from '../../components/Book3D.astro';
-import { books, series, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished, metaDescription } from '../../data/site';
+import { books, series, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished, metaDescription, bookStores } from '../../data/site';
 
 type Reader = { slug: string; chapters: { id: string; title: string }[]; source?: string };
 const readerFiles = import.meta.glob<Reader>('../../data/reader/*.json', { eager: true, import: 'default' });
@@ -32,11 +33,10 @@ const bookAccent = seriesInfo?.accent ?? '#df6348';
 // the foreground. Reuse it as a subdued atmospheric backdrop on every book.
 const bookHeroStyle = `--accent:${bookAccent};--cinema-still:url("${img.replace(/["\\]/g, '')}")`;
 
-const stores: [string, string | undefined][] = [
-  ['Amazon.com', book.us], ['Amazon.in', book.in], ['Amazon UK', book.uk],
-  ['Amazon CA', book.ca], ['Amazon AU', book.au], ['Paperback', book.paperback],
-];
-const availableStores = stores.filter(([, url]) => Boolean(url));
+/* Every store this title is sold in, in marketplace order. The first one is
+   the default buy target; market.ts swaps it for the visitor's own store. */
+const buyStores = bookStores(book);
+const availableStores = buyStores;
 const sameShelf = (book.series ? seriesBooks(book.series) : books.filter((b) => b.genre === book.genre))
   .filter((b) => b.slug !== book.slug && !b.comingSoon);
 const related = (sameShelf.length ? sameShelf : byNewest.filter((b) => b.slug !== book.slug)).slice(0, 4);
@@ -124,8 +124,33 @@ const jsonld = [
 
             <div class="book-hero-actions">
               {book.free && <a class="btn solid" href={readUrl}>Read free online <span aria-hidden="true">→</span></a>}
-              {book.us && <a class={`btn${book.free ? '' : ' solid'}`} href={book.us} target="_blank" rel="noopener">Amazon.com <span aria-hidden="true">↗</span></a>}
-              {book.in && <a class="btn" href={book.in} target="_blank" rel="noopener">Amazon.in <span aria-hidden="true">↗</span></a>}
+              {buyStores.length > 0 && (
+                <a
+                  class={`btn${book.free ? '' : ' solid'}`}
+                  href={buyStores[0].url}
+                  target="_blank"
+                  rel="noopener"
+                  data-buy
+                  data-us={book.us}
+                  data-uk={book.uk}
+                  data-in={book.in}
+                  data-ca={book.ca}
+                  data-au={book.au}
+                  data-us-label="Buy on Amazon.com"
+                  data-uk-label="Buy on Amazon.co.uk"
+                  data-in-label="Buy on Amazon.in"
+                  data-ca-label="Buy on Amazon.ca"
+                  data-au-label="Buy on Amazon.com.au"
+                >
+                  <span data-buy-label>Buy on {buyStores[0].label}</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              )}
+              {buyStores.length > 1 && (
+                <a class="btn book-store-link" href="#editions">
+                  All {buyStores.length} stores <span aria-hidden="true">↓</span>
+                </a>
+              )}
               <a class="book-scroll-link" href="#about">About this book <span aria-hidden="true">↓</span></a>
             </div>
             {book.free && <p class="book-reader-note">No payment or sign-up required to read online.</p>}
@@ -176,15 +201,9 @@ const jsonld = [
           <section class="edition-section" id="editions" aria-labelledby="edition-title">
             <div class="edition-heading">
               <div><span class="label mark">Find your edition</span><h2 id="edition-title">Choose a store</h2></div>
-              <p>Store availability and pricing are shown by the retailer.</p>
+              <p>Five Amazon marketplaces, one edition. Store availability and pricing are set by the retailer.</p>
             </div>
-            <div class="edition-links">
-              {availableStores.map(([label, url]) => (
-                <a class="edition-link" href={url} target="_blank" rel="noopener">
-                  <span>{label}</span><span aria-hidden="true">↗</span>
-                </a>
-              ))}
-            </div>
+            <Stores book={book} />
           </section>
         )}
 

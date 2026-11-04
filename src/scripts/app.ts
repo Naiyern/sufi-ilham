@@ -6,6 +6,7 @@ import { initCmdk } from './cmdk';
 import { initBook3D } from './books3d';
 import { loadBooks, prefetchBooks, type Book } from './store';
 import { setDialogOpen } from './dialog';
+import { initMarkets } from './market';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -98,6 +99,10 @@ initQuoteScene();
 /* ---------- theme ---------- */
 // Pass storage inside a guarded block: browsers may deny access in private mode.
 try { initTheme(document, localStorage); } catch { initTheme(document, { setItem() {} }); }
+
+/* ---------- marketplaces ---------- */
+// Promote the visitor's own Amazon store everywhere a buy link appears.
+initMarkets();
 
 /* ---------- nav ---------- */
 const nav = $('#nav');
@@ -255,17 +260,28 @@ const openModal = (b: Book, slug: string, trigger?: HTMLElement | null) => {
   }));
 
   const buy = $('#mBuy')!;
-  const stores: [string, string | undefined][] = [
-    ['Amazon.com', b.us], ['Amazon.in', b.in], ['UK', b.uk], ['Canada', b.ca], ['Australia', b.au],
-    ['Paperback', b.paperback],
-  ];
-  if (b.free && b.read) stores.unshift(['Read free online', b.read]);
-  buy.replaceChildren(...stores.filter(([, url]) => Boolean(url)).map(([label, url], index) => {
+  // every marketplace the title is listed in, in the same order as the book
+  // page; the visitor's own store (detected by market.ts) leads
+  const stores = [
+    { id: 'us', label: 'Amazon.com', url: b.us },
+    { id: 'uk', label: 'Amazon.co.uk', url: b.uk },
+    { id: 'in', label: 'Amazon.in', url: b.in },
+    { id: 'ca', label: 'Amazon.ca', url: b.ca },
+    { id: 'au', label: 'Amazon.com.au', url: b.au },
+    { id: 'paperback', label: 'Paperback', url: b.paperback },
+  ].filter((store): store is { id: string; label: string; url: string } => Boolean(store.url));
+  if (b.free && b.read) stores.unshift({ id: 'read', label: 'Read free online', url: b.read });
+  const localMarket = document.documentElement.dataset.market;
+  if (localMarket) {
+    stores.sort((a, z) => (a.id === localMarket ? -1 : z.id === localMarket ? 1 : 0));
+  }
+  buy.replaceChildren(...stores.map((store, index) => {
     const link = document.createElement('a');
     link.className = `btn${index === 0 ? ' pri' : ''}`;
-    link.href = url!;
-    link.textContent = label;
-    const external = new URL(url!, location.href).origin !== location.origin;
+    link.dataset.market = store.id;
+    link.href = store.url;
+    link.textContent = store.label;
+    const external = new URL(store.url, location.href).origin !== location.origin;
     if (external) {
       link.target = '_blank';
       link.rel = 'noopener';

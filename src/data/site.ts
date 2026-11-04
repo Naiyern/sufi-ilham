@@ -300,3 +300,64 @@ export function coverUrl(img: string, base = import.meta.env.BASE_URL): string {
   if (/^(https?:|data:)/.test(img)) return img;
   return `${base.replace(/\/$/, '')}/${img.replace(/^\//, '')}`;
 }
+
+/* ------------------------------------------------------------------ *
+ * Amazon marketplaces
+ * Every title is published into the same five stores; the per-book
+ * links live in books.json. One list here means a new marketplace is
+ * added in a single place and appears on every page that sells.
+ * ------------------------------------------------------------------ */
+
+export type MarketId = 'us' | 'uk' | 'in' | 'ca' | 'au';
+
+export type Market = {
+  id: MarketId;
+  /** The store as Amazon names it. */
+  label: string;
+  domain: string;
+  /** ISO region code used to recognise the visitor's own store. */
+  region: string;
+};
+
+export const MARKETS: Market[] = [
+  { id: 'us', label: 'Amazon.com', domain: 'amazon.com', region: 'US' },
+  { id: 'uk', label: 'Amazon.co.uk', domain: 'amazon.co.uk', region: 'GB' },
+  { id: 'in', label: 'Amazon.in', domain: 'amazon.in', region: 'IN' },
+  { id: 'ca', label: 'Amazon.ca', domain: 'amazon.ca', region: 'CA' },
+  { id: 'au', label: 'Amazon.com.au', domain: 'amazon.com.au', region: 'AU' },
+];
+
+export type StoreLink = {
+  id: MarketId | 'paperback';
+  label: string;
+  domain: string;
+  region?: string;
+  url: string;
+};
+
+/** Every store a given book can be bought from, in marketplace order. */
+export function bookStores(book: Book): StoreLink[] {
+  const out: StoreLink[] = [];
+  for (const market of MARKETS) {
+    const url = book[market.id];
+    if (url) out.push({ id: market.id, label: market.label, domain: market.domain, region: market.region, url });
+  }
+  if (book.paperback) {
+    let domain = 'print edition';
+    try { domain = new URL(book.paperback).host.replace(/^www\./, ''); } catch { /* keep the label */ }
+    out.push({ id: 'paperback', label: 'Paperback', domain, url: book.paperback });
+  }
+  return out;
+}
+
+/** The stores a visitor can actually buy from across a set of books. */
+export function marketsAcross(list: Book[]): StoreLink[] {
+  const seen = new Map<string, StoreLink>();
+  for (const book of list) {
+    for (const store of bookStores(book)) {
+      if (store.id === 'paperback' || seen.has(store.id)) continue;
+      seen.set(store.id, store);
+    }
+  }
+  return MARKETS.map((m) => seen.get(m.id)).filter((s): s is StoreLink => Boolean(s));
+}

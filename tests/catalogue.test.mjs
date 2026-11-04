@@ -7,6 +7,7 @@ import { JSDOM } from 'jsdom';
 import { initCatalogue } from '../src/scripts/catalogue.js';
 import { initTheme } from '../src/scripts/theme.js';
 import { setDialogOpen } from '../src/scripts/dialog.ts';
+import { detectMarket, initMarkets } from '../src/scripts/market.ts';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const builtHtml = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
@@ -673,4 +674,116 @@ test('meta descriptions fit a search result', () => {
     assert.ok(content.length >= 50, `${page}: description is only ${content.length} chars`);
     assert.ok(content.length <= 160, `${page}: description is ${content.length} chars`);
   }
+});
+
+/* ------------------------------------------------------------------ *
+ * Amazon marketplaces + the generated soundtrack.
+ * ------------------------------------------------------------------ */
+
+test('a book page lists every marketplace the title is sold in', () => {
+  const dom = new JSDOM(readFileSync(join(projectRoot, 'dist/books/the-quiet-tenancy/index.html'), 'utf8'));
+  const d = dom.window.document;
+  const list = d.querySelector('[data-stores]');
+  assert.ok(list, 'no store list on the page');
+
+  const items = [...list.querySelectorAll('[data-market]')];
+  const markets = items.map((i) => i.dataset.market).filter((id) => id !== 'paperback');
+  assert.deepEqual(markets, ['us', 'uk', 'in', 'ca', 'au']);
+  // a print edition, when the title has one, comes after the marketplaces
+  if (items.some((i) => i.dataset.market === 'paperback')) {
+    assert.equal(items[items.length - 1].dataset.market, 'paperback');
+  }
+
+  const expected = {
+    us: 'amazon.com', uk: 'amazon.co.uk', in: 'amazon.in', ca: 'amazon.ca',
+    au: 'amazon.com.au', paperback: 'amazon.com',
+  };
+  for (const item of items) {
+    const link = item.querySelector('a');
+    assert.ok(link, 'store item without a link');
+    assert.match(link.href, /^https:\/\/www\./, 'store link must be absolute');
+    assert.ok(link.href.includes(expected[item.dataset.market]), `${item.dataset.market} points at ${link.href}`);
+    assert.equal(link.target, '_blank');
+    assert.match(link.rel, /noopener/);
+    assert.ok(link.textContent.trim().length > 5, 'store link needs a visible name');
+    // the badge is server-rendered but hidden until the browser knows the region
+    const badge = item.querySelector('[data-local-badge]');
+    assert.ok(badge && badge.hasAttribute('hidden'), 'local badge should start hidden');
+  }
+
+  // one buy button, pre-loaded with every marketplace for market.ts to switch
+  const buy = d.querySelector('[data-buy]');
+  assert.ok(buy, 'missing the adaptive buy button');
+  for (const market of ['us', 'uk', 'in', 'ca', 'au']) {
+    assert.ok(buy.dataset[`${market}`], `buy button has no ${market} target`);
+  }
+});
+
+test('every page carries the full marketplace list in the colophon', () => {
+  for (const file of builtPages()) {
+    const page = file.replace(join(projectRoot, 'dist'), '');
+    if (page.startsWith('/read/')) continue; // the reader is its own document
+    const dom = new JSDOM(readFileSync(file, 'utf8'));
+    const nav = dom.window.document.querySelector('nav[aria-label="Amazon marketplaces"]');
+    assert.ok(nav, `${page}: no marketplace list`);
+    const links = [...nav.querySelectorAll('a')];
+    assert.equal(links.length, 5, `${page}: expected five marketplaces, found ${links.length}`);
+    for (const link of links) {
+      assert.match(link.href, /^https:\/\/www\.amazon\./, `${page}: ${link.href}`);
+      assert.match(link.rel, /noopener/);
+    }
+  }
+});
+
+test('the visitor\u2019s own Amazon store is detected from the language tags', () => {
+  assert.equal(detectMarket(['en-GB']), 'uk');
+  assert.equal(detectMarket(['hi-IN']), 'in');
+  assert.equal(detectMarket(['en_US']), 'us');       // underscore form
+  assert.equal(detectMarket(['en-AU', 'en']), 'au');
+  assert.equal(detectMarket(['en-CA']), 'ca');
+  assert.equal(detectMarket(['fr-FR']), null);        // no Amazon store of ours
+  assert.equal(detectMarket([]), null);
+});
+
+test('the local store is promoted, badged and retargets the buy button', () => {
+  const dom = new JSDOM(`
+    <body>
+      <ul data-stores>
+        <li data-market="us"><a href="https://www.amazon.com/dp/X"><span data-local-badge hidden>Your store</span></a></li>
+        <li data-market="in"><a href="https://www.amazon.in/dp/X"><span data-local-badge hidden>Your store</span></a></li>
+      </ul>
+      <a data-buy data-us="https://www.amazon.com/dp/X" data-in="https://www.amazon.in/dp/X"
+         data-in-label="Buy on Amazon.in"><span data-buy-label>Buy on Amazon.com</span></a>
+    </body>`);
+  const d = dom.window.document;
+  const market = initMarkets(d, ['en-IN']);
+
+  assert.equal(market, 'in');
+  assert.equal(d.documentElement.dataset.market, 'in');
+
+  const first = d.querySelector('[data-stores] [data-market]');
+  assert.equal(first.dataset.market, 'in', 'the local store should lead the list');
+  assert.ok(first.classList.contains('is-local'));
+  assert.equal(first.querySelector('[data-local-badge]').hasAttribute('hidden'), false);
+
+  const buy = d.querySelector('[data-buy]');
+  assert.equal(buy.getAttribute('href'), 'https://www.amazon.in/dp/X');
+  assert.equal(buy.textContent.trim(), 'Buy on Amazon.in');
+});
+
+test('the soundtrack is ours, generated, and light enough to stream', () => {
+  const audio = readFileSync(join(projectRoot, 'public/sama.mp3'));
+  assert.ok(audio.length > 1_500_000, `soundtrack is only ${audio.length} bytes`);
+  assert.ok(audio.length < 3_200_000, `soundtrack is ${audio.length} bytes — too heavy`);
+  // an MPEG frame or an ID3 tag, not an HTML error page
+  assert.ok(audio[0] === 0x49 || audio[0] === 0xff, 'public/sama.mp3 is not an MP3');
+
+  // the generator is in the repo, so the asset can be rebuilt from source
+  const generator = readFileSync(join(projectRoot, 'scripts/audio/sama.py'), 'utf8');
+  assert.match(generator, /numpy/);
+  assert.match(generator, /lameenc/);
+  assert.match(generator, /public.*sama\.mp3/s);
+
+  // cache-busted, so returning visitors get the new bed rather than the old one
+  assert.match(builtHtml, /sama\.mp3\?v=2/);
 });
