@@ -6,6 +6,7 @@ import { initBook3D } from './books3d';
 import { loadBooks, prefetchBooks, type Book } from './store';
 import { setDialogOpen } from './dialog';
 import { initMarkets } from './market';
+import { initShelf } from './shelf';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -98,6 +99,28 @@ initQuoteScene();
 /* ---------- marketplaces ---------- */
 // Promote the visitor's own Amazon store everywhere a buy link appears.
 initMarkets();
+
+/* ---------- the shelf ---------- */
+// The site remembers which books you opened, on this device only.
+initShelf();
+
+/* ---------- buy bar ---------- */
+/* On a phone the hero's buy button scrolls away within a screen. Once it has
+   gone, the same action floats at the bottom. Marked inert while off-screen,
+   so it is never an invisible tab stop. */
+const initBuyBar = () => {
+  const bar = $('#buyBar');
+  const actions = $('.book-hero-actions');
+  if (!bar || !actions || !('IntersectionObserver' in window)) return;
+  const observer = new IntersectionObserver(([entry]) => {
+    const show = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+    bar.classList.toggle('show', show);
+    bar.setAttribute('aria-hidden', String(!show));
+    bar.toggleAttribute('inert', !show);
+  }, { threshold: 0 });
+  observer.observe(actions);
+};
+initBuyBar();
 
 /* ---------- nav ---------- */
 const nav = $('#nav');

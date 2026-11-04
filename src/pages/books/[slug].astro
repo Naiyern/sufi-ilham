@@ -64,7 +64,7 @@ const jsonld = [
 
 <Base title={`${book.title} — Sufi Ilham`} description={metaDescription(plain)} image={socialImage} type="book" jsonld={jsonld}>
   <div class="bp-bar" id="bpBar"></div>
-  <div id="bookBody">
+  <div id="bookBody" data-book={JSON.stringify({ slug: book.slug, title: book.title, img })}>
     <header class="book-hero" style={bookHeroStyle}>
       <div class="wrap">
         <p class="crumb book-crumb">
@@ -159,6 +159,37 @@ const jsonld = [
         </div>
       </div>
     </header>
+
+    {buyStores.length > 0 && (
+      <div class="buy-bar" id="buyBar" aria-hidden="true" inert>
+        <div class="wrap buy-bar-in">
+          <img class="buy-bar-cover" src={img} alt="" width="40" height="60" loading="lazy" decoding="async" />
+          <div class="buy-bar-copy">
+            <span class="buy-bar-title">{book.title}</span>
+            <span class="buy-bar-meta">{book.pages ? `${book.pages} pp · ` : ''}{buyStores.length} stores</span>
+          </div>
+          <a
+            class="btn solid buy-bar-cta"
+            href={buyStores[0].url}
+            target="_blank"
+            rel="noopener"
+            data-buy
+            data-us={book.us}
+            data-uk={book.uk}
+            data-in={book.in}
+            data-ca={book.ca}
+            data-au={book.au}
+            data-us-label="Buy"
+            data-uk-label="Buy"
+            data-in-label="Buy"
+            data-ca-label="Buy"
+            data-au-label="Buy"
+          >
+            <span data-buy-label>Buy</span> <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    )}
 
     <section class="book-content" id="about">
       <div class="wrap">

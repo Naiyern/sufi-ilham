@@ -7,6 +7,7 @@ import { JSDOM } from 'jsdom';
 import { initCatalogue } from '../src/scripts/catalogue.js';
 import { setDialogOpen } from '../src/scripts/dialog.ts';
 import { detectMarket, initMarkets } from '../src/scripts/market.ts';
+import { initShelf, readShelf, rememberBook } from '../src/scripts/shelf.ts';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const builtHtml = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
@@ -15,6 +16,9 @@ const builtHtml = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
 // hardcoding it, so the tests follow astro.config's SITE_BASE.
 const BASE = new URL(builtHtml.match(/<link rel="canonical" href="([^"]+)"/)[1]).pathname.replace(/\/$/, '');
 const stylesheet = readFileSync(join(projectRoot, 'src/styles/global.css'), 'utf8');
+// the shelf is a memory, not an archive: it keeps the last six books
+const SIX = 6;
+const readPage = (route) => readFileSync(join(projectRoot, 'dist', route, 'index.html'), 'utf8');
 
 function setupCatalogue() {
   const dom = new JSDOM(builtHtml, {
@@ -738,4 +742,207 @@ test('the soundtrack is ours, generated, and light enough to stream', () => {
 
   // cache-busted, so returning visitors get the new bed rather than the old one
   assert.match(builtHtml, /sama\.mp3\?v=2/);
+});
+
+/* ---------- the shelf: the site remembering where your attention was ---------- */
+
+function shelfStorage(entries) {
+  const store = new Map();
+  if (entries) store.set('si_shelf', JSON.stringify(entries));
+  return {
+    store,
+    getItem: (key) => (store.has(key) ? store.get(key) : null),
+    setItem: (key, value) => { store.set(key, String(value)); },
+    removeItem: (key) => { store.delete(key); },
+  };
+}
+
+const sampleShelf = [
+  { slug: 'the-quiet-tenancy', title: 'The Quiet Tenancy', img: 'https://example.test/a.jpg', ts: 1710000000000 },
+  { slug: 'darya-ka-aik-hissa', title: 'Darya Ka Aik Hissa', img: 'https://example.test/b.jpg', ts: 1700000000000 },
+];
+
+test('the shelf replays the books you opened, in this browser only', () => {
+  const dom = new JSDOM(builtHtml, { url: 'https://sufi-ilham.test/sufi-ilham/', pretendToBeVisual: true });
+  const d = dom.window.document;
+  const storage = shelfStorage(sampleShelf);
+
+  // before the script runs the section is in the document but out of sight
+  assert.equal(d.getElementById('myShelf').hidden, true);
+  assert.equal(d.getElementById('myShelfRail').children.length, 0);
+
+  initShelf(d, storage);
+
+  const section = d.getElementById('myShelf');
+  const rail = d.getElementById('myShelfRail');
+  assert.equal(section.hidden, false, 'a non-empty shelf should reveal itself');
+  assert.equal(rail.children.length, 2);
+  assert.equal(d.documentElement.dataset.shelf, '2');
+
+  const links = [...rail.querySelectorAll('a')];
+  assert.equal(links[0].getAttribute('href'), `${BASE}/books/the-quiet-tenancy/`);
+  assert.equal(links[1].getAttribute('href'), `${BASE}/books/darya-ka-aik-hissa/`);
+  assert.match(links[0].querySelector('img').getAttribute('src'), /example\.test\/a\.jpg$/);
+  assert.match(links[0].textContent, /The Quiet Tenancy/);
+
+  // and it can be forgotten on request
+  d.getElementById('myShelfClear').dispatchEvent(new dom.window.Event('click', { bubbles: true }));
+  assert.equal(rail.children.length, 0);
+  assert.equal(section.hidden, true);
+  assert.equal(storage.getItem('si_shelf'), null);
+  assert.equal(d.documentElement.dataset.shelf, undefined);
+});
+
+test('a book page records itself, newest first, at most six deep', () => {
+  const book = new JSDOM(readFileSync(join(projectRoot, 'dist/books/the-quiet-tenancy/index.html'), 'utf8'), {
+    url: 'https://sufi-ilham.test/sufi-ilham/books/the-quiet-tenancy/',
+  });
+  const storage = shelfStorage();
+  initShelf(book.window.document, storage);
+
+  const recorded = JSON.parse(storage.getItem('si_shelf'));
+  assert.equal(recorded.length, 1);
+  assert.equal(recorded[0].slug, 'the-quiet-tenancy');
+  assert.ok(recorded[0].title.length > 3, 'a shelf entry needs its title to be readable');
+  assert.match(recorded[0].img, /^https:\/\//);
+  assert.equal(typeof recorded[0].ts, 'number');
+
+  // re-opening a book moves it to the front instead of duplicating it
+  initShelf(book.window.document, storage);
+  assert.equal(JSON.parse(storage.getItem('si_shelf')).length, 1);
+
+  // the rail is a memory, not an archive
+  for (let i = 0; i < 9; i += 1) {
+    rememberBook(storage, { slug: `book-${i}`, title: `Book ${i}`, img: '' }, 1720000000000 + i);
+  }
+  const shelf = readShelf(storage);
+  assert.equal(shelf.length, SIX);
+  assert.equal(shelf[0].slug, 'book-8');
+  assert.equal(shelf.at(-1).slug, 'book-3');
+});
+
+test('a broken, blocked or hostile shelf never breaks a page', () => {
+  const home = new JSDOM(builtHtml, { url: 'https://sufi-ilham.test/sufi-ilham/' });
+
+  // unreadable storage
+  const junk = { getItem: () => '{not json', setItem: () => {}, removeItem: () => {} };
+  assert.deepEqual(readShelf(junk), []);
+  initShelf(home.window.document, junk);
+  assert.equal(home.window.document.getElementById('myShelf').hidden, true);
+
+  // entries that are not books, or that would inject a path
+  const hostile = {
+    getItem: () => JSON.stringify([
+      null,
+      { slug: '../../etc/passwd', title: 'nope', ts: 1 },
+      { slug: 'fine-book', title: 'Fine Book', ts: 2 },
+    ]),
+    setItem: () => {},
+    removeItem: () => {},
+  };
+  assert.deepEqual(readShelf(hostile).map((item) => item.slug), ['fine-book']);
+
+  // storage that refuses to write (private mode, full quota)
+  const full = { getItem: () => null, setItem: () => { throw new Error('QuotaExceededError'); }, removeItem: () => {} };
+  const book = new JSDOM(readFileSync(join(projectRoot, 'dist/books/the-quiet-tenancy/index.html'), 'utf8'));
+  assert.doesNotThrow(() => initShelf(book.window.document, full));
+
+  // and no JavaScript at all leaves the rail hidden and empty
+  assert.match(builtHtml, /<section class="my-shelf" id="myShelf"[^>]*hidden/);
+  assert.match(builtHtml, /<ul class="my-shelf-rail" id="myShelfRail"><\/ul>/);
+});
+
+test('the floating buy bar mirrors the hero action and starts out of the way', () => {
+  const dom = new JSDOM(readFileSync(join(projectRoot, 'dist/books/the-quiet-tenancy/index.html'), 'utf8'));
+  const d = dom.window.document;
+  const bar = d.getElementById('buyBar');
+  assert.ok(bar, 'no floating buy bar on a book page');
+
+  // off-screen until the hero action scrolls away, and untouchable while it is
+  assert.ok(bar.hasAttribute('inert'));
+  assert.equal(bar.getAttribute('aria-hidden'), 'true');
+  assert.ok(bar.querySelector('img.buy-bar-cover'));
+  assert.match(bar.querySelector('.buy-bar-title').textContent, /./);
+
+  const hero = d.querySelector('.book-hero-actions [data-buy]');
+  const cta = bar.querySelector('[data-buy]');
+  assert.ok(hero && cta, 'both the hero and the bar need a buy action');
+  assert.equal(cta.getAttribute('href'), hero.getAttribute('href'));
+  assert.equal(cta.target, '_blank');
+  assert.match(cta.rel, /noopener/);
+  for (const market of ['us', 'uk', 'in', 'ca', 'au']) {
+    assert.equal(cta.dataset[market], hero.dataset[market], `the bar drops the ${market} store`);
+    assert.ok(cta.dataset[`${market}Label`], `the bar cannot relabel the ${market} store`);
+  }
+  assert.ok(bar.querySelector('[data-buy-label]'), 'the bar needs a relabelling hook for market.ts');
+
+  // it only exists on phones, and only once the hero has gone by
+  assert.match(stylesheet, /@media \(max-width: 900px\) \{ \.buy-bar \{ display: block; \} \}/);
+  assert.match(stylesheet, /\.buy-bar \{\s*position: fixed;\s*inset: auto 0 0;/);
+  assert.match(stylesheet, /\.buy-bar\.show \{ transform: none; \}/);
+});
+
+test('the phone layout keeps clear of notches, and the catalogue stays browsable', () => {
+  // the viewport may reach under the notch and the home indicator
+  assert.match(builtHtml, /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/);
+  assert.match(stylesheet, /env\(safe-area-inset-bottom/);
+  assert.match(stylesheet, /env\(safe-area-inset-top/);
+  assert.match(stylesheet, /env\(safe-area-inset-right/);
+
+  // two books per row on a phone, with the cover on top instead of one wide tile
+  assert.match(
+    stylesheet,
+    /@media \(max-width: 560px\) \{\s*\.catalog-grid \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\); gap: \.5rem; \}/,
+  );
+  assert.match(stylesheet, /\.book-tile \{\s*grid-template-columns: minmax\(0, 1fr\);\s*grid-template-rows: auto auto;/);
+
+  // thumb-sized targets in the masthead
+  assert.match(stylesheet, /\.mast \.mini, \.seek \{ width: 44px; height: 44px; min-width: 44px; \}/);
+});
+
+test('the paper sections sit in one continuous field instead of on separate sheets', () => {
+  assert.match(stylesheet, /main \{\s*background-color: var\(--paper\);\s*background-image:/);
+  assert.match(stylesheet, /@media \(min-width: 780px\) \{\s*main \{ background-attachment: fixed, fixed; \}/);
+  // the reading area no longer repaints the page on top of it
+  assert.match(stylesheet, /\.book-content \{ background: transparent; \}/);
+  // and a reader who asks for more contrast gets flat paper, not a wash
+  assert.match(stylesheet, /@media \(prefers-contrast: more\) \{\s*main \{ background-image: none; \}/);
+});
+
+test('the privacy page lists the shelf and no longer promises a theme', () => {
+  const privacy = new JSDOM(readPage('privacy')).window.document;
+  const storage = [...privacy.querySelectorAll('code')].map((code) => code.textContent);
+  assert.ok(storage.includes('si_shelf'), 'the shelf must be disclosed');
+  assert.ok(storage.includes('si_music'), 'the soundtrack choice must stay disclosed');
+  assert.ok(!storage.includes('theme'), 'nothing stores a theme any more');
+  assert.match(privacy.body.textContent, /this browser/i);
+});
+
+test('the shelf shows how far into a book you got, and the reader remembers the place', () => {
+  const dom = new JSDOM(builtHtml, { url: 'https://sufi-ilham.test/sufi-ilham/', pretendToBeVisual: true });
+  const d = dom.window.document;
+  const storage = shelfStorage([
+    ...sampleShelf,
+    { slug: 'a-recipe-for-maple-falls', title: 'A Recipe for Maple Falls', img: '', ts: 1690000000000 },
+  ]);
+  storage.setItem('reader:the-quiet-tenancy', JSON.stringify({ y: 2100, p: 0.42 }));
+  // an older visit stored a bare pixel offset: no page progress to show
+  storage.setItem('reader:darya-ka-aik-hissa', '1840');
+
+  initShelf(d, storage);
+
+  const [started, legacy] = [...d.querySelectorAll('#myShelfRail a')];
+  const meter = started.querySelector('.my-shelf-progress');
+  assert.ok(meter, 'a started book should carry its progress');
+  assert.equal(meter.style.getPropertyValue('--p'), '0.42');
+  assert.equal(meter.getAttribute('aria-label'), 'Read 42%');
+  assert.match(started.textContent, /42% read/);
+  assert.equal(legacy.querySelector('.my-shelf-progress'), null, 'a bare scroll offset is not progress');
+
+  // the reader saves both the place and the fraction, and still reads older values
+  const reader = readFileSync(join(projectRoot, 'dist/read/darya-ka-aik-hissa/index.html'), 'utf8');
+  assert.match(reader, /localStorage\.setItem\(K, JSON\.stringify\(\{ y: Math\.round\(window\.scrollY\), p: Math\.round\(p \* 1000\) \/ 1000 \}\)\)/);
+  assert.match(reader, /function savedPosition\(\)/);
+  assert.match(reader, /raw\.charAt\(0\) === '\{'/);
+  assert.doesNotMatch(reader, /parseInt\(localStorage\.getItem\(K\)/, 'every restore must go through savedPosition');
 });

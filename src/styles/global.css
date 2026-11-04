@@ -3754,3 +3754,308 @@ html { scrollbar-gutter: stable; }
   .store-anchor:hover { transform: none; }
   .store-anchor:hover .store-go { transform: none; }
 }
+
+/* =========================================================
+   PHONE PASS, CONTINUITY AND MEMORY
+   What a 360px screen, a notched home bar, a long scroll and
+   a returning visitor each need — in that order.
+   ========================================================= */
+
+/* ---- 1. the edges of the glass ----
+   viewport-fit=cover is on, so the fixed furniture has to keep clear of the
+   notch, the rounded corners and the home indicator. */
+.to-top {
+  right: calc(.9rem + env(safe-area-inset-right, 0px));
+  bottom: calc(.9rem + env(safe-area-inset-bottom, 0px));
+}
+.mast { padding-top: max(.55rem, env(safe-area-inset-top, 0px)); }
+.buy-bar { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* ---- 2. the floating buy action ---- */
+.buy-bar {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 160;
+  display: none;
+  background: #191713;
+  color: #f3eee5;
+  border-top: 1px solid rgba(243, 238, 229, .18);
+  box-shadow: 0 -14px 40px rgba(10, 8, 5, .28);
+  transform: translateY(110%);
+  transition: transform var(--dur-3) var(--ease-out);
+  /* the button keeps its light-on-dark identity inside the dark bar */
+  --fg: #f3eee5;
+  --bg: #191713;
+  --mark: #df6348;
+  --mark-2: #d9b45e;
+}
+.buy-bar.show { transform: none; }
+.buy-bar-in {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .8rem;
+  padding-block: .5rem;
+}
+.buy-bar-cover {
+  width: 38px;
+  height: 57px;
+  object-fit: cover;
+  border: 1px solid rgba(243, 238, 229, .22);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .4);
+}
+.buy-bar-copy { display: grid; gap: .12rem; min-width: 0; }
+.buy-bar-title {
+  font-family: var(--display);
+  font-size: 1.02rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.buy-bar-meta {
+  font: .52rem/1.4 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #aaa18f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.buy-bar-cta {
+  min-height: 44px;
+  padding: .62rem .95rem;
+  gap: .4rem;
+  background: #f3eee5;
+  color: #191713;
+  border-color: #f3eee5;
+}
+.buy-bar-cta::after { background: var(--mark); }
+.buy-bar-cta:hover { color: #fff; }
+
+/* only phones and small tablets get the floating action */
+@media (max-width: 900px) { .buy-bar { display: block; } }
+/* the bar is fixed, so the footer and the back-to-top control need to clear it */
+@media (max-width: 900px) {
+  body.book-page .colophon { padding-bottom: calc(3rem + 76px + env(safe-area-inset-bottom, 0px)); }
+  body.book-page .to-top { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ---- 3. the masthead and hero on small glass ----
+   320-430px is the tightest real estate on the site: the wordmark, the hero
+   and the first call to action all have to survive one thumb. */
+@media (max-width: 560px) {
+  .mast-in { gap: .35rem; }
+  .logo b { font-size: 1.18rem; }
+  .mast .mini, .seek { width: 44px; height: 44px; min-width: 44px; }
+  .seek { padding: 0; justify-content: center; }
+  .mast nav { width: min(90vw, 320px); }
+}
+@media (max-width: 430px) {
+  .editorial-hero.cover { padding-top: 4.5rem; }
+  .editorial-hero h1 { font-size: clamp(3rem, 15.5vw, 4.2rem); }
+  .hero-intro { font-size: clamp(1.55rem, 7.2vw, 2.05rem); margin-top: 1.05rem; }
+  .hero-lede { font-size: .97rem; }
+  .hero-actions { margin-top: 1.15rem; gap: .5rem; }
+  .hero-actions .btn { padding-inline: 1rem; font-size: .65rem; }
+  .hero-location { margin-top: .5rem; font-size: .62rem; }
+  .scene-nav { margin-top: 1.15rem; }
+  .ticker { margin-top: 1.3rem; }
+  .hero-stats { padding-block: .55rem; }
+}
+@media (max-width: 375px) {
+  .editorial-hero h1 { font-size: 2.85rem; }
+  .hero-intro { font-size: 1.42rem; }
+  /* two quiet lines wrap instead of being cut to make room */
+  .cover-top { flex-wrap: wrap; gap: .15rem .9rem; }
+}
+
+/* a book page on a phone used to spend the first screen and a half on a cover
+   and liner notes; the title and the buy action now arrive sooner */
+@media (max-width: 560px) {
+  body.book-page .book-hero { padding-top: 5.2rem; }
+  .book-hero-grid { gap: 1.25rem; }
+  .book-hero-art { width: min(62%, 210px); padding: 8px; }
+  .book-hero-copy h1 { font-size: clamp(2.25rem, 11.5vw, 3.4rem); }
+  .book-hero-facts { margin-top: 1.1rem; }
+  .book-hero-actions { margin-top: 1.1rem; gap: .5rem; }
+  .book-hero-actions .btn { min-height: 48px; }
+}
+
+/* a full-height opening on a phone hides the fact that there is a site below
+   it; 92svh leaves the next section peeking over the fold */
+@media (max-width: 680px) {
+  .editorial-hero.cover { min-height: 92svh; }
+  .hero-visual { padding-bottom: 1.6rem; }
+}
+
+/* ---- 3b. the catalogue on a phone ----
+   A single column of wide tiles meant one book per screen: thirty-six books,
+   thirty-six swipes, and a lot of scrolling to find anything. On a phone the
+   grid now keeps two columns and each tile stands its cover on top, shelf
+   fashion, so four to six books are in view at once. */
+@media (max-width: 560px) {
+  .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+  .book-tile {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: start;
+    min-height: 0;
+    gap: .5rem;
+    padding: .5rem .5rem .65rem;
+    overflow: hidden;
+    contain-intrinsic-size: auto 300px;
+  }
+  .book-tile-cover { width: 100%; align-self: start; }
+  /* at a quarter of the old width a steep 3-D turn reads as a smear */
+  .book-tile .b3d { --b3d-ry: 10deg; --b3d-rx: -3deg; }
+  .book-tile-copy { gap: 0; }
+  .book-tile h3 { margin: .38rem 0 .3rem; font-size: .98rem; line-height: 1.12; }
+  .book-tile-kicker { font-size: .44rem; letter-spacing: .1em; }
+  .book-tile-kicker > span:first-child { -webkit-line-clamp: 1; }
+  .book-tile-number, .book-tile-sub, .book-tile-open { display: none; }
+  .book-tile-meta { margin-top: .35rem; font-size: .43rem; letter-spacing: .06em; gap: .15rem .3rem; }
+  .book-tile-meta span + span::before { margin-right: .3rem; }
+  .book-tile:hover { transform: none; }
+}
+
+/* ---- 4. one continuous field ----
+   Paper sections used to sit on the page colour as separate sheets: the same
+   cream interrupted by a slightly different cream, five times down a scroll.
+   Now there is one field behind all of them — a single slow gradient with a
+   warm light falling from above the fold — so the seams between sections are
+   a change of rhythm, not a change of document. The deliberate stages (ink
+   hero, clay discovery panel, closing quote, colophon) still cut through it. */
+main {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(78% 44% at 50% -8%, rgba(255, 251, 240, .85), transparent 72%),
+    linear-gradient(180deg,
+      var(--paper) 0%,
+      color-mix(in srgb, var(--paper) 86%, var(--paper-2)) 17%,
+      var(--paper) 43%,
+      color-mix(in srgb, var(--paper) 82%, var(--paper-2)) 71%,
+      var(--paper) 100%);
+  background-repeat: no-repeat;
+}
+
+/* on a real screen the light is fixed to the glass and the page moves under
+   it — the room stays still while you scroll through it */
+@media (min-width: 780px) {
+  main { background-attachment: fixed, fixed; }
+}
+
+/* the light is a courtesy, not a requirement */
+@media (prefers-contrast: more) {
+  main { background-image: none; }
+}
+
+/* paper sections stop re-declaring themselves: the field shows through, and
+   only borders and rhythm mark the change */
+.book-content { background: transparent; }
+
+/* ---- 5. the shelf ---- */
+.my-shelf {
+  padding: clamp(1.6rem, 3.5vw, 2.6rem) 0 clamp(1.4rem, 3vw, 2.2rem);
+  border-bottom: 1px solid var(--rule);
+}
+.my-shelf[hidden] { display: none; }
+.my-shelf-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+.my-shelf-head h2 {
+  font: 400 clamp(1.5rem, 3vw, 2.15rem)/1 var(--display);
+  letter-spacing: -.022em;
+  margin: 0;
+}
+.my-shelf-note {
+  display: flex;
+  align-items: baseline;
+  gap: .7rem;
+  margin: 0;
+  font: .55rem/1.5 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.my-shelf-note button {
+  font: inherit;
+  color: var(--mark);
+  text-decoration: underline;
+  text-underline-offset: .22em;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0 .1rem;
+}
+.my-shelf-note button:hover { color: var(--fg); }
+.my-shelf-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(112px, 148px);
+  gap: clamp(.7rem, 2vw, 1.2rem);
+  margin: 0;
+  padding: 0 0 .5rem;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+.my-shelf-item { scroll-snap-align: start; min-width: 0; }
+.my-shelf-link { display: grid; gap: .5rem; align-items: start; }
+.my-shelf-cover {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 12px 24px rgba(22, 21, 15, .2);
+  transform: perspective(620px) rotateY(-6deg);
+  transform-origin: right center;
+  transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease);
+}
+.my-shelf-link:hover .my-shelf-cover,
+.my-shelf-link:focus-visible .my-shelf-cover {
+  transform: perspective(620px) rotateY(-1deg);
+  box-shadow: 0 16px 30px rgba(22, 21, 15, .24);
+}
+.my-shelf-progress {
+  display: block;
+  height: 2px;
+  margin-top: .15rem;
+  background: var(--rule-2);
+  overflow: hidden;
+}
+.my-shelf-progress-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--p, 0) * 100%);
+  background: linear-gradient(90deg, var(--mark-2), var(--mark));
+}
+.my-shelf-pct {
+  font: .45rem/1.4 var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.my-shelf-title {
+  font-family: var(--display);
+  font-size: .93rem;
+  line-height: 1.16;
+  letter-spacing: -.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .my-shelf-cover, .my-shelf-link:hover .my-shelf-cover, .my-shelf-link:focus-visible .my-shelf-cover { transform: none; }
+}
+
+/* print: the floating furniture, the shelf and the light do not belong on paper */
+@media print {
+  .buy-bar, .my-shelf { display: none !important; }
+  main { background: none !important; }
+}
