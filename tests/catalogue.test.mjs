@@ -5,7 +5,6 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
 import { initCatalogue } from '../src/scripts/catalogue.js';
-import { initTheme } from '../src/scripts/theme.js';
 import { setDialogOpen } from '../src/scripts/dialog.ts';
 import { detectMarket, initMarkets } from '../src/scripts/market.ts';
 
@@ -329,38 +328,7 @@ test('Song of the Unbroken Sky uses the current Amazon cover images', () => {
   }
 });
 
-test('theme toggle preserves preference and communicates its current state', () => {
-  const dom = new JSDOM(builtHtml, { url: 'https://sufiilham.test/' });
-  const { document, localStorage } = dom.window;
-  document.documentElement.dataset.theme = 'dark';
-  initTheme(document, localStorage);
-  const button = document.getElementById('themeBtn');
-  assert.equal(button.getAttribute('aria-label'), 'Dark mode');
-  assert.equal(button.getAttribute('aria-pressed'), 'true');
-  assert.equal(button.title, 'Switch to light mode');
-  button.click();
-  assert.equal(document.documentElement.dataset.theme, 'light');
-  assert.equal(button.getAttribute('aria-pressed'), 'false');
-  assert.equal(localStorage.getItem('theme'), 'light');
-  button.click();
-  assert.equal(document.documentElement.dataset.theme, 'dark');
-  assert.equal(localStorage.getItem('theme'), 'dark');
-  close(dom);
-});
-
-test('theme toggle works when storage is unavailable', () => {
-  const dom = new JSDOM(builtHtml, { url: 'https://sufiilham.test/' });
-  initTheme(dom.window.document, { setItem() { throw new Error('Storage unavailable'); } });
-  const button = dom.window.document.getElementById('themeBtn');
-  button.click();
-  assert.equal(dom.window.document.documentElement.dataset.theme, 'dark');
-  assert.equal(button.getAttribute('aria-pressed'), 'true');
-  close(dom);
-});
-
-test('dark reading surfaces and cinematic light pass have reduced-motion fallback', () => {
-  assert.match(stylesheet, /html\[data-theme='dark'\] \.discover-paths/);
-  assert.match(stylesheet, /html\[data-theme='dark'\] \.home-discovery/);
+test('the cinematic light pass has a reduced-motion fallback', () => {
   assert.match(stylesheet, /@media \(prefers-reduced-motion: no-preference\)\s*\{\s*\.hero-image-wrap::before\s*\{\s*animation: portrait-light-pass/);
   assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.hero-image-wrap::before, \.hero-eyebrow-rule\s*\{\s*animation: none !important/);
 });
@@ -377,7 +345,6 @@ test('book and series scenes have useful next steps and book cover backdrops', (
   const book = new JSDOM(readFileSync(join(projectRoot, 'dist/books/the-ninth-bell/index.html'), 'utf8'));
   assert.match(book.window.document.querySelector('.book-hero').getAttribute('style'), /--cinema-still:url\("https:\/\/m\.media-amazon\.com/);
   close(book);
-  assert.match(stylesheet, /html\[data-theme='dark'\] \.next-chapter/);
   assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.book-hero-copy, \.s-hero-in/);
 });
 
@@ -423,12 +390,7 @@ test('3D books appear everywhere a cover does, and flatten for reduced motion', 
   assert.match(stylesheet, /\.b3d-frame \{[^}]*perspective: clamp\([^)]*cqw/);
 });
 
-test('the books hold up on dark stages, in print, and in the palette', () => {
-  // dark stages: a black shadow on near-black loses the object, so the theme
-  // deepens the shadow and swaps the dark board rim for a warm one
-  assert.match(stylesheet, /:root\[data-theme='dark'\] \.b3d-shadow \{[^}]*background: radial-gradient/);
-  assert.match(stylesheet, /:root\[data-theme='dark'\] \.b3d-front::after \{[^}]*inset 0 0 0 1px rgba\(255, 246, 228/);
-
+test('the books hold up in print and in the palette', () => {
   // print: a turned object should come out as a flat jacket
   const print = stylesheet.match(/@media print \{[\s\S]*?\.mast, #toTop[\s\S]*?\n\}/);
   assert.ok(print, 'missing print rules for the book object');
@@ -596,29 +558,20 @@ test('closing a dialog removes it from the tab order and the a11y tree', () => {
   assert.equal(el.hasAttribute('inert'), true);
 });
 
-test('the browser chrome follows the theme, and ink jackets stay dark', () => {
-  const build = (chrome, theme) => {
-    const dom = new JSDOM(
-      '<html><head><meta name="theme-color" id="themeColor" content="#f3f0e9"></head>' +
-        `<body data-chrome="${chrome}"><button id="themeBtn"></button></body></html>`,
-    );
-    if (theme) dom.window.document.documentElement.dataset.theme = theme;
-    return dom;
-  };
+test('the site has one fixed appearance', () => {
+  // no control to switch appearance, and no attribute for one to set
+  assert.doesNotMatch(builtHtml, /id="themeBtn"/);
+  assert.doesNotMatch(builtHtml, /data-theme=/);
+  assert.doesNotMatch(builtHtml, /prefers-color-scheme/);
+  assert.doesNotMatch(builtHtml, /localStorage\.getItem\('theme'\)/);
 
-  // a paper page follows the visitor: light chrome, then dark
-  const paper = build('paper');
-  const store = { setItem() {} };
-  initTheme(paper.window.document, store);
-  const paperMeta = paper.window.document.getElementById('themeColor');
-  assert.equal(paperMeta.content, '#f3f0e9');
-  paper.window.document.getElementById('themeBtn').click();
-  assert.equal(paperMeta.content, '#191713');
+  // one palette, declared once, and a native colour scheme that matches it
+  assert.match(stylesheet, /:root \{ color-scheme: light; \}/);
+  assert.doesNotMatch(stylesheet, /data-theme/);
+  assert.doesNotMatch(stylesheet, /prefers-color-scheme/);
 
-  // an ink jacket is dark at the top even in light mode, so its chrome is too
-  const ink = build('ink', 'light');
-  initTheme(ink.window.document, store);
-  assert.equal(ink.window.document.getElementById('themeColor').content, '#191713');
+  // the browser chrome still answers to the page it frames
+  assert.match(builtHtml, /<meta name="theme-color" id="themeColor" content="#191713">/);
 });
 
 test('cross-angle detail: button stacking, focus, native chrome, forced colours, print, landscape, wide', () => {
@@ -628,9 +581,8 @@ test('cross-angle detail: button stacking, focus, native chrome, forced colours,
   // the focus ring is currentColor, which is legible on paper and on ink
   assert.match(stylesheet, /a:focus-visible,[\s\S]{0,260}outline: 2px solid currentColor/);
 
-  // native widgets and the scrollbar gutter follow the theme
+  // native widgets and the scrollbar gutter match the one palette
   assert.match(stylesheet, /:root \{ color-scheme: light; \}/);
-  assert.match(stylesheet, /:root\[data-theme='dark'\] \{ color-scheme: dark; \}/);
   assert.match(stylesheet, /html \{ scrollbar-gutter: stable; \}/);
 
   // small gold text has an ink-weight variant
