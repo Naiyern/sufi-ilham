@@ -282,7 +282,10 @@ body.menu-open::before {
 .shelf-scroll {
   display: flex; gap: clamp(1rem, 2vw, 1.8rem);
   overflow-x: auto; scroll-snap-type: x mandatory;
-  padding-block: .55rem 1.6rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
+  padding-block: 1.15rem 1.9rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
+  /* a turned book stands proud of its box at the top and sits on a shadow
+     below it: without this the scroller's own edge cuts both */
+  align-items: start;
   scrollbar-width: thin;
 }
 .shelf-scroll::-webkit-scrollbar { height: 3px; }
@@ -838,7 +841,7 @@ body { font-size: clamp(16px, 1.15vw + 0.6rem, 18px); }
   .drop::first-letter { font-size: 3.4em; }
   .shelf-scroll { margin-inline: -.9rem; padding-inline: .9rem; gap: .85rem; }
   .spine { flex: 0 0 156px; }
-  .spine-img { aspect-ratio: 2/3; }
+  /* the object sets its own height; a fixed ratio here would crop it */
   .spread-fan { margin-top: 1.2rem; max-width: 360px; }
   .spread-fan img { width: 30%; }
   .colophon-head { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -930,7 +933,11 @@ html, body { max-width: 100%; overflow-x: clip; }
   max-width: 100%;
 }
 img, video, iframe { max-width: 100%; }
-.shelf-scroll, .filters, .cover-cta, .buy-row, .s-meta {
+/* A shelf scrolls sideways — it is not a wrapping grid. It was wrapped here,
+   once, to stop the page scrolling horizontally; but a scroller with
+   `overflow-x: auto` and `max-width: 100%` cannot overflow the page anyway,
+   and wrapping turned five books into 4 + 1 and left a hole in the row. */
+.filters, .cover-cta, .buy-row, .s-meta {
   flex-wrap: wrap;
 }
 
@@ -2094,8 +2101,10 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 }
 .contact-sheet .spine { transition: transform .4s var(--ease); }
 .contact-sheet .spine-img {
-  border: 1px solid var(--rule-2);
-  box-shadow: 0 18px 46px rgba(22, 21, 15, .2);
+  /* it used to be a framed photograph; now it holds an object that has its own
+     boards and its own shadow, so the frame would only draw a box round it */
+  border: 0;
+  box-shadow: none;
 }
 .contact-sheet .spine h3 { text-wrap: balance; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
@@ -2211,7 +2220,9 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 }
 .author-chapter > .wrap { position: relative; z-index: 1; }
 .author-chapter .folio { border-bottom-color: var(--rule-2); }
-.author-chapter .essay-grid { align-items: center; }
+/* the plates are far taller than the copy: centred, the copy floated to the
+   middle of the column and left a hole above it. It starts at the top now. */
+.author-chapter .essay-grid { align-items: start; }
 .author-chapter .essay-grid > div:first-child { position: sticky; top: 100px; }
 .author-chapter .plate {
   padding: 8px 8px 0;
@@ -3073,6 +3084,10 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   --b3d-rx: -6deg;
   --gx: 26%;
   --gy: 8%;
+  /* The turn and the contact shadow paint a little outside the object's box.
+     That foot is reserved here, inside the object, so a caption below a book
+     can never be painted over — at 90px or at 400px, on any stage. */
+  padding-bottom: 4.5%;
   --b3d-board: #241f17;
   --b3d-board-2: #3a3122;
   --b3d-foil: #d8b45e;
@@ -3363,7 +3378,7 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   z-index: -1;
   left: 5%;
   right: 1%;
-  bottom: -4%;
+  bottom: -1%;
   height: 13%;
   /* contact first, then the room: a book standing on a surface casts a dense
      little shadow where the boards meet it, and a wide soft one around */
@@ -4156,8 +4171,9 @@ html { scrollbar-gutter: stable; }
     min-height: 0;
     gap: .5rem;
     padding: .5rem .5rem .65rem;
-    overflow: hidden;
-    contain-intrinsic-size: auto 300px;
+    /* the cover is a turned object now: clipping the tile cuts its spine off */
+    overflow: visible;
+    contain-intrinsic-size: auto 330px;
   }
   .book-tile-cover { width: 100%; align-self: start; }
   /* at a quarter of the old width a steep 3-D turn reads as a smear */
