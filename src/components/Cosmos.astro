@@ -1,0 +1,74 @@
+---
+import { books, published, pageCount, series } from '../data/site';
+
+/* A sky is generated, not photographed: 140 stars placed by a fixed seed, so
+   the same constellation is in the HTML on every build and nothing has to be
+   downloaded to see it. */
+let seed = 20260104;
+const random = () => {
+  seed = (seed * 1664525 + 1013904223) % 4294967296;
+  return seed / 4294967296;
+};
+const stars = Array.from({ length: 110 }, () => ({
+  x: +(random() * 100).toFixed(3),
+  y: +(random() * 100).toFixed(3),
+  size: +(0.6 + random() * 1.7).toFixed(2),
+  opacity: +(0.22 + random() * 0.62).toFixed(2),
+  delay: +(random() * 9).toFixed(2),
+  duration: +(5 + random() * 7).toFixed(2),
+}));
+
+const years = [...new Set(published
+  .map((book) => (book.published ?? '').slice(0, 4))
+  .filter((year) => /^\d{4}$/.test(year)))]
+  .sort();
+
+const figures = [
+  { value: books.length, label: 'Titles in the archive' },
+  { value: pageCount.toLocaleString('en-GB'), label: 'Pages in print' },
+  { value: series.length, label: 'Series in motion' },
+];
+---
+
+<section class="cosmos" aria-labelledby="cosmos-title" id="cosmos">
+  <div class="cosmos-sky" aria-hidden="true">
+    {stars.map((star) => (
+      <span
+        class="cosmos-star"
+        style={`left:${star.x}%;top:${star.y}%;width:${star.size}px;height:${star.size}px;opacity:${star.opacity};animation-delay:${star.delay}s;animation-duration:${star.duration}s`}
+      />
+    ))}
+  </div>
+  <div class="cosmos-horizon" aria-hidden="true"></div>
+
+  <div class="wrap cosmos-inner">
+    <p class="cosmos-overline">The scale of it</p>
+
+    <h2 id="cosmos-title" class="cosmos-line">
+      <span class="cosmos-line-a">Not a shelf.</span>
+      <span class="cosmos-line-b">A sky.</span>
+    </h2>
+
+    <p class="cosmos-lede">
+      {published.length} books. {pageCount.toLocaleString('en-GB')} pages. One question, asked in every way
+      available to one person — what is a life for?
+    </p>
+
+    <dl class="cosmos-figures">
+      {figures.map((figure) => (
+        <div>
+          <dt>{figure.label}</dt>
+          <dd>{figure.value}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <p class="cosmos-caption">
+      Written across {years[0]}–{years[years.length - 1]} · built to be read after the writer.
+    </p>
+
+    <a class="cosmos-enter" href="#index">
+      Enter the archive <span aria-hidden="true">↓</span>
+    </a>
+  </div>
+</section>

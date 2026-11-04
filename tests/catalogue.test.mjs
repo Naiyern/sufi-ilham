@@ -1100,3 +1100,49 @@ test('the wall turns on its own, and on request', async () => {
   // and it can be put back to sleep without leaving a timer behind
   stop();
 });
+
+test('the overture puts the archive at the scale of a sky', () => {
+  // the catalogue as the build reads it (site.ts imports the JSON straight)
+  const catalogue = JSON.parse(readFileSync(join(projectRoot, 'src/data/books.json'), 'utf8'));
+  const publishedBooks = catalogue.filter((book) => !book.comingSoon);
+  const printedPages = publishedBooks.map((book) => book.pages)
+    .filter((pages) => Number.isFinite(pages))
+    .reduce((total, pages) => total + pages, 0);
+  const home = new JSDOM(builtHtml).window.document;
+  const cosmos = home.querySelector('#cosmos');
+  assert.ok(cosmos, 'the home page needs its overture');
+  assert.equal(cosmos.getAttribute('aria-labelledby'), 'cosmos-title');
+  assert.ok(home.getElementById('cosmos-title').textContent.trim().length > 5);
+
+  // a constellation the HTML carries, not a photograph it downloads
+  const stars = [...cosmos.querySelectorAll('.cosmos-star')];
+  assert.ok(stars.length >= 100, `only ${stars.length} stars`);
+  assert.ok(cosmos.querySelector('.cosmos-sky').getAttribute('aria-hidden') === 'true', 'the sky is decoration');
+  for (const star of stars.slice(0, 8)) {
+    assert.match(star.getAttribute('style'), /left:[\d.]+%;top:[\d.]+%;width:[\d.]+px/, 'each star is placed inline');
+  }
+  // the same constellation every build
+  const again = new JSDOM(readFileSync(join(projectRoot, 'dist/index.html'), 'utf8')).window.document;
+  assert.deepEqual(
+    [...again.querySelectorAll('.cosmos-star')].map((s) => s.getAttribute('style')),
+    stars.map((s) => s.getAttribute('style')),
+  );
+
+  // the numbers are the catalogue's own, not decoration
+  const figures = [...cosmos.querySelectorAll('.cosmos-figures dd')].map((dd) => dd.textContent.trim());
+  assert.deepEqual(figures, [
+    String(catalogue.length),
+    printedPages.toLocaleString('en-GB'),
+    String(new Set(catalogue.map((book) => book.series).filter(Boolean)).size),
+  ]);
+  assert.equal(figures[0], '36');
+  assert.equal(figures[1], '6,071');
+  assert.match(cosmos.querySelector('.cosmos-caption').textContent, /2024–2026/);
+
+  // and the sky is a sky: horizon, drift, breath — all removable
+  assert.match(stylesheet, /\.cosmos-horizon \{[\s\S]{0,400}?border-radius: 50%/);
+  assert.match(stylesheet, /@keyframes cosmos-drift/);
+  assert.match(stylesheet, /@keyframes cosmos-breath/);
+  assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{\s*\.cosmos-star \{ animation: none; \}/);
+  assert.match(stylesheet, /\.editorial-hero h1 \{ font-size: clamp\(7rem, 12\.4vw, 16rem\)/);
+});
