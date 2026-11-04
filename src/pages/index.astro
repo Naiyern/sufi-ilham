@@ -181,6 +181,20 @@ const jsonld = [
     </div>
   </section>
 
+  <!-- ================= YOUR SHELF (this browser only) ================= -->
+  <section class="my-shelf" id="myShelf" aria-labelledby="myShelfTitle" hidden>
+    <div class="wrap">
+      <div class="my-shelf-head">
+        <h2 id="myShelfTitle">Your shelf</h2>
+        <p class="my-shelf-note">
+          <span>Kept in this browser</span>
+          <button type="button" id="myShelfClear">Clear</button>
+        </p>
+      </div>
+      <ul class="my-shelf-rail" id="myShelfRail"></ul>
+    </div>
+  </section>
+
   <!-- ================= NEW RELEASES (dated, not hardcoded) ================= -->
   <section id="new" class="cinema-reel" style={`--reel-still:url("${releaseBackdrop}")`}>
     <div class="wrap">

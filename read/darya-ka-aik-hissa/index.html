@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" dir="rtl" data-rtheme="sepia" data-pw="normal"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>دریا کا ایک حصہ — Read free · Sufi Ilham</title><meta name="description" content="Read دریا کا ایک حصہ by Sufi Ilham free online — the complete text in a reader you can resize, re-theme and set to your own pace."><meta name="theme-color" content="#ece3d0"><link rel="canonical" href="https://naiyern.github.io/sufi-ilham/books/darya-ka-aik-hissa/"><meta name="robots" content="noindex,follow"><meta property="og:type" content="book"><meta property="og:title" content="دریا کا ایک حصہ — Read free · Sufi Ilham"><meta property="og:description" content="Read دریا کا ایک حصہ by Sufi Ilham free online."><meta property="og:url" content="https://naiyern.github.io/sufi-ilham/books/darya-ka-aik-hissa/"><link rel="preload" href="/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-400-normal.BVDOj1dq.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-700-normal.CV4fHIsl.woff2" as="font" type="font/woff2" crossorigin><link rel="icon" href="/sufi-ilham/favicon.ico" sizes="any"><style>
+<!DOCTYPE html><html lang="en" dir="rtl" data-rtheme="sepia" data-pw="normal"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>دریا کا ایک حصہ — Read free · Sufi Ilham</title><meta name="description" content="Read دریا کا ایک حصہ by Sufi Ilham free online — the complete text in a reader you can resize, re-theme and set to your own pace."><meta name="theme-color" content="#ece3d0"><link rel="canonical" href="https://naiyern.github.io/sufi-ilham/books/darya-ka-aik-hissa/"><meta name="robots" content="noindex,follow"><meta property="og:type" content="book"><meta property="og:title" content="دریا کا ایک حصہ — Read free · Sufi Ilham"><meta property="og:description" content="Read دریا کا ایک حصہ by Sufi Ilham free online."><meta property="og:url" content="https://naiyern.github.io/sufi-ilham/books/darya-ka-aik-hissa/"><link rel="preload" href="/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-400-normal.BVDOj1dq.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/sufi-ilham/_astro/noto-nastaliq-urdu-arabic-700-normal.CV4fHIsl.woff2" as="font" type="font/woff2" crossorigin><link rel="icon" href="/sufi-ilham/favicon.ico" sizes="any"><style>
       :root { --rf: 1.25rem; --rlh: 2.15; --rmw: 44rem; --pw: 760px; }
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
@@ -21,6 +21,13 @@
       html[data-rtheme="sepia"] .rtop { background: rgba(236,227,208,.9); }
       html[data-rtheme="dark"]  .rtop { background: rgba(20,20,15,.9); }
       .rtop .sp { margin-inline-start: auto; }
+      /* the reader is a full-screen surface: keep the bar off the notch and the
+         last line off the home indicator */
+      .rtop {
+        padding-top: calc(.55rem + env(safe-area-inset-top, 0px));
+        padding-inline-start: calc(clamp(.6rem, 3vw, 1.2rem) + env(safe-area-inset-left, 0px));
+        padding-inline-end: calc(clamp(.6rem, 3vw, 1.2rem) + env(safe-area-inset-right, 0px));
+      }
       .rttl { font: 600 .95rem/1.2 var(--display, Georgia, serif); white-space: nowrap;
         overflow: hidden; text-overflow: ellipsis; max-width: 34vw; }
       .rpageind { font: 500 .8rem/1 system-ui; opacity: .75; white-space: nowrap;
@@ -40,6 +47,7 @@
       html[data-rtheme="sepia"] .rpanel { background: #f3ecdd; }
       html[data-rtheme="dark"]  .rpanel { background: #1e1e17; }
       .rpanel.open { display: block; }
+      .rpanel { max-height: calc(100dvh - 4.6rem); max-height: calc(100svh - 4.6rem); overflow-y: auto; -webkit-overflow-scrolling: touch; }
       #rsettings { inset-inline-end: clamp(.6rem, 3vw, 1.2rem); }
       .rrow { display: flex; align-items: center; gap: .5rem; margin: .35rem 0 .8rem; }
       .rrow > span { font: 600 .7rem/1 system-ui; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
@@ -65,7 +73,11 @@
       .ornament { display: block; margin: 1.2rem auto 0; width: 132px; height: auto; color: #c99a3f; opacity: .9; }
 
       /* ---- PDF page mode ---- */
-      main.rbook { padding: 0 clamp(.6rem, 3vw, 1.4rem) 24vh; }
+      main.rbook {
+        padding: 0 clamp(.6rem, 3vw, 1.4rem) calc(24vh + env(safe-area-inset-bottom, 0px));
+        padding-inline-start: calc(clamp(.6rem, 3vw, 1.4rem) + env(safe-area-inset-left, 0px));
+        padding-inline-end: calc(clamp(.6rem, 3vw, 1.4rem) + env(safe-area-inset-right, 0px));
+      }
       .rbanner { max-width: var(--pw); margin: 1.4rem auto 0; padding: .7rem .9rem; border-radius: 8px;
         font-size: .82rem; border: 1px dashed #c99a3f; background: rgba(201,154,63,.12); }
       .rbanner a, .pdfjs-fallback a { color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
@@ -107,6 +119,23 @@ const mode = "pdf";
         var KG = 'reader:prefs';
         var prefs = { theme: 'sepia', pw: 'normal', font: 1.25 };
         try { Object.assign(prefs, JSON.parse(localStorage.getItem(KG) || '{}')); } catch (e) {}
+
+        // The saved place is stored as { y, p }: the pixel position to restore
+        // and the fraction read, so the shelf outside the reader can show how
+        // far in you are. Plain numbers from older visits are still understood.
+        function savedPosition() {
+          try {
+            var raw = localStorage.getItem(K);
+            if (!raw) return 0;
+            if (raw.charAt(0) === '{') {
+              var o = JSON.parse(raw);
+              var ny = parseInt(o && o.y, 10);
+              return isNaN(ny) ? 0 : ny;
+            }
+            var n = parseInt(raw, 10);
+            return isNaN(n) ? 0 : n;
+          } catch (e) { return 0; }
+        }
 
         function apply() {
           html.setAttribute('data-rtheme', prefs.theme);
@@ -160,7 +189,9 @@ const mode = "pdf";
           var h = document.documentElement.scrollHeight - window.innerHeight;
           var p = h > 0 ? window.scrollY / h : 0;
           bar.style.setProperty('--p', p);
-          try { localStorage.setItem(K, String(window.scrollY)); } catch (e) {}
+          try {
+            localStorage.setItem(K, JSON.stringify({ y: Math.round(window.scrollY), p: Math.round(p * 1000) / 1000 }));
+          } catch (e) {}
           updateInd();
           ticking = false;
         }
@@ -205,7 +236,7 @@ const mode = "pdf";
               observe();
               updateInd();
               // restore position
-              try { var y = parseInt(localStorage.getItem(K) || '0', 10); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); }); } catch (e) {}
+              var y = savedPosition(); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); });
             } catch (err) {
               var fallback = document.createElement('div');
               fallback.className = 'pdfjs-fallback';
@@ -314,7 +345,7 @@ const mode = "pdf";
           onScroll();
         } else {
           // text / empty modes
-          try { var y = parseInt(localStorage.getItem(K) || '0', 10); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); }); } catch (e) {}
+          var y = savedPosition(); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); });
           onScroll();
         }
       })();
