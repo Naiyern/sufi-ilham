@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import BookTile from '../components/BookTile.astro';
 import Cover from '../components/Cover.astro';
 import QuoteStage from '../components/QuoteStage.astro';
+import Cosmos from '../components/Cosmos.astro';
 import Book3D from '../components/Book3D.astro';
 import AnimatedCover from '../components/AnimatedCover.astro';
 import { books, published, series, seriesBooks, site, themes, journey, coverUrl, pdfUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished, seriesStructuredData } from '../data/site';
@@ -181,6 +182,9 @@ const jsonld = [
       </div>
     </div>
   </section>
+
+  <!-- ================= THE OVERTURE ================= -->
+  <Cosmos />
 
   <!-- ================= YOUR SHELF (this browser only) ================= -->
   <section class="my-shelf" id="myShelf" aria-labelledby="myShelfTitle" hidden>
