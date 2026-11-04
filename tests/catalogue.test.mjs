@@ -1221,3 +1221,104 @@ test('every page ships the curtain, and it can be lifted', () => {
   assert.match(stylesheet, /html:not\(\.js\) \.veil \{ display: none; \}/);
   assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{ \.veil \{ display: none; \} \}/);
 });
+
+/* ---------- the author's two frames ---------- */
+
+test('the author plate is one frame holding two ages, cut by a seam you move', () => {
+  const page = new JSDOM(readFileSync(join(projectRoot, 'dist/index.html'), 'utf8')).window.document;
+
+  const portrait = page.querySelector('.author-main');
+  assert.ok(portrait, 'the main portrait plate should still be there');
+  assert.ok(portrait.querySelector('.plate-img img'), 'the portrait sits in its own clipped frame');
+
+  const seam = page.querySelector('[data-seam]');
+  assert.ok(seam, 'the then/now frame should exist');
+  const frame = seam.querySelector('.seam-frame');
+  const images = Array.from(frame.querySelectorAll('img'));
+  assert.equal(images.length, 2, 'two photographs share one frame');
+  assert.match(images[0].getAttribute('src'), /sufi-ilham-childhood\.webp$/);
+  assert.match(images[1].getAttribute('src'), /sufi-ilham-flute\.webp$/);
+  assert.ok(images[0].classList.contains('seam-then'));
+  assert.ok(images[1].classList.contains('seam-now'), 'the later photograph is the one that is cut');
+  for (const image of images) {
+    assert.ok(image.getAttribute('alt'), 'both photographs keep a description');
+    assert.equal(image.getAttribute('loading'), 'lazy');
+  }
+
+  // graded files, so the attributes have to match the images actually shipped
+  assert.deepEqual([+images[0].getAttribute('width'), +images[0].getAttribute('height')], [760, 620]);
+  assert.deepEqual([+images[1].getAttribute('width'), +images[1].getAttribute('height')], [830, 830]);
+  const portraitImg = portrait.querySelector('img');
+  assert.deepEqual([+portraitImg.getAttribute('width'), +portraitImg.getAttribute('height')], [1000, 1250]);
+
+  // the seam is a real slider, not a picture of one
+  const range = frame.querySelector('input.seam-range');
+  assert.ok(range, 'the seam must be a control');
+  assert.equal(range.type, 'range');
+  assert.equal(range.getAttribute('min'), '0');
+  assert.equal(range.getAttribute('max'), '100');
+  assert.equal(range.getAttribute('value'), '50');
+  assert.match(range.getAttribute('aria-label'), /childhood.*flute/i);
+  assert.ok(frame.querySelector('.seam-line .seam-knob'));
+  assert.equal(frame.querySelectorAll('.seam-tag').length, 2);
+  assert.equal(seam.querySelector('figcaption').textContent.replace(/\s+/g, ' ').trim(), 'Where it beganThe flute, today');
+});
+
+test('the seam is painted from its value, and the portrait only leans on a mouse', async () => {
+  const { initSeam, seamValueText, initPortraitLook } = await import('../src/scripts/author.ts');
+
+  assert.equal(seamValueText(0), 'All of the childhood photograph');
+  assert.equal(seamValueText(100), 'All of the flute, today');
+  assert.equal(seamValueText(37), '37% of the frame shows the childhood photograph');
+
+  const dom = new JSDOM(
+    `<body>
+       <figure class="author-main"><div class="plate-img"><img src="x.jpg" alt=""></div><figcaption>Portrait</figcaption></figure>
+       <figure data-seam>
+         <div class="seam-frame"><input class="seam-range" type="range" min="0" max="100" value="50"></div>
+       </figure>
+     </body>`,
+    { pretendToBeVisual: true },
+  );
+  const d = dom.window.document;
+  const frame = d.querySelector('.seam-frame');
+  const range = d.querySelector('.seam-range');
+
+  const stop = initSeam(d);
+  assert.equal(frame.style.getPropertyValue('--seam'), '50%');
+  assert.equal(frame.dataset.seamState, 'mixed');
+  assert.equal(range.getAttribute('aria-valuetext'), '50% of the frame shows the childhood photograph');
+
+  range.value = '0';
+  range.dispatchEvent(new dom.window.Event('input'));
+  assert.equal(frame.style.getPropertyValue('--seam'), '0%');
+  assert.equal(frame.dataset.seamState, 'then');
+
+  range.value = '100';
+  range.dispatchEvent(new dom.window.Event('input'));
+  assert.equal(frame.dataset.seamState, 'now');
+  stop();
+
+  // no pointer media query in jsdom: the portrait must simply do nothing
+  const image = d.querySelector('.author-main img');
+  const unlook = initPortraitLook(d);
+  d.querySelector('.author-main').dispatchEvent(new dom.window.MouseEvent('pointermove', { clientX: 10, clientY: 10 }));
+  assert.equal(image.style.getPropertyValue('--look-x'), '', 'no lean without a fine pointer');
+  unlook();
+});
+
+test('the author frames are graded as one film, and the seam is drawn in gold', () => {
+  assert.match(stylesheet, /\.author-main \.plate-img img \{[\s\S]{0,220}?scale\(1\.06\)/);
+  assert.match(stylesheet, /animation: author-push linear both;/);
+  assert.match(stylesheet, /@supports \(animation-timeline: view\(\)\)/);
+  assert.match(stylesheet, /\.seam-img \{[\s\S]{0,160}?object-fit: cover;/);
+  assert.match(stylesheet, /\.seam-now \{ clip-path: inset\(0 0 0 var\(--seam, 50%\)\); \}/);
+  assert.match(stylesheet, /\.seam-frame:focus-within \{ outline:/, 'the slider must show where the keyboard is');
+  assert.match(stylesheet, /\.plate-img::after,\s*\.seam-frame::after \{/, 'one grain over every plate');
+  // the grain and the vignette are the same layer on every plate
+  assert.match(stylesheet, /feTurbulence/);
+  assert.match(stylesheet, /\.seam-knob \{/);
+  assert.match(stylesheet, /@media \(max-width: 560px\) \{\s*\.plate--seam \.seam-frame \{ aspect-ratio: 4 \/ 3; \}/);
+  // and nothing may push the portrait for a reader who asked for stillness
+  assert.match(stylesheet, /@media \(prefers-reduced-motion: no-preference\) \{\s*\.author-main \.plate-img img \{\s*animation: author-push/);
+});

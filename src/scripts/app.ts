@@ -9,6 +9,7 @@ import { initMarkets } from './market';
 import { initShelf } from './shelf';
 import { initQuotes } from './quotes';
 import { initCurtain } from './transition';
+import { initSeam, initPortraitLook } from './author';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -106,6 +107,8 @@ initMarkets();
 // One line on the page, a different one on every visit, and a slow turn while
 // you read. Fetches the deck only if a stage is actually present.
 initQuotes();
+initSeam();
+initPortraitLook();
 
 /* ---------- the shelf ---------- */
 // The site remembers which books you opened, on this device only.
