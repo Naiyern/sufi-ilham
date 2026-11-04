@@ -8,6 +8,7 @@ import { setDialogOpen } from './dialog';
 import { initMarkets } from './market';
 import { initShelf } from './shelf';
 import { initQuotes } from './quotes';
+import { initCurtain } from './transition';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
@@ -457,5 +458,10 @@ if (bp) {
   addEventListener('scroll', onBp, { passive: true });
   onBp();
 }
+
+/* ---------- the cut between pages ----------
+   Registered last on purpose: a click that opens the dialog or the palette is
+   already handled by then, and those must never raise the curtain. */
+initCurtain();
 
 export {};

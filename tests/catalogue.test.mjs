@@ -1146,3 +1146,78 @@ test('the overture puts the archive at the scale of a sky', () => {
   assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{\s*\.cosmos-star \{ animation: none; \}/);
   assert.match(stylesheet, /\.editorial-hero h1 \{ font-size: clamp\(7rem, 12\.4vw, 16rem\)/);
 });
+
+/* ---------- the cut between pages ---------- */
+
+test('the site decides what a page change is, and covers it', async () => {
+  const { isInternalNavigation, initCurtain } = await import('../src/scripts/transition.ts');
+  const here = { origin: 'https://sufi-ilham.test', pathname: '/sufi-ilham/books/x/', search: '' };
+  const link = (href, extra = {}) => ({
+    href, hasAttribute: (name) => name in extra, target: extra.target ?? null,
+  });
+
+  assert.equal(isInternalNavigation(link('https://sufi-ilham.test/sufi-ilham/discover/'), here), true);
+  assert.equal(isInternalNavigation(link('/sufi-ilham/privacy/'), here), true);
+  // a jump inside the page is not a page change
+  assert.equal(isInternalNavigation(link('#editions'), here), false);
+  assert.equal(isInternalNavigation(link('/sufi-ilham/books/x/#editions'), here), false);
+  // nor is clicking the page you are already on
+  assert.equal(isInternalNavigation(link('/sufi-ilham/books/x/'), here), false);
+  // nor anything leaving the site, opening a tab, downloading, or telephoning
+  assert.equal(isInternalNavigation(link('https://www.amazon.co.uk/dp/X'), here), false);
+  assert.equal(isInternalNavigation(link('https://sufi-ilham.test/sufi-ilham/discover/', { target: '_blank' }), here), false);
+  assert.equal(isInternalNavigation(link('/sufi-ilham/reads/x.pdf', { download: '' }), here), false);
+  assert.equal(isInternalNavigation(link('mailto:hello@example.com'), here), false);
+  assert.equal(isInternalNavigation(link('tel:+440000000000'), here), false);
+
+  // and the curtain itself: raised on a real page change, never twice
+  const dom = new JSDOM('<body><div id="veil"></div><a id="go" href="/sufi-ilham/discover/">Discover</a></body>', {
+    url: 'https://sufi-ilham.test/sufi-ilham/',
+    pretendToBeVisual: true,
+  });
+  const d = dom.window.document;
+  const veil = d.getElementById('veil');
+  const navigations = [];
+  const stop = initCurtain(d, { navigate: (href) => navigations.push(href) });
+
+  const click = (el, init = {}) => {
+    const event = new dom.window.MouseEvent('click', { bubbles: true, cancelable: true, button: 0, ...init });
+    el.dispatchEvent(event);
+    return event;
+  };
+
+  const event = click(d.getElementById('go'));
+  assert.equal(event.defaultPrevented, true, 'a page change should be taken over by the curtain');
+  assert.ok(veil.classList.contains('is-on'), 'the curtain should be down');
+
+  // a second click while leaving must not queue a second navigation
+  click(d.getElementById('go'));
+  veil.dispatchEvent(new dom.window.Event('transitionend'));
+  await new Promise((resolve) => setTimeout(resolve, 40));
+  assert.deepEqual(navigations, ['https://sufi-ilham.test/sufi-ilham/discover/']);
+
+  // a modified click belongs to the browser
+  veil.classList.remove('is-on');
+  dom.window.location.href = 'https://sufi-ilham.test/sufi-ilham/';
+  const modified = new dom.window.MouseEvent('click', { bubbles: true, cancelable: true, button: 0, metaKey: true });
+  d.getElementById('go').dispatchEvent(modified);
+  assert.equal(modified.defaultPrevented, false);
+  stop();
+});
+
+test('every page ships the curtain, and it can be lifted', () => {
+  for (const file of builtPages()) {
+    const page = file.replace(join(projectRoot, 'dist'), '');
+    if (page.startsWith('/read/')) continue;
+    const html = readFileSync(file, 'utf8');
+    assert.match(html, /<div class="veil" id="veil" aria-hidden="true"><\/div>/, `${page}: missing the curtain`);
+    assert.match(html, /<div class="aperture" aria-hidden="true"><\/div>/, `${page}: missing the aperture`);
+  }
+  assert.match(stylesheet, /\.veil \{[\s\S]{0,200}?z-index: 880;/);
+  assert.match(stylesheet, /\.veil\.is-on \{ opacity: 1; \}/);
+  // the curtain and the aperture must be the same colour, or the handover shows
+  assert.match(stylesheet, /\.veil \{[^}]*background: #14110d;/);
+  assert.match(stylesheet, /\.aperture \{[^}]*background: #14110d;/);
+  assert.match(stylesheet, /html:not\(\.js\) \.veil \{ display: none; \}/);
+  assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{ \.veil \{ display: none; \} \}/);
+});
