@@ -18,6 +18,20 @@ const BASE = new URL(builtHtml.match(/<link rel="canonical" href="([^"]+)"/)[1])
 const stylesheet = readFileSync(join(projectRoot, 'src/styles/global.css'), 'utf8');
 // the shelf is a memory, not an archive: it keeps the last six books
 const SIX = 6;
+
+/* the palette is checked from the tokens themselves: a copy of a hex value in
+   the test would keep passing long after the stylesheet had drifted */
+const tokens = (name) => [...stylesheet.matchAll(new RegExp(`--${name}: (#[0-9a-f]{6})`, 'gi'))]
+  .map((match) => match[1].toLowerCase());
+const channel = (value) => (value / 255 <= 0.03928 ? value / 255 / 12.92 : ((value / 255 + 0.055) / 1.055) ** 2.4);
+const luminance = (hex) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+};
+const contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
 const readPage = (route) => readFileSync(join(projectRoot, 'dist', route, 'index.html'), 'utf8');
 
 function setupCatalogue() {
@@ -405,18 +419,16 @@ test('the books hold up in print and in the palette', () => {
   assert.match(stylesheet, /\.cmdk-row img \{[^}]*rotateY\(11deg\)/);
   assert.doesNotMatch(stylesheet, /\.cmdk-row img \{[^}]*rotateY\(-/);
 
-  // meta text has to clear AA on the tinted surfaces it sits on
+  // meta text has to clear AA on every tinted surface it sits on
   const ink3 = stylesheet.match(/--ink-3: (#[0-9a-f]{6})/i)?.[1];
   assert.ok(ink3, 'missing --ink-3 token');
-  const rgb = [1, 3, 5].map((i) => parseInt(ink3.slice(i, i + 2), 16));
-  const lum = ([r, g, b]) => {
-    const f = (v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4);
-    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
-  };
-  for (const surface of ['#eae6dc', '#f3f0e9']) {
-    const s = [1, 3, 5].map((i) => parseInt(surface.slice(i, i + 2), 16));
-    const [hi, lo] = [lum(rgb), lum(s)].sort((a, b) => b - a);
-    assert.ok((hi + 0.05) / (lo + 0.05) >= 4.5, `--ink-3 fails AA on ${surface}`);
+  // dark scopes (book hero, colophon, the intent hero) re-declare --paper as
+  // ink; only the light stock has to carry dark metadata text
+  const lightSurfaces = [...new Set(tokens('paper').concat(tokens('paper-2')))]
+    .filter((hex) => luminance(hex) > 0.3);
+  assert.ok(lightSurfaces.length >= 2, 'expected a paper and a paper-2 surface');
+  for (const surface of lightSurfaces) {
+    assert.ok(contrast(ink3, surface) >= 4.5, `--ink-3 fails AA on ${surface} (${contrast(ink3, surface).toFixed(2)})`);
   }
 
   // the reader guide is a primary destination, so its nav item says so
@@ -902,7 +914,7 @@ test('the phone layout keeps clear of notches, and the catalogue stays browsable
 
 test('the paper sections sit in one continuous field instead of on separate sheets', () => {
   assert.match(stylesheet, /main \{\s*background-color: var\(--paper\);\s*background-image:/);
-  assert.match(stylesheet, /@media \(min-width: 780px\) \{\s*main \{ background-attachment: fixed, fixed; \}/);
+  assert.match(stylesheet, /@media \(min-width: 780px\) \{\s*main \{ background-attachment: fixed, fixed, fixed; \}/);
   // the reading area no longer repaints the page on top of it
   assert.match(stylesheet, /\.book-content \{ background: transparent; \}/);
   // and a reader who asks for more contrast gets flat paper, not a wash
@@ -945,4 +957,40 @@ test('the shelf shows how far into a book you got, and the reader remembers the 
   assert.match(reader, /function savedPosition\(\)/);
   assert.match(reader, /raw\.charAt\(0\) === '\{'/);
   assert.doesNotMatch(reader, /parseInt\(localStorage\.getItem\(K\)/, 'every restore must go through savedPosition');
+});
+
+test('the paper is one stock, deep enough never to read as a white page', () => {
+  // every light scope agrees on the same stock: no page may quietly pick its own
+  const light = [...new Set(tokens('paper'))].filter((hex) => luminance(hex) > 0.3);
+  assert.equal(light.length, 1, `--paper is declared as ${light.join(', ')}`);
+  assert.ok(luminance(light[0]) < 0.8, `--paper ${light[0]} still reads as white`);
+
+  const secondShade = [...new Set(tokens('paper-2'))].filter((hex) => luminance(hex) > 0.3);
+  assert.equal(secondShade.length, 1, `--paper-2 is declared as ${secondShade.join(', ')}`);
+  assert.ok(luminance(secondShade[0]) < luminance(light[0]), 'paper-2 should sit below paper');
+
+  // nothing paints a white sheet any more; the PDF canvas and print are exempt
+  const withoutPrint = stylesheet.replace(/@media print \{[\s\S]*?\n\}/g, '');
+  const withoutPdfCanvas = withoutPrint.replace(/\.pdfjs-page \{[^}]*\}/g, '');
+  assert.doesNotMatch(withoutPdfCanvas, /background(?:-color)?:\s*(#fff|#ffffff|white)\b/i);
+  assert.doesNotMatch(stylesheet, /--paper: #f7f2e9/i);
+  assert.doesNotMatch(stylesheet, /--paper-2: #eae6dc/i);
+
+  // the field is lamplight on paper — warm, fixed — not a lighter rectangle
+  assert.match(stylesheet, /radial-gradient\(78% 44% at 50% -8%, rgba\(255, 243, 218/);
+  assert.match(stylesheet, /main::after \{[\s\S]{0,400}?radial-gradient\(125% 105% at 50% 42%, transparent 52%/);
+});
+
+test('nothing on the site is a card sitting on a page', () => {
+  // panels are separated by tone and light, not by outlines that say "card"
+  assert.match(
+    stylesheet,
+    /\.book-tile,\s*\.catalog-controls,\s*\.book-brief,\s*\.edition-section,\s*\.book-reader \{ border-color: transparent; \}/,
+  );
+
+  // the two parchment acts dissolve out of the field instead of starting at an edge
+  assert.match(
+    stylesheet,
+    /\.home-discovery,\s*\.next-chapter \{[\s\S]{0,200}?linear-gradient\(180deg,\s*var\(--paper\) 0,\s*#dccaa8 11%,\s*#dccaa8 89%,\s*var\(--paper\) 100%\)/,
+  );
 });
