@@ -1,7 +1,6 @@
 import { initGo } from './amazon';
 import { initAudio } from './audio';
 import { initCatalogue } from './catalogue.js';
-import { initTheme } from './theme.js';
 import { initCmdk } from './cmdk';
 import { initBook3D } from './books3d';
 import { loadBooks, prefetchBooks, type Book } from './store';
@@ -95,10 +94,6 @@ const initQuoteScene = () => {
   observer.observe(scene);
 };
 initQuoteScene();
-
-/* ---------- theme ---------- */
-// Pass storage inside a guarded block: browsers may deny access in private mode.
-try { initTheme(document, localStorage); } catch { initTheme(document, { setItem() {} }); }
 
 /* ---------- marketplaces ---------- */
 // Promote the visitor's own Amazon store everywhere a buy link appears.

@@ -75,17 +75,9 @@ const hasInkHero = pageClass !== '';
 
     <script is:inline>
       (() => {
-        const root = document.documentElement;
-        root.classList.add('js');
-        try {
-          const theme = localStorage.getItem('theme');
-          if (theme) root.dataset.theme = theme;
-          else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-            root.dataset.theme = 'dark';
-        } catch {
-          if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-            root.dataset.theme = 'dark';
-        }
+        // One fixed appearance; the js class is what gates the reveal
+        // animations and the no-script fallbacks.
+        document.documentElement.classList.add('js');
 
         const optOut = [navigator.doNotTrack, window.doNotTrack, navigator.msDoNotTrack]
           .some((value) => ['1', 'yes'].includes(String(value).toLowerCase()))
@@ -106,7 +98,7 @@ const hasInkHero = pageClass !== '';
       <style>html { overflow: auto }</style>
     </noscript>
   </head>
-  <body class={pageClass || undefined} data-chrome={hasInkHero ? 'ink' : 'paper'}>
+  <body class={pageClass || undefined}>
     <div class="progress" id="progress"></div>
     <div class="grain" aria-hidden="true"></div>
     <a class="skip" href="#main">Skip to content</a>
