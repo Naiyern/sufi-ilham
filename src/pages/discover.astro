@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Cover from '../components/Cover.astro';
 import Book3D from '../components/Book3D.astro';
+import ToneMelt from '../components/ToneMelt.astro';
 import { bookBySlug, coverUrl, published, series } from '../data/site';
 import { readingPaths } from '../data/reading-paths';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -23,6 +24,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
     <div class="discover-hero-bottom wrap"><span>AN OPEN INVITATION</span><span>SCROLL TO EXPLORE ↓</span></div>
   </section>
+  <ToneMelt to="paper" />
 
   <section class="discover-paths" id="paths">
     <div class="wrap">
@@ -38,5 +40,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </div>
   </section>
+  <ToneMelt to="ember" />
   <section class="discover-finale"><div class="wrap discover-finale-inner"><span class="discover-overline">THE STORY CONTINUES / 02</span><h2>There is more<br /><em>to discover.</em></h2><p>Explore every title, find a series to follow, or read the Urdu novella online for free.</p><div class="discover-actions"><a class="discover-button" href={`${base}/#index`}>Browse all books <span aria-hidden="true">↗</span></a><a class="discover-text-link" href={`${base}/read/darya-ka-aik-hissa/`}>Read the free novella <span aria-hidden="true">↗</span></a></div></div></section>
 </Base>
