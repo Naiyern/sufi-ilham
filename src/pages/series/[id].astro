@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import BookCard from '../../components/BookCard.astro';
-import ToneMelt from '../../components/ToneMelt.astro';
 import { series, seriesBooks, site, seriesStructuredData, metaDescription, bookStores, type Series } from '../../data/site';
 import { coverUrl } from '../../data/site';
 
@@ -58,7 +57,6 @@ const heroImg = hero && !hero.img.startsWith('data:') ? coverUrl(hero.img, site.
       </div>
     </div>
   </section>
-  <ToneMelt to="paper" />
 
   <section id="order" style={`--accent:${s.accent}`}>
     <div class="wrap">

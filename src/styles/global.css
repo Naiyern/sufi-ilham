@@ -25,13 +25,6 @@
   --mark-2: #9a7420;    /* antique gold */
   --field: rgba(34, 29, 22, 0.05);
 
-  /* Shared scene endpoints: every colour melt lands on the exact surface that
-     follows it, rather than revealing a second seam at the section boundary. */
-  --stage-ink: #191713;
-  --stage-clay: #dccaa8;
-  --stage-ember: #b65a40;
-  --melt-height: clamp(6rem, 10vw, 10rem);
-
   --display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --text: 'Newsreader Variable', 'Newsreader', Georgia, serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
@@ -2891,7 +2884,7 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
 .btn { transition: color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease),
         background var(--dur-2) var(--ease), transform var(--dur-2) var(--ease-out); }
 .btn:hover { transform: translateY(-2px); }
-.editorial-hero.cover { --bg: var(--stage-ink); background: var(--stage-ink); padding-top: clamp(7rem, 9vw, 8rem); }
+.editorial-hero.cover { --bg: #29221f; background: #29221f; padding-top: clamp(7rem, 9vw, 8rem); }
 .editorial-hero.cover::before { opacity: .13; }
 .hero-layout { grid-template-columns: minmax(0, 1.1fr) minmax(300px, .75fr); gap: clamp(3rem, 7vw, 8rem); padding-top: clamp(3rem, 5.5vw, 5rem); }
 .editorial-hero h1 { font-size: clamp(6rem, 11.3vw, 11rem); line-height: .78; letter-spacing: -.065em; }
@@ -2935,7 +2928,7 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
 .series-spread h2 { font-size: clamp(3.5rem, 6vw, 6.5rem); line-height: .95; letter-spacing: -.04em; }
 .series-spread .spread-num { color: var(--accent); opacity: .75; }
 .ord li { border-color: var(--rule); }
-.book-hero { background-color: var(--stage-ink); }
+.book-hero { background-color: #29221f; }
 .book-hero-copy h1 { letter-spacing: -.045em; }
 .book-cover-mat { box-shadow: 0 25px 55px rgba(0,0,0,.3); }
 .book-status-line { letter-spacing: .12em; }
@@ -2945,18 +2938,18 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
 .edition-section { padding: clamp(2rem, 4vw, 3rem); background: var(--paper-2); border: 1px solid var(--rule); }
 .edition-link { min-height: 64px; background: var(--paper); transition: background .2s, transform .2s; }
 .edition-link:hover { transform: translateY(-2px); }
-.s-hero { background-color: var(--stage-ink); }
+.s-hero { background-color: #29221f; }
 .s-hero h1 { letter-spacing: -.045em; }
 .s-track { border-color: var(--rule); }
 .s-step { padding-block: 1.2rem; }
 .correspondence-chapter .form, .enquiry-chapter .form { border: 1px solid var(--rule-2); padding: clamp(1.5rem, 3vw, 3rem); }
 .form input, .form textarea, .form select { min-height: 50px; }
-.colophon { --bg: var(--stage-ink); background: var(--stage-ink); border-top: 0; padding-block: clamp(4rem, 7vw, 7rem) 2rem; }
+.colophon { --bg: #29221f; background: #29221f; border-top: 1px solid #b4785d; padding-block: clamp(4rem, 7vw, 7rem) 2rem; }
 .colophon-wordmark { letter-spacing: -.06em; }
 .colophon-grid { gap: clamp(1.5rem, 3vw, 4rem); }
 .colo a { text-underline-offset: .25em; }
 .colo a:hover { color: #edaa8d; }
-.discover-hero { background: var(--stage-ink); }
+.discover-hero { background: #29221f; }
 .discover-hero h1 em { color: #dfbdab; }
 .discover-hero::before { background: radial-gradient(ellipse at 80% 40%, rgba(166, 106, 79, .25), transparent 45%); }
 .discover-kicker, .discover-aside-label { color: #dfa991; }
@@ -2983,14 +2976,14 @@ body.discover-page .mast::before, body.contact-page .mast::before, body.legal-pa
   .hero-layout { grid-template-columns: 1fr; }
 }
 /* Reading and recovery pages keep the same editorial rhythm as the archive. */
-.not-found { min-height: 78svh; display: grid; align-items: center; padding: 9rem 0 6rem; background: var(--stage-ink); color: #f7f2e9; }
+.not-found { min-height: 78svh; display: grid; align-items: center; padding: 9rem 0 6rem; background: #29221f; color: #f7f2e9; }
 .not-found-grid { display: grid; grid-template-columns: 1.4fr .6fr; gap: 4rem; align-items: center; }
 .not-found-kicker { font: .66rem var(--mono); letter-spacing: .14em; color: #dea993; }
 .not-found h1 { margin: 1.8rem 0; font: 400 clamp(4rem, 7vw, 7.5rem)/.96 var(--display); letter-spacing: -.045em; }
 .not-found h1 em { color: #d5b5a3; }
 .not-found-intro { max-width: 34rem; font-size: 1.2rem; color: #ddd0c1; }
-.not-found .btn { --fg: #f7f2e9; --bg: var(--stage-ink); color: var(--fg); border-color: #af9a89; }
-.not-found .btn.solid { background: #f7f2e9; color: var(--stage-ink); }
+.not-found .btn { --fg: #f7f2e9; --bg: #29221f; color: var(--fg); border-color: #af9a89; }
+.not-found .btn.solid { background: #f7f2e9; color: #29221f; }
 .not-found-number { display: grid; justify-items: center; border: 1px solid rgba(247,242,233,.23); padding: 2.5rem 1rem; color: #dcc2ad; text-align: center; }
 .not-found-number span { font: .6rem var(--mono); letter-spacing: .15em; }
 .not-found-number b { font: 400 clamp(7rem, 14vw, 14rem)/1 var(--display); letter-spacing: -.07em; }
@@ -4552,7 +4545,7 @@ html:not(.js) .veil { display: none; }
      night rather than two dark pages */
   background:
     radial-gradient(125% 72% at 50% -18%, rgba(48, 37, 24, .92) 0%, rgba(28, 23, 16, .55) 46%, transparent 100%),
-    linear-gradient(180deg, var(--stage-ink) 0%, #1e1912 24%, #14110c 62%, #0f0d09 100%);
+    linear-gradient(180deg, #29221f 0%, #1e1912 24%, #14110c 62%, #0f0d09 100%);
 }
 
 /* a generated constellation: the HTML carries the stars, nothing is fetched */
@@ -4794,76 +4787,4 @@ html:not(.js) .veil { display: none; }
   .release-sequence {
     font-size: .6rem !important;
   }
-}
-
-/* =========================================================
-   CINEMATIC COLOUR MELTS — shared scene transitions
-   The bridge owns the gradient; the sections on either side own the reading.
-   That separation keeps every word on a fully contrast-safe surface. Warm
-   multi-stop colour and two quiet light pools replace hard ink/paper cuts.
-   ========================================================= */
-.tone-melt {
-  position: relative;
-  isolation: isolate;
-  z-index: 2;
-  inline-size: 100%;
-  block-size: var(--melt-height);
-  flex: none;
-  margin-block: -1px;
-  overflow: hidden;
-  pointer-events: none;
-  background-color: var(--melt-to);
-  background-image:
-    radial-gradient(90% 145% at 0% 0%, color-mix(in srgb, var(--mark-2) 12%, transparent), transparent 64%),
-    radial-gradient(85% 140% at 100% 100%, color-mix(in srgb, var(--mark) 9%, transparent), transparent 68%),
-    linear-gradient(180deg,
-      var(--melt-from) 0%,
-      color-mix(in srgb, var(--melt-from) 86%, var(--melt-to)) 18%,
-      color-mix(in srgb, var(--melt-from) 64%, var(--melt-to)) 38%,
-      color-mix(in srgb, var(--melt-from) 46%, var(--melt-to)) 52%,
-      color-mix(in srgb, var(--melt-from) 28%, var(--melt-to)) 72%,
-      color-mix(in srgb, var(--melt-from) 10%, var(--melt-to)) 90%,
-      var(--melt-to) 100%);
-}
-.tone-melt::before {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  inset: -48% 12%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(217, 180, 94, .11), transparent 64%);
-  filter: blur(28px);
-  pointer-events: none;
-}
-
-/* The local shelf is progressive enhancement. Its two bridges stay hidden
-   with it, then appear through the same data attribute used to render it. */
-.tone-melt--shelf { display: none; }
-html[data-shelf] .tone-melt--shelf { display: block; }
-
-/* Paper scenes begin on the same cream where their incoming melt ends. */
-.contact-sheet {
-  padding-top: clamp(2.2rem, 4vw, 4rem);
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 48%, var(--paper) 100%);
-}
-.threads-chapter {
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 46%, var(--paper) 100%);
-}
-
-/* Keep the cinematic lens, but do not turn the light page's outer edges into
-   a heavy black frame. The intentional scene bridges now carry the contrast. */
-main::after {
-  background: radial-gradient(125% 105% at 50% 42%, transparent 64%, rgba(58, 42, 26, .07) 100%);
-  opacity: .55;
-}
-
-@media (max-width: 640px) {
-  :root { --melt-height: clamp(5.25rem, 22vw, 7.5rem); }
-  .tone-melt::before { inset-inline: -15%; filter: blur(22px); }
-}
-@media (prefers-contrast: more) {
-  .tone-melt { background: linear-gradient(180deg, var(--melt-from), var(--melt-to)); }
-  .tone-melt::before { display: none; }
-}
-@media print {
-  .tone-melt { display: none !important; }
 }

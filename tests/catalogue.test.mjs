@@ -924,51 +924,6 @@ test('the paper sections sit in one continuous field instead of on separate shee
   assert.match(stylesheet, /@media \(prefers-contrast: more\) \{\s*main \{ background-image: none; \}/);
 });
 
-test('cinematic colour melts connect every ink and paper scene', () => {
-  const assertDecorativeMelts = (document, expected) => {
-    const melts = [...document.querySelectorAll('[data-tone-melt]')];
-    assert.equal(melts.length, expected);
-    assert.ok(melts.every((melt) => melt.getAttribute('aria-hidden') === 'true' && !melt.textContent.trim()));
-    return melts;
-  };
-
-  const home = new JSDOM(builtHtml);
-  const { document } = home.window;
-  assertDecorativeMelts(document, 8);
-  const recentMelt = document.querySelector('#new + [data-tone-melt]');
-  assert.equal(recentMelt.dataset.from, 'ink');
-  assert.equal(recentMelt.dataset.to, 'paper');
-  assert.equal(document.querySelector('#shelf').previousElementSibling, recentMelt);
-  assert.equal(document.querySelector('#series').previousElementSibling.dataset.to, 'ink');
-  assert.equal(document.querySelector('#essay').nextElementSibling.dataset.to, 'paper');
-  assert.equal(document.querySelector('#figures').nextElementSibling.dataset.to, 'ink');
-  assert.equal(document.querySelector('#ending').nextElementSibling.dataset.to, 'paper');
-  assert.equal(document.querySelectorAll('.tone-melt--shelf').length, 2);
-  assert.match(stylesheet, /html\[data-shelf\] \.tone-melt--shelf \{ display: block; \}/);
-  close(home);
-
-  for (const [route, expected] of Object.entries({
-    'books/the-ninth-bell': 2,
-    'series/maple': 2,
-    contact: 2,
-    privacy: 2,
-    terms: 2,
-    discover: 3,
-  })) {
-    const dom = new JSDOM(readPage(route));
-    assertDecorativeMelts(dom.window.document, expected);
-    close(dom);
-  }
-
-  const guide = new JSDOM(readPage('discover'));
-  assert.equal(guide.window.document.querySelector('#paths + [data-tone-melt]').dataset.to, 'ember');
-  assert.equal(guide.window.document.querySelector('main + [data-tone-melt]').dataset.from, 'ember');
-  close(guide);
-  const notFound = new JSDOM(readFileSync(join(projectRoot, 'dist/404.html'), 'utf8'));
-  assertDecorativeMelts(notFound.window.document, 0);
-  close(notFound);
-});
-
 test('the privacy page lists the shelf and no longer promises a theme', () => {
   const privacy = new JSDOM(readPage('privacy')).window.document;
   const storage = [...privacy.querySelectorAll('code')].map((code) => code.textContent);

@@ -6,7 +6,6 @@ import QuoteStage from '../components/QuoteStage.astro';
 import Cosmos from '../components/Cosmos.astro';
 import Book3D from '../components/Book3D.astro';
 import AnimatedCover from '../components/AnimatedCover.astro';
-import ToneMelt from '../components/ToneMelt.astro';
 import { books, published, series, seriesBooks, site, themes, journey, coverUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished, seriesStructuredData } from '../data/site';
 import { publicImageSize } from '../data/image-size';
 import { resolvePortrait } from '../data/portrait';
@@ -186,7 +185,6 @@ const jsonld = [
 
   <!-- ================= THE OVERTURE ================= -->
   <Cosmos />
-  <ToneMelt to="paper" shelf />
 
   <!-- ================= YOUR SHELF (this browser only) ================= -->
   <section class="my-shelf" id="myShelf" aria-labelledby="myShelfTitle" hidden>
@@ -201,7 +199,6 @@ const jsonld = [
       <ul class="my-shelf-rail" id="myShelfRail"></ul>
     </div>
   </section>
-  <ToneMelt to="ink" shelf />
 
   <!-- ================= NEW RELEASES (dated, not hardcoded) ================= -->
   <section id="new" class="cinema-reel" style={`--reel-still:url("${releaseBackdrop}")`}>
@@ -288,10 +285,8 @@ const jsonld = [
     </div>
   </section>
 
-  <ToneMelt to="paper" />
-
   <!-- ================= SHELF ================= -->
-  <section id="shelf" class="contact-sheet">
+  <section id="shelf" class="contact-sheet" style="padding-top:0">
     <div class="wrap">
       <div class="folio reveal">
         <h2>Recently published</h2>
@@ -408,7 +403,6 @@ const jsonld = [
   </section>
 
   <!-- ================= SERIES SPREADS ================= -->
-  <ToneMelt to="ink" />
   <div id="series">
     {series.map((s, i) => {
       const list = seriesBooks(s.id);
@@ -547,7 +541,6 @@ const jsonld = [
   </section>
 
   <!-- ================= FIGURES / THEMES ================= -->
-  <ToneMelt to="paper" />
   <section id="figures" class="threads-chapter">
     <div class="wrap">
       <div class="folio reveal">
@@ -580,9 +573,7 @@ const jsonld = [
   </section>
 
   <!-- ================= INTERTITLE: a line that changes every visit ================= -->
-  <ToneMelt to="ink" />
   <QuoteStage id="ending" seed="/ending" />
-  <ToneMelt to="paper" />
 
   <!-- ================= ENQUIRIES ================= -->
   <section id="enquiries" class="spread enquiry-chapter">
