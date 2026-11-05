@@ -7,6 +7,7 @@ import CommandPalette from '../components/CommandPalette.astro';
 import NextChapter from '../components/NextChapter.astro';
 import FlowHud from '../components/FlowHud.astro';
 import FlowBlend from '../components/FlowBlend.astro';
+import Welcome from '../components/Welcome.astro';
 import { site } from '../data/site';
 import { resolvePortrait } from '../data/portrait';
 /* The two faces that paint first: the display serif of the masthead/hero and
@@ -116,6 +117,7 @@ const hasInkHero = pageClass !== '';
     <Footer />
     <BookModal />
     <CommandPalette />
+    <Welcome />
 
     <!-- ambient soundtrack -->
     <audio id="bgm" loop preload="none" playsinline src={`${base}/sama.mp3?v=2`}></audio>
