@@ -41,6 +41,7 @@ export function initFlow(doc: Document = document, view: Window = doc.defaultVie
   const scenes = Array.from(doc.querySelectorAll<HTMLElement>(SCENES))
     .filter((scene) => !scene.hidden);
   if (!scenes.length) return () => {};
+  const blends = Array.from(doc.querySelectorAll<HTMLElement>('[data-flow-blend]'));
 
   const current = hud.querySelector<HTMLElement>('[data-flow-current]');
   const total = hud.querySelector<HTMLElement>('[data-flow-total]');
@@ -92,6 +93,16 @@ export function initFlow(doc: Document = document, view: Window = doc.defaultVie
     const distance = Math.max(0, root.scrollHeight - viewport);
     const progress = distance > 0 ? Math.min(1, Math.max(0, top / distance)) : 0;
     hud.style.setProperty('--flow-p', progress.toFixed(4));
+
+    // Move one warm reflection through each colour seam as it enters the
+    // viewport. The static gradient never depends on this enhancement.
+    for (const blend of blends) {
+      const rect = blend.getBoundingClientRect();
+      const arrival = Math.min(1, Math.max(0, (viewport - rect.top) / (viewport * .72)));
+      const light = Math.sin(arrival * Math.PI) * .62;
+      blend.style.setProperty('--blend-p', arrival.toFixed(3));
+      blend.style.setProperty('--blend-o', light.toFixed(3));
+    }
   };
 
   const schedule = () => {

@@ -4982,3 +4982,77 @@ main::after {
 @media print {
   .flow-hud { display: none !important; }
 }
+
+/* =========================================================
+   CINEMATIC SCENE BLENDS — visible colour, zero document space
+   Each marker is exactly 0px tall. Its gradient paints upwards into the
+   preceding scene's own padding, then lands on the next scene's real colour.
+   Nothing is inserted into the reading flow and no heading changes position.
+   ========================================================= */
+.flow-blend {
+  --flow-blend-height: clamp(4rem, 6vw, 5rem);
+  position: relative;
+  z-index: 8;
+  display: block;
+  inline-size: 100%;
+  block-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.flow-blend::before,
+.flow-blend::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  block-size: var(--flow-blend-height);
+  pointer-events: none;
+}
+.flow-blend::before {
+  background-image:
+    radial-gradient(85% 90% at 82% 0%, color-mix(in srgb, var(--mark-2) 13%, transparent), transparent 65%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--blend-to) 0%, transparent) 0%,
+      color-mix(in srgb, var(--blend-to) 4%, transparent) 12%,
+      color-mix(in srgb, var(--blend-to) 14%, transparent) 28%,
+      color-mix(in srgb, var(--blend-to) 36%, transparent) 46%,
+      color-mix(in srgb, var(--blend-to) 62%, transparent) 64%,
+      color-mix(in srgb, var(--blend-to) 84%, transparent) 80%,
+      color-mix(in srgb, var(--blend-to) 96%, transparent) 93%,
+      var(--blend-to) 100%);
+}
+.flow-blend::after {
+  display: none;
+  background: linear-gradient(105deg,
+    transparent 32%,
+    rgba(255, 238, 196, .28) 47%,
+    rgba(217, 180, 94, .15) 56%,
+    transparent 72%);
+  filter: blur(7px);
+  opacity: var(--blend-o, 0);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 24%, #000 72%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 24%, #000 72%, transparent);
+  transform: translate3d(calc(-55% + var(--blend-p, .5) * 110%), 0, 0);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .flow-blend::after { display: block; }
+}
+
+/* A returning reader's local shelf is optional, so its two blends are too. */
+.flow-blend--shelf { display: none; }
+html[data-shelf] .flow-blend--shelf { display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-blend::after { display: none; }
+}
+@media (prefers-contrast: more) {
+  .flow-blend::before { background: linear-gradient(180deg, transparent, var(--blend-to)); }
+  .flow-blend::after { display: none; }
+}
+@media print {
+  .flow-blend { display: none !important; }
+}

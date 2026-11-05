@@ -1,0 +1,27 @@
+---
+/* A zero-height scene seam. The gradient and its moving light are absolutely
+   positioned above this marker, inside the preceding scene's existing padding.
+   Unlike a transition band, this element consumes no vertical document space. */
+type Tone = 'paper' | 'paper-2' | 'clay' | 'ember' | 'ink';
+interface Props {
+  to?: Tone;
+  shelf?: boolean;
+}
+
+const tones: Record<Tone, string> = {
+  paper: 'var(--paper)',
+  'paper-2': 'var(--paper-2)',
+  clay: 'var(--stage-clay)',
+  ember: 'var(--stage-ember)',
+  ink: 'var(--stage-ink)',
+};
+const { to = 'paper', shelf = false } = Astro.props;
+---
+
+<span
+  class={`flow-blend${shelf ? ' flow-blend--shelf' : ''}`}
+  data-flow-blend
+  data-to={to}
+  style={`--blend-to:${tones[to]}`}
+  aria-hidden="true"
+></span>
