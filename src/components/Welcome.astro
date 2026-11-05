@@ -9,6 +9,7 @@ const motes = Array.from({ length: 24 }, (_, index) => ({
   delay: -(index % 9) * .8,
   opacity: .18 + (index % 5) * .1,
 }));
+const voiceBands = Array.from({ length: 18 }, (_, index) => index * 20);
 ---
 
 <div
@@ -26,7 +27,7 @@ const motes = Array.from({ length: 24 }, (_, index) => ({
     preload="none"
     playsinline
     src={`${base}/welcome-ur.mp3?v=1`}
-    aria-label="Urdu welcome narration"
+    aria-label="Welcome narration"
   ></audio>
 
   <div class="welcome__atmosphere" aria-hidden="true">
@@ -49,7 +50,14 @@ const motes = Array.from({ length: 24 }, (_, index) => ({
     </div>
 
     <div class="welcome__content">
-      <div class="welcome__seal" aria-hidden="true"><span>SI</span><i></i></div>
+      <div class="welcome__instrument" aria-hidden="true">
+        <div class="welcome__wave">
+          {voiceBands.map((angle) => (
+            <i data-voice-band style={`--angle:${angle}deg`}></i>
+          ))}
+        </div>
+        <div class="welcome__seal"><span>SI</span><i></i></div>
+      </div>
       <p class="welcome__eyebrow"><span></span>A house of stories &amp; questions<span></span></p>
 
       <h2 class="welcome__title" id="welcomeTitle">
@@ -63,17 +71,23 @@ const motes = Array.from({ length: 24 }, (_, index) => ({
         and the words that find us when we need them most.
       </p>
 
+      <div class="welcome__playback" aria-hidden="true">
+        <span class="welcome__playback-label">The introduction is playing</span>
+        <span class="welcome__playback-line"><i></i></span>
+        <span class="welcome__playback-time" data-welcome-time>00:00</span>
+      </div>
+
       <div class="welcome__actions">
         <button class="welcome__enter" id="welcomeEnter" type="button">
-          <span data-welcome-enter-label>Enter with Urdu voice</span>
+          <span data-welcome-enter-label>Begin the experience</span>
           <span class="welcome__arrow" aria-hidden="true">→</span>
         </button>
         <button class="welcome__quiet" id="welcomeQuiet" type="button">Enter in silence</button>
       </div>
 
-      <p class="welcome__sound-note">
+      <p class="welcome__sound-note" aria-live="polite">
         <span class="welcome__sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        Urdu voice and music begin only after your choice.
+        <span data-welcome-note>Voice and music begin only after your choice.</span>
       </p>
     </div>
 
