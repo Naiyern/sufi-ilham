@@ -6,6 +6,7 @@ import BookModal from '../components/BookModal.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 import NextChapter from '../components/NextChapter.astro';
 import FlowHud from '../components/FlowHud.astro';
+import FlowBlend from '../components/FlowBlend.astro';
 import { site } from '../data/site';
 import { resolvePortrait } from '../data/portrait';
 /* The two faces that paint first: the display serif of the masthead/hero and
@@ -109,7 +110,9 @@ const hasInkHero = pageClass !== '';
 
     <Nav />
     <main id="main"><slot /></main>
+    {isContact && <FlowBlend to="paper" />}
     {(pageClass === 'book-page' || pageClass === 'series-page' || isContact) && <NextChapter />}
+    {!isNotFound && <FlowBlend to="ink" />}
     <Footer />
     <BookModal />
     <CommandPalette />

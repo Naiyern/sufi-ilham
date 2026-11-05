@@ -5,6 +5,7 @@ import AnimatedCover from '../../components/AnimatedCover.astro';
 import Cover from '../../components/Cover.astro';
 import Stores from '../../components/Stores.astro';
 import Book3D from '../../components/Book3D.astro';
+import FlowBlend from '../../components/FlowBlend.astro';
 import { books, series, site, seriesBooks, type Book, coverUrl, byNewest, isNewRelease, formatPublished, metaDescription, bookStores } from '../../data/site';
 
 type Reader = { slug: string; chapters: { id: string; title: string }[]; source?: string };
@@ -159,6 +160,7 @@ const jsonld = [
         </div>
       </div>
     </header>
+    <FlowBlend to="paper" />
 
     {buyStores.length > 0 && (
       <div class="buy-bar" id="buyBar" aria-hidden="true" inert>

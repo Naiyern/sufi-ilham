@@ -6,6 +6,7 @@ import QuoteStage from '../components/QuoteStage.astro';
 import Cosmos from '../components/Cosmos.astro';
 import Book3D from '../components/Book3D.astro';
 import AnimatedCover from '../components/AnimatedCover.astro';
+import FlowBlend from '../components/FlowBlend.astro';
 import { books, published, series, seriesBooks, site, themes, journey, coverUrl, byNewest, newReleases, isNewRelease, formatPublished, pageCount, latestPublished, seriesStructuredData } from '../data/site';
 import { publicImageSize } from '../data/image-size';
 import { resolvePortrait } from '../data/portrait';
@@ -185,6 +186,7 @@ const jsonld = [
 
   <!-- ================= THE OVERTURE ================= -->
   <Cosmos />
+  <FlowBlend to="paper" shelf />
 
   <!-- ================= YOUR SHELF (this browser only) ================= -->
   <section class="my-shelf" id="myShelf" aria-labelledby="myShelfTitle" hidden>
@@ -199,6 +201,7 @@ const jsonld = [
       <ul class="my-shelf-rail" id="myShelfRail"></ul>
     </div>
   </section>
+  <FlowBlend to="ink" shelf />
 
   <!-- ================= NEW RELEASES (dated, not hardcoded) ================= -->
   <section id="new" class="cinema-reel" style={`--reel-still:url("${releaseBackdrop}")`}>
@@ -285,6 +288,8 @@ const jsonld = [
     </div>
   </section>
 
+
+  <FlowBlend to="paper-2" />
 
   <!-- ================= SHELF ================= -->
   <section id="shelf" class="contact-sheet" style="padding-top:0">
@@ -402,6 +407,8 @@ const jsonld = [
       </div>
     </div>
   </section>
+
+  <FlowBlend to="ink" />
 
   <!-- ================= SERIES SPREADS ================= -->
   <div id="series">
@@ -541,6 +548,8 @@ const jsonld = [
     </div>
   </section>
 
+  <FlowBlend to="paper-2" />
+
   <!-- ================= FIGURES / THEMES ================= -->
   <section id="figures" class="threads-chapter">
     <div class="wrap">
@@ -573,8 +582,11 @@ const jsonld = [
     </div>
   </section>
 
+  <FlowBlend to="ink" />
+
   <!-- ================= INTERTITLE: a line that changes every visit ================= -->
   <QuoteStage id="ending" seed="/ending" />
+  <FlowBlend to="paper" />
 
   <!-- ================= ENQUIRIES ================= -->
   <section id="enquiries" class="spread enquiry-chapter">
