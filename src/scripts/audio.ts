@@ -1,16 +1,21 @@
 /* "Sama'" ambient soundtrack. Silent until the visitor opts in; a remembered
    preference waits for a user gesture when the browser requires one. Fades in/out. */
+export const NARRATION_EVENT = 'sufi:narration';
+
 export function initAudio() {
   const a = document.getElementById('bgm') as HTMLAudioElement | null;
   if (!a) return;
 
   const KEY = 'si_music';
   const VOL = 0.3;
+  const NARRATION_VOL = 0.075;
   const btn = document.getElementById('sndBtn');
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let fadeT: number | null = null;
   let wanted = false;
+  let narrating = false;
+  const level = () => narrating ? NARRATION_VOL : VOL;
   try { wanted = localStorage.getItem(KEY) === 'on'; } catch { /* private mode */ }
 
   a.volume = 0;
@@ -49,8 +54,8 @@ export function initAudio() {
   function start() {
     if (!wanted) return;
     const pr = a!.play();
-    if (pr && pr.then) pr.then(() => { fade(VOL, RM ? 600 : 4000); paint(); }).catch(arm);
-    else { fade(VOL, 4000); paint(); }
+    if (pr && pr.then) pr.then(() => { fade(level(), RM ? 600 : 4000); paint(); }).catch(arm);
+    else { fade(level(), 4000); paint(); }
   }
 
   const stop = () => fade(0, 700, () => { try { a.pause(); } catch { /* ignore */ } paint(); });
@@ -62,11 +67,18 @@ export function initAudio() {
     paint();
   });
 
+  /* Keep the local Urdu recording intelligible: the score recedes to a quiet
+     cinematic bed while it speaks, then gently returns to its normal level. */
+  document.addEventListener(NARRATION_EVENT, (event) => {
+    narrating = Boolean((event as CustomEvent<{ active?: boolean }>).detail?.active);
+    if (wanted && !a.paused && !document.hidden) fade(level(), narrating ? 500 : 1400);
+  });
+
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       if (!a.paused) fade(0, 400, () => a.pause());
     } else if (wanted) {
-      a.play().then(() => { fade(VOL, 1400); paint(); }).catch(() => {});
+      a.play().then(() => { fade(level(), 1400); paint(); }).catch(() => {});
     }
   });
 

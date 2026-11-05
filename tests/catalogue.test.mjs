@@ -1053,13 +1053,33 @@ test('the cinematic welcome is hidden safely and offers explicit voice and silen
   assert.equal(welcome.querySelectorAll('h1').length, 0, 'the introduction never replaces the page h1');
   assert.match(welcome.querySelector('h2').textContent.replace(/\s+/g, ' '), /Welcome to\s+Sufi Library/);
   assert.equal(welcome.querySelectorAll('.welcome__mote').length, 24);
-  assert.match(document.getElementById('welcomeEnter').textContent, /Enter with voice/);
+  assert.match(document.getElementById('welcomeEnter').textContent, /Enter with Urdu voice/);
   assert.match(document.getElementById('welcomeQuiet').textContent, /Enter in silence/);
   assert.equal(document.getElementById('bgm').hasAttribute('autoplay'), false);
+  const voice = document.getElementById('welcomeVoice');
+  assert.ok(voice);
+  assert.equal(voice.hasAttribute('autoplay'), false);
+  assert.equal(voice.getAttribute('preload'), 'none');
+  assert.equal(voice.getAttribute('src'), `${BASE}/welcome-ur.mp3?v=1`);
   assert.match(stylesheet, /@keyframes welcome-title-in/);
   assert.match(stylesheet, /@keyframes welcome-leave/);
   assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{\s*\.welcome \*/);
   close(dom);
+});
+
+test('Urdu narration is a local prerecording, not a robotic platform voice', () => {
+  const audio = readFileSync(join(projectRoot, 'public/welcome-ur.mp3'));
+  assert.ok(audio.length > 50_000, `Urdu narration is only ${audio.length} bytes`);
+  assert.ok(audio.length < 300_000, `Urdu narration is ${audio.length} bytes — too heavy for a welcome`);
+  assert.ok(audio[0] === 0x49 || audio[0] === 0xff, 'public/welcome-ur.mp3 is not an MP3');
+  assert.match(WELCOME_NARRATION, /[\u0600-\u06ff]/, 'the narration script must be Urdu');
+
+  const welcomeSource = readFileSync(join(projectRoot, 'src/scripts/welcome.ts'), 'utf8');
+  assert.doesNotMatch(welcomeSource, /speechSynthesis|SpeechSynthesisUtterance/);
+  assert.match(welcomeSource, /voice\.play\(\)/);
+  const audioSource = readFileSync(join(projectRoot, 'src/scripts/audio.ts'), 'utf8');
+  assert.match(audioSource, /NARRATION_VOL = 0\.075/);
+  assert.match(audioSource, /document\.addEventListener\(NARRATION_EVENT/);
 });
 
 test('welcome narration needs a gesture, the session remembers entry, and replay stays available', async () => {
@@ -1068,14 +1088,18 @@ test('welcome narration needs a gesture, the session remembers entry, and replay
     getItem: (key) => values.get(key) ?? null,
     setItem: (key, value) => values.set(key, value),
   };
-  const spoken = [];
+  const played = [];
+  const narrationSignals = [];
   const first = new JSDOM(builtHtml, {
     url: 'https://sufi-ilham.test/sufi-ilham/?welcome=1',
     pretendToBeVisual: true,
   });
+  first.window.document.addEventListener('sufi:narration', (event) => {
+    narrationSignals.push(event.detail.active);
+  });
   const stopFirst = initWelcome(first.window.document, {
     storage,
-    speak: (text) => spoken.push(text),
+    playVoice: (audio) => played.push(audio),
     reducedMotion: true,
   });
   const welcome = first.window.document.getElementById('welcome');
@@ -1083,21 +1107,25 @@ test('welcome narration needs a gesture, the session remembers entry, and replay
   assert.equal(welcome.getAttribute('aria-hidden'), 'false');
   assert.equal(welcome.hasAttribute('inert'), false);
   assert.ok(first.window.document.body.classList.contains('welcome-open'));
-  assert.deepEqual(spoken, [], 'nothing speaks before the visitor chooses');
+  assert.deepEqual(played, [], 'nothing plays before the visitor chooses');
 
   first.window.document.getElementById('welcomeEnter').click();
   await new Promise((resolve) => setTimeout(resolve, 20));
-  assert.deepEqual(spoken, [WELCOME_NARRATION]);
+  assert.equal(played.length, 1);
+  assert.equal(played[0].id, 'welcomeVoice');
+  assert.equal(played[0].getAttribute('src'), `${BASE}/welcome-ur.mp3?v=1`);
+  assert.deepEqual(narrationSignals, [true], 'the soundtrack ducks while Urdu narration plays');
   assert.equal(values.get(WELCOME_STORAGE_KEY), 'seen');
   assert.equal(welcome.getAttribute('aria-hidden'), 'true');
   assert.ok(welcome.hasAttribute('inert'));
   assert.ok(!welcome.classList.contains('is-open'));
   assert.ok(!first.window.document.body.classList.contains('welcome-open'));
   stopFirst();
+  assert.equal(narrationSignals.at(-1), false, 'cleanup restores the normal soundtrack level');
   close(first);
 
   const returning = new JSDOM(builtHtml, { url: 'https://sufi-ilham.test/sufi-ilham/' });
-  const stopReturning = initWelcome(returning.window.document, { storage, speak: (text) => spoken.push(text) });
+  const stopReturning = initWelcome(returning.window.document, { storage, playVoice: (audio) => played.push(audio) });
   assert.ok(!returning.window.document.getElementById('welcome').classList.contains('is-open'));
   stopReturning();
   close(returning);
@@ -1108,13 +1136,13 @@ test('welcome narration needs a gesture, the session remembers entry, and replay
   });
   const stopReplay = initWelcome(replay.window.document, {
     storage,
-    speak: (text) => spoken.push(text),
+    playVoice: (audio) => played.push(audio),
     reducedMotion: true,
   });
   assert.ok(replay.window.document.getElementById('welcome').classList.contains('is-open'));
   replay.window.document.getElementById('welcomeQuiet').click();
   await new Promise((resolve) => setTimeout(resolve, 20));
-  assert.equal(spoken.length, 1, 'silent entry never starts narration');
+  assert.equal(played.length, 1, 'silent entry never starts narration');
   assert.ok(!replay.window.document.getElementById('welcome').classList.contains('is-open'));
   stopReplay();
   close(replay);
@@ -1127,6 +1155,8 @@ test('the privacy page lists the shelf and no longer promises a theme', () => {
   assert.ok(storage.includes('si_music'), 'the soundtrack choice must stay disclosed');
   assert.ok(storage.includes('si_welcome_v1'), 'the session-only welcome flag must be disclosed');
   assert.match(privacy.body.textContent, /session storage/i);
+  assert.match(privacy.body.textContent, /prerecorded narration file/i);
+  assert.doesNotMatch(privacy.body.textContent, /device’s speech synthesis/i);
   assert.ok(!storage.includes('theme'), 'nothing stores a theme any more');
   assert.match(privacy.body.textContent, /this browser/i);
 });
