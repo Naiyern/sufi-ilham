@@ -9,6 +9,7 @@ import { setDialogOpen } from '../src/scripts/dialog.ts';
 import { detectMarket, initMarkets } from '../src/scripts/market.ts';
 import { initShelf, readShelf, rememberBook } from '../src/scripts/shelf.ts';
 import { initFlow } from '../src/scripts/flow.ts';
+import { initWelcome, WELCOME_NARRATION, WELCOME_STORAGE_KEY } from '../src/scripts/welcome.ts';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const builtHtml = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
@@ -1041,11 +1042,91 @@ test('the flow readout follows real scenes and ordinary scroll position', async 
   close(dom);
 });
 
+test('the cinematic welcome is hidden safely and offers explicit voice and silence choices', () => {
+  const dom = new JSDOM(builtHtml);
+  const { document } = dom.window;
+  const welcome = document.getElementById('welcome');
+  assert.ok(welcome);
+  assert.equal(welcome.getAttribute('role'), 'dialog');
+  assert.equal(welcome.getAttribute('aria-hidden'), 'true');
+  assert.ok(welcome.hasAttribute('inert'));
+  assert.equal(welcome.querySelectorAll('h1').length, 0, 'the introduction never replaces the page h1');
+  assert.match(welcome.querySelector('h2').textContent.replace(/\s+/g, ' '), /Welcome to\s+Sufi Library/);
+  assert.equal(welcome.querySelectorAll('.welcome__mote').length, 24);
+  assert.match(document.getElementById('welcomeEnter').textContent, /Enter with voice/);
+  assert.match(document.getElementById('welcomeQuiet').textContent, /Enter in silence/);
+  assert.equal(document.getElementById('bgm').hasAttribute('autoplay'), false);
+  assert.match(stylesheet, /@keyframes welcome-title-in/);
+  assert.match(stylesheet, /@keyframes welcome-leave/);
+  assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{\s*\.welcome \*/);
+  close(dom);
+});
+
+test('welcome narration needs a gesture, the session remembers entry, and replay stays available', async () => {
+  const values = new Map();
+  const storage = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => values.set(key, value),
+  };
+  const spoken = [];
+  const first = new JSDOM(builtHtml, {
+    url: 'https://sufi-ilham.test/sufi-ilham/?welcome=1',
+    pretendToBeVisual: true,
+  });
+  const stopFirst = initWelcome(first.window.document, {
+    storage,
+    speak: (text) => spoken.push(text),
+    reducedMotion: true,
+  });
+  const welcome = first.window.document.getElementById('welcome');
+  assert.ok(welcome.classList.contains('is-open'));
+  assert.equal(welcome.getAttribute('aria-hidden'), 'false');
+  assert.equal(welcome.hasAttribute('inert'), false);
+  assert.ok(first.window.document.body.classList.contains('welcome-open'));
+  assert.deepEqual(spoken, [], 'nothing speaks before the visitor chooses');
+
+  first.window.document.getElementById('welcomeEnter').click();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.deepEqual(spoken, [WELCOME_NARRATION]);
+  assert.equal(values.get(WELCOME_STORAGE_KEY), 'seen');
+  assert.equal(welcome.getAttribute('aria-hidden'), 'true');
+  assert.ok(welcome.hasAttribute('inert'));
+  assert.ok(!welcome.classList.contains('is-open'));
+  assert.ok(!first.window.document.body.classList.contains('welcome-open'));
+  stopFirst();
+  close(first);
+
+  const returning = new JSDOM(builtHtml, { url: 'https://sufi-ilham.test/sufi-ilham/' });
+  const stopReturning = initWelcome(returning.window.document, { storage, speak: (text) => spoken.push(text) });
+  assert.ok(!returning.window.document.getElementById('welcome').classList.contains('is-open'));
+  stopReturning();
+  close(returning);
+
+  const replay = new JSDOM(builtHtml, {
+    url: 'https://sufi-ilham.test/sufi-ilham/?welcome=1',
+    pretendToBeVisual: true,
+  });
+  const stopReplay = initWelcome(replay.window.document, {
+    storage,
+    speak: (text) => spoken.push(text),
+    reducedMotion: true,
+  });
+  assert.ok(replay.window.document.getElementById('welcome').classList.contains('is-open'));
+  replay.window.document.getElementById('welcomeQuiet').click();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.equal(spoken.length, 1, 'silent entry never starts narration');
+  assert.ok(!replay.window.document.getElementById('welcome').classList.contains('is-open'));
+  stopReplay();
+  close(replay);
+});
+
 test('the privacy page lists the shelf and no longer promises a theme', () => {
   const privacy = new JSDOM(readPage('privacy')).window.document;
   const storage = [...privacy.querySelectorAll('code')].map((code) => code.textContent);
   assert.ok(storage.includes('si_shelf'), 'the shelf must be disclosed');
   assert.ok(storage.includes('si_music'), 'the soundtrack choice must stay disclosed');
+  assert.ok(storage.includes('si_welcome_v1'), 'the session-only welcome flag must be disclosed');
+  assert.match(privacy.body.textContent, /session storage/i);
   assert.ok(!storage.includes('theme'), 'nothing stores a theme any more');
   assert.match(privacy.body.textContent, /this browser/i);
 });

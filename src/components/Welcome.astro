@@ -1,0 +1,76 @@
+---
+import { published, series } from '../data/site';
+
+const motes = Array.from({ length: 24 }, (_, index) => ({
+  x: (index * 37 + 11) % 96,
+  y: (index * 53 + 7) % 88,
+  duration: 5 + (index % 6) * 1.3,
+  delay: -(index % 9) * .8,
+  opacity: .18 + (index % 5) * .1,
+}));
+---
+
+<div
+  class="welcome"
+  id="welcome"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="welcomeTitle"
+  aria-describedby="welcomeDescription"
+  inert
+>
+  <div class="welcome__atmosphere" aria-hidden="true">
+    <div class="welcome__aura"></div>
+    <div class="welcome__orbit welcome__orbit--outer"></div>
+    <div class="welcome__orbit welcome__orbit--inner"></div>
+    <div class="welcome__horizon"></div>
+    {motes.map((mote) => (
+      <i
+        class="welcome__mote"
+        style={`--x:${mote.x}%;--y:${mote.y}%;--duration:${mote.duration}s;--delay:${mote.delay}s;--opacity:${mote.opacity}`}
+      ></i>
+    ))}
+  </div>
+
+  <div class="welcome__frame">
+    <div class="welcome__topline" aria-hidden="true">
+      <span>The Sufi Ilham archive</span>
+      <span>A door into the work</span>
+    </div>
+
+    <div class="welcome__content">
+      <div class="welcome__seal" aria-hidden="true"><span>SI</span><i></i></div>
+      <p class="welcome__eyebrow"><span></span>A house of stories &amp; questions<span></span></p>
+
+      <h2 class="welcome__title" id="welcomeTitle">
+        <span class="welcome__title-line"><span>Welcome to&nbsp;</span></span>
+        <span class="welcome__title-line welcome__title-line--name"><span>Sufi <em>Library</em></span></span>
+      </h2>
+
+      <p class="welcome__urdu" lang="ur" dir="rtl">خوش آمدید</p>
+      <p class="welcome__description" id="welcomeDescription">
+        For the stories we live, the questions we carry,<br />
+        and the words that find us when we need them most.
+      </p>
+
+      <div class="welcome__actions">
+        <button class="welcome__enter" id="welcomeEnter" type="button">
+          <span data-welcome-enter-label>Enter with voice</span>
+          <span class="welcome__arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="welcome__quiet" id="welcomeQuiet" type="button">Enter in silence</button>
+      </div>
+
+      <p class="welcome__sound-note">
+        <span class="welcome__sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        Voice and music begin only after your choice.
+      </p>
+    </div>
+
+    <div class="welcome__bottom" aria-hidden="true">
+      <span>{published.length} books · {series.length} story worlds</span>
+      <span>Come in · make yourself at home</span>
+    </div>
+  </div>
+</div>

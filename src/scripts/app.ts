@@ -11,10 +11,14 @@ import { initQuotes } from './quotes';
 import { initCurtain } from './transition';
 import { initFlow } from './flow';
 import { initSeam, initPortraitLook } from './author';
+import { initWelcome } from './welcome';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
   Array.from(r.querySelectorAll(s)) as T[];
+
+/* ---------- first-visit cinematic welcome ---------- */
+initWelcome();
 
 /* ---------- cinematic pointer depth ---------- */
 const initCinematicParallax = () => {
