@@ -1,17 +1,19 @@
+import { NARRATION_EVENT } from './audio.ts';
+
 /* First-visit cinematic welcome.
 
    Visual motion may introduce the visit automatically; sound may not. Modern
-   browsers require a gesture, so narration and the existing opt-in soundtrack
-   begin only inside the Enter button's click handler. The session flag stores
-   no identity and disappears when the browsing session ends. */
+   browsers require a gesture, so the prerecorded Urdu narration and existing
+   opt-in soundtrack begin only inside the Enter button's click handler. The
+   session flag stores no identity and disappears when the browsing session ends. */
 
 export const WELCOME_STORAGE_KEY = 'si_welcome_v1';
-export const WELCOME_NARRATION = 'Welcome to Soo fee Library. A home for stories, questions, and the quiet truths that stay with you. Come in, and find the words that were waiting for you.';
+export const WELCOME_NARRATION = 'خوش آمدید۔ صوفی لائبریری میں آپ کا استقبال ہے۔ میں اس ادبی سفر میں آپ کا ساتھ دوں گا۔ یہاں ہر کتاب ایک سوال ہے، ہر کہانی ایک سفر، اور ہر لفظ اپنے آپ کو پہچاننے کی ایک دعوت۔ آئیے، کچھ لمحے دنیا کے شور سے دور، ان الفاظ کے قریب بیٹھیں۔ ہو سکتا ہے، جو جواب آپ ڈھونڈ رہے ہیں، وہی یہاں آپ کا انتظار کر رہا ہو۔ آئیے، کہانی شروع کریں۔';
 
 type SessionStore = Pick<Storage, 'getItem' | 'setItem'>;
 type WelcomeOptions = {
   storage?: SessionStore | null;
-  speak?: (text: string) => void;
+  playVoice?: (audio: HTMLAudioElement) => void;
   reducedMotion?: boolean;
 };
 
@@ -33,8 +35,8 @@ export function initWelcome(doc: Document = document, options: WelcomeOptions = 
   if (seen && !replay) return () => {};
 
   const reduced = options.reducedMotion ?? view.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const nativeSpeech = view.speechSynthesis;
-  const canNarrate = Boolean(options.speak || (nativeSpeech && typeof SpeechSynthesisUtterance !== 'undefined'));
+  const voice = doc.getElementById('welcomeVoice') as HTMLAudioElement | null;
+  const canNarrate = Boolean(voice);
   const label = enter.querySelector<HTMLElement>('[data-welcome-enter-label]');
   if (!canNarrate && label) label.textContent = 'Enter with sound';
 
@@ -46,33 +48,40 @@ export function initWelcome(doc: Document = document, options: WelcomeOptions = 
     try { storage?.setItem(WELCOME_STORAGE_KEY, 'seen'); } catch { /* private mode */ }
   };
 
+  const signalNarration = (active: boolean) => {
+    try {
+      doc.dispatchEvent(new view.CustomEvent(NARRATION_EVENT, { detail: { active } }));
+    } catch { /* an older browser can still play the recording without ducking */ }
+  };
+  const voiceStarted = () => signalNarration(true);
+  const voiceStopped = () => signalNarration(false);
+  voice?.addEventListener('play', voiceStarted);
+  voice?.addEventListener('pause', voiceStopped);
+  voice?.addEventListener('ended', voiceStopped);
+  voice?.addEventListener('error', voiceStopped);
+
   const cancelNarration = () => {
-    try { nativeSpeech?.cancel(); } catch { /* unsupported or already gone */ }
+    voiceStopped();
+    if (!voice || options.playVoice) return;
+    try { voice.pause(); } catch { /* unsupported or already gone */ }
+    try { voice.currentTime = 0; } catch { /* metadata may not be ready */ }
   };
 
   const narrate = () => {
-    if (!canNarrate) return;
+    if (!voice) return;
+    if (options.playVoice) {
+      options.playVoice(voice);
+      voiceStarted();
+      return;
+    }
+    try { voice.currentTime = 0; } catch { /* metadata may not be ready */ }
+    voice.volume = 1;
     try {
-      if (options.speak) {
-        options.speak(WELCOME_NARRATION);
-        return;
-      }
-      if (!nativeSpeech) return;
-      const line = new SpeechSynthesisUtterance(WELCOME_NARRATION);
-      line.lang = 'en-GB';
-      line.rate = .84;
-      line.pitch = .88;
-      line.volume = 1;
-      const voices = nativeSpeech.getVoices();
-      const english = voices.filter((voice) => voice.lang.toLowerCase().startsWith('en'));
-      const preferred = ['Daniel', 'Google UK English Male', 'Microsoft Ryan', 'Microsoft Guy', 'Serena', 'Samantha', 'Alex'];
-      line.voice = preferred.map((name) => english.find((voice) => voice.name.includes(name))).find(Boolean)
-        ?? english.find((voice) => voice.lang.toLowerCase() === 'en-gb')
-        ?? english[0]
-        ?? null;
-      nativeSpeech.cancel();
-      nativeSpeech.speak(line);
-    } catch { /* a missing platform voice never blocks entry */ }
+      const playback = voice.play();
+      if (playback) void playback.catch(voiceStopped);
+    } catch {
+      voiceStopped();
+    }
   };
 
   const soundtrack = (on: boolean) => {
@@ -106,6 +115,8 @@ export function initWelcome(doc: Document = document, options: WelcomeOptions = 
     }, reduced ? 0 : 680);
   };
 
+  const onEnter = () => close(true);
+  const onQuiet = () => close(false);
   const onKeydown = (event: KeyboardEvent) => {
     if (closing || !overlay.classList.contains('is-open')) return;
     if (event.key === 'Escape') {
@@ -129,8 +140,16 @@ export function initWelcome(doc: Document = document, options: WelcomeOptions = 
   overlay.setAttribute('aria-hidden', 'false');
   overlay.removeAttribute('inert');
   doc.body.classList.add('welcome-open');
-  enter.addEventListener('click', () => close(true));
-  quiet.addEventListener('click', () => close(false));
+
+  /* Begin buffering only when the introduction is actually shown. Returning
+     visitors and silent sessions never download the narration. */
+  if (voice && !options.playVoice) {
+    voice.preload = 'auto';
+    try { voice.load(); } catch { /* play() will retry after the gesture */ }
+  }
+
+  enter.addEventListener('click', onEnter);
+  quiet.addEventListener('click', onQuiet);
   doc.addEventListener('keydown', onKeydown);
   view.addEventListener('pagehide', cancelNarration);
   focusTimer = view.setTimeout(() => enter.focus({ preventScroll: true }), reduced ? 0 : 420);
@@ -139,8 +158,14 @@ export function initWelcome(doc: Document = document, options: WelcomeOptions = 
     view.clearTimeout(closeTimer);
     view.clearTimeout(focusTimer);
     cancelNarration();
+    enter.removeEventListener('click', onEnter);
+    quiet.removeEventListener('click', onQuiet);
     doc.removeEventListener('keydown', onKeydown);
     view.removeEventListener('pagehide', cancelNarration);
+    voice?.removeEventListener('play', voiceStarted);
+    voice?.removeEventListener('pause', voiceStopped);
+    voice?.removeEventListener('ended', voiceStopped);
+    voice?.removeEventListener('error', voiceStopped);
     doc.body.classList.remove('welcome-open');
   };
 }
