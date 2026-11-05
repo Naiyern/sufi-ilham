@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import BookModal from '../components/BookModal.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 import NextChapter from '../components/NextChapter.astro';
-import ToneMelt from '../components/ToneMelt.astro';
+import FlowHud from '../components/FlowHud.astro';
 import { site } from '../data/site';
 import { resolvePortrait } from '../data/portrait';
 /* The two faces that paint first: the display serif of the masthead/hero and
@@ -103,14 +103,13 @@ const hasInkHero = pageClass !== '';
     <div class="veil" id="veil" aria-hidden="true"></div>
     <div class="aperture" aria-hidden="true"></div>
     <div class="progress" id="progress"></div>
+    <FlowHud />
     <div class="grain" aria-hidden="true"></div>
     <a class="skip" href="#main">Skip to content</a>
 
     <Nav />
     <main id="main"><slot /></main>
-    {isContact && <ToneMelt to="paper" />}
     {(pageClass === 'book-page' || pageClass === 'series-page' || isContact) && <NextChapter />}
-    {!isNotFound && <ToneMelt to="ink" from={isDiscover ? 'ember' : 'paper'} />}
     <Footer />
     <BookModal />
     <CommandPalette />

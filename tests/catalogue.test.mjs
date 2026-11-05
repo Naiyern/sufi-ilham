@@ -8,6 +8,7 @@ import { initCatalogue } from '../src/scripts/catalogue.js';
 import { setDialogOpen } from '../src/scripts/dialog.ts';
 import { detectMarket, initMarkets } from '../src/scripts/market.ts';
 import { initShelf, readShelf, rememberBook } from '../src/scripts/shelf.ts';
+import { initFlow } from '../src/scripts/flow.ts';
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 const builtHtml = readFileSync(join(projectRoot, 'dist/index.html'), 'utf8');
@@ -924,49 +925,90 @@ test('the paper sections sit in one continuous field instead of on separate shee
   assert.match(stylesheet, /@media \(prefers-contrast: more\) \{\s*main \{ background-image: none; \}/);
 });
 
-test('cinematic colour melts connect every ink and paper scene', () => {
-  const assertDecorativeMelts = (document, expected) => {
-    const melts = [...document.querySelectorAll('[data-tone-melt]')];
-    assert.equal(melts.length, expected);
-    assert.ok(melts.every((melt) => melt.getAttribute('aria-hidden') === 'true' && !melt.textContent.trim()));
-    return melts;
-  };
-
+test('the flow interface adds no layout-shifting transition bands', () => {
   const home = new JSDOM(builtHtml);
   const { document } = home.window;
-  assertDecorativeMelts(document, 8);
-  const recentMelt = document.querySelector('#new + [data-tone-melt]');
-  assert.equal(recentMelt.dataset.from, 'ink');
-  assert.equal(recentMelt.dataset.to, 'paper');
-  assert.equal(document.querySelector('#shelf').previousElementSibling, recentMelt);
-  assert.equal(document.querySelector('#series').previousElementSibling.dataset.to, 'ink');
-  assert.equal(document.querySelector('#essay').nextElementSibling.dataset.to, 'paper');
-  assert.equal(document.querySelector('#figures').nextElementSibling.dataset.to, 'ink');
-  assert.equal(document.querySelector('#ending').nextElementSibling.dataset.to, 'paper');
-  assert.equal(document.querySelectorAll('.tone-melt--shelf').length, 2);
-  assert.match(stylesheet, /html\[data-shelf\] \.tone-melt--shelf \{ display: block; \}/);
+  assert.equal(document.querySelector('#new').nextElementSibling, document.querySelector('#shelf'));
+  assert.equal(document.querySelector('#essay').nextElementSibling, document.querySelector('#figures'));
+  assert.equal(document.querySelector('#figures').nextElementSibling, document.querySelector('#ending'));
+  assert.equal(document.querySelector('#ending').nextElementSibling, document.querySelector('#enquiries'));
   close(home);
 
-  for (const [route, expected] of Object.entries({
-    'books/the-ninth-bell': 2,
-    'series/maple': 2,
-    contact: 2,
-    privacy: 2,
-    terms: 2,
-    discover: 3,
-  })) {
-    const dom = new JSDOM(readPage(route));
-    assertDecorativeMelts(dom.window.document, expected);
+  for (const route of ['', 'books/the-ninth-bell', 'series/maple', 'contact', 'privacy', 'terms', 'discover']) {
+    const dom = new JSDOM(route ? readPage(route) : builtHtml);
+    const page = dom.window.document;
+    assert.equal(page.querySelectorAll('[data-tone-melt], .tone-melt').length, 0, `${route || 'home'}: no empty melt bands`);
+    const hud = page.getElementById('flowHud');
+    assert.ok(hud, `${route || 'home'}: one fixed flow readout`);
+    assert.equal(hud.getAttribute('aria-hidden'), 'true');
+    assert.equal(hud.querySelectorAll('a, button, input, [tabindex]').length, 0, 'decoration adds no tab stops');
     close(dom);
   }
+  assert.doesNotMatch(stylesheet, /\.tone-melt/);
+  assert.match(stylesheet, /\.flow-hud \{\s*position: fixed;/);
+  assert.match(stylesheet, /@media \(min-width: 1280px\).*prefers-reduced-motion: no-preference/);
+  assert.match(stylesheet, /@media \(prefers-reduced-motion: reduce\) \{\s*\.flow-hud/);
+});
 
-  const guide = new JSDOM(readPage('discover'));
-  assert.equal(guide.window.document.querySelector('#paths + [data-tone-melt]').dataset.to, 'ember');
-  assert.equal(guide.window.document.querySelector('main + [data-tone-melt]').dataset.from, 'ember');
-  close(guide);
-  const notFound = new JSDOM(readFileSync(join(projectRoot, 'dist/404.html'), 'utf8'));
-  assertDecorativeMelts(notFound.window.document, 0);
-  close(notFound);
+test('the flow readout follows real scenes and ordinary scroll position', async () => {
+  const chrome = new JSDOM(builtHtml);
+  const hudMarkup = chrome.window.document.getElementById('flowHud').outerHTML;
+  close(chrome);
+  const dom = new JSDOM(`<body>${hudMarkup}<main>
+    <section class="editorial-hero"><h1>Opening</h1></section>
+    <section><h2>Second scene</h2></section>
+    <section class="closing-quote"><h2>Last light</h2></section>
+  </main><footer class="colophon" data-flow-label="Colophon"></footer>`, {
+    url: 'https://sufi-ilham.test/sufi-ilham/',
+    pretendToBeVisual: true,
+  });
+  const { window } = dom;
+  const { document } = window;
+  Object.defineProperty(window, 'innerHeight', { configurable: true, value: 800 });
+  Object.defineProperty(window, 'scrollY', { configurable: true, writable: true, value: 0 });
+  Object.defineProperty(document.documentElement, 'scrollHeight', { configurable: true, value: 2400 });
+  window.scrollTo = () => { throw new Error('the flow interface must never scroll the page'); };
+
+  const sections = [...document.querySelectorAll('main > section')];
+  const boxes = [
+    { top: 0, bottom: 800 },
+    { top: 800, bottom: 1600 },
+    { top: 1600, bottom: 2400 },
+  ];
+  sections.forEach((section, index) => {
+    section.getBoundingClientRect = () => ({
+      ...boxes[index], left: 0, right: 1000, width: 1000,
+      height: boxes[index].bottom - boxes[index].top, x: 0, y: boxes[index].top,
+    });
+  });
+  document.querySelector('.colophon').getBoundingClientRect = () => ({
+    top: 2400, bottom: 2800, left: 0, right: 1000, width: 1000, height: 400, x: 0, y: 2400,
+  });
+
+  const stop = initFlow(document, window);
+  const hud = document.getElementById('flowHud');
+  assert.equal(hud.querySelector('[data-flow-total]').textContent, '04');
+  assert.equal(hud.querySelector('[data-flow-current]').textContent, '01');
+  assert.equal(hud.querySelector('[data-flow-label]').textContent, 'Opening');
+  assert.equal(hud.dataset.tone, 'ink');
+  assert.ok(sections[0].classList.contains('is-flow-current'));
+
+  boxes[0] = { top: -1000, bottom: -200 };
+  boxes[1] = { top: -200, bottom: 600 };
+  boxes[2] = { top: 600, bottom: 1400 };
+  window.scrollY = 600;
+  window.dispatchEvent(new window.Event('scroll'));
+  await new Promise((resolve) => setTimeout(resolve, 40));
+
+  assert.equal(hud.querySelector('[data-flow-current]').textContent, '02');
+  assert.equal(hud.querySelector('[data-flow-label]').textContent, 'Second scene');
+  assert.equal(hud.dataset.tone, 'paper');
+  assert.equal(hud.style.getPropertyValue('--flow-p'), '0.3750');
+  assert.ok(sections[1].classList.contains('is-flow-current'));
+  assert.ok(!sections[0].classList.contains('is-flow-current'));
+  assert.equal(window.scrollY, 600);
+  stop();
+  close(dom);
 });
 
 test('the privacy page lists the shelf and no longer promises a theme', () => {

@@ -25,12 +25,10 @@
   --mark-2: #9a7420;    /* antique gold */
   --field: rgba(34, 29, 22, 0.05);
 
-  /* Shared scene endpoints: every colour melt lands on the exact surface that
-     follows it, rather than revealing a second seam at the section boundary. */
+  /* Shared scene endpoints keep the full-bleed editorial stages consistent. */
   --stage-ink: #191713;
   --stage-clay: #dccaa8;
   --stage-ember: #b65a40;
-  --melt-height: clamp(6rem, 10vw, 10rem);
 
   --display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --text: 'Newsreader Variable', 'Newsreader', Georgia, serif;
@@ -4797,73 +4795,190 @@ html:not(.js) .veil { display: none; }
 }
 
 /* =========================================================
-   CINEMATIC COLOUR MELTS — shared scene transitions
-   The bridge owns the gradient; the sections on either side own the reading.
-   That separation keeps every word on a fully contrast-safe surface. Warm
-   multi-stop colour and two quiet light pools replace hard ink/paper cuts.
+   FLOW INTERFACE — motion without layout shifts
+   A fixed chapter readout, a single active rule, and optical entrances. None
+   of these elements owns document space or changes the reading order.
    ========================================================= */
-.tone-melt {
-  position: relative;
-  isolation: isolate;
-  z-index: 2;
-  inline-size: 100%;
-  block-size: var(--melt-height);
-  flex: none;
-  margin-block: -1px;
-  overflow: hidden;
+.flow-hud {
+  position: fixed;
+  z-index: 80;
+  top: 50%;
+  right: max(.8rem, env(safe-area-inset-right));
+  display: none;
+  grid-template-columns: auto 1px;
+  grid-template-rows: auto auto;
+  gap: .85rem .7rem;
+  align-items: start;
+  transform: translateY(-50%);
+  color: var(--ink-3);
   pointer-events: none;
-  background-color: var(--melt-to);
-  background-image:
-    radial-gradient(90% 145% at 0% 0%, color-mix(in srgb, var(--mark-2) 12%, transparent), transparent 64%),
-    radial-gradient(85% 140% at 100% 100%, color-mix(in srgb, var(--mark) 9%, transparent), transparent 68%),
-    linear-gradient(180deg,
-      var(--melt-from) 0%,
-      color-mix(in srgb, var(--melt-from) 86%, var(--melt-to)) 18%,
-      color-mix(in srgb, var(--melt-from) 64%, var(--melt-to)) 38%,
-      color-mix(in srgb, var(--melt-from) 46%, var(--melt-to)) 52%,
-      color-mix(in srgb, var(--melt-from) 28%, var(--melt-to)) 72%,
-      color-mix(in srgb, var(--melt-from) 10%, var(--melt-to)) 90%,
-      var(--melt-to) 100%);
+  user-select: none;
 }
-.tone-melt::before {
+.flow-hud__count {
+  grid-column: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: .28rem;
+  font: .55rem/1 var(--mono);
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+}
+.flow-hud__count [data-flow-current] { color: var(--mark-2); font-size: .72rem; }
+.flow-hud__divider { opacity: .38; }
+.flow-hud__label {
+  grid-column: 1;
+  max-height: 10rem;
+  overflow: hidden;
+  justify-self: end;
+  writing-mode: vertical-rl;
+  font: .52rem/1.4 var(--mono);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  opacity: .82;
+}
+.flow-hud__track {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 1px;
+  height: 12rem;
+  background: color-mix(in srgb, currentColor 22%, transparent);
+}
+.flow-hud__track i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--mark-2), var(--mark));
+  transform: scaleY(var(--flow-p, 0));
+  transform-origin: 50% 0;
+}
+.flow-hud__track b {
+  position: absolute;
+  top: calc(var(--flow-p, 0) * 100%);
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mark-2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mark-2) 12%, transparent), 0 0 14px color-mix(in srgb, var(--mark-2) 55%, transparent);
+  transform: translate(-50%, -50%);
+}
+.flow-hud[data-tone='ink'] { color: #d3ccbd; }
+.flow-hud[data-tone='ink'] .flow-hud__count [data-flow-current],
+.flow-hud[data-tone='ink'] .flow-hud__track b { color: #d9b45e; }
+
+/* Only wide, tall screens have a safe margin outside the editorial measure. */
+@media (min-width: 1280px) and (min-height: 560px) and (prefers-reduced-motion: no-preference) {
+  .flow-hud { display: grid; opacity: 0; transition: opacity .45s var(--ease), color .45s var(--ease); }
+  html.flow-ready .flow-hud { opacity: .82; }
+  body.menu-open .flow-hud { opacity: 0; }
+}
+
+/* One rule responds to the chapter at the reading line. It is a short entrance,
+   not a perpetual glow, and it leaves the existing editorial rule intact. */
+.flow-scene .folio { position: relative; }
+.flow-scene .folio::after {
   content: '';
   position: absolute;
-  z-index: 0;
-  inset: -48% 12%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(217, 180, 94, .11), transparent 64%);
-  filter: blur(28px);
+  inset: auto 0 -2px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--mark-2), var(--mark) 42%, transparent 88%);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
   pointer-events: none;
 }
-
-/* The local shelf is progressive enhancement. Its two bridges stay hidden
-   with it, then appear through the same data attribute used to render it. */
-.tone-melt--shelf { display: none; }
-html[data-shelf] .tone-melt--shelf { display: block; }
-
-/* Paper scenes begin on the same cream where their incoming melt ends. */
-.contact-sheet {
-  padding-top: clamp(2.2rem, 4vw, 4rem);
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 48%, var(--paper) 100%);
-}
-.threads-chapter {
-  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 46%, var(--paper) 100%);
+.flow-scene.is-flow-current .folio::after { animation: flow-folio 1.15s var(--ease-out) both; }
+@keyframes flow-folio {
+  0% { opacity: 0; transform: scaleX(0); }
+  35% { opacity: .9; }
+  100% { opacity: .24; transform: scaleX(1); }
 }
 
-/* Keep the cinematic lens, but do not turn the light page's outer edges into
-   a heavy black frame. The intentional scene bridges now carry the contrast. */
+/* Depth and focus replace the old flat rise on screens that can afford the
+   extra paint. No clipping is used, so book spines and shadows stay intact. */
+@media (min-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .reveal {
+    transform: translate3d(0, 26px, 0);
+    filter: blur(5px);
+    transition: opacity var(--dur-5) var(--ease-out), transform var(--dur-5) var(--ease-out), filter var(--dur-4) var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+  .reveal.in { transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+
+/* Cross-document flow: the page recedes optically while the next title carries
+   the reader forward. Browsers without view transitions keep normal navigation. */
+h1 { view-transition-name: flow-title; }
+::view-transition-group(flow-title) { z-index: 2; animation-duration: .65s; animation-timing-function: var(--ease-out); }
+::view-transition-old(root) { animation: flow-page-out .26s var(--ease) both; }
+::view-transition-new(root) { animation: flow-page-in .58s var(--ease-out) both; }
+@keyframes flow-page-out {
+  to { opacity: 0; transform: scale(.992); filter: blur(6px); }
+}
+@keyframes flow-page-in {
+  from { opacity: 0; transform: translateY(12px) scale(1.003); filter: blur(7px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* The existing ink curtain stays opaque for the hand-off. A single hairline of
+   antique light and a soft pool make it feel intentional rather than a flash. */
+.veil { isolation: isolate; overflow: hidden; }
+.veil::before,
+.veil::after,
+.aperture::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+.veil::before {
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(217, 180, 94, .12), transparent 56%);
+  transform: scale(.82);
+}
+.veil::after,
+.aperture::after {
+  top: 50%;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 180, 94, .85), transparent);
+  box-shadow: 0 0 20px rgba(217, 180, 94, .2);
+  transform: scaleX(0);
+}
+.veil.is-on::before { animation: flow-veil-glow .34s var(--ease) both; }
+.veil.is-on::after { animation: flow-veil-line .32s var(--ease-out) both; }
+.aperture::after { animation: flow-aperture-line 620ms var(--ease-out) both; }
+@keyframes flow-veil-glow { to { opacity: 1; transform: scale(1); } }
+@keyframes flow-veil-line {
+  0% { opacity: 0; transform: scaleX(0); }
+  55% { opacity: 1; }
+  100% { opacity: .4; transform: scaleX(1); }
+}
+@keyframes flow-aperture-line {
+  0% { opacity: 0; transform: scaleX(0); }
+  35% { opacity: .7; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+
+/* The lens remains quiet; the active interface, not a black frame, carries the
+   cinematic treatment around the cream reading field. */
 main::after {
-  background: radial-gradient(125% 105% at 50% 42%, transparent 64%, rgba(58, 42, 26, .07) 100%);
-  opacity: .55;
+  background: radial-gradient(125% 105% at 50% 42%, transparent 64%, rgba(58, 42, 26, .09) 100%);
+  opacity: .5;
 }
 
-@media (max-width: 640px) {
-  :root { --melt-height: clamp(5.25rem, 22vw, 7.5rem); }
-  .tone-melt::before { inset-inline: -15%; filter: blur(22px); }
+@media (prefers-reduced-motion: reduce) {
+  .flow-hud, .flow-scene .folio::after { display: none; }
+  .reveal { filter: none !important; }
+  ::view-transition-old(root), ::view-transition-new(root),
+  ::view-transition-old(flow-title), ::view-transition-new(flow-title) { animation: none; }
+  .veil::before, .veil::after, .aperture::after { display: none; }
 }
 @media (prefers-contrast: more) {
-  .tone-melt { background: linear-gradient(180deg, var(--melt-from), var(--melt-to)); }
-  .tone-melt::before { display: none; }
+  .flow-hud, .flow-scene .folio::after { display: none; }
 }
 @media print {
-  .tone-melt { display: none !important; }
+  .flow-hud { display: none !important; }
 }
