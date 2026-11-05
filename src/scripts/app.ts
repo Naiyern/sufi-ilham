@@ -9,6 +9,7 @@ import { initMarkets } from './market';
 import { initShelf } from './shelf';
 import { initQuotes } from './quotes';
 import { initCurtain } from './transition';
+import { initFlow } from './flow';
 import { initSeam, initPortraitLook } from './author';
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
@@ -113,6 +114,9 @@ initPortraitLook();
 /* ---------- the shelf ---------- */
 // The site remembers which books you opened, on this device only.
 initShelf();
+
+/* ---------- the reader's passage through the existing scenes ---------- */
+initFlow();
 
 /* ---------- buy bar ---------- */
 /* On a phone the hero's buy button scrolls away within a screen. Once it has
