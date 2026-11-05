@@ -71,7 +71,7 @@ const hasInkHero = pageClass !== '';
     <link rel="preload" href={textFont} as="font" type="font/woff2" crossorigin />
     <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
     <link rel="dns-prefetch" href="https://m.media-amazon.com" />
-    {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+    {jsonld.map((j: unknown) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
 
     <script is:inline>
       (() => {
