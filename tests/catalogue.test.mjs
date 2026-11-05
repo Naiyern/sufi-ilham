@@ -1053,8 +1053,11 @@ test('the cinematic welcome is hidden safely and offers explicit voice and silen
   assert.equal(welcome.querySelectorAll('h1').length, 0, 'the introduction never replaces the page h1');
   assert.match(welcome.querySelector('h2').textContent.replace(/\s+/g, ' '), /Welcome to\s+Sufi Library/);
   assert.equal(welcome.querySelectorAll('.welcome__mote').length, 24);
-  assert.match(document.getElementById('welcomeEnter').textContent, /Enter with Urdu voice/);
+  assert.match(document.getElementById('welcomeEnter').textContent, /Begin the experience/);
+  assert.doesNotMatch(document.getElementById('welcomeEnter').textContent, /Urdu|Hindi|English/);
   assert.match(document.getElementById('welcomeQuiet').textContent, /Enter in silence/);
+  assert.equal(welcome.querySelectorAll('[data-voice-band]').length, 18);
+  assert.ok(welcome.querySelector('.welcome__playback'));
   assert.equal(document.getElementById('bgm').hasAttribute('autoplay'), false);
   const voice = document.getElementById('welcomeVoice');
   assert.ok(voice);
@@ -1077,6 +1080,8 @@ test('Urdu narration is a local prerecording, not a robotic platform voice', () 
   const welcomeSource = readFileSync(join(projectRoot, 'src/scripts/welcome.ts'), 'utf8');
   assert.doesNotMatch(welcomeSource, /speechSynthesis|SpeechSynthesisUtterance/);
   assert.match(welcomeSource, /voice\.play\(\)/);
+  assert.match(welcomeSource, /createMediaElementSource/);
+  assert.match(welcomeSource, /getByteFrequencyData/);
   const audioSource = readFileSync(join(projectRoot, 'src/scripts/audio.ts'), 'utf8');
   assert.match(audioSource, /NARRATION_VOL = 0\.075/);
   assert.match(audioSource, /document\.addEventListener\(NARRATION_EVENT/);
@@ -1114,11 +1119,18 @@ test('welcome narration needs a gesture, the session remembers entry, and replay
   assert.equal(played.length, 1);
   assert.equal(played[0].id, 'welcomeVoice');
   assert.equal(played[0].getAttribute('src'), `${BASE}/welcome-ur.mp3?v=1`);
-  assert.deepEqual(narrationSignals, [true], 'the soundtrack ducks while Urdu narration plays');
+  assert.deepEqual(narrationSignals, [true], 'the soundtrack ducks while narration plays');
   assert.equal(values.get(WELCOME_STORAGE_KEY), 'seen');
+  assert.ok(welcome.classList.contains('is-narrating'), 'the cinematic scene stays for the narration');
+  assert.equal(welcome.getAttribute('aria-hidden'), 'false');
+  assert.match(first.window.document.getElementById('welcomeEnter').textContent, /Enter the library/);
+  assert.match(first.window.document.getElementById('welcomeQuiet').textContent, /Stop & enter/);
+
+  played[0].dispatchEvent(new first.window.Event('ended'));
+  await new Promise((resolve) => setTimeout(resolve, 20));
   assert.equal(welcome.getAttribute('aria-hidden'), 'true');
   assert.ok(welcome.hasAttribute('inert'));
-  assert.ok(!welcome.classList.contains('is-open'));
+  assert.ok(!welcome.classList.contains('is-open'), 'the scene exits automatically when narration ends');
   assert.ok(!first.window.document.body.classList.contains('welcome-open'));
   stopFirst();
   assert.equal(narrationSignals.at(-1), false, 'cleanup restores the normal soundtrack level');
@@ -1146,6 +1158,28 @@ test('welcome narration needs a gesture, the session remembers entry, and replay
   assert.ok(!replay.window.document.getElementById('welcome').classList.contains('is-open'));
   stopReplay();
   close(replay);
+});
+
+test('entering during narration skips the visual wait without restarting the recording', async () => {
+  const played = [];
+  const dom = new JSDOM(builtHtml, {
+    url: 'https://sufi-ilham.test/sufi-ilham/?welcome=1',
+    pretendToBeVisual: true,
+  });
+  const stop = initWelcome(dom.window.document, {
+    storage: null,
+    playVoice: (audio) => played.push(audio),
+    reducedMotion: true,
+  });
+  const enter = dom.window.document.getElementById('welcomeEnter');
+  enter.click();
+  assert.ok(dom.window.document.getElementById('welcome').classList.contains('is-narrating'));
+  enter.click();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.equal(played.length, 1, 'the second click never restarts the voice');
+  assert.ok(!dom.window.document.getElementById('welcome').classList.contains('is-open'));
+  stop();
+  close(dom);
 });
 
 test('the privacy page lists the shelf and no longer promises a theme', () => {
