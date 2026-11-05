@@ -211,6 +211,10 @@ const mode = "pdf";
 
         var reflowPdf = function () {};
         var updateInd = function () {};
+        // Read the saved place before the initial onScroll() writes progress.
+        // PDF loading is asynchronous: reading it later would return the zero
+        // just written at page load instead of the reader's previous position.
+        var restoreY = savedPosition();
 
         if (mode === 'pdf') {
           var wrap = document.getElementById('rpages');
@@ -236,8 +240,8 @@ const mode = "pdf";
               buildShells();
               observe();
               updateInd();
-              // restore position
-              var y = savedPosition(); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); });
+              // Restore the value captured before the first progress write.
+              if (restoreY > 0) requestAnimationFrame(function () { scrollTo(0, restoreY); });
             } catch (err) {
               var fallback = document.createElement('div');
               fallback.className = 'pdfjs-fallback';
@@ -336,7 +340,6 @@ const mode = "pdf";
             // width changed → re-render visible pages at new size.
             rendered = {};
             shells.forEach(function (s) { var c = s.querySelector('canvas'); if (c) c.remove(); });
-            var mid = window.scrollY + window.innerHeight / 2;
             for (var i = 0; i < shells.length; i++) {
               var r = shells[i].getBoundingClientRect();
               if (r.bottom > -900 && r.top < window.innerHeight + 900) { renderPage(i + 1); }
@@ -345,8 +348,8 @@ const mode = "pdf";
 
           onScroll();
         } else {
-          // text / empty modes
-          var y = savedPosition(); if (y > 0) requestAnimationFrame(function () { scrollTo(0, y); });
+          // text / empty modes use the same pre-write snapshot as PDF mode.
+          if (restoreY > 0) requestAnimationFrame(function () { scrollTo(0, restoreY); });
           onScroll();
         }
       })();

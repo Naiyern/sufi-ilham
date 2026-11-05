@@ -962,6 +962,51 @@ test('the shelf shows how far into a book you got, and the reader remembers the 
   assert.doesNotMatch(reader, /parseInt\(localStorage\.getItem\(K\)/, 'every restore must go through savedPosition');
 });
 
+test('the PDF reader restores its saved place after the first progress write and asynchronous load', async () => {
+  const reader = readFileSync(join(projectRoot, 'dist/read/darya-ka-aik-hissa/index.html'), 'utf8');
+  const dom = new JSDOM(reader, {
+    url: 'https://sufi-ilham.test/sufi-ilham/read/darya-ka-aik-hissa/',
+    runScripts: 'outside-only',
+    pretendToBeVisual: true,
+  });
+  const { window } = dom;
+  window.localStorage.setItem('reader:darya-ka-aik-hissa', JSON.stringify({ y: 1840, p: 0.42 }));
+
+  const frames = [];
+  const scrolls = [];
+  window.requestAnimationFrame = (callback) => { frames.push(callback); return frames.length; };
+  window.cancelAnimationFrame = () => {};
+  window.scrollTo = (...args) => { scrolls.push(args); };
+  window.scrollBy = () => {};
+  // The viewer's memory timer is irrelevant here; do not keep the test alive.
+  window.setInterval = () => 1;
+  window.clearInterval = () => {};
+  window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} };
+  window.__pdfLib = {
+    GlobalWorkerOptions: {},
+    getDocument: () => ({ promise: Promise.resolve({
+      numPages: 1,
+      getPage: () => Promise.resolve({
+        getViewport: ({ scale }) => ({ width: 600 * scale, height: 900 * scale }),
+      }),
+    }) }),
+  };
+
+  const inline = [...window.document.scripts].find((script) => script.textContent.includes("var K = 'reader:'"));
+  assert.ok(inline, 'the generated reader must include its inline controller');
+  // JSDOM does not load browser modules. Substitute only the PDF.js import;
+  // the real controller, storage writes and asynchronous sequencing still run.
+  const dynamicImport = "var lib = await import(wrap.getAttribute('data-lib'));";
+  assert.ok(inline.textContent.includes(dynamicImport));
+  window.eval(inline.textContent.replace(dynamicImport, 'var lib = window.__pdfLib;'));
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  for (const callback of frames.splice(0)) callback(0);
+
+  assert.ok(scrolls.some(([, y]) => y === 1840), 'the pre-load scroll position must survive the initial zero-progress write');
+  assert.equal(window.document.querySelectorAll('.rpage').length, 1);
+  close(dom);
+});
+
 test('the paper is one stock, deep enough never to read as a white page', () => {
   // every light scope agrees on the same stock: no page may quietly pick its own
   const light = [...new Set(tokens('paper'))].filter((hex) => luminance(hex) > 0.3);

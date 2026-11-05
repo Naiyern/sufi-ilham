@@ -12,7 +12,7 @@ interface Props {
 }
 const { src, title, w = 400, h = 600, eager = false, cls = '' } = Astro.props;
 const initials = title.replace(/[^A-Za-z ]/g, '').split(/\s+/).filter(Boolean).slice(0, 2)
-  .map((x) => x[0].toUpperCase()).join('');
+  .map((x: string) => x[0].toUpperCase()).join('');
 ---
 
 <span class={`cv ${cls}`} data-fallback={initials} style={`--ar:${w}/${h}`}>
