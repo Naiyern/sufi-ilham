@@ -4,7 +4,7 @@ export const readingPaths = [
   {
     number: '01', eyebrow: 'For the curious mind', title: 'Question everything',
     description: 'Books that look beneath the familiar: consciousness, belief and the way we experience the world.',
-    slugs: ['first-person-singular', 'belief-unveiled', 'the-human-operating-manual'],
+    slugs: ['more-than-a-symbol', 'first-person-singular', 'belief-unveiled'],
     accent: 'ochre',
   },
   {

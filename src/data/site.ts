@@ -292,6 +292,11 @@ export const journey = [
     title: 'Darya Ka Aik Hissa & Nasruddin Ki Tedhi Tarazu',
     text: 'A free Urdu novella to read online, and a Hindi historical-folkloric novel included in Kindle Unlimited.',
   },
+  {
+    date: '5 Nov 2026',
+    title: 'More Than a Symbol',
+    text: 'Four fictional lives across four cities, intertwined with social reflection on women, belief, dignity and the right to choose.',
+  },
 ];
 
 /** Resolve a cover to a usable URL. Remote (http) and inline (data:) sources

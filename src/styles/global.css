@@ -3754,7 +3754,7 @@ input, select, textarea { caret-color: var(--mark); accent-color: var(--mark); }
 html { scrollbar-color: color-mix(in srgb, var(--mark-2) 70%, transparent) var(--paper); }
 section[id], div[id] { scroll-margin-top: 96px; }
 
-/* ---- 8. the catalogue is 36 tiles: let the browser skip the ones off screen ---- */
+/* ---- 8. the catalogue is 37 tiles: let the browser skip the ones off screen ---- */
 .book-tile {
   content-visibility: auto;
   contain-intrinsic-size: auto 240px;

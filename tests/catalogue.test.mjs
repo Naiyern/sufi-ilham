@@ -67,18 +67,18 @@ function close(dom) {
   dom.window.close();
 }
 
-test('starts with all 36 catalogue entries and a contextual live count', () => {
+test('starts with all 37 catalogue entries and a contextual live count', () => {
   const dom = setupCatalogue();
   const { document } = dom.window;
   const tiles = [...document.querySelectorAll('#bookGrid .book-tile')];
   const forthcoming = tiles.filter((tile) => tile.dataset.comingSoon === 'true');
 
-  assert.equal(tiles.length, 36);
-  assert.equal(tiles.length - forthcoming.length, 32);
+  assert.equal(tiles.length, 37);
+  assert.equal(tiles.length - forthcoming.length, 33);
   assert.equal(forthcoming.length, 4);
-  assert.equal(new Set(tiles.map((tile) => tile.dataset.order)).size, 36);
-  assert.deepEqual(visibleSlugs(document).length, 36);
-  assert.equal(document.querySelector('#fcount').textContent, 'Showing 36 of 36 titles');
+  assert.equal(new Set(tiles.map((tile) => tile.dataset.order)).size, 37);
+  assert.deepEqual(visibleSlugs(document).length, 37);
+  assert.equal(document.querySelector('#fcount').textContent, 'Showing 37 of 37 titles');
   assert.equal(document.querySelector('#catalogReset').hidden, true);
   assert.equal(document.querySelector('#bookEmpty').hidden, true);
   close(dom);
@@ -90,7 +90,7 @@ test('searches summaries with case-insensitive AND terms and combines with langu
 
   setSearch(dom, 'FLOWER nahrabad');
   assert.deepEqual(visibleSlugs(document), ['the-river-s-portion']);
-  assert.equal(document.querySelector('#fcount').textContent, 'Showing 1 of 36 titles');
+  assert.equal(document.querySelector('#fcount').textContent, 'Showing 1 of 37 titles');
 
   setSearch(dom, '');
   setSearch(dom, 'Hindi');
@@ -113,7 +113,7 @@ test('combines genre, series, and search; the top reset restores every control',
   assert.equal(document.querySelector('#catalogReset').hidden, false);
   document.querySelector('#catalogReset').click();
 
-  assert.equal(visibleSlugs(document).length, 36);
+  assert.equal(visibleSlugs(document).length, 37);
   assert.equal(document.querySelector('#bookSearch').value, '');
   assert.equal(document.querySelector('#seriesFilter').value, 'all');
   assert.equal(document.querySelector('#bookSort').value, 'newest');
@@ -160,14 +160,14 @@ test('no-results state gives a working reset path and returns focus to search', 
 
   setSearch(dom, 'nothing-matches-this-query');
   assert.deepEqual(visibleSlugs(document), []);
-  assert.equal(document.querySelector('#fcount').textContent, 'Showing 0 of 36 titles');
+  assert.equal(document.querySelector('#fcount').textContent, 'Showing 0 of 37 titles');
   assert.equal(document.querySelector('#bookEmpty').hidden, false);
   assert.equal(document.querySelector('#catalogReset').hidden, false);
 
   document.querySelector('.catalog-empty .js-catalog-reset').click();
-  assert.equal(visibleSlugs(document).length, 36);
+  assert.equal(visibleSlugs(document).length, 37);
   assert.equal(document.querySelector('#bookEmpty').hidden, true);
-  assert.equal(document.querySelector('#fcount').textContent, 'Showing 36 of 36 titles');
+  assert.equal(document.querySelector('#fcount').textContent, 'Showing 37 of 37 titles');
   assert.equal(document.activeElement, document.querySelector('#bookSearch'));
   close(dom);
 });
@@ -244,12 +244,30 @@ test('does nothing on pages without a catalogue', () => {
 });
 
 test('new release is searchable and links to its verified book page', () => {
+  const [latest] = JSON.parse(readFileSync(join(projectRoot, 'src/data/books.json'), 'utf8'));
+  assert.equal(latest.slug, 'more-than-a-symbol');
   const dom = setupCatalogue();
-  setSearch(dom, 'First Person Singular');
-  assert.deepEqual(visibleSlugs(dom.window.document), ['first-person-singular']);
-  const page = readFileSync(join(projectRoot, 'dist/books/first-person-singular/index.html'), 'utf8');
-  assert.match(page, /B0HNWJH3LD/);
-  assert.match(page, /22 Oct 2026/);
+  setSearch(dom, 'More Than a Symbol');
+  assert.deepEqual(visibleSlugs(dom.window.document), ['more-than-a-symbol']);
+
+  const page = readFileSync(join(projectRoot, 'dist/books/more-than-a-symbol/index.html'), 'utf8');
+  assert.match(page, /B0HQK4836L/);
+  assert.ok(page.includes('https://www.amazon.com/dp/B0HQJTBZCZ'));
+  assert.match(page, /5 Nov 2026/);
+  assert.match(page, /503 Pages/);
+  assert.match(page, /Paperback: 386 pages/);
+  assert.match(page, /Kindle Unlimited/);
+  assert.match(page, /Content note:/);
+  assert.ok(page.includes('cover-more-than-a-symbol.jpg'));
+  assert.ok(statSync(join(projectRoot, 'public/images/cover-more-than-a-symbol.jpg')).size < 250_000);
+
+  const home = new JSDOM(builtHtml).window.document;
+  assert.match(home.querySelector('.hero-note').textContent, /5 Nov 2026/);
+  assert.ok(home.querySelector('#new [data-slug="more-than-a-symbol"]'));
+  assert.match(readFileSync(join(projectRoot, 'dist/rss.xml'), 'utf8'), /More Than a Symbol/);
+  assert.ok(readFileSync(join(projectRoot, 'dist/sitemap-0.xml'), 'utf8').includes('/books/more-than-a-symbol/'));
+  const manifest = JSON.parse(readFileSync(join(projectRoot, 'dist/site.webmanifest'), 'utf8'));
+  assert.match(manifest.description, /author of 33 books/);
   close(dom);
 });
 
@@ -371,6 +389,7 @@ test('Amazon-verified metadata and direct paperback links stay synchronized', ()
   const books = JSON.parse(readFileSync(join(projectRoot, 'src/data/books.json'), 'utf8'));
   const bySlug = Object.fromEntries(books.map((book) => [book.slug, book]));
   const metadata = {
+    'more-than-a-symbol': { pages: 503, published: '2026-11-05' },
     'nasruddin-ki-tedhi-tarazu': { pages: 574 },
     'the-wall-was-a-gesture': { published: '2026-08-09' },
     'the-map-is-finished': { published: '2026-08-09' },
@@ -386,6 +405,7 @@ test('Amazon-verified metadata and direct paperback links stay synchronized', ()
   }
 
   const paperbacks = {
+    'more-than-a-symbol': 'B0HQJTBZCZ',
     'the-human-operating-manual': 'B0HBWFJSNW',
     'moh-tera-prem-where-attachment-ends-and-love-begins': 'B0HFGN775L',
     'prem-the-ancient-path-of-selfless-unconditional-love': 'B0HFFQ6CTD',
@@ -443,7 +463,7 @@ test('every catalogue cover is a physical 3D book with an accessible front', () 
   const dom = new JSDOM(builtHtml);
   const { document } = dom.window;
   const books = [...document.querySelectorAll('#bookGrid .book-tile [data-book3d]')];
-  assert.equal(books.length, 36, 'each tile should carry one book object');
+  assert.equal(books.length, 37, 'each tile should carry one book object');
   for (const book of books) {
     const front = book.querySelector('.b3d-front');
     assert.ok(front, 'missing front board');
@@ -558,7 +578,7 @@ test('premium detail: tokens, text rendering, scroll state and system preference
   assert.match(print[0], /\.mast, #toTop, \.cmdk, \.modal, \.colophon/);
   assert.match(print[0], /\.book-hero, \.colophon, \.editorial-hero \{ background: #fff !important/);
 
-  // the 36-tile catalogue skips off-screen painting without shifting layout
+  // the 37-tile catalogue skips off-screen painting without shifting layout
   assert.match(stylesheet, /\.book-tile \{[^}]*content-visibility: auto[^}]*contain-intrinsic-size: auto 240px/s);
 });
 
@@ -1508,8 +1528,8 @@ test('the overture puts the archive at the scale of a sky', () => {
     printedPages.toLocaleString('en-GB'),
     String(new Set(catalogue.map((book) => book.series).filter(Boolean)).size),
   ]);
-  assert.equal(figures[0], '36');
-  assert.equal(figures[1], '6,776');
+  assert.equal(figures[0], '37');
+  assert.equal(figures[1], '7,279');
   assert.match(cosmos.querySelector('.cosmos-caption').textContent, /2024–2026/);
 
   // and the sky is a sky: horizon, drift, breath — all removable
@@ -1770,7 +1790,7 @@ test('the shelf scrolls sideways and never cuts a book, nor paints one over its 
 
 test('a reveal cue cannot hide something taller than the screen', async () => {
   const source = readFileSync(join(projectRoot, 'src/scripts/app.ts'), 'utf8');
-  // 12% of the 36-tile catalogue can never be on a phone screen at once
+  // 12% of the 37-tile catalogue can never be on a phone screen at once
   assert.match(source, /\{ threshold: 0, rootMargin: '0px 0px -8% 0px' \}/);
   assert.ok(!/threshold: 0\.12/.test(source), 'no reveal may be keyed to a fraction of its own height');
 });
