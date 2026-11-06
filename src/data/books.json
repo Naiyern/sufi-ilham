@@ -110,6 +110,7 @@
   "desc": "<p lang=\"hi\">तेरहवीं सदी के अनातोलिया की धूल भरी राहों, बाज़ारों और मस्जिदों के बीच एक ऐसा आदमी चलता है जिसकी सबसे बड़ी ताक़त उसकी बुद्धि नहीं, बल्कि दुनिया की बेवकूफ़ियों को देखने की उसकी क्षमता है।</p><p lang=\"hi\"><b>मुल्ला नसरुद्दीन।</b></p><p lang=\"hi\">कभी वह हँसाता है, कभी उलझाता है, और कभी एक साधारण-सी बात के भीतर ऐसा सवाल रख देता है जिससे सामने वाला देर तक बच नहीं पाता।</p><p lang=\"hi\">गरीबी की कठोर ज़मीन, सुल्तानों की राजनीति, व्यापारियों की चालाकी और लोककथाओं की नसों के बीच यह कहानी उस आदमी की यात्रा है जो हर असमान तराज़ू में केवल वजन नहीं, बल्कि इंसान की नीयत देखता है।</p><p lang=\"hi\">इंसाफ़, धर्म, सत्ता, धन और इंसान की असली कीमत क्या है?</p><p lang=\"hi\">हँसी और व्यंग्य के पीछे छिपी यह ऐतिहासिक-लोककथात्मक कथा केवल अतीत की कहानी नहीं है। यह उन सवालों की कहानी है जो सदियों बाद भी हमारे सामने वैसे ही खड़े हैं।</p><p lang=\"hi\">“नसरुद्दीन की टेढ़ी तराज़ू” — जहाँ हर मज़ाक के पीछे एक सवाल है, और हर सवाल के पीछे इंसान।</p>",
   "spec": [
    "Kindle Unlimited",
+   "574 Pages",
    "Kindle edition",
    "Language: Hindi",
    "Published 29 Sept 2026",
@@ -125,7 +126,8 @@
   "uk": "https://www.amazon.co.uk/dp/B0HLFWT9TJ",
   "ca": "https://www.amazon.ca/dp/B0HLFWT9TJ",
   "au": "https://www.amazon.com.au/dp/B0HLFWT9TJ",
-  "blurb": "In 13th-century Anatolia, Mullah Nasruddin weighs more than goods on his crooked scale — he weighs conscience. A witty historical-folkloric novel about justice, power, faith, and what a person is truly worth."
+  "blurb": "In 13th-century Anatolia, Mullah Nasruddin weighs more than goods on his crooked scale — he weighs conscience. A witty historical-folkloric novel about justice, power, faith, and what a person is truly worth.",
+  "pages": 574
  },
  {
   "img": "https://m.media-amazon.com/images/I/71x+qs3EpiL._SL500_.jpg",
@@ -157,7 +159,7 @@
   "blurb": "Paid to live ninety days in a Brooklyn brownstone and notice everything, Cassie Adler finds the house keeping a schedule of its own — and learns she was chosen for a reason."
  },
  {
-  "img": "images/cover-human-operating-manual.jpg",
+  "img": "https://m.media-amazon.com/images/I/61ARgWwgdRL._SL500_.jpg",
   "title": "The Human Operating Manual",
   "sub": "A Systems-Based Guide to Designing a Better Mind, Better Habits, and a Better Life",
   "kicker": "Self-Help · Systems",
@@ -168,8 +170,9 @@
    "383 Pages",
    "Kindle edition",
    "Paperback",
-   "Published Jul 2026"
+   "Published 28 Jul 2026"
   ],
+  "paperback": "https://www.amazon.com/dp/B0HBWFJSNW",
   "us": "https://www.amazon.com/Human-Operating-Manual-Systems-Based-Designing-ebook/dp/B0HBW5S4Y2",
   "in": "https://www.amazon.in/Human-Operating-Manual-Systems-Based-Designing-ebook/dp/B0HBW5S4Y2",
   "uk": "https://www.amazon.co.uk/dp/B0HBW5S4Y2",
@@ -197,6 +200,7 @@
    "Published Aug 2026",
    "ASIN B0HFGNWFTV"
   ],
+  "paperback": "https://www.amazon.com/dp/B0HFGN775L",
   "us": "https://www.amazon.com/dp/B0HFGNWFTV",
   "in": "https://www.amazon.in/dp/B0HFGNWFTV",
   "uk": "https://www.amazon.co.uk/dp/B0HFGNWFTV",
@@ -224,6 +228,7 @@
    "Published Aug 2026",
    "ASIN B0HFFDVWVV"
   ],
+  "paperback": "https://www.amazon.com/dp/B0HFFQ6CTD",
   "us": "https://www.amazon.com/dp/B0HFFDVWVV",
   "in": "https://www.amazon.in/dp/B0HFFDVWVV",
   "uk": "https://www.amazon.co.uk/dp/B0HFFDVWVV",
@@ -237,7 +242,7 @@
   "blurb": "The ancient Sanskrit path of selfless, unconditional love — from the bhakti poets, the Sufis, the Upanishads and the Buddha."
  },
  {
-  "img": "images/cover-laozi.jpg",
+  "img": "https://m.media-amazon.com/images/I/41A+4hOTilL._SL500_.jpg",
   "title": "Laozi: The Man Who Disappeared into the Dao",
   "sub": "The Life, the Silence, and the Long Afterlife of the Sage Who Taught the World to Let Go",
   "kicker": "Biography · Philosophy",
@@ -262,7 +267,7 @@
   "blurb": "A biography of a man whose historical footprint is almost invisible and whose philosophical shadow stretches across two and a half millennia — with a guided reading of the Daodejing in twelve movements."
  },
  {
-  "img": "images/cover-wall-gesture.jpg",
+  "img": "https://m.media-amazon.com/images/I/513A60HyoFL._SL500_.jpg",
   "title": "The Wall Was a Gesture",
   "sub": "A Book of Seeing",
   "kicker": "Philosophy",
@@ -272,7 +277,7 @@
    "334 Pages",
    "Paperback",
    "ISBN 979-8191732695",
-   "Published Aug 2026"
+   "Published 9 Aug 2026"
   ],
   "us": "https://www.amazon.com/Wall-Was-Gesture-Book-Seeing/dp/B0HDLVQKBD",
   "in": "https://www.amazon.in/dp/B0HDLVQKBD",
@@ -280,14 +285,14 @@
   "ca": "https://www.amazon.ca/dp/B0HDLVQKBD",
   "au": "https://www.amazon.com.au/dp/B0HDLVQKBD",
   "slug": "the-wall-was-a-gesture",
-  "published": "2026-08",
+  "published": "2026-08-09",
   "genre": "philosophy",
   "ku": false,
   "pages": 334,
   "blurb": "A philosophical work in twenty-two chapters — from the quiet sense of being a separate self to the peace of seeing that the world was never outside you."
  },
  {
-  "img": "images/cover-map-finished.jpg",
+  "img": "https://m.media-amazon.com/images/I/51hL-iCyYQL._SL500_.jpg",
   "title": "The Map Is Finished",
   "sub": "A Journey Through Attention, Freedom, and the Love That Is Left When the Map Ends",
   "kicker": "Philosophy · Meditation",
@@ -297,7 +302,7 @@
    "320 Pages",
    "Paperback",
    "ISBN 979-8191566634",
-   "Published Aug 2026"
+   "Published 9 Aug 2026"
   ],
   "us": "https://www.amazon.com/dp/B0HDLTJSMN",
   "in": "https://www.amazon.in/dp/B0HDLTJSMN",
@@ -305,14 +310,14 @@
   "ca": "https://www.amazon.ca/dp/B0HDLTJSMN",
   "au": "https://www.amazon.com.au/dp/B0HDLTJSMN",
   "slug": "the-map-is-finished",
-  "published": "2026-08",
+  "published": "2026-08-09",
   "genre": "philosophy",
   "ku": false,
   "pages": 320,
   "blurb": "\"The map is not the country. Walk until you know the difference.\" One continuous journey in twenty chapters through attention, freedom, and what remains when the map ends."
  },
  {
-  "img": "images/cover-neurofocus.jpg",
+  "img": "https://m.media-amazon.com/images/I/815858EtEVL._SL500_.jpg",
   "title": "NeuroFocus Protocol",
   "sub": "Mastering ADHD, Attention, Motivation, and Deep Focus in a Distracted World",
   "kicker": "Attention · Psychology",
@@ -320,24 +325,25 @@
   "desc": "<p>A clear, engaging guide that combines modern psychology, practical strategies and empowering insight to help you stop blaming yourself and start building systems that fit the way your mind actually works.</p><ul><li>uncover the hidden strengths of ADHD, including creativity, fast thinking and hyperfocus</li><li>design a meaningful life that works with your brain instead of against it</li><li>take back control of your attention in a distracted world</li></ul><p>Whether you are a student, professional, parent, or simply someone trying to think more clearly, this book will transform the way you work, learn and live.</p>",
   "spec": [
    "362 Pages",
-   "Kindle Edition",
+   "Paperback",
    "Kindle edition",
-   "Published Apr 2026"
+   "Published 4 Apr 2026"
   ],
+  "paperback": "https://www.amazon.com/dp/B0GSLQCQC7",
   "us": "https://www.amazon.com/NeuroFocus-Protocol-Mastering-Motivation-Distracted-ebook/dp/B0DRYQNKQQ",
   "in": "https://www.amazon.in/NeuroFocus-Protocol-Mastering-Motivation-Distracted-ebook/dp/B0DRYQNKQQ",
   "uk": "https://www.amazon.co.uk/dp/B0DRYQNKQQ",
   "ca": "https://www.amazon.ca/dp/B0DRYQNKQQ",
   "au": "https://www.amazon.com.au/dp/B0DRYQNKQQ",
   "slug": "neurofocus-protocol",
-  "published": "2026-04",
+  "published": "2026-04-04",
   "genre": "self-help",
   "ku": false,
   "pages": 362,
   "blurb": "Uncover the hidden strengths of ADHD — creativity, fast thinking, hyperfocus — and design a life that works with your brain instead of against it."
  },
  {
-  "img": "images/cover-fractured-time.jpg",
+  "img": "https://m.media-amazon.com/images/I/81IvBhWdjSL._SL500_.jpg",
   "title": "Fractured Time",
   "sub": "A Journey Beyond Boundaries and the Illusions of Time",
   "kicker": "Philosophy · Time",
@@ -347,22 +353,24 @@
    "Kindle Unlimited",
    "56 Pages",
    "Kindle edition",
-   "Paperback"
+   "Paperback",
+   "Published 13 Nov 2024"
   ],
+  "paperback": "https://www.amazon.com/dp/B0DMVC5Z9N",
   "us": "https://www.amazon.com/Fractured-Time-Journey-Boundaries-Illusions-ebook/dp/B0DMWLSKNW",
   "in": "https://www.amazon.in/Fractured-Time-Journey-Boundaries-Illusions-ebook/dp/B0DMWLSKNW",
   "uk": "https://www.amazon.co.uk/dp/B0DMWLSKNW",
   "ca": "https://www.amazon.ca/dp/B0DMWLSKNW",
   "au": "https://www.amazon.com.au/dp/B0DMWLSKNW",
   "slug": "fractured-time",
-  "published": "2024-11-11",
+  "published": "2024-11-13",
   "genre": "philosophy",
   "ku": true,
   "pages": 56,
   "blurb": "What if time isn't real — but a beautiful lie you've been hypnotized into believing? A bold unraveling of one of the greatest illusions you've ever lived by."
  },
  {
-  "img": "images/cover-belief-unveiled.jpg",
+  "img": "https://m.media-amazon.com/images/I/71IwRC4gZaL._SL500_.jpg",
   "title": "Belief Unveiled",
   "sub": "The Truth About Your Beliefs: Why You're Stuck — And How to Break Free",
   "kicker": "Self-Help · The Debut",
@@ -370,24 +378,26 @@
   "desc": "<p>What if everything holding you back is just… a belief?</p><p>Sufi Ilham takes you into the hidden architecture of your mind, revealing how unconscious beliefs silently dictate your reality — your relationships, career, health and happiness. More importantly, you'll discover exactly how to rewrite these beliefs and reclaim control of your life.</p><ul><li><b>The Belief Blueprint</b> — how your subconscious mind creates your reality</li><li><b>The 5 Core Limiting Beliefs</b> that keep most people stuck, and how to shatter them</li><li><b>Mind Reconstruction Methods</b> — step-by-step practices to replace toxic thought patterns</li><li><b>The Vulnerability Advantage</b> — why authenticity is the fastest path to connection</li></ul><p>Bridging psychology, spirituality and neuroscience, this book delivers a system for lasting transformation — not temporary motivation. You're not broken. You simply need to update the operating system running your life.</p>",
   "spec": [
    "Kindle Unlimited",
-   "66 Pages",
+   "178 Pages",
    "Kindle edition",
-   "Published Oct 2024"
+   "Paperback & hardcover",
+   "Published 18 Oct 2024"
   ],
+  "paperback": "https://www.amazon.com/dp/B0DK9X7L88",
   "us": "https://www.amazon.com/Belief-Unveiled-Truth-Beliefs-Stuck-ebook/dp/B0DK913BHH",
   "in": "https://www.amazon.in/Belief-Unveiled-Truth-Beliefs-Stuck-ebook/dp/B0DK913BHH",
   "uk": "https://www.amazon.co.uk/dp/B0DK913BHH",
   "ca": "https://www.amazon.ca/dp/B0DK913BHH",
   "au": "https://www.amazon.com.au/dp/B0DK913BHH",
   "slug": "belief-unveiled",
-  "published": "2024-10",
+  "published": "2024-10-18",
   "genre": "self-help",
   "ku": true,
-  "pages": 66,
+  "pages": 178,
   "blurb": "A journey into the hidden architecture of your mind, revealing how unconscious beliefs silently dictate your reality — and exactly how to rewrite them."
  },
  {
-  "img": "images/cover-infinite-classroom.jpg",
+  "img": "https://m.media-amazon.com/images/I/81H0fUd2+XL._SL500_.jpg",
   "title": "The Infinite Classroom",
   "sub": "A Journey of Learning from Birth to Beyond",
   "kicker": "Learning · Life",
@@ -398,8 +408,9 @@
    "76 Pages",
    "Kindle edition",
    "Paperback available",
-   "Published Feb 2025"
+   "Published 24 Feb 2025"
   ],
+  "paperback": "https://www.amazon.com/dp/B0DYD8WJK2",
   "us": "https://www.amazon.com/Infinite-Classroom-Journey-Learning-Beyond-ebook/dp/B0DYG3Z9GQ",
   "in": "https://www.amazon.in/Infinite-Classroom-Journey-Learning-Beyond-ebook/dp/B0DYG3Z9GQ",
   "uk": "https://www.amazon.co.uk/dp/B0DYG3Z9GQ",
@@ -609,7 +620,7 @@
   "blurb": "A forger who hides magic from the Crown, and the collector sent to hunt her — bound together by a gold seal that neither of them chose."
  },
  {
-  "img": "https://m.media-amazon.com/images/I/41RmGxerMvL._SL500_.jpg",
+  "img": "https://m.media-amazon.com/images/I/715cmN5IGLL._SL500_.jpg",
   "title": "The Sea Tithe",
   "sub": "The Tithe Crown · Book 2 of 3",
   "kicker": "Book Two · On the Run",
@@ -665,7 +676,7 @@
   "blurb": "Inland, shadows do not arrive at all. The Crown has never needed permission to own something — and Neris is done asking for one."
  },
  {
-  "img": "https://m.media-amazon.com/images/I/41JGSmjfJzL._SL500_.jpg",
+  "img": "https://m.media-amazon.com/images/I/81WKUmhRIaL._SL500_.jpg",
   "title": "The Map of Tomorrow",
   "sub": "The Cartographers of Lost Tomorrows · Book 1 of 7",
   "kicker": "Book One · Slow-Burn Mystery",
@@ -673,12 +684,13 @@
   "desc": "<p>Every night, somewhere in the world, a map appears that should not exist. It shows no countries and no roads. It shows events that have not happened yet.</p><p><b>Cassia Merel</b> restores damaged charts in a fog-bound harbor city where drowned bells are said to ring. Hidden in the binding of an 1897 atlas, she finds one of the impossible maps. At first it predicts trivia — a gull, a skidding bus, a broken window. Then it predicts a death.</p><p>Hers — at the ninth hour of the ninth day of the tenth month. And beside the mark that means her death, someone has written a name: <b>Elias Rooke</b>. A man officially dead for twenty-seven years.</p><p>To survive, Cassia must find a dead man, read a future drawn in her father’s missing hand, and learn the first law of the secret guild that trades in tomorrows: a predicted event can be moved, bargained, or paid for by another — but it can never be destroyed. Unless she is willing to redraw the margin itself.</p>",
   "spec": [
    "Kindle Unlimited",
-   "272 Pages",
+   "280 Pages",
    "Kindle edition",
    "Paperback",
    "Published 11 Sept 2026",
    "ASIN B0HJH4MH5D"
   ],
+  "paperback": "https://www.amazon.com/dp/B0HJHSZRJW",
   "us": "https://www.amazon.com/dp/B0HJH4MH5D",
   "in": "https://www.amazon.in/dp/B0HJH4MH5D",
   "uk": "https://www.amazon.co.uk/dp/B0HJH4MH5D",
@@ -690,11 +702,11 @@
   "order": 1,
   "genre": "fiction",
   "ku": true,
-  "pages": 272,
+  "pages": 280,
   "blurb": "Every night, a map appears showing events that have not happened yet. The newest one shows Cassia’s death — and the name of a man dead for twenty-seven years."
  },
  {
-  "img": "https://m.media-amazon.com/images/I/41oqEmb-oEL._SL500_.jpg",
+  "img": "https://m.media-amazon.com/images/I/91yF6667P6L._SL500_.jpg",
   "title": "The Tide of Unmade Days",
   "sub": "The Cartographers of Lost Tomorrows · Book 2 of 7",
   "kicker": "Book Two · The Day Lived",
@@ -702,12 +714,13 @@
   "desc": "<p>There is a street in Saltmere that no map admits to. It appears at low water, collects its rent from the living, and slides back under. And now the tide has begun delivering bills for a day that no one lived — a day the world was billed for and does not remember.</p><p>Restorer <b>Cassia Merel</b> has seen the impossible before; this time it has an address. With the dead man who answers doors, <b>Elias Rooke</b>, she follows the Row’s ledger down to the kept bell of Saltmere — drowned, chained, and scheduled to ring again at low water, 4:12, on the first of November: THE DAY LIVED.</p><p>The Trust wants the street. The tide wants its day. And the borough’s newest rule — <em>we are a borough of record now</em> — means whatever happens will be written down, countersigned, and kept. A day that does not die waits. And a waiting day requires an address.</p>",
   "spec": [
    "Kindle Unlimited",
-   "219 Pages",
+   "230 Pages",
    "Kindle edition",
    "Paperback",
    "Published 12 Sept 2026",
    "ASIN B0HJMJWG6S"
   ],
+  "paperback": "https://www.amazon.com/dp/B0HJNH4RCC",
   "us": "https://www.amazon.com/dp/B0HJMJWG6S",
   "in": "https://www.amazon.in/dp/B0HJMJWG6S",
   "uk": "https://www.amazon.co.uk/dp/B0HJMJWG6S",
@@ -719,11 +732,11 @@
   "order": 2,
   "genre": "fiction",
   "ku": true,
-  "pages": 219,
+  "pages": 230,
   "blurb": "Saltmere’s unmapped street has surfaced with bills for a day no one lived — and a drowned bell scheduled to ring again."
  },
  {
-  "img": "https://m.media-amazon.com/images/I/41QmgEYdQtL._SL500_.jpg",
+  "img": "https://m.media-amazon.com/images/I/71JDIuw4fJL._SL500_.jpg",
   "title": "The Compass of the Dead",
   "sub": "The Cartographers of Lost Tomorrows · Book 3 of 7",
   "kicker": "Book Three · The Road",
@@ -736,6 +749,7 @@
    "Published 13 Sept 2026",
    "ASIN B0HJNDGLH1"
   ],
+  "paperback": "https://www.amazon.com/dp/B0HJND47L7",
   "us": "https://www.amazon.com/dp/B0HJNDGLH1",
   "in": "https://www.amazon.in/dp/B0HJNDGLH1",
   "uk": "https://www.amazon.co.uk/dp/B0HJNDGLH1",

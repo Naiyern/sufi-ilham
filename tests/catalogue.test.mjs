@@ -331,20 +331,78 @@ test('book specs avoid stale fixed retailer prices', () => {
   for (const book of books) for (const spec of book.spec || []) assert.doesNotMatch(spec, /[₹$£]\s*\d/);
 });
 
-test('Song of the Unbroken Sky uses the current Amazon cover images', () => {
+test('Amazon-synchronised titles use current covers in data, store and pages', () => {
   const books = JSON.parse(readFileSync(join(projectRoot, 'src/data/books.json'), 'utf8'));
   const covers = {
     'the-eden-of-sunspire': '81DvLXaR5LL._SY342_.jpg',
     'the-citadel-of-sapphire-seas': '819Acw0OWjL._SY342_.jpg',
     'the-chariot-of-peace': '81xXCHwx8tL._SY342_.jpg',
+    'the-human-operating-manual': '61ARgWwgdRL._SL500_.jpg',
+    'laozi-the-man-who-disappeared-into-the-dao': '41A+4hOTilL._SL500_.jpg',
+    'the-wall-was-a-gesture': '513A60HyoFL._SL500_.jpg',
+    'the-map-is-finished': '51hL-iCyYQL._SL500_.jpg',
+    'neurofocus-protocol': '815858EtEVL._SL500_.jpg',
+    'fractured-time': '81IvBhWdjSL._SL500_.jpg',
+    'belief-unveiled': '71IwRC4gZaL._SL500_.jpg',
+    'the-infinite-classroom': '81H0fUd2+XL._SL500_.jpg',
+    'the-sea-tithe': '715cmN5IGLL._SL500_.jpg',
+    'the-map-of-tomorrow': '81WKUmhRIaL._SL500_.jpg',
+    'the-tide-of-unmade-days': '91yF6667P6L._SL500_.jpg',
+    'the-compass-of-the-dead': '71JDIuw4fJL._SL500_.jpg',
   };
   const store = JSON.parse(readFileSync(join(projectRoot, 'dist/book-store.json'), 'utf8'));
-  const seriesPage = readFileSync(join(projectRoot, 'dist/series/song/index.html'), 'utf8');
   for (const [slug, image] of Object.entries(covers)) {
-    assert.ok(books.find((book) => book.slug === slug).img.endsWith(image));
-    assert.ok(store[slug].img.endsWith(image));
-    assert.ok(seriesPage.includes(image));
-    assert.ok(readFileSync(join(projectRoot, 'dist/books', slug, 'index.html'), 'utf8').includes(image));
+    assert.ok(books.find((book) => book.slug === slug).img.endsWith(image), `${slug}: source cover`);
+    assert.ok(store[slug].img.endsWith(image), `${slug}: store cover`);
+    assert.ok(builtHtml.includes(image), `${slug}: home cover`);
+    assert.ok(readFileSync(join(projectRoot, 'dist/books', slug, 'index.html'), 'utf8').includes(image), `${slug}: book cover`);
+  }
+  for (const [route, slugs] of Object.entries({
+    song: ['the-eden-of-sunspire', 'the-citadel-of-sapphire-seas', 'the-chariot-of-peace'],
+    tithe: ['the-sea-tithe'],
+    carto: ['the-map-of-tomorrow', 'the-tide-of-unmade-days', 'the-compass-of-the-dead'],
+  })) {
+    const seriesPage = readFileSync(join(projectRoot, 'dist/series', route, 'index.html'), 'utf8');
+    for (const slug of slugs) assert.ok(seriesPage.includes(covers[slug]), `${slug}: series cover`);
+  }
+});
+
+test('Amazon-verified metadata and direct paperback links stay synchronized', () => {
+  const books = JSON.parse(readFileSync(join(projectRoot, 'src/data/books.json'), 'utf8'));
+  const bySlug = Object.fromEntries(books.map((book) => [book.slug, book]));
+  const metadata = {
+    'nasruddin-ki-tedhi-tarazu': { pages: 574 },
+    'the-wall-was-a-gesture': { published: '2026-08-09' },
+    'the-map-is-finished': { published: '2026-08-09' },
+    'neurofocus-protocol': { published: '2026-04-04' },
+    'fractured-time': { published: '2024-11-13' },
+    'belief-unveiled': { pages: 178, published: '2024-10-18' },
+    'the-map-of-tomorrow': { pages: 280 },
+    'the-tide-of-unmade-days': { pages: 230 },
+  };
+  for (const [slug, expected] of Object.entries(metadata)) {
+    for (const [key, value] of Object.entries(expected)) assert.equal(bySlug[slug][key], value, `${slug}: ${key}`);
+    if (expected.pages) assert.ok(bySlug[slug].spec.includes(`${expected.pages} Pages`), `${slug}: displayed pages`);
+  }
+
+  const paperbacks = {
+    'the-human-operating-manual': 'B0HBWFJSNW',
+    'moh-tera-prem-where-attachment-ends-and-love-begins': 'B0HFGN775L',
+    'prem-the-ancient-path-of-selfless-unconditional-love': 'B0HFFQ6CTD',
+    'neurofocus-protocol': 'B0GSLQCQC7',
+    'fractured-time': 'B0DMVC5Z9N',
+    'belief-unveiled': 'B0DK9X7L88',
+    'the-infinite-classroom': 'B0DYD8WJK2',
+    'the-map-of-tomorrow': 'B0HJHSZRJW',
+    'the-tide-of-unmade-days': 'B0HJNH4RCC',
+    'the-compass-of-the-dead': 'B0HJND47L7',
+  };
+  const store = JSON.parse(readFileSync(join(projectRoot, 'dist/book-store.json'), 'utf8'));
+  for (const [slug, asin] of Object.entries(paperbacks)) {
+    const url = `https://www.amazon.com/dp/${asin}`;
+    assert.equal(bySlug[slug].paperback, url, `${slug}: source paperback`);
+    assert.equal(store[slug].paperback, url, `${slug}: store paperback`);
+    assert.ok(readFileSync(join(projectRoot, 'dist/books', slug, 'index.html'), 'utf8').includes(url), `${slug}: paperback button`);
   }
 });
 
@@ -1451,7 +1509,7 @@ test('the overture puts the archive at the scale of a sky', () => {
     String(new Set(catalogue.map((book) => book.series).filter(Boolean)).size),
   ]);
   assert.equal(figures[0], '36');
-  assert.equal(figures[1], '6,071');
+  assert.equal(figures[1], '6,776');
   assert.match(cosmos.querySelector('.cosmos-caption').textContent, /2024–2026/);
 
   // and the sky is a sky: horizon, drift, breath — all removable
