@@ -1,6 +1,6 @@
 /* "Your shelf" — the site remembering where your attention was.
 
-   The archive holds 36 titles; a visitor who opens three of them should not
+   The archive holds 37 titles; a visitor who opens three of them should not
    have to find them again from the top. Each book page records itself in this
    browser's local storage; the home page replays the last few as a rail.
 

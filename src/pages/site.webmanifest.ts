@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { published } from '../data/site';
 
 /**
  * Generated (not copied from public/) so `start_url`, `scope` and icon URLs
@@ -11,7 +12,7 @@ const manifest = {
   name: 'Sufi Ilham — Author',
   short_name: 'Sufi Ilham',
   description:
-    'Official website of Sufi Ilham (MD Naiyer Alam), author of 32 books — the Cartographers saga, the Song of the Unbroken Sky trilogy, The Spare Key Summer, and works on philosophy, romance and self-discovery.',
+    `Official website of Sufi Ilham (MD Naiyer Alam), author of ${published.length} books — the Cartographers saga, the Song of the Unbroken Sky trilogy, The Spare Key Summer, and works on philosophy, romance and self-discovery.`,
   start_url: `${base}/`,
   scope: `${base}/`,
   display: 'standalone',

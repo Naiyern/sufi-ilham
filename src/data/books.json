@@ -1,5 +1,34 @@
 [
  {
+  "img": "images/cover-more-than-a-symbol.jpg",
+  "title": "More Than a Symbol",
+  "sub": "Women, Belief, and the Right to Choose",
+  "kicker": "Society · Belief · Freedom",
+  "quote": "\"When a woman is praised, is she also free?\"",
+  "desc": "<p>She may be called a goddess, a daughter, a keeper of honour, a symbol of strength. These words can carry love and respect. But what happens when an ideal becomes a boundary — and the person behind it is no longer heard?</p><p>In <b>More Than a Symbol</b>, Sufi Ilham explores the distance between celebrating an idea of womanhood and recognising the freedom of women as individuals. From family and faith to education, work, law and public life, this book asks who makes the decisions, whose voice matters, and what dignity looks like in everyday life.</p><p>Through the intertwined fictional lives of <b>Asha</b> in Kathmandu, <b>Lina</b> in Birmingham, <b>Lucía</b> in Bogotá and <b>Nia</b> in Accra, readers encounter women navigating ambition, care, belief, belonging and the right to choose. Their stories sit alongside social reflection and discussions of selected real-world cases from India and around the world.</p><p>This is not a call to choose between faith and freedom, or between belonging and change. It is an invitation to question the expectations that limit people, listen beyond the labels we give them, and imagine a world where every woman has room to be heard, to belong and to choose.</p><p><b>Content note:</b> This book discusses sexual violence, coercion, abuse and other difficult subjects. The four recurring characters are fictional.</p>",
+  "spec": [
+   "Kindle Unlimited",
+   "503 Pages",
+   "Kindle and paperback",
+   "Paperback: 386 pages",
+   "Published 5 Nov 2026",
+   "Kindle ASIN B0HQK4836L",
+   "Paperback ASIN B0HQJTBZCZ"
+  ],
+  "paperback": "https://www.amazon.com/dp/B0HQJTBZCZ",
+  "us": "https://www.amazon.com/dp/B0HQK4836L",
+  "in": "https://www.amazon.in/dp/B0HQK4836L",
+  "uk": "https://www.amazon.co.uk/dp/B0HQK4836L",
+  "ca": "https://www.amazon.ca/dp/B0HQK4836L",
+  "au": "https://www.amazon.com.au/dp/B0HQK4836L",
+  "slug": "more-than-a-symbol",
+  "published": "2026-11-05",
+  "genre": "philosophy",
+  "ku": true,
+  "pages": 503,
+  "blurb": "Four fictional lives in Kathmandu, Birmingham, Bogotá and Accra illuminate the distance between celebrating womanhood and hearing women — an invitation to dignity, belonging and the freedom to choose."
+ },
+ {
   "img": "https://m.media-amazon.com/images/I/71FKccMtFLL._SL500_.jpg",
   "title": "The Ninth Bell",
   "sub": "A Novel of Love, Grief, and the Courage to Be Found",
