@@ -979,7 +979,7 @@ test('the flow readout follows real scenes and ordinary scroll position', async 
     <section class="editorial-hero"><h1>Opening</h1></section>
     <span class="flow-blend" data-flow-blend aria-hidden="true"></span>
     <section><h2>Second scene</h2></section>
-    <section class="closing-quote"><h2>Last light</h2></section>
+    <section class="discover-finale"><h2>Last light</h2></section>
   </main><footer class="colophon" data-flow-label="Colophon"></footer>`, {
     url: 'https://sufi-ilham.test/sufi-ilham/',
     pretendToBeVisual: true,
@@ -1038,6 +1038,14 @@ test('the flow readout follows real scenes and ordinary scroll position', async 
   assert.ok(sections[1].classList.contains('is-flow-current'));
   assert.ok(!sections[0].classList.contains('is-flow-current'));
   assert.equal(window.scrollY, 600);
+
+  boxes[1] = { top: -1000, bottom: -200 };
+  boxes[2] = { top: -200, bottom: 600 };
+  window.scrollY = 1400;
+  window.dispatchEvent(new window.Event('scroll'));
+  await new Promise((resolve) => setTimeout(resolve, 40));
+  assert.equal(hud.querySelector('[data-flow-current]').textContent, '03');
+  assert.equal(hud.dataset.tone, 'accent', 'the rust finale gets a contrast-safe interface tone');
   stop();
   close(dom);
 });

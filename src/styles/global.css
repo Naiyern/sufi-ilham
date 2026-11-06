@@ -193,6 +193,7 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
 .mini:hover { border-color: var(--fg); background: var(--field); }
 .mini svg { width: 15px; height: 15px; }
 .burger { display: none; }
+.burger-cross { display: none; }
 
 .seek {
   display: flex; align-items: center; gap: .5rem;
@@ -206,7 +207,7 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
 
 @media (max-width: 1180px) {
   .mast nav {
-    position: fixed; inset: 0 0 0 auto; width: min(86vw, 330px);
+    position: fixed; inset: 0 0 0 auto; z-index: 1; width: min(86vw, 330px);
     background: var(--paper-2); border-left: 1px solid var(--fg);
     padding: 5.5rem 1.6rem 2rem; transform: translateX(100%);
     transition: transform .5s var(--ease); overflow-y: auto;
@@ -214,7 +215,11 @@ section { position: relative; z-index: 1; padding: clamp(4rem, 9vw, 8rem) 0; }
   .mast nav.open { transform: none; }
   .mast nav ul { flex-direction: column; gap: 0; }
   .mast nav a { display: block; padding: 1rem 0; font-size: .95rem; border-bottom: 1px solid var(--rule); }
-  .burger { display: grid; }
+  /* Keep the same button above the drawer: it becomes an explicit close icon,
+     instead of leaving touch visitors to discover the scrim or Escape key. */
+  .burger { position: relative; z-index: 2; display: grid; }
+  .burger[aria-expanded='true'] .burger-lines { display: none; }
+  .burger[aria-expanded='true'] .burger-cross { display: block; }
   .seek span { display: none; }
 }
 /* off-canvas menu: scrim + scroll lock while open */
@@ -2801,7 +2806,7 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 .discover-text-link { color: inherit; text-underline-offset: .3em; font-size: 1rem; }
 .discover-hero-aside { border-top: 1px solid rgba(242, 231, 210, .28); padding-top: 1.5rem; max-width: 23rem; }
 .discover-aside-label { color: #d0b795; }
-.discover-hero-aside p { font-family: var(--display); font-style: italic; font-size: clamp(1.7rem, 2.6vw, 2.5rem); line-height: 1.1; margin: 1.2rem 0 2rem; }
+.discover-hero-aside p { color: #d3c5b2; font-family: var(--display); font-style: italic; font-size: clamp(1.7rem, 2.6vw, 2.5rem); line-height: 1.1; margin: 1.2rem 0 2rem; }
 .discover-aside-facts { display: flex; gap: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.2); color: #c8bcaa; font: .65rem var(--mono); text-transform: uppercase; }
 .discover-aside-facts b { display: block; color: #fff; font: 2rem var(--display); margin-bottom: .4rem; }
 .discover-hero-bottom { display: flex; justify-content: space-between; gap: 1rem; color: #b9a894; border-top: 1px solid rgba(255,255,255,.16); margin-top: clamp(5rem, 10vw, 9rem); padding-top: 1.3rem; }
@@ -2828,8 +2833,8 @@ body.legal-page .mast .seek:hover { border-color: var(--mark-2); }
 .path-book > span:last-child { display: block; margin-top: .8rem; }
 .path-book > span:last-child span { color: #844f38; }
 .path-book > span:last-child { text-wrap: pretty; }
-.discover-finale { background: #b65a40; color: #fff5e7; padding: clamp(5rem, 9vw, 9rem) 0; }
-.discover-finale-inner { text-align: center; }.discover-finale .discover-overline { color: #f6d9c8; }
+.discover-finale { background: #a44e36; color: #fff5e7; padding: clamp(5rem, 9vw, 9rem) 0; }
+.discover-finale-inner { text-align: center; }.discover-finale .discover-overline { color: #fff5e7; }
 .discover-finale p { margin: 1.7rem auto 2rem; max-width: 31rem; color: #f7e5d9; }
 .discover-finale .discover-actions { justify-content: center; }
 .home-discovery { background: #dccaa8; color: #2c2118; padding: clamp(4rem, 7vw, 7rem) 0; }
@@ -3746,7 +3751,7 @@ input, select, textarea { caret-color: var(--mark); accent-color: var(--mark); }
 }
 
 /* ---- 7. chrome ---- */
-html { scrollbar-color: color-mix(in srgb, var(--mark-2) 70%, transparent) transparent; }
+html { scrollbar-color: color-mix(in srgb, var(--mark-2) 70%, transparent) var(--paper); }
 section[id], div[id] { scroll-margin-top: 96px; }
 
 /* ---- 8. the catalogue is 36 tiles: let the browser skip the ones off screen ---- */
@@ -4866,11 +4871,20 @@ html:not(.js) .veil { display: none; }
 .flow-hud[data-tone='ink'] { color: #d3ccbd; }
 .flow-hud[data-tone='ink'] .flow-hud__count [data-flow-current],
 .flow-hud[data-tone='ink'] .flow-hud__track b { color: #d9b45e; }
+.flow-hud[data-tone='accent'] { color: #fff5e7; }
+.flow-hud[data-tone='accent'] .flow-hud__count [data-flow-current] { color: #fff5e7; }
+.flow-hud[data-tone='accent'] .flow-hud__label { opacity: 1; }
+.flow-hud[data-tone='accent'] .flow-hud__track i { background: #fff5e7; }
+.flow-hud[data-tone='accent'] .flow-hud__track b {
+  background: #fff5e7;
+  box-shadow: 0 0 0 3px rgba(255, 245, 231, .14), 0 0 14px rgba(255, 245, 231, .35);
+}
 
 /* Only wide, tall screens have a safe margin outside the editorial measure. */
 @media (min-width: 1280px) and (min-height: 560px) and (prefers-reduced-motion: no-preference) {
   .flow-hud { display: grid; opacity: 0; transition: opacity .45s var(--ease), color .45s var(--ease); }
   html.flow-ready .flow-hud { opacity: .82; }
+  html.flow-ready .flow-hud[data-tone='accent'] { opacity: 1; }
   body.menu-open .flow-hud { opacity: 0; }
 }
 
@@ -5063,6 +5077,9 @@ html[data-shelf] .flow-blend--shelf { display: block; }
    inert in the HTML, opened once per session by welcome.ts, never a new h1.
    ========================================================= */
 body.welcome-open { overflow: hidden; }
+/* The reserved root gutter belongs to the dark threshold too, not to the
+   paper page beneath it. Browsers without :has keep the warm paper fallback. */
+html:has(body.welcome-open) { background: #12100d; scrollbar-color: #8a7346 #12100d; }
 .welcome {
   --voice-progress: 0;
   --voice-energy: 0;
@@ -5346,8 +5363,8 @@ body.welcome-open { overflow: hidden; }
   overflow: hidden;
   opacity: 0;
   color: #d9b45e;
-  font: .5rem/1.4 var(--mono);
-  letter-spacing: .14em;
+  font: .6rem/1.4 var(--mono);
+  letter-spacing: .1em;
   text-transform: uppercase;
   transform: translateY(8px);
   transition: opacity .55s, transform .55s var(--ease-out), max-height .55s, margin-top .55s;
@@ -5416,8 +5433,8 @@ body.welcome-open { overflow: hidden; }
   gap: .65rem;
   margin: 1rem 0 0;
   color: #aaa18f;
-  font: .52rem/1.6 var(--mono);
-  letter-spacing: .11em;
+  font: .6rem/1.6 var(--mono);
+  letter-spacing: .075em;
   text-transform: uppercase;
 }
 .welcome.is-open .welcome__sound-note { animation: welcome-soft-in .9s 1.35s var(--ease-out) both; }
@@ -5519,7 +5536,10 @@ body.welcome-open { overflow: hidden; }
   .welcome__enter, .welcome__quiet { width: 100%; }
   .welcome__orbit--outer { width: 145vw; }
   .welcome__orbit--inner { width: 105vw; }
-  .welcome__sound-note { font-size: .48rem; }
+  .welcome__sound-note { font-size: .6rem; letter-spacing: .055em; }
+  /* The reactive seal and playback line already carry this meaning. Removing
+     the duplicate bars gives the essential guidance room for one clean line. */
+  .welcome__sound-bars { display: none; }
 }
 @media (max-height: 680px) {
   .welcome__instrument { display: none; }

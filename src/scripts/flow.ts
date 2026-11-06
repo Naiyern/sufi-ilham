@@ -19,9 +19,13 @@ const SCENES = [
 const INK_SCENES = [
   '.editorial-hero', '.cosmos', '.cinema-reel', '.series-spread',
   '.author-chapter', '.closing-quote', '.book-hero', '.s-hero',
-  '.discover-hero', '.discover-finale', '.correspondence-chapter',
-  '.legal-hero', '.not-found', '.colophon',
+  '.discover-hero', '.correspondence-chapter', '.legal-hero',
+  '.not-found', '.colophon',
 ].join(',');
+
+/* Rust needs its own interface tone: muted paper and ink colours both lose
+   too much contrast there, even though the finale is not a paper scene. */
+const ACCENT_SCENES = '.discover-finale';
 
 const compact = (value: string) => value.replace(/\s+/g, ' ').trim();
 const labelFor = (scene: HTMLElement, index: number) => {
@@ -51,7 +55,9 @@ export function initFlow(doc: Document = document, view: Window = doc.defaultVie
   scenes.forEach((scene, index) => {
     scene.classList.add('flow-scene');
     scene.dataset.flowScene = number(index + 1);
-    scene.dataset.flowTone = scene.matches(INK_SCENES) ? 'ink' : 'paper';
+    scene.dataset.flowTone = scene.matches(ACCENT_SCENES)
+      ? 'accent'
+      : scene.matches(INK_SCENES) ? 'ink' : 'paper';
   });
   if (total) total.textContent = number(scenes.length);
 
