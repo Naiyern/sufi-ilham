@@ -40,6 +40,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
 
       <div class="form reveal in" id="waForm" data-phone={site.phoneRaw} role="group" aria-label="Send a contact message via WhatsApp" aria-describedby="waNote" style="--d:100ms">
+        <div class="contact-form-intro"><span class="label">A NOTE TO THE AUTHOR</span><h2>Start a conversation.</h2><p>Write your message here, then review and send it in WhatsApp.</p></div>
         <div><label for="n">Your Name</label><input id="n" name="name" autocomplete="name" required /></div>
         <div><label for="e">Email</label><input id="e" name="email" type="email" autocomplete="email" required /></div>
         <div>

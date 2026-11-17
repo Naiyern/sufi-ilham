@@ -112,7 +112,7 @@ const hasInkHero = pageClass !== '';
     <Nav />
     <main id="main"><slot /></main>
     {isContact && <FlowBlend to="paper" />}
-    {(pageClass === 'book-page' || pageClass === 'series-page' || isContact) && <NextChapter />}
+    {!isHome && !isDiscover && <NextChapter />}
     {!isNotFound && <FlowBlend to="ink" />}
     <Footer />
     <BookModal />
