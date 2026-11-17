@@ -1832,3 +1832,14 @@ test('the first screen stays light', () => {
   assert.equal(hero.getAttribute('width'), '1000');
   assert.equal(hero.getAttribute('height'), '1250');
 });
+
+test('reading paths offer consistent onward navigation across the site', () => {
+  for (const page of ['books/more-than-a-symbol/index.html', 'series/maple/index.html', 'contact/index.html', 'privacy/index.html', 'terms/index.html', '404.html']) {
+    const doc = new JSDOM(readFileSync(join(projectRoot, 'dist', page), 'utf8')).window.document;
+    const links = [...doc.querySelectorAll('.next-chapter-paths a')];
+    assert.equal(links.length, 4, page);
+    assert.ok(links.every((link, i) => link.getAttribute('href') === `${BASE}/discover/#path-0${i + 1}`), page);
+  }
+  const guide = new JSDOM(readFileSync(join(projectRoot, 'dist/discover/index.html'), 'utf8')).window.document;
+  assert.equal(guide.querySelectorAll('.discover-jump a').length, 4);
+});

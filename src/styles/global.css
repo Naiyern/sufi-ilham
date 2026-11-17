@@ -5568,3 +5568,52 @@ html:has(body.welcome-open) { background: #12100d; scrollbar-color: #8a7346 #121
 @media print {
   .welcome { display: none !important; }
 }
+
+/* Reader-first refinements: a consistent set of invitations throughout the archive. */
+.mast nav a[aria-current="page"] { color: inherit; border-bottom-color: #d9b45e; }
+.home-discovery .home-paths { gap: 0 1.5rem; }
+.home-discovery .home-paths a {
+  display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto;
+  align-items: center; gap: .8rem; min-height: 74px;
+  padding: .9rem 0; border: 0; border-bottom: 1px solid rgba(73,56,47,.35); background: transparent;
+}
+.home-path-number, .home-path-copy small {
+  font: .65rem/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+}
+.home-discovery .home-paths .home-path-copy { display: grid; gap: .3rem; color: #49382f; }
+.home-path-copy strong { font: 400 clamp(1.25rem, 1.8vw, 1.7rem)/1 var(--display); letter-spacing: 0; text-transform: none; }
+.home-path-copy small { opacity: .75; }
+
+.next-chapter { background: #c9b89a; color: #241e17; padding-block: clamp(4rem, 7vw, 7rem); }
+.next-chapter-heading { display: grid; grid-template-columns: 1.3fr .7fr; gap: 3rem; align-items: end; padding-bottom: 2.5rem; }
+.next-chapter-heading h2 { margin-top: 1.2rem; font-size: clamp(3.4rem, 6.5vw, 6.5rem); }
+.next-chapter-heading p { max-width: 32ch; margin: 0; color: #493c2e; font-size: 1.2rem; }
+.next-chapter-paths { display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid rgba(36,30,23,.35); }
+.next-chapter-paths a { position: relative; min-height: 170px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 1.5rem; padding: 1.5rem 2.4rem 1.5rem 1.25rem; border-right: 1px solid rgba(36,30,23,.25); transition: background .25s, color .25s; }
+.next-chapter-paths a:first-child { border-left: 1px solid rgba(36,30,23,.25); }
+.next-chapter-paths a:hover, .next-chapter-paths a:focus-visible { background: #241e17; color: #f4e8d2; }
+.next-path-number { font: .62rem/1.5 var(--mono); letter-spacing: .09em; text-transform: uppercase; }
+.next-chapter-paths strong { font: 400 clamp(1.5rem, 2.2vw, 2.15rem)/1 var(--display); }
+.next-path-arrow { position: absolute; top: 1.4rem; right: 1.25rem; }
+.next-chapter-bottom { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding-top: 1.5rem; font: .68rem/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.next-chapter-bottom a { border-bottom: 1px solid; padding-bottom: .25rem; }
+.contact-form-intro { margin-bottom: .5rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--rule); }
+.contact-form-intro h2 { margin: .6rem 0; font-size: clamp(2rem, 3.5vw, 3rem); }
+.contact-form-intro p { margin: 0; max-width: 38ch; }
+@media (max-width: 760px) {
+  .next-chapter-heading { grid-template-columns: 1fr; gap: 1.3rem; }
+  .next-chapter-paths { grid-template-columns: repeat(2, 1fr); }
+  .next-chapter-paths a { min-height: 140px; }
+  .next-chapter-paths a:nth-child(3) { border-left: 1px solid rgba(36,30,23,.25); }
+  .next-chapter-paths a:nth-child(-n+2) { border-bottom: 1px solid rgba(36,30,23,.25); }
+  .next-chapter-bottom { align-items: flex-start; flex-direction: column; }
+}
+@media print { .next-chapter { display: none; } }
+.discover-jump { position: relative; margin-top: clamp(3rem, 6vw, 6rem); padding-top: 1rem; border-top: 1px solid rgba(242,231,210,.28); }
+.discover-jump > span { display: block; margin-bottom: .8rem; color: #cbb894; font: .65rem/1.5 var(--mono); letter-spacing: .12em; }
+.discover-jump > div { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.discover-jump a { display: flex; align-items: center; gap: .6rem; min-height: 44px; color: #f2e7d2; font: 400 1.15rem/1.2 var(--display); }
+.discover-jump a span:first-child { color: #d8a78e; font: .65rem var(--mono); }
+.discover-jump a span:last-child { margin-left: auto; }
+.discover-jump a:hover { color: #e4b596; }
+@media (max-width: 760px) { .discover-jump > div { grid-template-columns: repeat(2, 1fr); } }

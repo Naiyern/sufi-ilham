@@ -53,7 +53,7 @@ const heroImg = hero && !hero.img.startsWith('data:') ? coverUrl(hero.img, site.
       </div>
 
       <div class="cover-cta">
-        {hero?.us && <a class="btn solid" href={hero.us} target="_blank" rel="noopener">Start with Book 1 →</a>}
+        {hero && <a class="btn solid" href={`${base}/books/${hero.slug}/`}>Explore the first book →</a>}
         <a class="btn" href="#order">Reading order</a>
       </div>
     </div>
